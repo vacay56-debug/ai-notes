@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Project × Skills × Cowork 完整比較指南｜消防署救護科應用版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1F3A5F;
+  --navy-deep:#152A47;
+  --vermilion:#B02E24;
+  --paper:#FAF8F4;
+  --ink:#2A2A2E;
+  --line:#D8D2C6;
+  --green:#3E6B4F;
+  --gold:#8A6D2F;
+  --violet:#5B4A7E;
+  --green-bg:#EEF4EF;
+  --gold-bg:#F7F3E6;
+  --violet-bg:#F1EEF7;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Noto Sans TC',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.75;
+  font-size:16px;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px 80px;}
+
+/* ── 頁首 ── */
+header{
+  border-bottom:3px double var(--navy);
+  padding:48px 0 28px;
+  margin-bottom:40px;
+  position:relative;
+}
+.doc-no{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  color:var(--navy);
+  letter-spacing:.08em;
+  margin-bottom:12px;
+}
+h1{
+  font-family:'Noto Serif TC',serif;
+  font-weight:900;
+  font-size:clamp(28px,4.5vw,42px);
+  color:var(--navy-deep);
+  letter-spacing:.02em;
+  line-height:1.3;
+}
+.subtitle{
+  margin-top:10px;
+  font-size:17px;
+  color:#5A5A60;
+}
+.subtitle strong{color:var(--vermilion);font-weight:700;}
+.stamp{
+  position:absolute;
+  right:0;top:52px;
+  border:2.5px solid var(--vermilion);
+  color:var(--vermilion);
+  font-family:'Noto Serif TC',serif;
+  font-weight:700;
+  font-size:14px;
+  padding:6px 10px;
+  transform:rotate(-4deg);
+  letter-spacing:.25em;
+  opacity:.85;
+  border-radius:2px;
+}
+@media(max-width:640px){.stamp{display:none;}}
+
+/* ── 章節標題 ── */
+.sec{margin:56px 0 24px;display:flex;align-items:baseline;gap:14px;}
+.sec .num{
+  font-family:'Noto Serif TC',serif;
+  font-weight:900;
+  font-size:26px;
+  color:var(--vermilion);
+}
+.sec h2{
+  font-family:'Noto Serif TC',serif;
+  font-weight:700;
+  font-size:24px;
+  color:var(--navy-deep);
+  border-bottom:2px solid var(--navy);
+  padding-bottom:6px;
+  flex:1;
+}
+.lede{margin-bottom:20px;color:#4A4A50;}
+
+/* ── 一句話定位 ── */
+.oneliner{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin:24px 0;
+}
+@media(max-width:820px){.oneliner{grid-template-columns:1fr;}}
+.one-card{
+  border:1.5px solid var(--line);
+  border-top:5px solid;
+  background:#fff;
+  padding:20px 20px 18px;
+  border-radius:4px;
+}
+.one-card.g{border-top-color:var(--green);}
+.one-card.y{border-top-color:var(--gold);}
+.one-card.v{border-top-color:var(--violet);}
+.one-card .tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  letter-spacing:.1em;
+  font-weight:600;
+  margin-bottom:6px;
+}
+.one-card.g .tag{color:var(--green);}
+.one-card.y .tag{color:var(--gold);}
+.one-card.v .tag{color:var(--violet);}
+.one-card h3{
+  font-family:'Noto Serif TC',serif;
+  font-size:20px;
+  color:var(--navy-deep);
+  margin-bottom:8px;
+}
+.one-card p{font-size:14.5px;color:#4A4A50;}
+.one-card .meta{
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px dashed var(--line);
+  font-size:13px;
+  color:#6A6A70;
+}
+
+/* ── 比較表 ── */
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  font-size:14.5px;
+  border:1.5px solid var(--navy);
+}
+th,td{
+  border:1px solid var(--line);
+  padding:12px 14px;
+  vertical-align:top;
+  text-align:left;
+}
+thead th{
+  background:var(--navy);
+  color:#fff;
+  font-family:'Noto Serif TC',serif;
+  font-weight:700;
+  font-size:15px;
+  letter-spacing:.05em;
+}
+tbody th{
+  background:#F2EFE8;
+  font-weight:700;
+  color:var(--navy-deep);
+  width:130px;
+  white-space:nowrap;
+}
+tbody tr:nth-child(even) td{background:#FCFBF8;}
+td b{color:var(--vermilion);font-weight:700;}
+.table-scroll{overflow-x:auto;border-radius:4px;}
+@media(max-width:820px){table{min-width:760px;}}
+
+/* ── 詳細卡片 ── */
+.detail{
+  border:1.5px solid var(--line);
+  border-left:6px solid;
+  background:#fff;
+  border-radius:4px;
+  margin-bottom:28px;
+  overflow:hidden;
+}
+.detail.g{border-left-color:var(--green);}
+.detail.y{border-left-color:var(--gold);}
+.detail.v{border-left-color:var(--violet);}
+.detail-head{
+  padding:18px 24px 14px;
+  display:flex;
+  align-items:baseline;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.detail.g .detail-head{background:var(--green-bg);}
+.detail.y .detail-head{background:var(--gold-bg);}
+.detail.v .detail-head{background:var(--violet-bg);}
+.detail-head h3{
+  font-family:'Noto Serif TC',serif;
+  font-size:21px;
+  color:var(--navy-deep);
+}
+.detail-head .en{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  color:#6A6A70;
+}
+.detail-body{padding:20px 24px 24px;}
+.blk{margin-bottom:18px;}
+.blk:last-child{margin-bottom:0;}
+.blk h4{
+  font-size:15px;
+  font-weight:700;
+  color:var(--navy);
+  margin-bottom:8px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.blk h4::before{
+  content:"";
+  width:8px;height:8px;
+  background:var(--vermilion);
+  display:inline-block;
+  transform:rotate(45deg);
+  flex:none;
+}
+.blk p{font-size:14.5px;color:#3E3E44;margin-bottom:6px;}
+.blk ol,.blk ul{padding-left:22px;font-size:14.5px;color:#3E3E44;}
+.blk li{margin-bottom:6px;}
+.blk li:last-child{margin-bottom:0;}
+code{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  background:#F0EDE5;
+  border:1px solid var(--line);
+  border-radius:3px;
+  padding:1px 6px;
+  color:var(--navy-deep);
+  white-space:nowrap;
+}
+.warn{
+  background:#FBF1F0;
+  border:1px solid #E4C2BE;
+  border-radius:4px;
+  padding:12px 16px;
+  font-size:14px;
+  color:#7A2820;
+  margin-top:10px;
+}
+.warn b{color:var(--vermilion);}
+
+/* ── 決策流程 ── */
+.decide{
+  background:#fff;
+  border:1.5px solid var(--navy);
+  border-radius:4px;
+  padding:26px 28px;
+}
+.q{
+  display:flex;
+  gap:16px;
+  padding:16px 0;
+  border-bottom:1px dashed var(--line);
+  align-items:flex-start;
+}
+.q:last-child{border-bottom:none;padding-bottom:0;}
+.q:first-child{padding-top:0;}
+.q .qm{
+  font-family:'Noto Serif TC',serif;
+  font-weight:900;
+  color:var(--vermilion);
+  font-size:18px;
+  flex:none;
+  width:52px;
+}
+.q .qt{flex:1;}
+.q .qt .question{font-weight:700;color:var(--navy-deep);margin-bottom:4px;}
+.q .qt .answer{font-size:14.5px;color:#4A4A50;}
+.pill{
+  display:inline-block;
+  font-size:13px;
+  font-weight:700;
+  padding:1px 10px;
+  border-radius:999px;
+  margin:0 2px;
+}
+.pill.g{background:var(--green-bg);color:var(--green);border:1px solid var(--green);}
+.pill.y{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold);}
+.pill.v{background:var(--violet-bg);color:var(--violet);border:1px solid var(--violet);}
+
+/* ── 救護科應用實例 ── */
+.case{
+  background:#fff;
+  border:1.5px solid var(--line);
+  border-radius:4px;
+  padding:18px 22px;
+  margin-bottom:14px;
+}
+.case .case-title{
+  font-weight:700;
+  color:var(--navy-deep);
+  margin-bottom:6px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.case p{font-size:14.5px;color:#4A4A50;}
+
+/* ── 頁尾 ── */
+footer{
+  margin-top:64px;
+  border-top:3px double var(--navy);
+  padding-top:18px;
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:8px;
+  font-size:13px;
+  color:#7A7A80;
+  font-family:'JetBrains Mono',monospace;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="doc-no">CLAUDE-REF-115-002｜內部參考文件</div>
+  <h1>Claude Project × Skills × Cowork<br>完整比較指南</h1>
+  <p class="subtitle">三種能力的定位、設定方式與進階要點 —— <strong>依消防署救護科實務情境增補</strong></p>
+  <div class="stamp">參考用</div>
+</header>
+
+<!-- ═══ 壹 ═══ -->
+<div class="sec"><span class="num">壹</span><h2>一句話定位</h2></div>
+<p class="lede">三者並非互斥選項，而是三個不同層次的工具：Project 是「工作空間」、Skills 是「自動觸發的作業程序」、Cowork 是「自主執行的代理人」。實務上經常三者併用。</p>
+
+<div class="oneliner">
+  <div class="one-card g">
+    <div class="tag">PROJECT｜專案</div>
+    <h3>持久性工作空間</h3>
+    <p>Claude 在同一 Project 內的每次對話中，持續掌握你上傳的檔案、指示與語氣設定。</p>
+    <div class="meta">類比：一個常設的<b>業務卷宗</b>，資料與脈絡都放在裡面。</div>
+  </div>
+  <div class="one-card y">
+    <div class="tag">SKILLS｜技能</div>
+    <h3>自動載入的指令集</h3>
+    <p>預先寫好的作業說明，當 Claude 偵測到相關任務時自動啟用。寫一次，每次都生效。</p>
+    <div class="meta">類比：一份<b>標準作業程序（SOP）</b>，觸發條件到了就自動套用。</div>
+  </div>
+  <div class="one-card v">
+    <div class="tag">COWORK｜協作代理</div>
+    <h3>桌面自主代理</h3>
+    <p>讀取你的檔案、自行規劃、逐步執行，最後交付完成品，過程中不需逐句對話。</p>
+    <div class="meta">類比：一位<b>可交辦整案的承辦同仁</b>，交付成果而非逐段回覆。</div>
+  </div>
+</div>
+
+<!-- ═══ 貳 ═══ -->
+<div class="sec"><span class="num">貳</span><h2>三方比較總表</h2></div>
+
+<div class="table-scroll">
+<table>
+  <thead>
+    <tr>
+      <th style="width:130px">比較項目</th>
+      <th>Project 專案</th>
+      <th>Skills 技能</th>
+      <th>Cowork 協作代理</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>本質</th>
+      <td>持久性工作空間，保存檔案、指示、語氣</td>
+      <td>可重複使用的指令集，偵測到相關任務即自動載入</td>
+      <td>桌面代理程式，讀檔、規劃、執行、交付</td>
+    </tr>
+    <tr>
+      <th>啟動方式</th>
+      <td>手動：在該 Project 內開啟對話</td>
+      <td><b>自動</b>：由 <code>description</code> 觸發條件判斷啟用</td>
+      <td>手動交辦任務後，代理<b>自主執行</b></td>
+    </tr>
+    <tr>
+      <th>最適用情境</th>
+      <td>需要一致口吻與固定背景知識的<b>反覆性內容產出</b></td>
+      <td>每週交代一次以上的任務、需逐步說明的<b>多步驟流程</b></td>
+      <td>有明確<b>完成品</b>的複雜任務；不想守在對話框旁的例行工作</td>
+    </tr>
+    <tr>
+      <th>記憶範圍</th>
+      <td>同一 Project 內的對話<b>互通記憶</b>，與其他 Project 隔離</td>
+      <td>本身無記憶，只是被動載入的知識與程序</td>
+      <td>單一工作階段內；可將工作成果存為範本供後續重用</td>
+    </tr>
+    <tr>
+      <th>Token 成本</th>
+      <td>Project 知識庫佔用上下文，資料越雜耗越多</td>
+      <td><b>省 token 不花 token</b>：漸進式揭露，未觸發不佔空間</td>
+      <td>長時間會話消耗快，任務完成後應關閉會話</td>
+    </tr>
+    <tr>
+      <th>設定成本</th>
+      <td>低：建資料夾、寫指示、上傳檔案</td>
+      <td>中：需撰寫 <code>SKILL.md</code>，觸發條件要寫得精準</td>
+      <td>中：需規劃資料夾結構與全域指示（Global Instructions）</td>
+    </tr>
+    <tr>
+      <th>適用平台</th>
+      <td>Claude.ai 網頁版／桌面版／行動版</td>
+      <td>Claude.ai、Claude Code、Cowork 皆可（格式相容）</td>
+      <td>Claude 桌面版之 Cowork 模式</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ═══ 參 ═══ -->
+<div class="sec"><span class="num">參</span><h2>逐項詳解</h2></div>
+
+<!-- Project -->
+<div class="detail g">
+  <div class="detail-head">
+    <h3>一、Project（專案）</h3>
+    <span class="en">persistent workspace</span>
+  </div>
+  <div class="detail-body">
+    <div class="blk">
+      <h4>是什麼</h4>
+      <p>一個持久存在的工作空間。上傳到 Project 的檔案、寫在 Project instructions 的規則，會套用到該 Project 內的<b>每一次</b>對話，不必每次重新交代背景。</p>
+    </div>
+    <div class="blk">
+      <h4>最適合</h4>
+      <ul>
+        <li>需要固定口吻、固定格式的反覆性文書工作。</li>
+        <li>圍繞同一批參考資料進行的長期業務（如同一法規研修案、同一年度計畫）。</li>
+      </ul>
+    </div>
+    <div class="blk">
+      <h4>設定步驟</h4>
+      <ol>
+        <li>上傳 20 至 30 份最具代表性的過往文件，作為口吻與格式範例。</li>
+        <li>撰寫 Project instructions：明確界定對象輪廓、語氣規則、禁用詞句。</li>
+        <li>上傳相關規範文件與標準作業程序（Standard Operating Procedure, SOP）。</li>
+      </ol>
+    </div>
+    <div class="blk">
+      <h4>多數人不知道的事</h4>
+      <ul>
+        <li><b>指示要短</b>：過長的 instructions 會被略讀，重點反而被稀釋。</li>
+        <li><b>一份整理好的檔案，勝過一堆零散上傳</b>：先自行彙整再上傳，效果遠優於把原始資料全部倒進去。</li>
+        <li><b>記憶隔離</b>：同一 Project 內的對話互通記憶，但該記憶與其他 Project 完全隔離——適合用來區隔不同業務流（如 EMS 政策與採購案分開建 Project）。</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Skills -->
+<div class="detail y">
+  <div class="detail-head">
+    <h3>二、Skills（技能）</h3>
+    <span class="en">auto-loading instruction set</span>
+  </div>
+  <div class="detail-body">
+    <div class="blk">
+      <h4>是什麼</h4>
+      <p>一組儲存好的作業指令（<code>SKILL.md</code> 加上選用的參考檔案），當 Claude 偵測到相關任務時<b>自動載入</b>。寫一次，之後每次觸發都自動套用，不必重複說明。</p>
+    </div>
+    <div class="blk">
+      <h4>最適合</h4>
+      <ul>
+        <li>每週需要向 Claude 交代一次以上的固定任務。</li>
+        <li>步驟固定、格式固定、否則每次都得重新解釋的多步驟流程（如公文三段式架構、預算書格式）。</li>
+      </ul>
+    </div>
+    <div class="blk">
+      <h4>設定步驟</h4>
+      <ol>
+        <li>請 Claude（或 Cowork 內建的 skill-creator）協助建立 Skill 骨架。</li>
+        <li>回答建置提問時<b>務必具體</b>：模糊的回答只會產出模糊的 Skill。</li>
+        <li>打包為 ZIP 上傳（Settings → Capabilities → Skills），注意 <code>SKILL.md</code> 必須位於 <code>資料夾名稱/SKILL.md</code> 這一層，不可多包一層。</li>
+        <li>桌面版亦可直接放置於 <code>%USERPROFILE%\.claude\skills\</code>（隱藏資料夾）。</li>
+      </ol>
+    </div>
+    <div class="blk">
+      <h4>多數人不知道的事</h4>
+      <ul>
+        <li><b>Skills 是省 token，不是花 token</b>：採漸進式揭露（progressive disclosure），未觸發的 Skill 不佔上下文，因此安裝多個 Skill 不會等比例增加消耗。</li>
+        <li><b>「不適用於」比「適用於」更重要</b>：<code>description</code> 是觸發開關，負面條件（do NOT use for）決定 Skill 會不會誤觸發、跨業務流互相干擾。例：EMS 研究 Skill 應明確排除 CIT（Crisis Intervention Team，危機介入小組）政策內容，避免跨到警政、衛政權責範圍。</li>
+        <li><b>Cowork 工作階段可轉存為 Skill</b>：任何一次成功的 Cowork 會話，可從會話選單直接轉為可重用的 Skill。</li>
+      </ul>
+      <div class="warn"><b>常見誤區：</b>Skill 寫好卻從不觸發，九成原因是 <code>description</code> 寫得太抽象。應直接列出使用者會說出口的字眼（如「寫公文」「編預算」「做簡報」）作為觸發詞。</div>
+    </div>
+  </div>
+</div>
+
+<!-- Cowork -->
+<div class="detail v">
+  <div class="detail-head">
+    <h3>三、Cowork（協作代理）</h3>
+    <span class="en">desktop agent</span>
+  </div>
+  <div class="detail-body">
+    <div class="blk">
+      <h4>是什麼</h4>
+      <p>桌面端的自主代理。指派任務後，它會讀取指定資料夾內的檔案、自行擬定執行計畫、逐步完成，最後<b>交付完成品</b>（檔案、報告、簡報），而非逐段對話回覆。</p>
+    </div>
+    <div class="blk">
+      <h4>最適合</h4>
+      <ul>
+        <li>有明確交付物的複雜任務（完整報告、成套簡報、多檔整合）。</li>
+        <li>希望「交辦後離開」的例行性工作，不必全程守在對話框。</li>
+      </ul>
+    </div>
+    <div class="blk">
+      <h4>設定步驟</h4>
+      <ol>
+        <li>建立 Cowork 工作資料夾，內含三個子資料夾：<code>background</code>（背景資料）、<code>outputs</code>（產出）、<code>templates</code>（範本）。</li>
+        <li>放入數份背景檔案：說明你是誰、你的口吻、你所屬機關的脈絡。</li>
+        <li>設定全域指示（Global Instructions），要求 Claude 在每項任務開始前先檢視背景檔案。</li>
+      </ol>
+    </div>
+    <div class="blk">
+      <h4>多數人不知道的事</h4>
+      <ul>
+        <li><b>長會話燒 token 很快</b>：任務完成後應即關閉會話，不要在同一會話中無限延伸。</li>
+        <li><b>成功的會話要存成範本</b>：任何一次執行得好的任務，結束時請 Claude 把該次的結構存為可重用範本，下次直接套用。</li>
+        <li><b>ABOUT ME 不會自動被讀取</b>：Cowork 讀取個人背景檔，是因為你在 Global Instructions 中<b>明確要求</b>它讀；沒寫，它就不讀。</li>
+      </ul>
+      <div class="warn"><b>釐清：</b>Cowork 與 Claude Code 為不同產品。<code>/loop</code>、<code>/goal</code>、<code>routines</code> 等指令屬於 Claude Code（終端機／開發者導向）；Cowork 為知識工作導向的桌面代理。兩者皆可使用相同格式的 <code>SKILL.md</code>。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 肆 ═══ -->
+<div class="sec"><span class="num">肆</span><h2>快速決策：我該用哪一個？</h2></div>
+
+<div class="decide">
+  <div class="q">
+    <div class="qm">問一</div>
+    <div class="qt">
+      <div class="question">這件事需要固定的背景資料與一致口吻，且會反覆進行？</div>
+      <div class="answer">是 → 建 <span class="pill g">Project</span>，把資料與指示放進去，之後所有相關對話都在裡面進行。</div>
+    </div>
+  </div>
+  <div class="q">
+    <div class="qm">問二</div>
+    <div class="qt">
+      <div class="question">這是一套固定流程，每週會交代 Claude 一次以上？</div>
+      <div class="answer">是 → 寫成 <span class="pill y">Skill</span>，讓它自動觸發，不必每次重新解釋步驟與格式。</div>
+    </div>
+  </div>
+  <div class="q">
+    <div class="qm">問三</div>
+    <div class="qt">
+      <div class="question">這件事有明確的交付物，而且我想交辦後就去做別的事？</div>
+      <div class="answer">是 → 交給 <span class="pill v">Cowork</span>，讓代理自行讀檔、規劃、執行、交付。</div>
+    </div>
+  </div>
+  <div class="q">
+    <div class="qm">併用</div>
+    <div class="qt">
+      <div class="question">三者可以疊加使用</div>
+      <div class="answer">最完整的組態：<span class="pill g">Project</span> 提供業務脈絡 ＋ <span class="pill y">Skills</span> 提供格式與程序 ＋ <span class="pill v">Cowork</span> 負責整案執行。Skill 在三種環境中皆可觸發，是三者之間的共通元件。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 伍 ═══ -->
+<div class="sec"><span class="num">伍</span><h2>救護科實務對應</h2></div>
+<p class="lede">以本科現行業務為例，說明三種工具的分工方式：</p>
+
+<div class="case">
+  <div class="case-title"><span class="pill g">Project</span>「緊急醫療救護法研修案」專案</div>
+  <p>上傳現行法規、歷次修法紀錄、各國制度比較資料與科內既往簽稿，撰寫指示界定引用格式與用語規範。研修案相關的所有對話集中於此，記憶互通且與採購、預算等其他業務隔離。</p>
+</div>
+
+<div class="case">
+  <div class="case-title"><span class="pill y">Skills</span>現行 <code>nfa-*</code> 技能組</div>
+  <p>公文起草（<code>nfa-gongwen</code>）、預算書撰寫（<code>nfa-budget-doc</code>）、政策簡報（<code>nfa-policy-slides</code>）、採購文件（<code>nfa-procurement</code>）、國際 EMS 研究（<code>nfa-ems-research</code>）、出國報告（<code>nfa-overseas-report</code>）等，各以具體業務用語作為觸發詞，並以負面條件區隔業務流（如 EMS 研究 Skill 排除 CIT 政策內容）。</p>
+</div>
+
+<div class="case">
+  <div class="case-title"><span class="pill v">Cowork</span>「韌性國家醫療整備計畫」季報產製</div>
+  <p>建立含背景資料、範本、產出三個子資料夾的工作區；交辦後由代理讀取執行進度資料、依範本產出季報初稿與簡報，承辦人僅需最終審校。執行順利的一次會話，即轉存為範本或 Skill 供下季重用。</p>
+</div>
+
+<div class="case">
+  <div class="case-title">整合工作流</div>
+  <p>Claude 建立分析架構與初稿 → NotebookLM 以原始文獻進行事實查證（尤其日文資料）→ Claude 依 Skill 產出正式文書 → Gamma 產製視覺簡報。Project 承載脈絡、Skills 承載程序、Cowork 承載執行，各司其職。</p>
+</div>
+
+<footer>
+  <span>CLAUDE-REF-115-002</span>
+  <span>中華民國 115 年 7 月 18 日編製</span>
+  <span>內部參考・非正式公文</span>
+</footer>
+
+</div>
+</body>
+</html>

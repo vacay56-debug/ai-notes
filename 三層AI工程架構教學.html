@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>提示工程 × 情境工程 × 框架工程｜三層 AI 工程架構完整教學</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1B2140;         /* 深靛墨色 */
+  --paper:#F5F6F9;       /* 冷調紙白 */
+  --card:#FFFFFF;
+  --line:#D9DDE8;
+  --muted:#5C6480;
+  --p-blue:#3B5BDB;      /* 提示工程 */
+  --p-blue-bg:#EDF1FE;
+  --c-rose:#D6336C;      /* 情境工程 */
+  --c-rose-bg:#FDEFF4;
+  --h-teal:#0B8F73;      /* 框架工程 */
+  --h-teal-bg:#E8F7F2;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans TC',-apple-system,'PingFang TC','Microsoft JhengHei',sans-serif;
+  background:var(--paper);color:var(--ink);line-height:1.75;
+  font-size:16px;
+}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+
+/* ===== Hero：三層嵌套結構 ===== */
+header{padding:56px 0 40px;background:linear-gradient(180deg,#FFFFFF 0%,var(--paper) 100%);border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+h1{font-size:clamp(26px,4.5vw,40px);font-weight:900;line-height:1.3;letter-spacing:.01em}
+h1 .t-p{color:var(--p-blue)} h1 .t-c{color:var(--c-rose)} h1 .t-h{color:var(--h-teal)}
+.lede{margin-top:16px;max-width:720px;color:var(--muted);font-size:17px}
+
+/* 嵌套層示意：框架 ⊃ 情境 ⊃ 提示 */
+.nest{margin:36px 0 8px;border:2px solid var(--h-teal);border-radius:18px;background:var(--h-teal-bg);padding:18px}
+.nest .tag{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;display:inline-block;padding:2px 10px;border-radius:99px;margin-bottom:10px}
+.nest>.tag{background:var(--h-teal);color:#fff}
+.nest-c{border:2px solid var(--c-rose);border-radius:14px;background:var(--c-rose-bg);padding:16px}
+.nest-c>.tag{background:var(--c-rose);color:#fff}
+.nest-p{border:2px solid var(--p-blue);border-radius:10px;background:var(--p-blue-bg);padding:16px}
+.nest-p>.tag{background:var(--p-blue);color:#fff}
+.nest p{font-size:14.5px;color:var(--ink)}
+.nest .sub{font-size:13px;color:var(--muted);margin-top:2px}
+
+/* ===== 通用區塊 ===== */
+section{padding:52px 0}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px;flex-wrap:wrap}
+.sec-num{font-family:var(--mono);font-weight:700;font-size:14px;color:#fff;padding:4px 12px;border-radius:8px}
+h2{font-size:clamp(21px,3vw,28px);font-weight:900}
+.sec-sub{color:var(--muted);margin-bottom:26px;max-width:760px}
+h3{font-size:18px;font-weight:700;margin:30px 0 12px}
+.band-p .sec-num{background:var(--p-blue)} .band-p h2 em{color:var(--p-blue);font-style:normal}
+.band-c .sec-num{background:var(--c-rose)} .band-c h2 em{color:var(--c-rose);font-style:normal}
+.band-h .sec-num{background:var(--h-teal)} .band-h h2 em{color:var(--h-teal);font-style:normal}
+.band-c{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+
+/* 表格 */
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14.5px;margin:16px 0}
+th{background:var(--ink);color:#fff;text-align:left;padding:10px 14px;font-weight:700;white-space:nowrap}
+td{padding:10px 14px;border-top:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:#FAFBFD}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.pill{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:700;padding:1px 8px;border-radius:6px;white-space:nowrap}
+.pill-p{background:var(--p-blue-bg);color:var(--p-blue)}
+.pill-c{background:var(--c-rose-bg);color:var(--c-rose)}
+.pill-h{background:var(--h-teal-bg);color:var(--h-teal)}
+
+/* 流程圖 */
+.flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:18px 0}
+.flow .node{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px 16px;min-width:120px;flex:1;text-align:center}
+.flow .node b{display:block;font-size:15px}
+.flow .node span{font-size:12.5px;color:var(--muted)}
+.flow .arrow{align-self:center;padding:0 8px;font-weight:900;color:var(--muted);font-size:18px}
+.node.hl-p{border-color:var(--p-blue);background:var(--p-blue-bg)}
+.node.hl-c{border-color:var(--c-rose);background:var(--c-rose-bg)}
+.node.hl-h{border-color:var(--h-teal);background:var(--h-teal-bg)}
+
+/* 程式碼／提示詞範例 */
+.code{font-family:var(--mono);font-size:13px;line-height:1.7;background:#111634;color:#E6E9F5;border-radius:12px;padding:18px 20px;overflow-x:auto;white-space:pre-wrap;margin:12px 0}
+.code .cm{color:#7C86AD}
+.code .k{color:#8FB4FF;font-weight:700}
+.code .s{color:#FFB3CD}
+.code-label{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--muted);margin:16px 0 -6px}
+
+/* 好壞對照 */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.duo .box{border-radius:12px;padding:16px 18px;border:1.5px solid}
+.box-bad{border-color:#E8A0A0;background:#FDF3F3}
+.box-good{border-color:#8FCDB4;background:#F1FAF6}
+.box .box-t{font-weight:900;font-size:14px;margin-bottom:8px}
+.box-bad .box-t{color:#B23A3A}
+.box-good .box-t{color:#1D7A57}
+.box p{font-size:14px}
+.box .code{margin:10px 0 0;font-size:12.5px}
+
+/* 卡片列 */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:16px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.card b.ct{display:block;font-size:15px;margin-bottom:6px}
+.card p{font-size:14px;color:var(--muted)}
+.card .num{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--muted)}
+
+/* 備註框 */
+.note{border-left:4px solid var(--ink);background:#fff;border-radius:0 10px 10px 0;padding:14px 18px;margin:18px 0;font-size:14.5px}
+.note-p{border-left-color:var(--p-blue)}
+.note-c{border-left-color:var(--c-rose)}
+.note-h{border-left-color:var(--h-teal)}
+
+footer{padding:36px 0 56px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+
+/* 目錄 */
+nav.toc{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+nav.toc .wrap{display:flex;gap:6px;overflow-x:auto;padding-top:10px;padding-bottom:10px}
+nav.toc a{font-size:13.5px;font-weight:700;color:var(--muted);text-decoration:none;padding:5px 12px;border-radius:99px;white-space:nowrap}
+nav.toc a:hover,nav.toc a:focus-visible{background:var(--paper);color:var(--ink)}
+a:focus-visible{outline:2px solid var(--p-blue);outline-offset:2px}
+
+@media (max-width:640px){
+  .duo{grid-template-columns:1fr}
+  .flow{flex-direction:column}
+  .flow .arrow{transform:rotate(90deg);text-align:center;padding:2px 0}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">AI Engineering · Three Layers</div>
+    <h1><span class="t-p">提示工程</span> × <span class="t-c">情境工程</span> × <span class="t-h">框架工程</span><br>三層 AI 工程架構完整教學</h1>
+    <p class="lede">同一顆大型語言模型（Large Language Model, LLM），可以只回一句話，也可以自動跑完一整條文件產製管線。差別不在模型本身，而在你於哪一層做工程：<strong>訊息層、記憶層、機器層</strong>。三層是嵌套關係，不是取代關係。</p>
+
+    <div class="nest" aria-label="三層嵌套結構示意">
+      <span class="tag">第三層｜框架工程 Harness Engineering ——「機器」</span>
+      <p>設計整個自動化系統：蒐集 → 執行 → 驗證的迴圈、子代理分工、失敗重試。</p>
+      <div class="nest-c" style="margin-top:10px">
+        <span class="tag">第二層｜情境工程 Context Engineering ——「記憶」</span>
+        <p>管理有限的情境視窗：決定哪些資料留下、壓縮、丟棄，逐步維護模型「看得到什麼」。</p>
+        <div class="nest-p" style="margin-top:10px">
+          <span class="tag">第一層｜提示工程 Prompt Engineering ——「訊息」</span>
+          <p>組裝單一次輸入：角色、背景、指令、範例、輸出格式。</p>
+          <p class="sub">框架包含情境，情境包含提示——外層做得好，內層才有發揮空間。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="頁面目錄">
+  <div class="wrap">
+    <a href="#compare">三層對照</a>
+    <a href="#prompt">1 提示工程</a>
+    <a href="#context">2 情境工程</a>
+    <a href="#harness">3 框架工程</a>
+    <a href="#practice">實務進階路徑</a>
+    <a href="#pitfalls">常見誤區</a>
+  </div>
+</nav>
+
+<section id="compare">
+  <div class="wrap">
+    <div class="sec-head"><h2>三層架構一覽對照</h2></div>
+    <p class="sec-sub">先建立整體座標：三層各自的工作單位、優化對象與失敗徵兆不同，診斷問題時應先判斷「壞在哪一層」。</p>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>面向</th><th><span class="pill pill-p">提示工程</span></th><th><span class="pill pill-c">情境工程</span></th><th><span class="pill pill-h">框架工程</span></th></tr></thead>
+      <tbody>
+        <tr><td><b>比喻</b></td><td>訊息（The Message）</td><td>記憶（The Memory）</td><td>機器（The Machine）</td></tr>
+        <tr><td><b>工作單位</b></td><td>一次輸入（one input）</td><td>每一步「留在視窗內的內容」</td><td>整個任務管線（gather → act → verify）</td></tr>
+        <tr><td><b>核心問題</b></td><td>這次要怎麼「說」？</td><td>模型此刻該「看到」什麼？</td><td>系統要怎麼「自己跑完並驗證」？</td></tr>
+        <tr><td><b>核心操作</b></td><td>組裝：角色＋背景＋指令＋範例＋格式</td><td>策展：挑選（select）、壓縮（compress）、丟棄（drop）</td><td>編排：工具呼叫、子代理、驗證器、重試</td></tr>
+        <tr><td><b>優化方式</b></td><td>調整最弱的那個提示元件</td><td>調整視窗預算分配</td><td>調整迴圈與驗收標準</td></tr>
+        <tr><td><b>失敗徵兆</b></td><td>答非所問、格式錯誤、風格不對</td><td>長對話後遺忘、幻覺、抓錯重點</td><td>單步都對、整體流程卻走偏或無法收斂</td></tr>
+        <tr><td><b>典型工具</b></td><td>提示模板、少樣本範例（few-shot examples）</td><td>檢索增強生成（Retrieval-Augmented Generation, RAG）、摘要壓縮、記憶系統</td><td>代理框架（agent framework）、Claude Skills、n8n、驗證腳本</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="note">
+      <b>判斷順序建議：</b>由內而外。先確認提示寫對（同樣輸入單獨測試是否正確）→ 再檢查情境（模型當下視窗內有沒有它需要的資料）→ 最後才動框架（流程設計與驗證機制）。
+    </div>
+  </div>
+</section>
+<section id="prompt" class="band-p">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">Layer 1</span><h2><em>提示工程</em>｜組裝一則精準的訊息</h2></div>
+    <p class="sec-sub">提示工程（Prompt Engineering）的工作單位是「一次輸入」。目標：把角色、背景、指令、範例與輸出格式組裝成一則完整訊息，讓模型在單次推論中產出正確結果。</p>
+
+    <h3>運作流程</h3>
+    <div class="flow">
+      <div class="node hl-p"><b>① 組裝 Compose</b><span>五大元件 → 完整提示</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><b>② 送出 Send</b><span>一次輸入</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><b>③ 生成 Generate</b><span>LLM 推論產出</span></div>
+      <div class="arrow">→</div>
+      <div class="node hl-p"><b>④ 精修 Refine</b><span>調整最弱元件，重跑</span></div>
+    </div>
+
+    <h3>五大提示元件</h3>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>元件</th><th>功能</th><th>公務情境示例</th></tr></thead>
+      <tbody>
+        <tr><td><b>角色 Role</b></td><td>設定專業視角與行文立場</td><td>「你是中央機關承辦人，熟悉行政程序與公文格式」</td></tr>
+        <tr><td><b>背景 Context</b></td><td>提供任務所需的文件與事實</td><td>貼上會議紀錄、法規條文、前次函稿</td></tr>
+        <tr><td><b>指令 Instructions</b></td><td>明確定義要做什麼、步驟為何</td><td>「依三段式架構撰寫簽稿：主旨、說明、擬辦」</td></tr>
+        <tr><td><b>範例 Examples</b></td><td>用少樣本範例示範期望的輸入→輸出</td><td>附一份過去核定的同類簽稿當寫作樣板</td></tr>
+        <tr><td><b>格式 Format</b></td><td>指定輸出結構（表格、JSON、字數）</td><td>「說明分點條列，每點不超過 60 字」</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3>實作範例：撰寫研討會簽稿</h3>
+    <div class="duo">
+      <div class="box box-bad">
+        <div class="box-t">✗ 弱提示（缺角色、背景、格式）</div>
+        <p>模型只能靠猜，產出格式與用語通常不符機關慣例。</p>
+        <div class="code">幫我寫一份辦理國際研討會的簽。</div>
+      </div>
+      <div class="box box-good">
+        <div class="box-t">✓ 強提示（五元件齊備）</div>
+        <p>角色、背景、指令、範例、格式各就各位，可一次到位。</p>
+        <div class="code"><span class="k">【角色】</span>你是中央機關承辦人，熟悉三段式簽稿。
+<span class="k">【背景】</span>本科擬於 115 年 9 月辦理國際研討會，
+已邀 5 位國外講者，經費 120 萬元，由年度預算支應。
+<span class="k">【指令】</span>撰寫陳核簽稿，重點：辦理依據、
+講者與議程規劃、經費來源、行政分工。
+<span class="k">【範例】</span>（附去年核定簽稿一份，比照其語氣）
+<span class="k">【格式】</span>主旨一句話；說明分點；擬辦兩案並敘明建議。</div>
+      </div>
+    </div>
+
+    <div class="note note-p">
+      <b>精修原則：</b>結果不理想時，不要整段重寫，而是找出「最弱的元件」單點調整——格式錯就補格式規範、語氣錯就換範例、內容錯就補背景。一次改一項，才能定位真正的問題來源。
+    </div>
+  </div>
+</section>
+
+<section id="context" class="band-c">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">Layer 2</span><h2><em>情境工程</em>｜經營模型的工作記憶</h2></div>
+    <p class="sec-sub">情境工程（Context Engineering）的工作單位是「每一步留在視窗內的內容」。情境視窗（context window）是有限預算：塞得越滿，模型注意力越稀釋。策展人（curator）的任務是持續決定挑選、壓縮、丟棄。</p>
+
+    <h3>運作流程</h3>
+    <div class="flow">
+      <div class="node"><b>① 蒐集 Gather</b><span>六大來源匯入</span></div>
+      <div class="arrow">→</div>
+      <div class="node hl-c"><b>② 策展 Curate</b><span>挑選／壓縮／丟棄</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><b>③ 餵入 Feed</b><span>放進有限視窗</span></div>
+      <div class="arrow">→</div>
+      <div class="node hl-c"><b>④ 更新 Update</b><span>新產出成為下一步的情境</span></div>
+    </div>
+
+    <h3>六大情境來源</h3>
+    <div class="cards">
+      <div class="card"><b class="ct">使用者查詢 User query</b><p>本次任務的核心問題，永遠優先保留。</p></div>
+      <div class="card"><b class="ct">系統提示 System prompt</b><p>常駐的角色設定與行為規範（如 Skill 內的規則）。</p></div>
+      <div class="card"><b class="ct">檢索文件 Retrieved docs</b><p>從知識庫或雲端硬碟撈出的相關文件段落。</p></div>
+      <div class="card"><b class="ct">工具輸出 Tool outputs</b><p>搜尋結果、程式執行結果、API 回傳資料。</p></div>
+      <div class="card"><b class="ct">記憶 Memory</b><p>跨對話累積的長期偏好與專案背景。</p></div>
+      <div class="card"><b class="ct">先前輪次 Prior turns</b><p>本對話的歷史訊息——最容易膨脹的來源。</p></div>
+    </div>
+
+    <h3>策展三操作</h3>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>操作</th><th>做法</th><th>公務情境示例</th></tr></thead>
+      <tbody>
+        <tr><td><b>挑選 Select</b></td><td>只放與本步驟直接相關的內容</td><td>審規格書時只放本案 RFP 第三章，而非整包 200 頁招標文件</td></tr>
+        <tr><td><b>壓縮 Compress</b></td><td>長文件先摘要成要點再放入</td><td>三場會議紀錄先各壓成 10 條決議，再一起比對</td></tr>
+        <tr><td><b>丟棄 Drop</b></td><td>移除已完成階段的過程性內容</td><td>初稿討論定案後，開新對話只帶「定稿＋修改原則」</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3>實作範例：長對話處理採購案</h3>
+    <div class="duo">
+      <div class="box box-bad">
+        <div class="box-t">✗ 無策展</div>
+        <p>同一對話從需求訪談聊到驗收，貼進 5 份完整文件。50 輪之後模型開始混用不同版本的規格數字——不是模型變笨，是視窗裡塞了互相矛盾的舊資料。</p>
+      </div>
+      <div class="box box-good">
+        <div class="box-t">✓ 有策展</div>
+        <p>每完成一階段就請模型輸出「階段摘要」，開新對話時只帶三樣東西：</p>
+        <div class="code"><span class="cm"># 新對話的起手情境</span>
+1. 本案基本資料（案名、預算、期程）— 200 字
+2. 上一階段定案摘要 — 10 條要點
+3. 本階段唯一任務文件（規格書 v3 全文）</div>
+      </div>
+    </div>
+
+    <div class="note note-c">
+      <b>核心心法：</b>情境視窗是「工作桌面」不是「檔案櫃」。桌上只放正在用的文件；其餘進檔案櫃（知識庫、專案文件），需要時再檢索。判斷標準：這段內容若刪掉，模型下一步會做錯嗎？不會，就丟。
+    </div>
+  </div>
+</section>
+<section id="harness" class="band-h">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">Layer 3</span><h2><em>框架工程</em>｜打造會自我驗證的機器</h2></div>
+    <p class="sec-sub">框架工程（Harness Engineering）的工作單位是「整條任務管線」。它把前兩層包進一個可重複執行的迴圈：蒐集（Gather）→ 執行（Act）→ 驗證（Verify），驗證未通過就帶著更新後的情境重跑，直到產出通過驗收才交付。</p>
+
+    <h3>運作流程</h3>
+    <div class="flow">
+      <div class="node hl-c"><b>① 蒐集 Gather</b><span>情境工程區：策展 → 有限視窗</span></div>
+      <div class="arrow">→</div>
+      <div class="node hl-p"><b>② 執行 Act</b><span>提示工程區：組裝提示 → 呼叫工具／子代理</span></div>
+      <div class="arrow">→</div>
+      <div class="node hl-h"><b>③ 驗證 Verify</b><span>測試腳本／LLM 評審</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><b>通過 → 交付</b><span>未通過 → 帶新情境重跑</span></div>
+    </div>
+
+    <h3>四個關鍵構件</h3>
+    <div class="cards">
+      <div class="card"><b class="ct">工具輸出 Tool outputs</b><p>計算、檢索、檔案處理交給確定性工具，不讓模型「用想的」——數字用程式算，法條用檢索查。</p></div>
+      <div class="card"><b class="ct">子代理 Sub-agent specialists</b><p>把大任務拆給多個專職代理：一個起草、一個核對法規、一個檢查格式，各自持有乾淨的小情境。</p></div>
+      <div class="card"><b class="ct">驗證器 Verifier</b><p>可執行的驗收標準：格式檢核腳本、必要欄位清單，或由 LLM 擔任評審（LLM-as-judge）逐項評分。</p></div>
+      <div class="card"><b class="ct">重試迴圈 Retry loop</b><p>驗證失敗不是終點：把失敗原因寫回情境，重新走 Gather → Act → Verify，直到收斂。</p></div>
+    </div>
+
+    <h3>實作範例：公文自動審查管線</h3>
+    <p style="font-size:14.5px;color:var(--muted)">以「文件多角色審查」為例——這正是把單次提示升級為框架的典型場景：</p>
+    <div class="code"><span class="cm"># 管線設計（可用 Claude Skill、代理框架或 n8n 實作）</span>
+
+<span class="k">Gather</span>  載入待審文件 + 審查基準（法規要點、格式規範）
+        → 策展：只放本件全文與對應規範，不放歷史案件
+
+<span class="k">Act</span>     子代理 A（法制視角）：檢核引據條文是否正確
+        子代理 B（主計視角）：檢核經費表述與科目
+        子代理 C（幕僚視角）：檢核三段式架構與用語
+        → 各自輸出結構化審查意見（JSON）
+
+<span class="k">Verify</span>  驗證器逐項比對：
+        - 必要欄位是否齊備（主旨／說明／擬辦）
+        - 三份意見是否互相矛盾 → 矛盾則標記人工裁決
+        - 通過 → 彙整為單一審查報告交付
+        - 未通過 → 把缺漏清單寫回情境，重跑 Act</div>
+
+    <div class="duo">
+      <div class="box box-bad">
+        <div class="box-t">✗ 只靠一次提示</div>
+        <p>「幫我審這份公文」——單一視角、無驗收標準，漏了也不知道漏，每次品質浮動。</p>
+      </div>
+      <div class="box box-good">
+        <div class="box-t">✓ 框架化</div>
+        <p>多角色分工＋明確驗收清單＋失敗重跑。品質由「流程」保證，而非單次運氣；且可重複用於每一份新文件。</p>
+      </div>
+    </div>
+
+    <div class="note note-h">
+      <b>核心心法：</b>框架工程的價值在「驗證器」。沒有可執行的驗收標準，迴圈就無從收斂——先寫得出「怎樣算通過」，才值得蓋機器。
+    </div>
+  </div>
+</section>
+
+<section id="practice">
+  <div class="wrap">
+    <div class="sec-head"><h2>實務進階路徑：何時該升級到下一層</h2></div>
+    <p class="sec-sub">不是每個任務都需要三層。以任務特性判斷停在哪一層，避免過度工程。</p>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>任務特性</th><th>停在哪一層</th><th>典型任務</th></tr></thead>
+      <tbody>
+        <tr><td>一次性、資料可全放進單一訊息</td><td><span class="pill pill-p">提示工程</span></td><td>改寫一段文字、單份簽稿起草、翻譯、單表摘要</td></tr>
+        <tr><td>多輪、多文件、跨階段，資料超出單次可貼範圍</td><td><span class="pill pill-c">＋情境工程</span></td><td>採購案全程協作、法規研修比對、長期專案追蹤</td></tr>
+        <tr><td>重複性高、可定義驗收標準、想無人化執行</td><td><span class="pill pill-h">＋框架工程</span></td><td>每日資料彙整自動化、批次文件審查、例行報表產製</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3>三步升級練習</h3>
+    <div class="cards">
+      <div class="card"><span class="num">STEP 1</span><b class="ct">把慣用任務寫成提示模板</b><p>挑一項每週重複的文書任務，依五元件寫成固定模板，連續使用兩週並每次只修一個元件。</p></div>
+      <div class="card"><span class="num">STEP 2</span><b class="ct">為長專案建立情境紀律</b><p>訂定「階段摘要」習慣：每完成一階段輸出定案摘要，開新對話只帶摘要＋當前文件。</p></div>
+      <div class="card"><span class="num">STEP 3</span><b class="ct">為一項例行任務蓋框架</b><p>先寫驗收清單，再設計 Gather → Act → Verify 流程，最後才選工具（Skill／n8n／腳本）實作。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pitfalls" style="background:#fff;border-top:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head"><h2>常見誤區</h2></div>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>誤區</th><th>問題</th><th>修正</th></tr></thead>
+      <tbody>
+        <tr><td><b>用提示解決情境問題</b></td><td>長對話出錯就一直加指令「請記得前面說的」，越加越亂</td><td>問題在視窗不在措辭——做摘要、開新對話、重新策展</td></tr>
+        <tr><td><b>視窗當檔案櫃</b></td><td>一開始就貼滿所有可能用到的文件，注意力被稀釋</td><td>採「按需檢索」：先給索引，需要哪段再取哪段</td></tr>
+        <tr><td><b>沒有驗證器就蓋框架</b></td><td>自動化流程跑得動，但產出品質無從把關</td><td>先定義可檢核的驗收標準，再談自動化</td></tr>
+        <tr><td><b>一個代理包山包海</b></td><td>單一代理背負超長系統提示，角色互相干擾</td><td>拆成子代理，各持小而乾淨的情境</td></tr>
+        <tr><td><b>過度工程</b></td><td>一次性任務也蓋管線，維護成本高於效益</td><td>用「重複頻率 × 驗收可定義度」判斷是否值得框架化</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>三層 AI 工程架構教學｜概念架構參考：Rathnakumar Udayakumar（@rathanuday）資訊圖表。本頁內容經重新編寫並擴充教學範例。</p>
+  </div>
+</footer>
+
+</body>
+</html>

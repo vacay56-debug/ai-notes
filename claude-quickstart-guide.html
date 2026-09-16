@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude 操作速成指南｜7 天上手 × 12 週精進</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c2b26;
+  --pine:#1f4d3f;
+  --pine-deep:#12332a;
+  --ems:#e8590c;
+  --ems-soft:#fdeee3;
+  --paper:#f7f9f6;
+  --card:#ffffff;
+  --line:#d8e0da;
+  --muted:#5c6b64;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Noto Sans TC',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.85;
+  font-size:16px;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px;}
+
+/* ── Header ── */
+header{
+  background:var(--pine-deep);
+  color:#f2f6f3;
+  padding:64px 0 48px;
+}
+.eyebrow{
+  display:inline-block;
+  border:1px solid rgba(255,255,255,.35);
+  padding:3px 14px;
+  border-radius:999px;
+  font-size:.8rem;
+  letter-spacing:.25em;
+  margin-bottom:20px;
+}
+h1{
+  font-family:'Noto Serif TC',serif;
+  font-weight:900;
+  font-size:clamp(1.9rem,5vw,2.8rem);
+  line-height:1.35;
+  margin-bottom:14px;
+}
+h1 .accent{color:#ffb385;}
+header p.sub{color:#c4d4cc;max-width:560px;font-size:.95rem;}
+
+/* ── Nav ── */
+nav{
+  background:var(--pine);
+  position:sticky;top:0;z-index:50;
+  overflow-x:auto;
+}
+nav .wrap{display:flex;gap:4px;padding:0 12px;}
+nav a{
+  color:#dceae2;text-decoration:none;
+  padding:10px 14px;font-size:.85rem;white-space:nowrap;
+}
+nav a:hover,nav a:focus-visible{background:rgba(255,255,255,.12);outline:none;}
+
+/* ── Sections ── */
+section{padding:52px 0 8px;}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:22px;border-bottom:3px solid var(--pine);padding-bottom:10px;}
+.sec-no{
+  font-family:'Noto Serif TC',serif;font-weight:900;
+  color:var(--ems);font-size:1.05rem;letter-spacing:.1em;
+}
+h2{
+  font-family:'Noto Serif TC',serif;font-weight:900;
+  font-size:clamp(1.3rem,3.5vw,1.65rem);color:var(--pine-deep);
+}
+h3{font-size:1.05rem;font-weight:700;color:var(--pine);margin:18px 0 8px;}
+p{margin-bottom:12px;}
+strong{color:var(--pine-deep);}
+
+.card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:10px;padding:20px 22px;margin-bottom:16px;
+}
+.card-accent{border-left:5px solid var(--ems);}
+
+/* key points */
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;}
+.kp .card{margin-bottom:0;}
+.kp .card b{display:block;color:var(--ems);margin-bottom:6px;font-size:.98rem;}
+.kp .card p{margin:0;font-size:.9rem;color:var(--muted);}
+
+/* day plan */
+.day{
+  display:grid;grid-template-columns:88px 1fr;gap:0;
+  background:var(--card);border:1px solid var(--line);
+  border-radius:10px;overflow:hidden;margin-bottom:12px;
+}
+.day .d{
+  background:var(--pine);color:#fff;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  font-family:'Noto Serif TC',serif;font-weight:900;padding:12px 6px;
+}
+.day .d span{font-size:1.4rem;}
+.day .d small{font-size:.7rem;font-weight:400;letter-spacing:.15em;}
+.day .body{padding:14px 18px;}
+.day .body b{color:var(--pine-deep);}
+.day ul{margin:6px 0 0 1.2em;font-size:.92rem;}
+.day li{margin-bottom:4px;}
+.tag{
+  display:inline-block;background:var(--ems-soft);color:var(--ems);
+  font-size:.75rem;font-weight:700;padding:1px 10px;border-radius:999px;margin-left:6px;
+}
+
+/* exercises */
+.ex .card{position:relative;padding-top:26px;}
+.ex .lv{
+  position:absolute;top:-12px;left:18px;
+  background:var(--ems);color:#fff;font-weight:700;font-size:.8rem;
+  padding:2px 14px;border-radius:999px;
+}
+.ex table{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:8px;}
+.ex td{padding:6px 8px;border-top:1px dashed var(--line);vertical-align:top;}
+.ex td:first-child{width:88px;color:var(--pine);font-weight:700;white-space:nowrap;}
+
+/* mistakes */
+.mis{counter-reset:m;}
+.mis .card{display:flex;gap:16px;align-items:flex-start;}
+.mis .card::before{
+  counter-increment:m;content:counter(m,decimal-leading-zero);
+  font-family:'Noto Serif TC',serif;font-weight:900;font-size:1.5rem;
+  color:var(--line);line-height:1;
+}
+.mis b{color:#b0400a;display:block;margin-bottom:4px;}
+.mis p{margin:0;font-size:.92rem;}
+.fix{color:var(--pine);font-weight:700;}
+
+/* resources */
+.res .card b{color:var(--pine-deep);}
+.res .card small{color:var(--muted);display:block;font-size:.85rem;}
+
+/* 12-week table */
+.wk{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:.9rem;}
+.wk th{background:var(--pine);color:#fff;padding:10px 12px;text-align:left;font-weight:700;}
+.wk td{padding:10px 12px;border-top:1px solid var(--line);vertical-align:top;}
+.wk tr td:first-child{font-weight:700;color:var(--ems);white-space:nowrap;}
+
+/* case */
+.case{
+  background:var(--pine-deep);color:#e8f0eb;border-radius:12px;
+  padding:28px 26px;margin:10px 0 20px;
+}
+.case h3{color:#ffb385;margin-top:0;}
+.case p{font-size:.95rem;}
+.case .metric{
+  display:inline-block;background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.25);border-radius:8px;
+  padding:6px 14px;margin:6px 8px 0 0;font-size:.85rem;
+}
+
+footer{
+  border-top:1px solid var(--line);margin-top:48px;
+  padding:26px 0 40px;color:var(--muted);font-size:.82rem;text-align:center;
+}
+@media(max-width:560px){
+  .day{grid-template-columns:64px 1fr;}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="eyebrow">CLAUDE 速成教練手冊</span>
+    <h1>7 天學會 Claude 操作，<br>把 AI 變成你的<span class="accent">最強業務助理</span></h1>
+    <p class="sub">為公部門文書工作者量身設計：從第一句提示詞，到可直接上線的公文、簡報與知識庫工作流。</p>
+  </div>
+</header>
+
+<nav aria-label="章節導覽">
+  <div class="wrap">
+    <a href="#s1">核心概念</a>
+    <a href="#s2">80/20 關鍵</a>
+    <a href="#s3">7 天計畫</a>
+    <a href="#s4">實作練習</a>
+    <a href="#s5">常見錯誤</a>
+    <a href="#s6">資源推薦</a>
+    <a href="#s7">每天 1 小時</a>
+    <a href="#s8">台灣案例</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- 1 -->
+<section id="s1">
+  <div class="sec-head"><span class="sec-no">第一節</span><h2>核心概念（白話說明）</h2></div>
+  <div class="card card-accent">
+    <p>Claude 不是搜尋引擎，而是一位<strong>能讀懂長文件、會寫作、可被指揮的資深幕僚</strong>。你給的「脈絡＋範例＋格式要求」越清楚，它產出的品質越接近可直接使用。</p>
+    <p style="margin:0">操作核心只有一句話：<strong>把每次提問當成交辦公文</strong>——說明背景（為什麼要做）、附上參考資料（範本或舊稿）、指定產出格式（主旨／說明／擬辦、表格、簡報大綱），然後針對結果「迭代修改」而不是砍掉重練。</p>
+  </div>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+  <div class="sec-head"><span class="sec-no">第二節</span><h2>80/20 關鍵（最重要的 20%）</h2></div>
+  <div class="kp">
+    <div class="card"><b>① 脈絡先行（角色＋背景）</b><p>開頭先講「你是誰、這份東西給誰看、用在什麼場合」。例：「你是熟悉《緊急醫療救護法》的政策幕僚，這份簽呈給組長核閱。」品質立刻提升 50%。</p></div>
+    <div class="card"><b>② 給範例（Few-shot）</b><p>貼一份你滿意的舊公文或簡報當「範本」，要求 Claude 模仿其格式與語氣。這是最省力、最可量化的技巧。</p></div>
+    <div class="card"><b>③ 指定輸出格式</b><p>明講要「三段式公文」「10 頁簡報大綱」「Excel 可貼的表格」。沒指定格式＝把決定權交給運氣。</p></div>
+    <div class="card"><b>④ 迭代修改，不重來</b><p>第一版只是草稿。接著下修正指令：「第二段太長，壓到 100 字」「擬辦改成三點」。連續修 2–3 輪，遠勝重寫提示詞。</p></div>
+    <div class="card"><b>⑤ 上傳檔案處理</b><p>直接丟 PDF、Word、Excel 給 Claude 摘要、比對、改寫。公部門 80% 的 AI 效益來自「餵文件」而非「憑空生成」。</p></div>
+    <div class="card"><b>⑥ 用 Projects 建常設指令</b><p>把單位背景、慣用格式、術語表寫進專案指令，之後每次對話自動套用，不必重複交代。</p></div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+  <div class="sec-head"><span class="sec-no">第三節</span><h2>7 天速成計畫</h2></div>
+
+  <div class="day"><div class="d"><small>DAY</small><span>1</span></div><div class="body">
+    <b>建立基本對話手感</b><span class="tag">40–60 分</span>
+    <ul>
+      <li>註冊／登入 Claude（網頁或 App），完成 5 組「有脈絡 vs. 沒脈絡」的同題對照提問。</li>
+      <li><b>成果：</b>親眼驗證脈絡對品質的影響，記下 3 個有效開場句。</li>
+    </ul>
+  </div></div>
+
+  <div class="day"><div class="d"><small>DAY</small><span>2</span></div><div class="body">
+    <b>學會迭代修改</b><span class="tag">45 分</span>
+    <ul>
+      <li>請 Claude 寫一封公務 Email，接著連下 3 輪修正指令（改語氣、改長度、改結構）。</li>
+      <li><b>成果：</b>完成一封可直接寄出的 Email，並體會「修」比「重寫」快。</li>
+    </ul>
+  </div></div>
+
+  <div class="day"><div class="d"><small>DAY</small><span>3</span></div><div class="body">
+    <b>檔案上傳與摘要</b><span class="tag">60 分</span>
+    <ul>
+      <li>上傳一份 20 頁以上的 PDF（法規、計畫書皆可），要求：摘要、重點表格、可能爭點。</li>
+      <li>再上傳第二份，要求「兩份文件差異比對表」。</li>
+      <li><b>成果：</b>一張可貼進簽呈的比對表。</li>
+    </ul>
+  </div></div>
+
+  <div class="day"><div class="d"><small>DAY</small><span>4</span></div><div class="body">
+    <b>範本仿寫（Few-shot）</b><span class="tag">45–60 分</span>
+    <ul>
+      <li>貼一份滿意的舊公文當範本，請 Claude 依新主題仿寫；比對格式、語氣是否到位。</li>
+      <li><b>成果：</b>第一份「範本驅動」的新公文草稿。</li>
+    </ul>
+  </div></div>
+
+  <div class="day"><div class="d"><small>DAY</small><span>5</span></div><div class="body">
+    <b>建立第一個 Project</b><span class="tag">60 分</span>
+    <ul>
+      <li>建立專案，寫入常設指令（單位背景、慣用格式、術語表），上傳 3–5 份常用參考文件。</li>
+      <li><b>成果：</b>一個「開口就懂你業務」的專屬工作區。</li>
+    </ul>
+  </div></div>
+
+  <div class="day"><div class="d"><small>DAY</small><span>6</span></div><div class="body">
+    <b>簡報與表格產製</b><span class="tag">60 分</span>
+    <ul>
+      <li>用同一份素材，分別要求「10 頁簡報大綱＋每頁講稿」與「Excel 追蹤表」。</li>
+      <li><b>成果：</b>一套可貼進 PowerPoint／Excel 的完整內容。</li>
+    </ul>
+  </div></div>
+
+  <div class="day"><div class="d"><small>DAY</small><span>7</span></div><div class="body">
+    <b>整合實戰＋建立 SOP</b><span class="tag">60–90 分</span>
+    <ul>
+      <li>挑一件本週真實待辦（簽呈、會議紀錄、簡報），全程用 Claude 完成。</li>
+      <li>把本週有效的提示詞整理成個人「提示詞範本庫」（10 條以內）。</li>
+      <li><b>成果：</b>第一件正式產出＋可重複使用的 SOP。</li>
+    </ul>
+  </div></div>
+</section>
+
+<!-- 4 -->
+<section id="s4" class="ex">
+  <div class="sec-head"><span class="sec-no">第四節</span><h2>三個實作練習（由淺入深）</h2></div>
+
+  <div class="card"><span class="lv">練習 1｜入門</span>
+    <h3>會議紀錄一鍵成稿</h3>
+    <table>
+      <tr><td>目標</td><td>把凌亂的會議筆記變成正式紀錄。</td></tr>
+      <tr><td>步驟重點</td><td>貼上原始筆記 → 指定格式（時間、出列席、決議、待辦） → 迭代修正 2 輪。</td></tr>
+      <tr><td>工具</td><td>Claude 網頁版或 App。</td></tr>
+      <tr><td>時間</td><td>約 30 分鐘。</td></tr>
+    </table>
+  </div>
+
+  <div class="card"><span class="lv">練習 2｜進階</span>
+    <h3>雙文件比對分析</h3>
+    <table>
+      <tr><td>目標</td><td>比對法規修正前後條文（或兩版計畫書），產出差異對照表與影響分析。</td></tr>
+      <tr><td>步驟重點</td><td>上傳兩份 PDF → 要求「三欄對照表：原條文／修正條文／修正理由」→ 追問「對地方機關的執行影響」。</td></tr>
+      <tr><td>工具</td><td>Claude ＋ 現有 PDF 檔案。</td></tr>
+      <tr><td>時間</td><td>約 60 分鐘。</td></tr>
+    </table>
+  </div>
+
+  <div class="card"><span class="lv">練習 3｜作品級</span>
+    <h3>建立「業務知識庫 Project」＋完整政策簡報</h3>
+    <table>
+      <tr><td>目標</td><td>做出一個可展示的成品：專屬 Project ＋ 一份 15 頁政策簡報（大綱、逐頁內容、講稿、Q&amp;A 預想題）。</td></tr>
+      <tr><td>步驟重點</td><td>① 建 Project，寫入常設指令與術語表；② 上傳 5 份核心文件；③ 產出簡報大綱 → 逐頁展開 → 生成講稿與 10 題長官可能提問；④ 貼進 PowerPoint 或 Gamma 完稿。</td></tr>
+      <tr><td>工具</td><td>Claude Projects ＋ PowerPoint／Gamma。</td></tr>
+      <tr><td>時間</td><td>約 2–3 小時（可拆兩天）。</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 5 -->
+<section id="s5" class="mis">
+  <div class="sec-head"><span class="sec-no">第五節</span><h2>常見錯誤與避免方法</h2></div>
+  <div class="card"><div><b>把 Claude 當搜尋引擎，一句話就想要完整答案</b><p>「幫我寫公文」這種提問注定失敗。<span class="fix">修正：</span>每次提問附上背景、對象、格式三要素。</p></div></div>
+  <div class="card"><div><b>第一版不滿意就整個重來</b><p>浪費前面累積的脈絡。<span class="fix">修正：</span>在同一對話中下修正指令，具體指出「哪一段、改成什麼樣」。</p></div></div>
+  <div class="card"><div><b>盲信產出內容，直接上簽</b><p>AI 可能編造法條號、日期、數據。<span class="fix">修正：</span>凡引用法規、統計、機關名稱，一律回原始文件核對；把「查核」列入 SOP 最後一步。</p></div></div>
+  <div class="card"><div><b>把機敏或個資文件直接上傳</b><p>公務資料有保密義務。<span class="fix">修正：</span>上傳前去識別化（遮蔽姓名、案號），並遵守機關的生成式 AI 使用規範。</p></div></div>
+  <div class="card"><div><b>有效的提示詞用完就丟</b><p>每次都從零開始，進步歸零。<span class="fix">修正：</span>建立個人提示詞範本庫（記事本或 Project 指令皆可），好用的立刻存檔。</p></div></div>
+</section>
+
+<!-- 6 -->
+<section id="s6" class="res">
+  <div class="sec-head"><span class="sec-no">第六節</span><h2>精簡資源推薦（台灣友善）</h2></div>
+  <div class="card"><b>Anthropic 官方文件（docs.claude.com）</b><small>提示工程章節最權威，範例多且持續更新；搭配瀏覽器翻譯即可閱讀。</small></div>
+  <div class="card"><b>Anthropic 支援中心（support.claude.com）</b><small>Projects、檔案上傳、方案額度等操作問題，這裡查最快、最正確。</small></div>
+  <div class="card"><b>Anthropic 官方 YouTube 頻道</b><small>官方示範影片，看畫面學操作，適合不想讀文件的入門者。</small></div>
+  <div class="card"><b>Facebook 台灣生成式 AI 社團（搜尋「生成式 AI」「AI 工作術」）</b><small>大量繁中實戰案例與提示詞分享，公務、行政應用討論活躍。</small></div>
+  <div class="card"><b>Hahow／YouTube 繁中 AI 應用課程</b><small>系統化繁中教學，適合想按部就班、需要完課證明的學習者。</small></div>
+</section>
+
+<!-- 7 -->
+<section id="s7">
+  <div class="sec-head"><span class="sec-no">第七節</span><h2>每天 1 小時 × 12 週優化策略</h2></div>
+  <table class="wk">
+    <tr><th>週次</th><th>焦點</th><th>檢核點（可量化）</th></tr>
+    <tr><td>第 1–2 週</td><td>基本對話＋迭代修改（原 Day 1–2 拉長練熟）</td><td>累積 10 組有效提示詞；完成 3 封可寄出的 Email。</td></tr>
+    <tr><td>第 3–4 週</td><td>檔案上傳：摘要、比對、萃取表格</td><td>完成 3 份文件摘要＋1 張雙文件比對表。</td></tr>
+    <tr><td>第 5–6 週</td><td>範本仿寫：公文、會議紀錄</td><td>2 份範本驅動的公文草稿，主管修改幅度低於 3 成。</td></tr>
+    <tr><td>第 7–8 週</td><td>建立 Project 與常設指令、術語表</td><td>1 個上線使用的業務 Project，日常提問改在專案內進行。</td></tr>
+    <tr><td>第 9–10 週</td><td>簡報與表格產製工作流</td><td>1 份 15 頁簡報（含講稿）從素材到完稿全程 AI 協作。</td></tr>
+    <tr><td>第 11–12 週</td><td>整合實戰：真實業務全流程＋個人 SOP 定稿</td><td>1 件正式業務產出＋10 條提示詞範本庫；估算單件文書時間節省 ≥ 40%。</td></tr>
+  </table>
+  <p style="margin-top:14px;font-size:.9rem;color:var(--muted)">原則：每週前 4 天各 1 小時「練」，第 5 天用 1 小時「用在真實工作」並記錄檢核點。學了不用，等於沒學。</p>
+</section>
+
+<!-- 8 -->
+<section id="s8">
+  <div class="sec-head"><span class="sec-no">第八節</span><h2>實際應用案例（台灣情境）</h2></div>
+  <div class="case">
+    <h3>案例：中央機關承辦人的法規修正作業</h3>
+    <p><strong>場景：</strong>某中央機關專員需辦理管理辦法修正，手上有現行條文、三份地方機關意見函與兩篇國外制度報告。<strong>目標：</strong>兩週內完成修正草案總說明、條文對照表與長官報告簡報。</p>
+    <p><strong>做法：</strong>建立專案 Project 上傳全部文件 → 請 Claude 產出「各方意見彙整表」→ 逐條生成修正對照表初稿 → 承辦人逐條核對法源後定稿 → 最後一小時產出 12 頁簡報大綱與講稿。</p>
+    <div>
+      <span class="metric">文書作業時間：5 天 → 2 天</span>
+      <span class="metric">意見彙整：3 小時 → 20 分鐘</span>
+      <span class="metric">簡報產製：半天 → 1 小時</span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Claude 操作速成指南｜學習用參考文件｜產出內容涉及法規與數據時，請務必回原始文件查核
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 自動化系統基礎架構｜九層架構與範例教學</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F4F7; --card:#FFFFFF; --ink:#17222B; --ink-2:#4A5A66; --line:#D5DDE4;
+  --code-bg:#101922; --code-ink:#D7E3EC;
+  --c1:#E8804A; --c2:#8A63D2; --c3:#3D8FD1; --c4:#4CA86B; --c5:#D8A62A; --c6:#D45FA4; --c7:#4A9BC0; --c8:#9A7BD8; --c9:#5FA85F;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}
+.mono{font-family:'JetBrains Mono',monospace}
+
+/* ===== Header ===== */
+header{max-width:1180px;margin:0 auto;padding:56px 24px 32px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.18em;color:var(--ink-2);text-transform:uppercase;margin-bottom:14px}
+h1{font-weight:900;font-size:clamp(30px,4.6vw,52px);line-height:1.2;letter-spacing:.01em}
+h1 .en{display:block;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:clamp(13px,1.4vw,16px);color:var(--ink-2);letter-spacing:.08em;margin-top:10px}
+.lede{max-width:760px;margin-top:20px;color:var(--ink-2);font-size:15.5px}
+.lede b{color:var(--ink)}
+
+/* ===== Layout ===== */
+.wrap{max-width:1180px;margin:0 auto;padding:12px 24px 90px;display:grid;grid-template-columns:230px 1fr;gap:36px;align-items:start}
+
+/* ===== Stack nav（簽名元素：系統堆疊圖） ===== */
+nav.stack{position:sticky;top:24px}
+nav.stack .cap{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;color:var(--ink-2);margin-bottom:10px}
+nav.stack a{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);padding:9px 12px;font-size:13.5px;font-weight:500;position:relative;transition:transform .15s ease, box-shadow .15s ease}
+nav.stack a + a{margin-top:-1px}
+nav.stack a:first-of-type{border-radius:10px 10px 0 0}
+nav.stack a:last-of-type{border-radius:0 0 10px 10px}
+nav.stack a .bar{width:8px;height:22px;border-radius:3px;flex:none}
+nav.stack a .no{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-2)}
+nav.stack a:hover{transform:translateX(4px);box-shadow:0 2px 10px rgba(23,34,43,.10);z-index:2}
+nav.stack a.on{transform:translateX(6px);box-shadow:0 3px 14px rgba(23,34,43,.14);z-index:3;font-weight:700}
+nav.stack a:focus-visible{outline:2px solid var(--ink);outline-offset:2px;z-index:4}
+
+/* ===== Sections ===== */
+section.layer{margin-bottom:44px;scroll-margin-top:20px}
+.layer-head{display:flex;align-items:baseline;gap:14px;border-left:6px solid;padding:6px 0 6px 16px;margin-bottom:18px}
+.layer-head .no{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink-2)}
+.layer-head h2{font-size:24px;font-weight:900}
+.layer-head .en{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-2);letter-spacing:.04em}
+.layer-intro{color:var(--ink-2);font-size:14.5px;margin:-8px 0 16px 22px;max-width:720px}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* ===== Concept cards ===== */
+details.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+details.card summary{list-style:none;cursor:pointer;padding:16px 18px;display:block;position:relative}
+details.card summary::-webkit-details-marker{display:none}
+details.card summary:hover{background:#FAFBFC}
+details.card summary:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.card .name{font-weight:700;font-size:16.5px;display:flex;align-items:center;gap:8px}
+.card .name .dot{width:9px;height:9px;border-radius:50%;flex:none}
+.card .name .en{font-family:'JetBrains Mono',monospace;font-weight:400;font-size:11.5px;color:var(--ink-2)}
+.card .desc{color:var(--ink-2);font-size:13.8px;margin-top:4px}
+.card .hint{position:absolute;right:16px;top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-2);border:1px solid var(--line);border-radius:20px;padding:2px 10px;transition:background .15s}
+details.card[open] .hint{background:var(--ink);color:#fff;border-color:var(--ink)}
+details.card[open] .hint::after{content:" −"}
+details.card:not([open]) .hint::after{content:" +"}
+
+.tut{border-top:1px dashed var(--line);padding:16px 18px 20px;font-size:14.2px}
+.tut .tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#fff;background:var(--ink);border-radius:4px;padding:2px 8px;display:inline-block;margin:10px 0 6px}
+.tut .tag:first-child{margin-top:0}
+.tut p{margin-bottom:4px}
+.tut p b{font-weight:700}
+pre{background:var(--code-bg);color:var(--code-ink);font-family:'JetBrains Mono',monospace;font-size:12.3px;line-height:1.7;border-radius:10px;padding:14px 16px;overflow-x:auto;margin:8px 0 4px;white-space:pre}
+pre .cm{color:#6E8A9E}
+pre .k{color:#7FC8F0}
+pre .s{color:#A8D8A8}
+
+footer{max-width:1180px;margin:0 auto;padding:0 24px 60px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--line);padding-top:24px}
+
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr;gap:20px}
+  nav.stack{position:static;display:flex;overflow-x:auto;gap:8px;padding-bottom:6px}
+  nav.stack .cap{display:none}
+  nav.stack a, nav.stack a:first-of-type, nav.stack a:last-of-type{border-radius:10px;flex:none;margin-top:0}
+  nav.stack a:hover, nav.stack a.on{transform:none}
+  .grid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  nav.stack a{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">SYSTEM BLUEPRINT · 09 LAYERS · 36 CONCEPTS</div>
+  <h1>AI 自動化系統基礎架構
+    <span class="en">FUNDAMENTALS OF AI AUTOMATION SYSTEMS</span>
+  </h1>
+  <p class="lede">一套可靠的人工智慧（Artificial Intelligence, AI）自動化系統由九個層面組成：從工作流的啟動方式、決策邏輯、系統整合，到資料、監控、擴展、安全、成本與對齊控制。<b>點選左側堆疊圖跳轉章節，點開任一概念卡即可展開「範例教學」</b>，每則教學均含情境與可直接套用的實作範例。</p>
+</header>
+
+<div class="wrap">
+
+<nav class="stack" aria-label="九層架構導覽">
+  <div class="cap">SYSTEM STACK</div>
+  <a href="#l1"><span class="bar" style="background:var(--c1)"></span><span><span class="no">L1</span> 智慧工作流</span></a>
+  <a href="#l2"><span class="bar" style="background:var(--c2)"></span><span><span class="no">L2</span> AI 決策層</span></a>
+  <a href="#l3"><span class="bar" style="background:var(--c3)"></span><span><span class="no">L3</span> 整合層</span></a>
+  <a href="#l4"><span class="bar" style="background:var(--c4)"></span><span><span class="no">L4</span> 資料與知識</span></a>
+  <a href="#l5"><span class="bar" style="background:var(--c5)"></span><span><span class="no">L5</span> 可觀測性</span></a>
+  <a href="#l6"><span class="bar" style="background:var(--c6)"></span><span><span class="no">L6</span> 擴展性</span></a>
+  <a href="#l7"><span class="bar" style="background:var(--c7)"></span><span><span class="no">L7</span> 安全與治理</span></a>
+  <a href="#l8"><span class="bar" style="background:var(--c8)"></span><span><span class="no">L8</span> 效能與成本</span></a>
+  <a href="#l9"><span class="bar" style="background:var(--c9)"></span><span><span class="no">L9</span> 控制與對齊</span></a>
+</nav>
+
+<main>
+
+<!-- ============ L1 ============ -->
+<section class="layer" id="l1">
+  <div class="layer-head" style="border-color:var(--c1)">
+    <span class="no">L1</span><h2>智慧工作流</h2><span class="en">Intelligent Workflows</span>
+  </div>
+  <p class="layer-intro">定義自動化「何時啟動、如何推進、何時交回人工」的骨架。</p>
+  <div class="grid">
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c1)"></span>觸發式啟動 <span class="en">Trigger-Based</span><span class="hint">範例教學</span></div>
+        <div class="desc">由事件啟動流程：API 呼叫、Webhook、使用者操作。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>信箱收到帶有「電子報」標籤的郵件時，自動摘要並寫入知識庫。</p>
+        <span class="tag">實作（n8n 流程）</span>
+<pre><span class="cm"># 節點串接順序</span>
+Gmail Trigger (label = 電子報)
+  → HTTP Request：呼叫 LLM API 產生 300 字摘要
+  → Google Drive：附加至「每日摘要.md」</pre>
+        <p><b>重點</b>：觸發器（Trigger）只負責「偵測事件」，後續處理交給下游節點，二者解耦後流程才容易維護。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c1)"></span>事件串流 <span class="en">Event Streaming</span><span class="hint">範例教學</span></div>
+        <div class="desc">對持續產生的資料流做即時決策，而非批次等待。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>勤務派遣系統每分鐘產生數十筆紀錄，需即時偵測「同區域十分鐘內超過三件」的壅塞訊號。</p>
+        <span class="tag">實作（概念流程）</span>
+<pre>派遣紀錄 → 訊息佇列（如 Kafka / MQTT）
+        → 串流處理：滑動視窗 10 分鐘計數
+        → 超過門檻 → 推播告警至值勤群組</pre>
+        <p><b>重點</b>：串流處理的核心是「視窗」（window）——在時間窗內聚合、比對門檻，事件過了視窗即丟棄，記憶體佔用固定。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c1)"></span>目標導向代理 <span class="en">Goal-Driven Agents</span><span class="hint">範例教學</span></div>
+        <div class="desc">給定目標，由 AI 自行規劃並執行多個步驟。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>只下達一個目標：「彙整三份會議逐字稿，產出決議事項追蹤表」。</p>
+        <span class="tag">實作（代理自主拆解）</span>
+<pre><span class="cm"># 代理內部規劃（自動產生）</span>
+1. 讀取三份逐字稿檔案
+2. 逐份抽取「決議」與「待辦」句
+3. 合併去重，標註負責單位與期限
+4. 輸出 Excel 追蹤表</pre>
+        <p><b>重點</b>：代理（Agent）與一般提示的差別在於「規劃—執行—檢查」迴圈；下指令時給<b>目標與驗收標準</b>，不必列步驟。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c1)"></span>人機協作把關 <span class="en">Human-in-the-Loop, HITL</span><span class="hint">範例教學</span></div>
+        <div class="desc">低信心或高風險任務自動升級為人工處理。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>公文自動分文：AI 判斷承辦科別，信心不足時轉人工分文。</p>
+        <span class="tag">實作（判斷邏輯）</span>
+<pre><span class="k">if</span> confidence >= <span class="s">0.90</span>: 自動分文並記錄
+<span class="k">elif</span> confidence >= <span class="s">0.70</span>: 分文 + 標記「請複核」
+<span class="k">else</span>: 進人工待辦佇列，附 AI 建議與理由</pre>
+        <p><b>重點</b>：設兩道門檻而非一道——高信心全自動、中信心「先做後審」、低信心「先審後做」，兼顧效率與風險。</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ============ L2 ============ -->
+<section class="layer" id="l2">
+  <div class="layer-head" style="border-color:var(--c2)">
+    <span class="no">L2</span><h2>AI 決策層</h2><span class="en">AI Decision Layer</span>
+  </div>
+  <p class="layer-intro">依任務性質選用不同決策引擎：能寫死的用規則，需預測的用模型，需理解語意的才用 LLM。</p>
+  <div class="grid">
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c2)"></span>規則引擎 <span class="en">Rule Engine</span><span class="hint">範例教學</span></div>
+        <div class="desc">確定性邏輯與護欄，結果可預測、可稽核。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>採購案依金額自動判定適用程序，這類法定門檻絕不該交給 LLM「推理」。</p>
+        <span class="tag">實作</span>
+<pre><span class="k">if</span> 金額 >= 公告金額: 公開招標
+<span class="k">elif</span> 金額 >= 逾公告金額十分之一: 公開取得書面報價
+<span class="k">else</span>: 得採小額採購</pre>
+        <p><b>重點</b>：法規門檻、金額級距、格式檢核一律用規則引擎；LLM 輸出也應再過一層規則檢核（護欄），確保合規。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c2)"></span>機器學習模型 <span class="en">Machine Learning Models, ML</span><span class="hint">範例教學</span></div>
+        <div class="desc">從歷史資料學習規律，做預測分析與評分。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>依過去三年勤務量、節慶與天候，預測下月各分隊救護出勤量，作為排班參考。</p>
+        <span class="tag">實作（Python 概念）</span>
+<pre><span class="k">from</span> sklearn.ensemble <span class="k">import</span> GradientBoostingRegressor
+X = 特徵[[<span class="s">"月份"</span>,<span class="s">"連假天數"</span>,<span class="s">"均溫"</span>,<span class="s">"前月出勤"</span>]]
+model.fit(X_train, y_train)
+預測 = model.predict(下月特徵)</pre>
+        <p><b>重點</b>：ML 適合「數字進、數字出」的預測；資料品質（欄位一致、無缺漏）比演算法選擇更影響成敗。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c2)"></span>大型語言模型推理 <span class="en">LLM Reasoning</span><span class="hint">範例教學</span></div>
+        <div class="desc">具語境理解能力的語言智慧，處理非結構化文字。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>來函文字千變萬化，規則寫不完——用 LLM 判讀要旨並輸出結構化結果。</p>
+        <span class="tag">實作（提示設計）</span>
+<pre>你是公文分類助手。閱讀以下來函，僅輸出 JSON：
+{ <span class="s">"類別"</span>: 訓練/採購/法規/國際交流,
+  <span class="s">"要旨"</span>: 30 字內, <span class="s">"時限"</span>: 有/無 }</pre>
+        <p><b>重點</b>：讓 LLM 輸出<b>固定格式</b>（JSON），下游程式才接得住；「僅輸出 JSON、不加說明」要寫進提示。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c2)"></span>多代理系統 <span class="en">Multi-Agent Systems</span><span class="hint">範例教學</span></div>
+        <div class="desc">規劃者、執行者、審核者分工協作。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>文件審查：一個角色起草，多個角色以不同立場審查，再由整合者定稿。</p>
+        <span class="tag">實作（角色分工）</span>
+<pre>規劃者 Planner：拆解審查面向（法制/預算/執行）
+執行者 Executor：逐面向產出審查意見
+審核者 Verifier：檢查意見有無矛盾、遺漏
+整合者：彙整為單一修正建議表</pre>
+        <p><b>重點</b>：多代理的價值在「立場分離」——審核者不知道執行者的思路，才審得出盲點；單一模型分次扮演即可實現。</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ============ L3 ============ -->
+<section class="layer" id="l3">
+  <div class="layer-head" style="border-color:var(--c3)">
+    <span class="no">L3</span><h2>整合層</h2><span class="en">Integration Layer</span>
+  </div>
+  <p class="layer-intro">讓 AI 與既有系統互通：新系統走 API，即時通知走 Webhook，老系統靠 RPA。</p>
+  <div class="grid">
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c3)"></span>API 與 gRPC <span class="en">APIs &amp; gRPC</span><span class="hint">範例教學</span></div>
+        <div class="desc">結構化的服務間通訊，系統整合的標準做法。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>自建工具需要呼叫 LLM 服務產生摘要。</p>
+        <span class="tag">實作（HTTP API 呼叫）</span>
+<pre><span class="k">const</span> res = <span class="k">await</span> fetch(<span class="s">"https://api.example.com/v1/messages"</span>, {
+  method: <span class="s">"POST"</span>,
+  headers: { <span class="s">"Content-Type"</span>: <span class="s">"application/json"</span> },
+  body: JSON.stringify({ messages: [{ role: <span class="s">"user"</span>, content: 全文 }] })
+});</pre>
+        <p><b>重點</b>：REST API 通用性最高；gRPC 用於高頻、低延遲的內部服務通訊。行政應用九成情境 REST 即足夠。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c3)"></span>Webhooks<span class="en">即時推播觸發</span><span class="hint">範例教學</span></div>
+        <div class="desc">事件發生時由來源系統「主動推送」，免輪詢。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>GitHub 儲存庫收到推送（push）時，自動重新部署靜態網站。</p>
+        <span class="tag">實作</span>
+<pre><span class="cm"># GitHub Repo → Settings → Webhooks</span>
+Payload URL: https://自動化平台/webhook/deploy
+Content type: application/json
+Events: push
+<span class="cm"># 平台收到後執行：建置 → 發布 GitHub Pages</span></pre>
+        <p><b>重點</b>：Webhook 與 API 方向相反——API 是「我去問」，Webhook 是「它來報」。定時輪詢改 Webhook，延遲從分鐘降到秒級。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c3)"></span>工具呼叫 <span class="en">Tool Calling</span><span class="hint">範例教學</span></div>
+        <div class="desc">LLM 依需求自行呼叫外部工具（查詢、計算、寫檔）。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>問 AI「下週三下午有沒有空」，它需要真的查行事曆而非猜測。</p>
+        <span class="tag">實作（工具定義）</span>
+<pre>tools: [{
+  name: <span class="s">"query_calendar"</span>,
+  description: <span class="s">"查詢指定日期區間的行程"</span>,
+  input_schema: { start: <span class="s">"date"</span>, end: <span class="s">"date"</span> }
+}]
+<span class="cm"># 模型回傳 tool_use → 程式執行查詢 → 結果回填 → 模型作答</span></pre>
+        <p><b>重點</b>：工具的 <b>description 寫得越具體，模型選用越準</b>；工具呼叫是「模型出題、程式執行、結果回填」三步迴圈。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c3)"></span>RPA 自動化 <span class="en">Robotic Process Automation, RPA</span><span class="hint">範例教學</span></div>
+        <div class="desc">模擬人工操作舊系統介面，適用於無 API 的老系統。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>老舊內部系統只有網頁介面、沒有 API，需每日登入下載報表。</p>
+        <span class="tag">實作（瀏覽器自動化）</span>
+<pre><span class="cm"># Playwright（Python）</span>
+page.goto(內部系統網址)
+page.fill(<span class="s">"#account"</span>, 帳號); page.fill(<span class="s">"#pwd"</span>, 密碼)
+page.click(<span class="s">"text=每日統計"</span>)
+page.click(<span class="s">"text=匯出 Excel"</span>)</pre>
+        <p><b>重點</b>：RPA 是「過渡方案」——介面一改版就壞，務必加上失敗告警；能爭取到 API 就淘汰 RPA。</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ============ L4 ============ -->
+<section class="layer" id="l4">
+  <div class="layer-head" style="border-color:var(--c4)">
+    <span class="no">L4</span><h2>資料與知識</h2><span class="en">Data &amp; Knowledge</span>
+  </div>
+  <p class="layer-intro">AI 回答的品質上限由資料決定：先汲取、再清洗、建索引，最後讓回答「有憑有據」。</p>
+  <div class="grid">
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c4)"></span>資料汲取 <span class="en">Ingestion</span><span class="hint">範例教學</span></div>
+        <div class="desc">批次與串流兩種方式，把外部資料收進系統。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>各縣市每月回報統計 Excel，格式不一，需自動彙入同一資料庫。</p>
+        <span class="tag">實作</span>
+<pre><span class="cm"># 批次汲取：每月 5 日排程執行</span>
+<span class="k">for</span> f <span class="k">in</span> 收件匣附件(<span class="s">"*.xlsx"</span>):
+    df = pd.read_excel(f)
+    df[<span class="s">"來源縣市"</span>] = 解析檔名(f)
+    寫入資料庫(df, table=<span class="s">"raw_monthly"</span>)</pre>
+        <p><b>重點</b>：先原封不動存入「原始層」（raw），再另做清洗層——保留原始資料，出錯時才能追溯重跑。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c4)"></span>資料轉換 <span class="en">Transformation</span><span class="hint">範例教學</span></div>
+        <div class="desc">清洗、標準化與加值，讓資料可分析、可比對。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>各單位日期寫法不一（113/5/1、2024-05-01、5月1日），縣市名稱有簡稱與全稱混用。</p>
+        <span class="tag">實作</span>
+<pre>df[<span class="s">"日期"</span>] = 統一為西元(df[<span class="s">"日期"</span>])   <span class="cm"># 民國→西元</span>
+df[<span class="s">"縣市"</span>] = df[<span class="s">"縣市"</span>].map(縣市對照表) <span class="cm"># 北市→臺北市</span>
+df = df.drop_duplicates(subset=[<span class="s">"案件編號"</span>])</pre>
+        <p><b>重點</b>：轉換規則寫成<b>對照表與函式</b>集中管理，不要散落各處；每次清洗記錄「改了幾筆、為何改」。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c4)"></span>向量資料庫 <span class="en">Vector Databases</span><span class="hint">範例教學</span></div>
+        <div class="desc">以語意相似度檢索，找「意思相近」而非「字面相同」。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>查「救護車收費」相關規定，傳統關鍵字搜尋會漏掉寫成「緊急救護費用」的條文。</p>
+        <span class="tag">實作（概念流程）</span>
+<pre>法規逐條 → 嵌入模型（embedding）→ 向量存入 DB
+查詢句 → 同一嵌入模型 → 取相似度 Top 5 條文</pre>
+        <p><b>重點</b>：文件切塊（chunking）大小是關鍵——法規以「條」為單位切、報告以「段」切，檢索精度差很多。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c4)"></span>檢索增強生成 <span class="en">Retrieval-Augmented Generation, RAG</span><span class="hint">範例教學</span></div>
+        <div class="desc">先檢索相關文件，再讓 LLM 依據文件作答，有憑有據。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>希望 AI 回答法規問題時「引用條文」而不是憑印象作答。</p>
+        <span class="tag">實作（RAG 三步）</span>
+<pre>1. 檢索：向量庫取回最相關 5 條條文
+2. 組裝：條文 + 使用者問題 一併放入提示
+3. 生成：要求「僅依所附條文作答並註明條號，
+   查無依據時明確回答『所附資料未規定』」</pre>
+        <p><b>重點</b>：最後一句「查無依據就說沒有」是 RAG 抑制幻覺（hallucination）的核心指令，務必寫入。</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ============ L5 ============ -->
+<section class="layer" id="l5">
+  <div class="layer-head" style="border-color:var(--c5)">
+    <span class="no">L5</span><h2>可觀測性 <span style="font-size:15px;font-weight:500">（LLMOps）</span></h2><span class="en">Observability</span>
+  </div>
+  <p class="layer-intro">看得見才管得住：記錄每次呼叫、管理每版提示、自動評分輸出、失敗時有備援。</p>
+  <div class="grid">
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c5)"></span>日誌與追蹤 <span class="en">Logging &amp; Tracing</span><span class="hint">範例教學</span></div>
+        <div class="desc">記錄每次提示、回應、延遲與錯誤。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>某天摘要品質突然變差，需要回查是哪一版提示、哪個模型、哪筆輸入造成。</p>
+        <span class="tag">實作（記錄欄位）</span>
+<pre>{ trace_id, 時間, 模型, 提示版本,
+  輸入tokens, 輸出tokens, 延遲ms,
+  狀態: 成功/失敗, 錯誤訊息 }</pre>
+        <p><b>重點</b>：<b>trace_id 貫穿整條流程</b>（觸發→檢索→生成→輸出），跨節點查問題時才串得起來。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c5)"></span>提示版本管理 <span class="en">Prompt Versioning</span><span class="hint">範例教學</span></div>
+        <div class="desc">提示詞如同程式碼，需版本化管理與回滾能力。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>提示改了三次後效果變差，卻想不起前一版怎麼寫。</p>
+        <span class="tag">實作（Git 管理）</span>
+<pre>prompts/
+  摘要_v1.md   <span class="cm"># 每版獨立檔案</span>
+  摘要_v2.md   <span class="cm"># commit 訊息記錄「為何改」</span>
+<span class="cm"># 系統呼叫時載入指定版本，日誌記下版本號</span></pre>
+        <p><b>重點</b>：改提示前先留存舊版與測試案例，改完跑同一批案例比較——「憑感覺改提示」是品質不穩的最大來源。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c5)"></span>評估管線 <span class="en">Evaluation Pipelines</span><span class="hint">範例教學</span></div>
+        <div class="desc">用固定測試集自動評分輸出品質。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>公文分類提示每次修改後，需確認 50 筆標準案例的準確率沒有退步。</p>
+        <span class="tag">實作</span>
+<pre><span class="k">for</span> 案例 <span class="k">in</span> 測試集(50筆):
+    結果 = 分類(案例.全文, 提示版本)
+    正確 += (結果 == 案例.標準答案)
+準確率 = 正確 / 50   <span class="cm"># 低於前版即擋下上線</span></pre>
+        <p><b>重點</b>：測試集要含<b>刁鑽案例</b>（模稜兩可、格式異常）；主觀品質可再用另一個 LLM 當評審（LLM-as-judge）。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c5)"></span>備援模型 <span class="en">Fallback Models</span><span class="hint">範例教學</span></div>
+        <div class="desc">主模型故障或逾時，自動切換備援以維持服務。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>每日 07:00 自動產生晨報，主模型服務中斷不能讓晨報開天窗。</p>
+        <span class="tag">實作</span>
+<pre><span class="k">try</span>: 回應 = 呼叫(主模型, timeout=<span class="s">30</span>)
+<span class="k">except</span> (逾時, 服務錯誤):
+    回應 = 呼叫(備援模型)
+    日誌.warning(<span class="s">"已切換備援"</span>)</pre>
+        <p><b>重點</b>：備援切換必須<b>記錄並告警</b>，否則主模型壞了三天都沒人發現；備援輸出格式需與主模型相容。</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ============ L6 ============ -->
+<section class="layer" id="l6">
+  <div class="layer-head" style="border-color:var(--c6)">
+    <span class="no">L6</span><h2>擴展性</h2><span class="en">Scalability</span>
+  </div>
+  <p class="layer-intro">量大時系統不塌：能平行就平行、忙不過來就排隊、依負載伸縮、依任務挑模型。</p>
+  <div class="grid">
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c6)"></span>平行執行 <span class="en">Parallel Execution</span><span class="hint">範例教學</span></div>
+        <div class="desc">彼此獨立的任務同時執行，縮短總時程。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>100 份文件逐一摘要需 50 分鐘；文件彼此獨立，可平行處理。</p>
+        <span class="tag">實作（Python）</span>
+<pre><span class="k">import</span> asyncio
+tasks = [摘要(doc) <span class="k">for</span> doc <span class="k">in</span> 文件清單]
+結果 = <span class="k">await</span> asyncio.gather(*tasks)  <span class="cm"># 併發上限另設</span></pre>
+        <p><b>重點</b>：平行度受 API 速率限制（rate limit）約束，需搭配「併發上限＋排隊」；任務間<b>有相依關係就不能平行</b>。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c6)"></span>工作佇列 <span class="en">Worker Queues</span><span class="hint">範例教學</span></div>
+        <div class="desc">任務先入佇列，由多個工作者依序領取處理。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>上班時間大量請求湧入，直接處理會逾時；改為「先收單、後處理」。</p>
+        <span class="tag">實作（概念）</span>
+<pre>請求 → 入列（queue）→ 立即回覆「已受理，編號 #123」
+Worker ×3 ← 從佇列領件 → 處理完成 → 通知結果</pre>
+        <p><b>重點</b>：佇列把「尖峰」削成「平均」；務必設計<b>失敗重入列與死信佇列</b>（dead-letter queue），失敗任務才不會蒸發。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c6)"></span>自動擴展 <span class="en">Auto-Scaling</span><span class="hint">範例教學</span></div>
+        <div class="desc">依負載動態增減運算資源。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>平日一台主機足夠，月底報表期負載暴增五倍。</p>
+        <span class="tag">實作（雲端設定概念）</span>
+<pre>規則：CPU > 70% 持續 5 分鐘 → 加開 1 台（上限 5）
+      CPU < 30% 持續 10 分鐘 → 縮回 1 台（下限 1）</pre>
+        <p><b>重點</b>：擴展的前提是服務「無狀態」（stateless）——狀態放資料庫或佇列，任何一台機器都能接手任何請求。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c6)"></span>模型路由 <span class="en">Model Routing</span><span class="hint">範例教學</span></div>
+        <div class="desc">依任務難度選用不同等級模型，兼顧成本與品質。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>所有任務都用旗艦模型，成本高且多數任務用不到；建立分級選用規則。</p>
+        <span class="tag">實作（路由表）</span>
+<pre>分類、貼標、格式轉換     → 輕量模型（快、便宜）
+摘要、翻譯、一般文件草擬 → 中階模型
+政策分析、長文推理、審查 → 旗艦模型</pre>
+        <p><b>重點</b>：路由規則來自<b>評估資料</b>——先用旗艦模型建立「標準答案」，再測輕量模型達標的任務類型，達標者降級。</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ============ L7 ============ -->
+<section class="layer" id="l7">
+  <div class="layer-head" style="border-color:var(--c7)">
+    <span class="no">L7</span><h2>安全與治理</h2><span class="en">Security &amp; Governance</span>
+  </div>
+  <p class="layer-intro">身分驗證、最小權限、個資保護、輸出把關——公部門導入 AI 的先決條件。</p>
+  <div class="grid">
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c7)"></span>OAuth 與 API 金鑰 <span class="en">OAuth + API Keys</span><span class="hint">範例教學</span></div>
+        <div class="desc">安全的存取控制：識別「誰」在呼叫服務。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>自動化流程需存取雲端硬碟與信箱，不能把帳號密碼寫死在程式裡。</p>
+        <span class="tag">實作（原則）</span>
+<pre>API 金鑰 → 存於環境變數/密鑰管理服務，<span class="k">絕不</span>寫入程式碼或版控
+OAuth   → 授權特定範圍（scope），如「唯讀信件」
+         而非整個帳號</pre>
+        <p><b>重點</b>：金鑰<b>定期輪換</b>、一服務一金鑰；金鑰若曾提交進 Git，即視同外洩，立即作廢重發。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c7)"></span>角色權限控管 <span class="en">Role-Based Access Control, RBAC</span><span class="hint">範例教學</span></div>
+        <div class="desc">最小權限原則：每個角色只拿得到必要的權限。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>摘要機器人只需要「讀」文件，卻拿到了整個雲端硬碟的「讀寫刪」權限。</p>
+        <span class="tag">實作（權限表）</span>
+<pre>摘要服務   → 指定資料夾：唯讀
+產文服務   → 輸出資料夾：讀寫；其餘：無
+管理者     → 全域：讀寫（需雙因子驗證）</pre>
+        <p><b>重點</b>：權限依「服務」而非「人」授予；每季盤點一次，<b>用不到的權限立即收回</b>。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c7)"></span>資料隱私 <span class="en">Data Privacy</span><span class="hint">範例教學</span></div>
+        <div class="desc">加密與個資遮罩，個資不進模型。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>要用 AI 分析案件紀錄，但紀錄含姓名、身分證號等個人資料（Personally Identifiable Information, PII）。</p>
+        <span class="tag">實作（送模型前遮罩）</span>
+<pre>原文：王〇〇，A123456789，主訴胸痛
+遮罩：[姓名]，[身分證號]，主訴胸痛
+<span class="cm"># 遮罩對照表僅存於內部，分析結果回填時還原</span></pre>
+        <p><b>重點</b>：遮罩要在<b>資料離開內部環境之前</b>完成；統計分析多數情境根本不需要個資欄位，能刪就刪。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c7)"></span>AI 護欄 <span class="en">AI Guardrails</span><span class="hint">範例教學</span></div>
+        <div class="desc">對模型輸出做安全與合規強制檢核。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>對外回覆的草稿由 AI 產生，需防止出現未經核定的政策承諾或錯誤法條。</p>
+        <span class="tag">實作（輸出檢核層）</span>
+<pre>輸出 → 規則檢核：禁用語清單、法條號格式驗證
+     → 引用檢核：引述條文需存在於法規庫
+     → 未通過 → 退回重生成或轉人工</pre>
+        <p><b>重點</b>：護欄放在「輸出後、送出前」，與提示內的要求<b>互為雙保險</b>——提示會被忽略，檢核程式不會。</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ============ L8 ============ -->
+<section class="layer" id="l8">
+  <div class="layer-head" style="border-color:var(--c8)">
+    <span class="no">L8</span><h2>效能與成本</h2><span class="en">Performance &amp; Cost</span>
+  </div>
+  <p class="layer-intro">失敗要能重試、重複要能快取、語境要能壓縮、費用要能追蹤到每條流程。</p>
+  <div class="grid">
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c8)"></span>重試邏輯 <span class="en">Retry Logic</span><span class="hint">範例教學</span></div>
+        <div class="desc">優雅處理暫時性失敗，不因一次錯誤中斷全流程。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>API 偶發逾時或限流（429），立即重打只會加劇壅塞。</p>
+        <span class="tag">實作（指數退避）</span>
+<pre><span class="k">for</span> i <span class="k">in</span> range(<span class="s">4</span>):
+    <span class="k">try</span>: <span class="k">return</span> 呼叫API()
+    <span class="k">except</span> 暫時性錯誤:
+        sleep(<span class="s">2</span>**i + 隨機抖動)  <span class="cm"># 1s→2s→4s→8s</span>
+<span class="k">raise</span> 最終失敗  <span class="cm"># 進死信佇列並告警</span></pre>
+        <p><b>重點</b>：只重試<b>暫時性錯誤</b>（逾時、429、5xx）；參數錯誤（4xx）重試一百次也不會好，直接失敗告警。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c8)"></span>批次與快取 <span class="en">Batching &amp; Caching</span><span class="hint">範例教學</span></div>
+        <div class="desc">合併請求、重用結果，直接降低 API 成本。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>同一份法規說明每天被詢問數十次，每次都重新生成回答。</p>
+        <span class="tag">實作</span>
+<pre><span class="cm"># 快取：相同輸入直接回存檔結果</span>
+key = hash(提示 + 輸入)
+<span class="k">if</span> key <span class="k">in</span> 快取: <span class="k">return</span> 快取[key]
+<span class="cm"># 批次：非即時任務集中夜間以批次 API 處理，單價常有折扣</span></pre>
+        <p><b>重點</b>：快取需設<b>有效期限</b>並在來源更新時失效；「即時性不重要」的任務改批次，是最容易省下的成本。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c8)"></span>Token 最佳化 <span class="en">Token Optimization</span><span class="hint">範例教學</span></div>
+        <div class="desc">壓縮語境（context），只給模型必要的資訊。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>每次都把 200 頁手冊全文塞進提示，費用高且模型抓不到重點。</p>
+        <span class="tag">實作（三招）</span>
+<pre>1. 檢索取代全文：只送最相關段落（RAG）
+2. 滾動摘要：長對話定期壓縮成摘要再續談
+3. 精簡提示：範例留 2–3 個代表性案例即可</pre>
+        <p><b>重點</b>：語境不是越多越好——無關內容會<b>稀釋注意力</b>；「相關且精簡」同時省錢又提升品質。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c8)"></span>成本監控 <span class="en">Cost Monitoring</span><span class="hint">範例教學</span></div>
+        <div class="desc">逐工作流追蹤用量，費用可歸戶、可預警。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>月底帳單暴增，卻不知道是哪條流程吃掉預算。</p>
+        <span class="tag">實作</span>
+<pre><span class="cm"># 每次呼叫記錄</span>
+{ 工作流: <span class="s">"每日晨報"</span>, 模型, 輸入tokens, 輸出tokens, 費用 }
+<span class="cm"># 週報彙總：各工作流費用排行 + 月預算 80% 預警</span></pre>
+        <p><b>重點</b>：費用要能<b>歸戶到工作流</b>層級才有管理意義；設「單次呼叫 token 上限」防止異常輸入造成天價帳單。</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ============ L9 ============ -->
+<section class="layer" id="l9">
+  <div class="layer-head" style="border-color:var(--c9)">
+    <span class="no">L9</span><h2>AI 控制與對齊</h2><span class="en">AI Control &amp; Alignment</span>
+  </div>
+  <p class="layer-intro">讓 AI 只做被允許的事：邊界由政策定義、可靠度有指標、關鍵動作人工把關、錯誤回饋持續改進。</p>
+  <div class="grid">
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c9)"></span>政策引擎 <span class="en">Policy Engine</span><span class="hint">範例教學</span></div>
+        <div class="desc">以明文規則定義 AI 的行為邊界。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>AI 助理可以「草擬」文件，但不得「發送」；可以讀資料，但不得刪除。</p>
+        <span class="tag">實作（政策清單）</span>
+<pre>允許：讀取指定資料夾、產生草稿、建立行事曆事件
+禁止：對外發送郵件、刪除檔案、修改正式檔
+條件：涉金額之文件 → 一律轉人工核可</pre>
+        <p><b>重點</b>：政策寫成<b>機器可判讀的清單</b>並由程式強制執行，而非只寫在提示裡「拜託模型遵守」。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c9)"></span>信心評分 <span class="en">Confidence Scoring</span><span class="hint">範例教學</span></div>
+        <div class="desc">量化每次輸出的可靠程度，作為分流依據。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>分類任務需要知道模型「多有把握」，才能決定要不要人工複核。</p>
+        <span class="tag">實作（自評 + 校驗）</span>
+<pre>提示要求輸出：{ <span class="s">"類別"</span>: ..., <span class="s">"信心"</span>: 0–1, <span class="s">"理由"</span>: ... }
+定期抽驗：比對「自評信心」與「實際正確率」
+偏差過大 → 調整分流門檻</pre>
+        <p><b>重點</b>：模型自評信心<b>常常過度自信</b>，必須用抽驗資料校準門檻，不能直接採信。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c9)"></span>人工核可關卡 <span class="en">Human Approval Gates</span><span class="hint">範例教學</span></div>
+        <div class="desc">關鍵動作執行前，強制經人工確認。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>自動化流程可產生對外函稿，但「送出」這個動作影響重大，不可全自動。</p>
+        <span class="tag">實作</span>
+<pre>草稿完成 → 推播審核連結給承辦人
+承辦人檢視 → 按「核可」→ 系統始執行發送
+逾 24 小時未核可 → 提醒；<span class="k">絕不</span>逾時自動放行</pre>
+        <p><b>重點</b>：核可關卡設在<b>不可逆動作</b>之前（發送、付款、刪除、對外公開）；「逾時自動通過」是最常見的設計錯誤。</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>
+        <div class="name"><span class="dot" style="background:var(--c9)"></span>回饋迴圈 <span class="en">Feedback Loops</span><span class="hint">範例教學</span></div>
+        <div class="desc">收集修正紀錄，讓系統持續改進。</div>
+      </summary>
+      <div class="tut">
+        <span class="tag">情境</span>
+        <p>承辦人常修改 AI 草稿的同一類問題（語氣、格式），但系統從未從中學習。</p>
+        <span class="tag">實作</span>
+<pre>1. 保存「AI 草稿 vs 人工定稿」差異
+2. 每月彙整高頻修正模式
+3. 更新提示範例或風格規範 → 跑評估集驗證
+4. 新版上線 → 觀察修正率是否下降</pre>
+        <p><b>重點</b>：回饋要<b>回到提示與評估集</b>才算閉環；只收集不利用的回饋等於沒有回饋。</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+  依 VIDVATTA〈Fundamentals of AI Automation Systems〉架構重製之中文教學版。九層架構、三十六項概念，各附情境化範例教學。
+</footer>
+
+<script>
+// 導覽捲動高亮（scroll-spy）
+const links = document.querySelectorAll('nav.stack a');
+const secs = document.querySelectorAll('section.layer');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#' + e.target.id));
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+secs.forEach(s => io.observe(s));
+</script>
+
+</body>
+</html>

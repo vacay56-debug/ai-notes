@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude AI 速成教練指南｜消防署救護科實務版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FFFFFF;
+    --paper-edge:#F3F1EC;
+    --ink:#1C1C1C;
+    --ink-soft:#4A4A4A;
+    --vermilion:#B02E24;      /* 硃紅（印章色） */
+    --gov-blue:#1F3A5F;       /* 公文靛藍 */
+    --rule:#D9D5CC;
+    --highlight:#FBF7EE;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper-edge);
+    color:var(--ink);
+    font-family:'Noto Sans TC',sans-serif;
+    font-size:16px;
+    line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+  }
+  .sheet{
+    max-width:820px;
+    margin:32px auto 64px;
+    background:var(--paper);
+    border:1px solid var(--rule);
+    box-shadow:0 2px 14px rgba(0,0,0,.06);
+    position:relative;
+    padding:56px 64px 72px 88px;
+  }
+  /* 騎縫線 */
+  .sheet::before{
+    content:"";
+    position:absolute;
+    top:0;bottom:0;left:44px;
+    border-left:1.5px dashed var(--vermilion);
+    opacity:.55;
+  }
+  /* 檔號角標 */
+  .corner{
+    position:absolute;
+    top:18px;right:24px;
+    font-size:12px;
+    color:var(--ink-soft);
+    text-align:left;
+    line-height:1.7;
+    border:1px solid var(--rule);
+    padding:6px 12px;
+  }
+  .corner span{display:block;}
+  header.doc-head{
+    text-align:center;
+    padding-bottom:28px;
+    border-bottom:3px double var(--ink);
+    margin-bottom:8px;
+  }
+  .agency{
+    font-family:'Noto Serif TC',serif;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:.35em;
+    color:var(--gov-blue);
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:'Noto Serif TC',serif;
+    font-weight:900;
+    font-size:34px;
+    letter-spacing:.12em;
+    line-height:1.4;
+  }
+  .subtitle{
+    margin-top:10px;
+    font-size:15px;
+    color:var(--ink-soft);
+    letter-spacing:.15em;
+  }
+  .doc-meta{
+    display:flex;
+    justify-content:space-between;
+    font-size:13.5px;
+    color:var(--ink-soft);
+    padding:10px 2px 0;
+    margin-bottom:40px;
+  }
+  .doc-meta b{color:var(--ink);font-weight:500;}
+
+  section{margin-bottom:52px;}
+  h2{
+    font-family:'Noto Serif TC',serif;
+    font-weight:700;
+    font-size:22px;
+    letter-spacing:.08em;
+    color:var(--ink);
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin-bottom:18px;
+  }
+  h2 .num{
+    font-size:16px;
+    color:var(--vermilion);
+    font-weight:700;
+    letter-spacing:.2em;
+    flex-shrink:0;
+  }
+  h2::after{
+    content:"";
+    flex:1;
+    border-bottom:1px solid var(--rule);
+    transform:translateY(-4px);
+  }
+  h3{
+    font-family:'Noto Serif TC',serif;
+    font-size:16.5px;
+    font-weight:700;
+    color:var(--gov-blue);
+    margin:22px 0 8px;
+  }
+  p{margin-bottom:12px;}
+  strong{font-weight:700;}
+  .lead{
+    background:var(--highlight);
+    border-left:3px solid var(--gov-blue);
+    padding:16px 20px;
+    font-size:15.5px;
+  }
+  ol.cn, ul.plain{list-style:none;}
+  ol.cn > li{
+    padding-left:2.6em;
+    position:relative;
+    margin-bottom:14px;
+  }
+  ol.cn > li::before{
+    content:attr(data-n) "、";
+    position:absolute;left:0;
+    font-family:'Noto Serif TC',serif;
+    font-weight:700;
+    color:var(--vermilion);
+  }
+  .time{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    color:var(--gov-blue);
+    background:#EEF2F7;
+    padding:1px 8px;
+    border-radius:2px;
+    white-space:nowrap;
+    margin-left:6px;
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:14.5px;
+    margin:14px 0 6px;
+  }
+  th,td{
+    border:1px solid var(--rule);
+    padding:9px 12px;
+    vertical-align:top;
+    text-align:left;
+  }
+  th{
+    background:var(--highlight);
+    font-family:'Noto Serif TC',serif;
+    font-weight:700;
+    white-space:nowrap;
+    color:var(--gov-blue);
+  }
+  td .goal{color:var(--ink-soft);font-size:13.5px;display:block;margin-top:3px;}
+  .exercise{
+    border:1px solid var(--rule);
+    border-top:3px solid var(--gov-blue);
+    padding:20px 24px;
+    margin-bottom:20px;
+    background:#FDFDFB;
+  }
+  .exercise.showcase{border-top-color:var(--vermilion);}
+  .exercise h3{margin-top:0;}
+  .exercise .tags{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .mistake{
+    display:grid;
+    grid-template-columns:1.1fr 1.2fr;
+    gap:0;
+    border:1px solid var(--rule);
+    margin-bottom:10px;
+    font-size:14.5px;
+  }
+  .mistake .wrong{padding:12px 16px;border-right:1px solid var(--rule);}
+  .mistake .fix{padding:12px 16px;background:var(--highlight);}
+  .mistake .label{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.15em;
+    display:block;
+    margin-bottom:4px;
+  }
+  .wrong .label{color:var(--vermilion);}
+  .fix .label{color:var(--gov-blue);}
+  .resource{
+    border-bottom:1px dashed var(--rule);
+    padding:12px 2px;
+  }
+  .resource:last-child{border-bottom:none;}
+  .resource b{font-family:'Noto Serif TC',serif;color:var(--gov-blue);}
+  .resource small{color:var(--ink-soft);display:block;font-size:14px;}
+  .case{
+    background:var(--highlight);
+    border:1px solid var(--rule);
+    padding:22px 26px;
+  }
+  .case h3{margin-top:0;}
+  .metric{
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;
+    color:var(--vermilion);
+    font-weight:600;
+  }
+  /* 結尾職名章 */
+  footer.doc-foot{
+    margin-top:64px;
+    padding-top:24px;
+    border-top:3px double var(--ink);
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+  }
+  .foot-note{font-size:13px;color:var(--ink-soft);line-height:1.9;}
+  .stamp{
+    width:92px;height:92px;
+    border:3px solid var(--vermilion);
+    border-radius:6px;
+    color:var(--vermilion);
+    font-family:'Noto Serif TC',serif;
+    font-weight:900;
+    font-size:17px;
+    letter-spacing:.1em;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    line-height:1.5;
+    transform:rotate(-4deg);
+    opacity:.88;
+    flex-shrink:0;
+  }
+  @media (max-width:720px){
+    .sheet{padding:40px 22px 56px 40px;margin:0;}
+    .sheet::before{left:18px;}
+    .corner{display:none;}
+    h1{font-size:26px;}
+    .mistake{grid-template-columns:1fr;}
+    .mistake .wrong{border-right:none;border-bottom:1px solid var(--rule);}
+    .doc-meta{flex-direction:column;gap:4px;}
+  }
+  @media (prefers-reduced-motion:no-preference){
+    section{animation:rise .5s ease both;}
+    @keyframes rise{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="corner">
+    <span>檔　　號：學習－速成－001</span>
+    <span>保存年限：永久</span>
+  </div>
+
+  <header class="doc-head">
+    <div class="agency">內政部消防署　救災救護組　緊急救護科</div>
+    <h1>Claude AI 速成教練指南</h1>
+    <div class="subtitle">最短時間．實際上手．公務實務版</div>
+  </header>
+  <div class="doc-meta">
+    <div>中華民國115年7月5日</div>
+    <div>適用對象：<b>初次使用 Claude 之公務同仁</b></div>
+  </div>
+
+  <!-- 壹 -->
+  <section>
+    <h2><span class="num">壹</span>核心概念（白話說明）</h2>
+    <div class="lead">
+      <p>Claude 是對話式人工智慧（Artificial Intelligence, AI）助理，本質是一位<strong>讀得極快、寫得極快、但不了解你單位內情的新進同仁</strong>。你給的指令與資料越完整，它交回的初稿越接近可用。</p>
+      <p style="margin-bottom:0;">因此核心原理只有一句：<strong>把「下指令」當成「交辦公務」</strong>——說清楚角色、任務、格式，附上原始資料，再逐步修改到定稿。AI 產出的是初稿，最終判斷與事實查核永遠在承辦人手上。</p>
+    </div>
+  </section>
+
+  <!-- 貳 -->
+  <section>
+    <h2><span class="num">貳</span>80/20 關鍵（最重要的 20%）</h2>
+    <ol class="cn">
+      <li data-n="一"><strong>指令三要素：角色＋任務＋格式。</strong>例：「你是消防署救護科承辦人，請將以下會議紀錄改寫為三段式簽稿（主旨、說明、擬辦）。」有這三項，品質立刻提升五成。</li>
+      <li data-n="二"><strong>附上原始資料，不要憑空要求。</strong>把法規條文、報告 PDF、會議逐字稿直接貼上或上傳，讓 Claude「根據資料回答」而非「憑印象回答」，可大幅降低錯誤。</li>
+      <li data-n="三"><strong>給範例（few-shot）。</strong>貼一份過去核定過的公文當範本，說「照這個格式與語氣」，比描述十句格式要求更有效。</li>
+      <li data-n="四"><strong>迭代修改，不要砍掉重練。</strong>初稿不滿意時，直接說「第二段太長、擬辦改為三點」，Claude 會在原稿上修，比重新下指令快三倍。</li>
+      <li data-n="五"><strong>用專案（Projects）固化常用格式。</strong>把單位格式規範、常用術語存進專案說明，之後每次對話自動套用，免去重複貼上。</li>
+      <li data-n="六"><strong>事實必查核。</strong>凡引用之法條號次、統計數據、外國制度，一律回到原始來源（如 NotebookLM 上傳之一手文件或官方網站）覆核後才進公文。</li>
+    </ol>
+  </section>
+
+  <!-- 參 -->
+  <section>
+    <h2><span class="num">參</span>七天速成計畫</h2>
+    <table>
+      <thead><tr><th style="width:72px;">日次</th><th>具體任務</th><th style="width:118px;">預估時間</th></tr></thead>
+      <tbody>
+        <tr><td>第 1 天</td><td>註冊帳號、下載手機 App 與桌面版；用日常問題試問 5 題，熟悉介面與對話節奏。<span class="goal">成果：能自在地開啟新對話、續問、複製回覆。</span></td><td><span class="time">30–45 分</span></td></tr>
+        <tr><td>第 2 天</td><td>練習「角色＋任務＋格式」三要素：拿一段舊會議紀錄，請 Claude 改寫成三段式簽稿；再下兩次修改指令。<span class="goal">成果：完成第一份 AI 協作公文初稿。</span></td><td><span class="time">45–60 分</span></td></tr>
+        <tr><td>第 3 天</td><td>上傳一份 PDF（如法規條文或研究報告），要求摘要重點、列出爭點、產出比較表。<span class="goal">成果：學會「附資料再提問」的工作方式。</span></td><td><span class="time">45 分</span></td></tr>
+        <tr><td>第 4 天</td><td>建立第一個專案（Project）：在專案說明寫入單位格式規範（民國紀年、術語格式、三段式架構），測試是否自動套用。<span class="goal">成果：擁有一個「記得你格式」的工作空間。</span></td><td><span class="time">45–60 分</span></td></tr>
+        <tr><td>第 5 天</td><td>認識技能（Skills）與檔案產出：請 Claude 直接產出 Word（.docx）與簡報大綱檔案並下載檢視。<span class="goal">成果：得到可直接開啟編輯的文件檔。</span></td><td><span class="time">45 分</span></td></tr>
+        <tr><td>第 6 天</td><td>製作一份 8–10 頁政策簡報大綱，並嘗試以視覺化工具（如 Gamma）轉為投影片。<span class="goal">成果：完成第一份 AI 協作簡報。</span></td><td><span class="time">60 分</span></td></tr>
+        <tr><td>第 7 天</td><td>整合小專案：從一份原始資料出發，走完「摘要 → 簽稿 → 簡報大綱」完整流程，並記錄耗時。<span class="goal">成果：完成第一個端到端工作流，建立基準時數。</span></td><td><span class="time">60–90 分</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 肆 -->
+  <section>
+    <h2><span class="num">肆</span>三個實作練習（由淺入深）</h2>
+
+    <div class="exercise">
+      <h3>練習一：公文潤稿</h3>
+      <div class="tags">工具：Claude 對話介面｜<span class="time">約 30 分</span></div>
+      <p><strong>目標：</strong>體驗三要素指令與迭代修改。<strong>步驟重點：</strong>貼上一段自己寫的草稿 → 下指令「你是資深承辦人，請潤飾為正式公文語氣，維持原意」→ 針對不滿意處連續修改兩次 → 對照前後版本，記下 Claude 改得好與改壞的地方。</p>
+    </div>
+
+    <div class="exercise">
+      <h3>練習二：國際制度比較表</h3>
+      <div class="tags">工具：Claude＋一份外文 PDF（如美國、日本救護制度報告）｜<span class="time">約 60 分</span></div>
+      <p><strong>目標：</strong>學會以資料為本的分析。<strong>步驟重點：</strong>上傳 PDF → 要求「摘要制度重點，並與臺灣現制做成對照表：法源、分級、訓練時數、主管機關」→ 逐格核對原文 → 標記需人工查證之處。這一步養成「AI 產出、人工驗證」的紀律。</p>
+    </div>
+
+    <div class="exercise showcase">
+      <h3>練習三：完整政策簡報包（可展示作品）</h3>
+      <div class="tags">工具：Claude 專案＋Gamma｜<span class="time">約 120 分</span></div>
+      <p><strong>目標：</strong>產出一份可對長官或跨機關會議報告的成品。<strong>步驟重點：</strong>在專案內上傳 2–3 份一手資料 → 請 Claude 建立分析架構與簡報大綱（含問題背景、國際做法、政策建議、資源需求）→ 產出逐頁講稿 → 轉入 Gamma 生成視覺投影片 → 人工覆核數據與法條。完成後即是一份<strong>可展示、可留存的實際作品</strong>。</p>
+    </div>
+  </section>
+
+  <!-- 伍 -->
+  <section>
+    <h2><span class="num">伍</span>常見錯誤與避免方法</h2>
+
+    <div class="mistake">
+      <div class="wrong"><span class="label">錯誤一</span>指令只有一句：「幫我寫一份簽。」</div>
+      <div class="fix"><span class="label">修正</span>補齊三要素：角色、任務內容、格式要求，並附背景資料。</div>
+    </div>
+    <div class="mistake">
+      <div class="wrong"><span class="label">錯誤二</span>把 AI 當搜尋引擎，憑空問統計數據與法條細節。</div>
+      <div class="fix"><span class="label">修正</span>先附上原始文件再提問；查最新資訊時要求開啟網路搜尋並附來源。</div>
+    </div>
+    <div class="mistake">
+      <div class="wrong"><span class="label">錯誤三</span>直接把 AI 產出的法條號次、數據放進公文。</div>
+      <div class="fix"><span class="label">修正</span>建立「紅字覆核」習慣：凡引用一律回到官方來源核對後才定稿。</div>
+    </div>
+    <div class="mistake">
+      <div class="wrong"><span class="label">錯誤四</span>一次要求做完十件事，產出零散且品質不穩。</div>
+      <div class="fix"><span class="label">修正</span>拆步驟：先架構、再內容、後格式，一回合完成一件事。</div>
+    </div>
+    <div class="mistake">
+      <div class="wrong"><span class="label">錯誤五</span>每次對話都重貼格式規範，浪費時間且容易漏。</div>
+      <div class="fix"><span class="label">修正</span>把固定規範寫進專案說明或自訂偏好，一次設定、長期生效。</div>
+    </div>
+  </section>
+
+  <!-- 陸 -->
+  <section>
+    <h2><span class="num">陸</span>精簡資源推薦（臺灣友善）</h2>
+    <div class="resource"><b>Anthropic 官方說明中心（support.claude.com）</b><small>介面操作、方案功能的最權威來源，遇到「這功能怎麼開」先查這裡。</small></div>
+    <div class="resource"><b>Anthropic 提示工程文件（docs.claude.com）</b><small>官方整理的下指令技巧，範例完整、更新頻繁，是 80/20 技巧的原始出處。</small></div>
+    <div class="resource"><b>Claude 行動版 App（iOS／Android）</b><small>通勤零碎時間即可練習對話，降低「要坐在電腦前才能學」的門檻。</small></div>
+    <div class="resource"><b>NotebookLM（Google）</b><small>與 Claude 互補：上傳一手文件做事實查核與出處定位，適合公務引用場景。</small></div>
+    <div class="resource"><b>YouTube 與 Facebook 中文 AI 社群</b><small>以「Claude 教學」「生成式 AI 公務應用」關鍵字搜尋，可找到大量繁體中文實作示範與同行交流；建議挑選近三個月內更新之內容，避免介面已改版。</small></div>
+  </section>
+
+  <!-- 柒 -->
+  <section>
+    <h2><span class="num">柒</span>每天只有 1 小時：12 週優化策略</h2>
+    <table>
+      <thead><tr><th style="width:110px;">週次</th><th>焦點</th><th>檢核點</th></tr></thead>
+      <tbody>
+        <tr><td>第 1–2 週</td><td>基礎對話與指令三要素</td><td>能不看筆記寫出合格指令；完成 10 次潤稿練習。</td></tr>
+        <tr><td>第 3–4 週</td><td>附檔分析與事實查核紀律</td><td>完成 3 份 PDF 摘要，且引用處全數覆核無誤。</td></tr>
+        <tr><td>第 5–6 週</td><td>專案（Projects）與知識庫建置</td><td>建立 1 個含格式規範與常用資料的工作專案。</td></tr>
+        <tr><td>第 7–8 週</td><td>文件產出：Word、簡報大綱、表格</td><td>產出 1 份免手動重排版即可上陳的文件。</td></tr>
+        <tr><td>第 9–10 週</td><td>工作流串接（如 Gamma、行事曆、雲端硬碟）</td><td>走通 1 條「資料→分析→文件→簡報」自動化流程。</td></tr>
+        <tr><td>第 11–12 週</td><td>完整實戰專案與時數盤點</td><td>以真實業務完成端到端專案，量化節省時數並檢討。</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:14px;color:var(--ink-soft);">原則：每週前四天各 1 小時做練習，第五天 1 小時做覆盤與檢核點驗收；寧可進度慢，不可跳過查核習慣的養成。</p>
+  </section>
+
+  <!-- 捌 -->
+  <section>
+    <h2><span class="num">捌</span>實際應用案例（臺灣情境）</h2>
+    <div class="case">
+      <h3>案例：救護訓練教材之國際比較與陳核簡報</h3>
+      <p>某中央機關承辦人須於兩週內，就戰術緊急傷患救護（Tactical Emergency Casualty Care, TECC）訓練課程提出國際做法比較與政策建議。承辦人先將美國緊急救護技術員協會（National Association of Emergency Medical Technicians, NAEMT）課綱與國內現行教材上傳至 Claude 專案，建立比較架構與差異分析；再以 NotebookLM 就引用段落逐一定位原文出處；最後由 Claude 產出三段式簽稿與簡報大綱，交 Gamma 生成投影片。</p>
+      <p style="margin-bottom:0;">可衡量成果：原需約 5 個工作天之作業壓縮至 <span class="metric">1.5 個工作天</span>，引用查核率 <span class="metric">100%</span>，簡報一次通過科內審查。</p>
+    </div>
+  </section>
+
+  <footer class="doc-foot">
+    <div class="foot-note">
+      本指南供機關內部學習參考。<br>
+      AI 產出內容應經承辦人查核後始得引用；涉及法規解釋以主管機關函釋為準。
+    </div>
+    <div class="stamp">速成<br>教練<br>指南</div>
+  </footer>
+</div>
+</body>
+</html>

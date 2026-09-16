@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Skills TOP 10・GitHub 本週熱門</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#10221c;
+    --paper:#f2efe6;
+    --panel:#ffffff;
+    --line:#d9d2bf;
+    --moss:#1f6f5c;
+    --mint:#8fd4b8;
+    --amber:#c98a2c;
+    --muted:#6b6656;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 92% 4%, rgba(143,212,184,.35), transparent 40%),
+      repeating-linear-gradient(0deg, rgba(16,34,28,.035) 0px, rgba(16,34,28,.035) 1px, transparent 1px, transparent 26px);
+    color:var(--ink);
+    font-family:'Noto Sans TC', sans-serif;
+    padding:56px 20px 80px;
+  }
+
+  .wrap{max-width:860px;margin:0 auto;}
+
+  header{margin-bottom:44px;}
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:.14em;
+    color:var(--moss);
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:16px;
+  }
+  .eyebrow::before{content:"";width:22px;height:2px;background:var(--moss);display:inline-block;}
+
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:clamp(40px,7vw,64px);
+    line-height:.98;
+    margin:0 0 14px;
+    letter-spacing:-.01em;
+  }
+  h1 span{color:var(--moss);}
+
+  .meta{
+    font-size:14px;
+    color:var(--muted);
+    display:flex;flex-wrap:wrap;gap:6px 14px;
+    border-top:1px solid var(--line);
+    padding-top:14px;
+  }
+  .meta b{color:var(--ink);font-weight:700;}
+
+  ol{list-style:none;margin:0;padding:0;counter-reset:rank;}
+
+  li{
+    counter-increment:rank;
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    margin-bottom:12px;
+    box-shadow:0 1px 0 rgba(16,34,28,.03);
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  li:hover{
+    transform:translateY(-2px);
+    border-color:var(--moss);
+    box-shadow:0 10px 24px rgba(16,34,28,.08);
+  }
+
+  a.row{
+    display:grid;
+    grid-template-columns:52px 1fr auto;
+    align-items:center;
+    gap:18px;
+    padding:16px 20px;
+    text-decoration:none;
+    color:inherit;
+  }
+
+  .rank{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:14px;
+    color:var(--moss);
+    background:rgba(31,111,92,.09);
+    border-radius:8px;
+    height:36px;width:36px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  li:nth-child(1) .rank{background:var(--amber);color:#fff;}
+
+  .name{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:19px;
+    font-weight:700;
+    margin:0 0 4px;
+    word-break:break-word;
+  }
+
+  .sub{
+    font-size:13px;
+    color:var(--muted);
+    display:flex;flex-wrap:wrap;gap:4px 10px;
+    align-items:center;
+  }
+  .sub .star{color:var(--amber);font-weight:700;}
+  .sub .lang{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    border:1px solid var(--line);
+    border-radius:5px;
+    padding:1px 6px;
+  }
+
+  .right{
+    display:flex;flex-direction:column;align-items:flex-end;gap:6px;
+    min-width:96px;
+  }
+  .tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.06em;
+    color:var(--moss);
+    border-bottom:1.5px solid var(--moss);
+    padding-bottom:2px;
+    white-space:nowrap;
+  }
+  .url{
+    font-size:11.5px;
+    color:var(--muted);
+    text-decoration:underline;
+    text-decoration-color:var(--line);
+    word-break:break-all;
+    text-align:right;
+    max-width:220px;
+  }
+
+  footer{
+    margin-top:32px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    font-size:12.5px;
+    color:var(--muted);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  }
+
+  @media (max-width:600px){
+    a.row{grid-template-columns:40px 1fr;}
+    .right{grid-column:1 / -1;align-items:flex-start;flex-direction:row;justify-content:space-between;margin-top:4px;padding-left:58px;}
+    .url{text-align:left;max-width:100%;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">GITHUB TRENDING · AI SKILLS</div>
+    <h1>AI Skills<br><span>TOP 10</span></h1>
+    <div class="meta">
+      <span><b>2026.06.26</b> 排行榜快照</span>
+      <span>· 高星項目・工具流・工作流</span>
+      <span>· 已附上各專案 GitHub 網址</span>
+    </div>
+  </header>
+
+  <ol>
+    <li>
+      <a class="row" href="https://github.com/obra/superpowers" target="_blank" rel="noopener">
+        <span class="rank">01</span>
+        <span>
+          <p class="name">superpowers</p>
+          <span class="sub"><span class="star">★ 238.8k</span><span class="lang">Shell</span><span>AI 從聊天框變成可複用工作流</span></span>
+        </span>
+        <span class="right">
+          <span class="tag">工作流</span>
+          <span class="url">github.com/obra/superpowers</span>
+        </span>
+      </a>
+    </li>
+
+    <li>
+      <a class="row" href="https://github.com/JuliusBrussee/caveman" target="_blank" rel="noopener">
+        <span class="rank">02</span>
+        <span>
+          <p class="name">caveman</p>
+          <span class="sub"><span class="star">★ 77.0k</span><span class="lang">JavaScript</span><span>讓 Claude Code 用更少 token 做事</span></span>
+        </span>
+        <span class="right">
+          <span class="tag">省錢</span>
+          <span class="url">github.com/JuliusBrussee/caveman</span>
+        </span>
+      </a>
+    </li>
+
+    <li>
+      <a class="row" href="https://github.com/safishamsi/graphify" target="_blank" rel="noopener">
+        <span class="rank">03</span>
+        <span>
+          <p class="name">graphify</p>
+          <span class="sub"><span class="star">★ 72.1k</span><span class="lang">Python</span><span>把代碼、文檔變成 AI 可查知識圖譜</span></span>
+        </span>
+        <span class="right">
+          <span class="tag">知識圖譜</span>
+          <span class="url">github.com/safishamsi/graphify</span>
+        </span>
+      </a>
+    </li>
+
+    <li>
+      <a class="row" href="https://github.com/addyosmani/agent-skills" target="_blank" rel="noopener">
+        <span class="rank">04</span>
+        <span>
+          <p class="name">agent-skills</p>
+          <span class="sub"><span class="star">★ 66.8k</span><span class="lang">Shell</span><span>給 AI 編程助手裝上工程能力</span></span>
+        </span>
+        <span class="right">
+          <span class="tag">工程</span>
+          <span class="url">github.com/addyosmani/agent-skills</span>
+        </span>
+      </a>
+    </li>
+
+    <li>
+      <a class="row" href="https://github.com/ComposioHQ/awesome-claude-skills" target="_blank" rel="noopener">
+        <span class="rank">05</span>
+        <span>
+          <p class="name">awesome-claude-skills</p>
+          <span class="sub"><span class="star">★ 65.9k</span><span class="lang">Python</span><span>Claude Skills 入口目錄，一次性收藏</span></span>
+        </span>
+        <span class="right">
+          <span class="tag">合集</span>
+          <span class="url">github.com/ComposioHQ/awesome-claude-skills</span>
+        </span>
+      </a>
+    </li>
+
+    <li>
+      <a class="row" href="https://github.com/Leonxlnx/taste-skill" target="_blank" rel="noopener">
+        <span class="rank">06</span>
+        <span>
+          <p class="name">taste-skill</p>
+          <span class="sub"><span class="star">★ 51.1k</span><span class="lang">JavaScript</span><span>讓 AI 少產出模板味，多一點審美</span></span>
+        </span>
+        <span class="right">
+          <span class="tag">審美</span>
+          <span class="url">github.com/Leonxlnx/taste-skill</span>
+        </span>
+      </a>
+    </li>
+
+    <li>
+      <a class="row" href="https://github.com/kepano/obsidian-skills" target="_blank" rel="noopener">
+        <span class="rank">07</span>
+        <span>
+          <p class="name">obsidian-skills</p>
+          <span class="sub"><span class="star">★ 38.2k</span><span class="lang">Markdown</span><span>讓 AI 讀寫 Obsidian 筆記庫</span></span>
+        </span>
+        <span class="right">
+          <span class="tag">筆記</span>
+          <span class="url">github.com/kepano/obsidian-skills</span>
+        </span>
+      </a>
+    </li>
+
+    <li>
+      <a class="row" href="https://github.com/anthropics/claude-plugins-official" target="_blank" rel="noopener">
+        <span class="rank">08</span>
+        <span>
+          <p class="name">claude-plugins-official</p>
+          <span class="sub"><span class="star">★ 31.1k</span><span class="lang">Python</span><span>Anthropic 官方 Claude 插件目錄</span></span>
+        </span>
+        <span class="right">
+          <span class="tag">官方</span>
+          <span class="url">github.com/anthropics/claude-plugins-official</span>
+        </span>
+      </a>
+    </li>
+
+    <li>
+      <a class="row" href="https://github.com/VoltAgent/awesome-agent-skills" target="_blank" rel="noopener">
+        <span class="rank">09</span>
+        <span>
+          <p class="name">awesome-agent-skills</p>
+          <span class="sub"><span class="star">★ 26.5k</span><span class="lang">Markdown</span><span>1000+ Agent Skills 導航倉庫</span></span>
+        </span>
+        <span class="right">
+          <span class="tag">導航</span>
+          <span class="url">github.com/VoltAgent/awesome-agent-skills</span>
+        </span>
+      </a>
+    </li>
+
+    <li>
+      <a class="row" href="https://github.com/op7418/guizang-ppt-skill" target="_blank" rel="noopener">
+        <span class="rank">10</span>
+        <span>
+          <p class="name">guizang-ppt-skill</p>
+          <span class="sub"><span class="star">★ 19.0k</span><span class="lang">HTML</span><span>用 AI 生成更像作品集的 PPT</span></span>
+        </span>
+        <span class="right">
+          <span class="tag">PPT</span>
+          <span class="url">github.com/op7418/guizang-ppt-skill</span>
+        </span>
+      </a>
+    </li>
+  </ol>
+
+  <footer>
+    <span>資料來源：使用者提供之排行榜截圖，GitHub 網址經逐一檢索比對確認</span>
+    <span>點擊項目名稱可開啟對應 GitHub Repo</span>
+  </footer>
+
+</div>
+</body>
+</html>

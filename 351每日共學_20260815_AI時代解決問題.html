@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>351每日共學｜2026年8月15日｜AI時代，不只要會用工具，更要學會解決問題</title>
+<style>
+:root{
+  --navy:#0a1f47;
+  --navy-2:#123a72;
+  --cyan:#22d3ee;
+  --red:#d92b2b;
+  --blue:#1d4ed8;
+  --orange:#ea8014;
+  --green:#15a34a;
+  --purple:#6d28d9;
+  --pink:#db2777;
+  --gold:#f5b823;
+  --ink:#12233f;
+  --ink-soft:#3d5372;
+  --line:#dbe3ee;
+  --page:#eef2f7;
+  --card:#ffffff;
+  --radius:16px;
+  --font: "Noto Sans TC","PingFang TC","Heiti TC","Microsoft JhengHei",
+          "Hiragino Sans GB", system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font);
+  background:var(--page);
+  color:var(--ink);
+  line-height:1.65;
+  padding:24px 12px 48px;
+  letter-spacing:.01em;
+}
+.sheet{
+  max-width:1040px;
+  margin:0 auto;
+  background:var(--card);
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 18px 50px rgba(10,31,71,.18);
+}
+
+/* ---------- HERO ---------- */
+.hero{
+  position:relative;
+  background:
+    radial-gradient(900px 380px at 88% -10%, rgba(34,211,238,.28), transparent 62%),
+    radial-gradient(700px 320px at 5% 0%, rgba(59,130,246,.30), transparent 60%),
+    linear-gradient(160deg,#071736 0%, var(--navy) 45%, var(--navy-2) 100%);
+  color:#fff;
+  padding:26px 26px 30px;
+}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(34,211,238,.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34,211,238,.10) 1px, transparent 1px);
+  background-size:46px 46px;
+  mask-image:linear-gradient(180deg, rgba(0,0,0,.9), transparent 85%);
+  pointer-events:none;
+}
+.hero > *{position:relative;z-index:1}
+
+.hero-top{
+  display:flex;flex-wrap:wrap;gap:20px;
+  align-items:flex-start;justify-content:space-between;
+}
+.brand h1{
+  font-size:clamp(44px,7.6vw,74px);
+  font-weight:900;line-height:.98;letter-spacing:-.02em;
+  text-shadow:0 4px 0 rgba(0,0,0,.28);
+}
+.brand h1 .n1{color:#4da3ff}
+.brand h1 .n2{color:var(--red)}
+.brand h1 .n3{color:#3ddc84}
+.brand h1 .zh{color:#fff}
+.tagline{
+  display:inline-block;margin-top:12px;
+  border:2px solid var(--gold);border-radius:999px;
+  padding:5px 20px;color:var(--gold);
+  font-weight:800;font-size:15px;letter-spacing:.06em;
+}
+.hero-right{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.datebox{
+  background:#fff;color:var(--navy);border-radius:14px;
+  padding:10px 16px;text-align:center;font-weight:900;
+  box-shadow:0 6px 0 rgba(0,0,0,.22);min-width:110px;
+}
+.datebox .y{color:var(--red);font-size:17px;line-height:1.35}
+.datebox .d{color:var(--red);font-size:21px;line-height:1.25}
+.datebox .w{font-size:15px;color:var(--ink);letter-spacing:.12em}
+
+.topic{max-width:430px}
+.topic .eyebrow{
+  display:inline-block;background:var(--red);color:#fff;
+  font-weight:800;font-size:14px;border-radius:8px;padding:3px 12px;margin-bottom:8px;
+}
+.topic h2{
+  font-size:clamp(22px,3.4vw,30px);font-weight:900;line-height:1.35;
+}
+.topic h2 em{font-style:normal;color:var(--gold)}
+.ai-chip{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:52px;height:52px;border-radius:14px;
+  border:2px solid var(--cyan);color:var(--cyan);
+  font-weight:900;font-size:20px;letter-spacing:.05em;
+  background:rgba(34,211,238,.10);
+}
+.topic-note{
+  margin-top:14px;background:rgba(255,255,255,.10);
+  border:1px solid rgba(34,211,238,.35);border-radius:14px;
+  padding:12px 16px;font-size:15px;line-height:1.8;color:#e8f4ff;
+}
+
+/* news + bubbles */
+.hero-grid{
+  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+  gap:18px;margin-top:22px;align-items:start;
+}
+.news{
+  background:#fff;color:var(--ink);border-radius:var(--radius);
+  padding:16px 18px 14px;box-shadow:0 8px 0 rgba(0,0,0,.18);
+}
+.news .tab{
+  display:inline-block;background:var(--red);color:#fff;font-weight:800;
+  border-radius:8px;padding:3px 14px;font-size:15px;margin-bottom:10px;
+}
+.news h3{font-size:20px;font-weight:900;line-height:1.45;margin-bottom:10px}
+.news ul{list-style:none;display:grid;gap:10px}
+.news li{
+  position:relative;padding-left:18px;font-size:14.5px;line-height:1.75;color:var(--ink-soft);
+}
+.news li::before{
+  content:"";position:absolute;left:0;top:.68em;
+  width:8px;height:8px;border-radius:50%;background:var(--blue);
+}
+.source{margin-top:12px;font-size:12px;color:#7d8ea6}
+
+.bubbles{display:grid;gap:12px}
+.bubble{
+  background:#fff;color:var(--ink);border-radius:14px;
+  padding:11px 15px;font-size:14.5px;font-weight:700;line-height:1.7;
+  box-shadow:0 5px 0 rgba(0,0,0,.16);
+}
+.bubble.cyan{background:#0e2f5c;color:#dff6ff;border:1.5px solid var(--cyan)}
+.bubble.gold{background:#fff6dd;border:1.5px solid var(--gold)}
+.bubble .who{
+  display:block;font-size:11.5px;font-weight:800;letter-spacing:.08em;
+  color:#7d8ea6;margin-bottom:2px;
+}
+.bubble.cyan .who{color:var(--cyan)}
+
+/* ---------- BODY ---------- */
+.body{padding:26px 26px 10px;display:grid;gap:18px}
+.row{display:grid;gap:18px}
+.r-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.r-5-1-q{grid-template-columns:1.15fr 1fr 1.25fr}
+.r-task{grid-template-columns:1.25fr 1fr 1.1fr}
+.r-quote{grid-template-columns:.85fr 2fr}
+.r-351{grid-template-columns:1.15fr 1fr}
+
+.card{
+  background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);
+  padding:16px 18px 18px;position:relative;
+}
+.card.tint-blue{background:#f4f8ff;border-color:#cddffc}
+.card.tint-green{background:#f2fbf5;border-color:#c6ecd3}
+.card.tint-orange{background:#fff8ef;border-color:#f6ddb8}
+.card.tint-purple{background:#f8f5ff;border-color:#ddd0f7}
+.card.tint-pink{background:#fff4f9;border-color:#f7cde1}
+.card.tint-red{background:#fff4f4;border-color:#f8cfcf}
+
+.tab{
+  display:inline-flex;align-items:center;gap:7px;
+  color:#fff;font-weight:800;font-size:15px;
+  border-radius:999px;padding:4px 16px;margin-bottom:12px;
+}
+.tab.b{background:var(--blue)} .tab.g{background:var(--green)}
+.tab.o{background:var(--orange)} .tab.p{background:var(--purple)}
+.tab.r{background:var(--red)} .tab.k{background:var(--pink)}
+.tab.n{background:var(--navy)}
+
+.card h4{font-size:16.5px;font-weight:900;line-height:1.55;margin-bottom:6px}
+.card p{font-size:14px;line-height:1.85;color:var(--ink-soft)}
+
+/* numbered points */
+.num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;
+  font-size:13px;font-weight:800;margin-right:7px;vertical-align:2px;
+}
+.num.g{background:var(--green)} .num.o{background:var(--orange)}
+.num.p{background:var(--purple)}
+
+/* flow chips */
+.flow{
+  display:flex;flex-wrap:wrap;align-items:stretch;gap:6px;
+  margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);
+}
+.step{
+  flex:1 1 0;min-width:58px;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+}
+.step .ico{
+  width:38px;height:38px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;font-size:19px;
+  background:#e8f0ff;border:1.5px solid #c6dafc;
+}
+.step .lb{font-size:11.5px;font-weight:700;color:var(--ink);line-height:1.35}
+.arrow{
+  align-self:center;color:var(--red);font-weight:900;font-size:15px;
+  flex:0 0 auto;padding-bottom:16px;
+}
+
+/* keywords */
+.kw{display:flex;justify-content:space-between;gap:6px;text-align:center;margin-top:6px}
+.kw .k{flex:1}
+.kw .ico{
+  width:42px;height:42px;margin:0 auto 6px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:21px;
+  background:#eaf7ef;border:1.5px solid #c6ecd3;
+}
+.kw .lb{font-size:13.5px;font-weight:800}
+
+/* checklist */
+.checks{list-style:none;display:grid;gap:8px;margin-top:4px}
+.checks li{
+  position:relative;padding-left:26px;font-size:14px;line-height:1.75;color:var(--ink-soft);
+}
+.checks li::before{
+  content:"✓";position:absolute;left:0;top:0;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--green);color:#fff;font-size:11px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;margin-top:.28em;
+}
+.checks.pink li::before{background:var(--pink)}
+
+/* task steps */
+.task-steps{display:flex;flex-wrap:wrap;gap:5px;margin:14px 0 12px}
+.task-steps .step .ico{background:#fff3e4;border-color:#f6ddb8}
+.callout{
+  background:#fff;border:1.5px dashed var(--orange);border-radius:12px;
+  padding:9px 13px;font-size:13.5px;font-weight:700;color:var(--ink);
+}
+
+/* quote */
+.quote{
+  display:flex;flex-direction:column;justify-content:center;height:100%;
+}
+.quote strong{
+  display:block;font-size:clamp(19px,2.6vw,25px);font-weight:900;line-height:1.55;
+}
+.quote strong u{text-decoration:none;color:var(--red)}
+
+/* 7 points */
+.seven{
+  display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-top:4px;
+}
+.seven .p{
+  background:#fff;border:1.5px solid #e3daf8;border-radius:12px;
+  padding:10px 8px;text-align:center;
+}
+.seven .p .n{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:20px;height:20px;border-radius:50%;background:var(--purple);
+  color:#fff;font-size:12px;font-weight:800;margin-bottom:5px;
+}
+.seven .p .t{display:block;font-size:12.5px;font-weight:800;line-height:1.5}
+.seven .p .d{display:block;font-size:11.5px;color:var(--ink-soft);line-height:1.6;margin-top:3px}
+.seven .p .e{display:block;font-size:17px;margin-top:6px}
+
+/* 351 method */
+.method{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:6px}
+.method h5{font-size:15px;font-weight:900;margin-bottom:8px}
+.method h5 .big{font-size:20px}
+.m3 h5{color:var(--blue)} .m5 h5{color:var(--green)} .m1 h5{color:var(--red)}
+.method ol{list-style:none;display:grid;gap:5px}
+.method li{font-size:13px;font-weight:700;color:var(--ink)}
+.method li span{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:17px;height:17px;border-radius:50%;border:1.5px solid currentColor;
+  font-size:10.5px;margin-right:6px;
+}
+.m3 li span{color:var(--blue)} .m5 li span{color:var(--green)}
+.method .m1 p{font-size:13px;font-weight:700;color:var(--ink)}
+.method-title{
+  text-align:center;font-size:22px;font-weight:900;margin-bottom:12px;
+}
+.method-title .a{color:var(--blue)} .method-title .b{color:var(--red)} .method-title .c{color:var(--green)}
+
+/* reminder */
+.remind{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:4px}
+.remind h5{font-size:14.5px;font-weight:900;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.remind .can h5{color:var(--blue)} .remind .cant h5{color:var(--red)}
+.remind ul{list-style:none;display:grid;gap:5px}
+.remind li{font-size:13px;line-height:1.7;color:var(--ink-soft)}
+.remind-foot{
+  margin-top:12px;text-align:center;background:var(--navy);color:#fff;
+  border-radius:10px;padding:7px;font-size:14px;font-weight:800;letter-spacing:.05em;
+}
+
+/* ---------- FOOTER ---------- */
+.foot{
+  margin-top:8px;
+  background:linear-gradient(160deg,#071736,var(--navy) 70%);
+  color:#fff;padding:20px 26px 24px;
+}
+.foot-grid{
+  display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;
+}
+.slots{
+  background:var(--red);border-radius:12px;padding:10px 16px;text-align:center;
+  font-weight:900;font-size:15px;line-height:1.4;
+}
+.contacts{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center}
+.contact{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px}
+.contact .ic{
+  width:26px;height:26px;border-radius:8px;display:flex;align-items:center;
+  justify-content:center;font-size:13px;font-weight:900;color:#fff;
+}
+.ic.tel{background:#16a34a} .ic.line{background:#06c755;font-size:10px}
+.ic.fb{background:#1877f2} .ic.yt{background:#ff0000;font-size:11px}
+.qr{text-align:center;font-size:11px;color:#cfe1f5}
+.qr svg{background:#fff;border-radius:8px;padding:5px;display:block;margin:0 auto 5px}
+.cta{
+  margin-top:16px;background:var(--gold);color:#3a2600;border-radius:999px;
+  padding:9px;text-align:center;font-weight:900;font-size:16px;letter-spacing:.03em;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:900px){
+  .hero-grid,.r-3,.r-5-1-q,.r-task,.r-quote,.r-351{grid-template-columns:1fr}
+  .seven{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .method{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr;text-align:center}
+  .contacts{justify-content:center}
+}
+@media (max-width:560px){
+  body{padding:12px 8px 32px}
+  .hero,.body,.foot{padding-left:16px;padding-right:16px}
+  .remind{grid-template-columns:1fr}
+  .seven{grid-template-columns:1fr}
+  .kw{flex-wrap:wrap}
+  .kw .k{flex:0 0 30%}
+}
+@media print{
+  body{background:#fff;padding:0}
+  .sheet{box-shadow:none;border-radius:0;max-width:none}
+  .card{break-inside:avoid}
+}
+@media (prefers-reduced-motion:no-preference){
+  .card,.news,.bubble{animation:rise .5s ease-out both}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+<main class="sheet">
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="hero-top">
+      <div class="brand">
+        <h1><span class="n1">3</span><span class="n2">5</span><span class="n3">1</span><span class="zh">每日共學</span></h1>
+        <span class="tagline">★ 天天學一點・進步多一點 ★</span>
+      </div>
+
+      <div class="hero-right">
+        <div class="datebox">
+          <div class="y">2026年</div>
+          <div class="d">8月15日</div>
+          <div class="w">星期六</div>
+        </div>
+        <div class="topic">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+            <div>
+              <span class="eyebrow">今日主題</span>
+              <h2>AI時代，<br>不只要會用工具，<br><em>更要學會解決問題。</em></h2>
+            </div>
+            <div class="ai-chip">AI</div>
+          </div>
+          <p class="topic-note">未來需要的，不只是會操作AI的人，<br>而是能思考、能實作、能合作，把想法變成成果的人。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-grid">
+      <section class="news">
+        <span class="tab">📰 今日新聞議題</span>
+        <h3>AI產業快速發展，職場正在改變！</h3>
+        <ul>
+          <li>台北舉辦「青年 × 科技 × 未來」AI產業鏈就業博覽會，協助青年與AI產業接軌。</li>
+          <li>彰化永靖高工完成「AI魔法學院」，學生運用AI生成、3D繪圖、雷射切割與程式控制，打造大型鐵道模型，從想法到實作，展現跨域能力！</li>
+        </ul>
+        <p class="source">資料來源：Tech+、經濟日報、中央社 等</p>
+      </section>
+
+      <aside class="bubbles">
+        <div class="bubble">
+          <span class="who">老師說</span>
+          不要只問「AI會不會取代我？」<br>更要問「我能不能和AI一起解決問題？」
+        </div>
+        <div class="bubble cyan">
+          <span class="who">流程</span>
+          發現問題 → 思考方法 → 整合工具 → 完成作品！
+        </div>
+        <div class="bubble gold">
+          <span class="who">同學說</span>
+          動手實作，把想法變成成果！用AI設計！
+        </div>
+        <div class="bubble">
+          <span class="who">AI說</span>
+          我是好幫手，但真正的創意與判斷來自你！
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <!-- ============ BODY ============ -->
+  <div class="body">
+
+    <!-- 3個重點 -->
+    <section class="row r-3">
+      <article class="card tint-blue">
+        <span class="tab b">🎯 3個重點</span>
+        <h4><span class="num">1</span>AI是工具，能力才是核心。</h4>
+        <p>會下指令只是起點，真正重要的是知道「我要解決什麼問題」。</p>
+        <div class="flow">
+          <div class="step"><div class="ico">🤖</div><div class="lb">工具</div></div>
+          <div class="arrow">➜</div>
+          <div class="step"><div class="ico">🧠</div><div class="lb">核心能力</div></div>
+        </div>
+      </article>
+
+      <article class="card tint-blue">
+        <h4><span class="num">2</span>從知道，走到做到。</h4>
+        <p>結合AI、3D設計、雷射切割、程式控制，把想法變成作品，才能真正解決問題。</p>
+        <div class="flow">
+          <div class="step"><div class="ico">✨</div><div class="lb">AI生成</div></div>
+          <div class="arrow">➜</div>
+          <div class="step"><div class="ico">📐</div><div class="lb">3D繪圖</div></div>
+          <div class="arrow">➜</div>
+          <div class="step"><div class="ico">🔺</div><div class="lb">雷射切割</div></div>
+          <div class="arrow">➜</div>
+          <div class="step"><div class="ico">💻</div><div class="lb">程式控制</div></div>
+          <div class="arrow">➜</div>
+          <div class="step"><div class="ico">🏆</div><div class="lb">完成作品</div></div>
+        </div>
+      </article>
+
+      <article class="card tint-blue">
+        <h4><span class="num">3</span>未來不是人和AI比賽，而是人學會駕馭AI。</h4>
+        <p>持續學習、跨域整合、溝通合作與解決問題，大幅提升價值與競爭力。</p>
+        <div class="flow">
+          <div class="step"><div class="ico">📖</div><div class="lb">學習力</div></div>
+          <div class="step"><div class="ico">🤝</div><div class="lb">合作力</div></div>
+          <div class="step"><div class="ico">🧩</div><div class="lb">解決力</div></div>
+          <div class="step"><div class="ico">💡</div><div class="lb">創造力</div></div>
+        </div>
+      </article>
+    </section>
+
+    <!-- 關鍵字 / 結論 / 思辨 -->
+    <section class="row r-5-1-q">
+      <article class="card tint-green">
+        <span class="tab g">5個關鍵字</span>
+        <div class="kw">
+          <div class="k"><div class="ico">❓</div><div class="lb">問題</div></div>
+          <div class="k"><div class="ico">🧠</div><div class="lb">思考</div></div>
+          <div class="k"><div class="ico">🤖</div><div class="lb">AI</div></div>
+          <div class="k"><div class="ico">🔧</div><div class="lb">實作</div></div>
+          <div class="k"><div class="ico">💡</div><div class="lb">創造</div></div>
+        </div>
+      </article>
+
+      <article class="card tint-red">
+        <span class="tab r">1個結論</span>
+        <p style="font-size:14.5px;color:var(--ink);font-weight:600">
+          AI能放大能力，但真正決定成果的，是人能不能發現問題、整合工具並完成事情。 🎯
+        </p>
+      </article>
+
+      <article class="card tint-orange">
+        <span class="tab o">🤔 今日思辨問題</span>
+        <h4>如果兩個人都會使用同一套AI工具，為什麼最後做出來的成果可能完全不同？</h4>
+        <p>・想一想：知識、問題、創意、判斷、努力、合作、實作經驗…等，會造成什麼差異？</p>
+      </article>
+    </section>
+
+    <!-- 任務 / 挑戰 / 目標 -->
+    <section class="row r-task">
+      <article class="card tint-blue">
+        <span class="tab b">🎯 AI今日任務｜AI幫我完成一件事</span>
+        <p>選一個生活中的小問題，按照步驟完成：</p>
+        <div class="flow task-steps">
+          <div class="step"><div class="ico">🔍</div><div class="lb">發現<br>問題</div></div>
+          <div class="arrow">➜</div>
+          <div class="step"><div class="ico">💡</div><div class="lb">自己想<br>方法</div></div>
+          <div class="arrow">➜</div>
+          <div class="step"><div class="ico">🤖</div><div class="lb">問AI<br>找方案</div></div>
+          <div class="arrow">➜</div>
+          <div class="step"><div class="ico">📋</div><div class="lb">選擇<br>方案</div></div>
+          <div class="arrow">➜</div>
+          <div class="step"><div class="ico">🔧</div><div class="lb">動手<br>完成</div></div>
+          <div class="arrow">➜</div>
+          <div class="step"><div class="ico">✅</div><div class="lb">檢查<br>成果</div></div>
+        </div>
+        <div class="callout">最後問自己：「這件事情裡，AI做了什麼？我又做了什麼？」</div>
+      </article>
+
+      <article class="card tint-orange">
+        <span class="tab o">今日行動挑戰</span>
+        <h4 style="color:var(--orange);font-size:19px">從想法到成果！✨</h4>
+        <p style="margin-bottom:10px">今天完成一件小事，讓AI成為你的好夥伴。</p>
+        <ul class="checks">
+          <li>用AI協助規劃或設計</li>
+          <li>自己動手實作或執行</li>
+          <li>檢查並改進成果</li>
+          <li>和別人分享的成果</li>
+        </ul>
+      </article>
+
+      <article class="card tint-pink">
+        <span class="tab k">❤️ 今日學習目標</span>
+        <ul class="checks pink">
+          <li>學會用AI協助解決問題。</li>
+          <li>能從想法到完成實作。</li>
+          <li>培養跨域整合與創新能力。</li>
+          <li>理解「工具」與「能力」的差別。</li>
+          <li>建立持續學習與成長的習慣。</li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- 一句話 / 7點 -->
+    <section class="row r-quote">
+      <article class="card tint-red quote">
+        <span class="tab r" style="align-self:flex-start">❤️ 今日一句話</span>
+        <strong>不要只學會問AI，<br><u>更要學會用AI把事情做好。</u> ✏️</strong>
+      </article>
+
+      <article class="card tint-purple">
+        <span class="tab p">今日核心整理｜7點</span>
+        <div class="seven">
+          <div class="p"><span class="n">1</span><span class="t">發現問題</span><span class="d">是解決問題的第一步。</span><span class="e">🔍</span></div>
+          <div class="p"><span class="n">2</span><span class="t">思考方法</span><span class="d">比單純模仿AI更重要。</span><span class="e">🧠</span></div>
+          <div class="p"><span class="n">3</span><span class="t">工具很多</span><span class="d">整合能力才是關鍵。</span><span class="e">🧩</span></div>
+          <div class="p"><span class="n">4</span><span class="t">動手實作</span><span class="d">才能把想法變成果實。</span><span class="e">🔧</span></div>
+          <div class="p"><span class="n">5</span><span class="t">人機合作</span><span class="d">創造更大的價值。</span><span class="e">🤝</span></div>
+          <div class="p"><span class="n">6</span><span class="t">持續學習</span><span class="d">才能跟上未來的變化。</span><span class="e">🌱</span></div>
+          <div class="p"><span class="n">7</span><span class="t">能力累積</span><span class="d">努力讓你不可取代。</span><span class="e">🏅</span></div>
+        </div>
+      </article>
+    </section>
+
+    <!-- 351學習法 / AI提醒 -->
+    <section class="row r-351">
+      <article class="card">
+        <div class="method-title">
+          <span class="a">3</span><span class="b">5</span><span class="c">1</span>高效學習法 <span style="color:var(--ink-soft)">×</span> <span style="color:var(--blue)">AI 學習</span>
+        </div>
+        <div class="method">
+          <div class="m3">
+            <h5><span class="big">3</span> 步驟 📝</h5>
+            <ol>
+              <li><span>1</span>定標題</li>
+              <li><span>2</span>找關鍵字</li>
+              <li><span>3</span>分析式筆記</li>
+            </ol>
+          </div>
+          <div class="m5">
+            <h5><span class="big">5</span> 技巧 🎧</h5>
+            <ol>
+              <li><span>1</span>問讀</li>
+              <li><span>2</span>聆聽</li>
+              <li><span>3</span>整理</li>
+              <li><span>4</span>複習</li>
+              <li><span>5</span>記憶</li>
+            </ol>
+          </div>
+          <div class="m1">
+            <h5><span class="big">1</span> 生受用 📚</h5>
+            <p>把知識轉化為能力，讓學習陪伴一生！</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="card tint-blue">
+        <span class="tab n">🤖 AI學習小提醒</span>
+        <div class="remind">
+          <div class="can">
+            <h5>✅ AI可以：</h5>
+            <ul>
+              <li>整理資訊、比較內容</li>
+              <li>提出查證方向</li>
+              <li>協助我們思考與創作</li>
+            </ul>
+          </div>
+          <div class="cant">
+            <h5>❌ AI不能代替：</h5>
+            <ul>
+              <li>查核原始證據</li>
+              <li>承擔判斷責任</li>
+              <li>決定我們應該相信什麼</li>
+            </ul>
+          </div>
+        </div>
+        <div class="remind-foot">記住：AI為輔・人為主導！</div>
+      </article>
+    </section>
+  </div>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="foot">
+    <div class="foot-grid">
+      <div class="slots">每日免費諮詢<br>三個名額 👥</div>
+
+      <div class="contacts">
+        <div class="contact"><span class="ic tel">📞</span>0985333314</div>
+        <div class="contact"><span class="ic line">LINE</span>0971479588</div>
+        <div class="contact"><span class="ic fb">f</span>alanma1961</div>
+        <div class="contact"><span class="ic yt">▶</span>@alanma1966</div>
+      </div>
+
+      <div class="qr">
+        <svg width="76" height="76" viewBox="0 0 29 29" role="img" aria-label="加入LINE的QR Code示意圖">
+          <rect width="29" height="29" fill="#fff"/>
+          <g fill="#0a1f47">
+            <path d="M1 1h7v7H1zM2 2v5h5V2z"/><rect x="3" y="3" width="3" height="3"/>
+            <path d="M21 1h7v7h-7zM22 2v5h5V2z"/><rect x="23" y="3" width="3" height="3"/>
+            <path d="M1 21h7v7H1zM2 22v5h5v-5z"/><rect x="3" y="23" width="3" height="3"/>
+            <rect x="10" y="1" width="1" height="3"/><rect x="12" y="2" width="1" height="4"/>
+            <rect x="14" y="1" width="1" height="2"/><rect x="16" y="3" width="1" height="3"/>
+            <rect x="10" y="6" width="3" height="1"/><rect x="15" y="7" width="3" height="1"/>
+            <rect x="1" y="10" width="3" height="1"/><rect x="5" y="12" width="3" height="1"/>
+            <rect x="2" y="14" width="2" height="1"/><rect x="6" y="16" width="2" height="1"/>
+            <rect x="10" y="10" width="2" height="2"/><rect x="14" y="11" width="2" height="2"/>
+            <rect x="18" y="10" width="2" height="1"/><rect x="12" y="14" width="2" height="2"/>
+            <rect x="16" y="15" width="2" height="2"/><rect x="10" y="18" width="2" height="1"/>
+            <rect x="21" y="10" width="1" height="3"/><rect x="24" y="11" width="2" height="1"/>
+            <rect x="26" y="14" width="2" height="2"/><rect x="22" y="15" width="2" height="1"/>
+            <rect x="10" y="21" width="2" height="2"/><rect x="14" y="22" width="2" height="1"/>
+            <rect x="18" y="21" width="1" height="3"/><rect x="21" y="22" width="2" height="2"/>
+            <rect x="24" y="24" width="2" height="2"/><rect x="12" y="25" width="3" height="1"/>
+            <rect x="16" y="26" width="2" height="1"/><rect x="20" y="26" width="1" height="2"/>
+          </g>
+        </svg>
+        掃QR Code加LINE
+      </div>
+    </div>
+    <div class="cta">★ 把握今天開放三個名額，一對一免費諮詢！★</div>
+  </footer>
+
+</main>
+</body>
+</html>

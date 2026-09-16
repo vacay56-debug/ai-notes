@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行政工作流的底層邏輯｜六條流的乘法模型</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0A2036;
+  --ink-2:#3D5470;
+  --ink-3:#7387A0;
+  --paper:#EDF1F5;
+  --card:#FFFFFF;
+  --line:#D3DDE7;
+  --grid:rgba(10,32,54,.045);
+
+  --f1:#1F5FA8;  /* 任務流 */
+  --f2:#0B8A8A;  /* 資訊流 */
+  --f3:#3B8A46;  /* 責任流 */
+  --f4:#D98014;  /* 時間流 */
+  --f5:#7A54C0;  /* 決策流 */
+  --f6:#4A5F87;  /* 證據流 */
+  --alert:#C0392B;
+
+  --serif:"Noto Serif TC",serif;
+  --sans:"Noto Sans TC",system-ui,sans-serif;
+  --mono:"JetBrains Mono","Noto Sans TC",monospace;
+
+  --maxw:1120px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{
+  font-family:var(--sans);
+  color:var(--ink);
+  background:var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:32px 32px;
+  line-height:1.75;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+
+/* ---------- 頂列 ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(237,241,245,.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-in{
+  max-width:var(--maxw);margin:0 auto;padding:11px 22px;
+  display:flex;align-items:center;gap:16px;justify-content:space-between;
+}
+.brand{font-family:var(--serif);font-weight:700;font-size:15px;letter-spacing:.06em;white-space:nowrap}
+.brand span{color:var(--ink-3);font-family:var(--mono);font-size:12px;margin-left:8px}
+.topnav{display:flex;gap:2px;flex-wrap:wrap}
+.topnav a{
+  font-size:13px;color:var(--ink-2);text-decoration:none;
+  padding:5px 9px;border-radius:4px;
+}
+.topnav a:hover{background:#fff;color:var(--ink)}
+.progress{position:absolute;left:0;bottom:-1px;height:2px;background:var(--f1);width:0}
+
+/* ---------- Hero ---------- */
+.hero{padding:74px 0 46px}
+.eyebrow{
+  font-family:var(--mono);font-size:12px;letter-spacing:.18em;
+  color:var(--ink-3);text-transform:uppercase;margin-bottom:20px;
+  display:flex;align-items:center;gap:10px;
+}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+h1{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(30px,5.4vw,54px);line-height:1.28;letter-spacing:-.01em;
+}
+h1 em{font-style:normal;color:var(--f1);position:relative;white-space:nowrap}
+h1 em::after{content:"";position:absolute;left:0;right:0;bottom:.08em;height:.16em;background:rgba(31,95,168,.16);z-index:-1}
+.lede{
+  margin-top:22px;max-width:60ch;font-size:17px;color:var(--ink-2);font-weight:300;
+}
+.lede strong{font-weight:500;color:var(--ink)}
+
+/* 公式列 */
+.formula{
+  margin-top:40px;background:var(--card);border:1px solid var(--line);
+  border-radius:3px;padding:22px 20px;
+  display:flex;align-items:stretch;gap:6px;flex-wrap:wrap;
+}
+.fx{flex:1 1 96px;text-align:center;padding:12px 4px;border-radius:3px;background:#F7F9FB;border-top:3px solid var(--c)}
+.fx b{display:block;font-size:15px;font-weight:700}
+.fx small{display:block;font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.1em;margin-top:2px}
+.op{display:flex;align-items:center;font-family:var(--mono);color:var(--ink-3);font-size:18px}
+.fx-out{flex:1 1 130px;text-align:center;padding:12px 6px;background:var(--ink);color:#fff;border-radius:3px}
+.fx-out b{display:block;font-size:15px}
+.fx-out small{display:block;font-family:var(--mono);font-size:10px;opacity:.6;letter-spacing:.1em;margin-top:2px}
+
+/* ---------- 區塊 ---------- */
+section{padding:52px 0}
+.sec-head{margin-bottom:30px;border-top:2px solid var(--ink);padding-top:14px}
+.sec-num{font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.16em}
+.sec-head h2{font-family:var(--serif);font-size:clamp(23px,3.4vw,32px);font-weight:700;line-height:1.4;margin-top:4px}
+.sec-head p{color:var(--ink-2);font-weight:300;margin-top:8px;max-width:62ch}
+
+/* 七階段 */
+.stages{display:grid;grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:10px}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:16px 14px;position:relative}
+.stage i{
+  font-family:var(--mono);font-style:normal;font-size:11px;font-weight:700;
+  color:#fff;background:var(--ink);width:20px;height:20px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;margin-bottom:10px;
+}
+.stage b{display:block;font-size:15px;font-weight:700;margin-bottom:5px}
+.stage span{font-size:13px;color:var(--ink-2);font-weight:300;line-height:1.6}
+
+/* 對照 */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:20px}
+.panel h3{font-size:15px;font-weight:700;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.panel.bad h3{color:var(--alert)}
+.panel.good h3{color:var(--f3)}
+.panel li{list-style:none;font-size:14px;color:var(--ink-2);padding:7px 0 7px 24px;position:relative;font-weight:300}
+.panel.bad li::before{content:"✕";position:absolute;left:0;color:var(--alert);font-size:12px;font-weight:700}
+.panel.good li::before{content:"✓";position:absolute;left:0;color:var(--f3);font-size:12px;font-weight:700}
+
+/* 乘法示意 */
+.mult{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:24px 20px;margin-top:22px}
+.mult h3{font-size:15px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--c,var(--ink))}
+.chain{display:flex;align-items:flex-end;gap:6px;height:130px}
+.ch{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px}
+.ch .bar{width:100%;background:var(--c);border-radius:2px 2px 0 0;transition:height .5s cubic-bezier(.2,.7,.3,1)}
+.ch .bar.dead{background:repeating-linear-gradient(45deg,#C9D2DB,#C9D2DB 4px,#DDE4EA 4px,#DDE4EA 8px)}
+.ch label{font-size:11px;color:var(--ink-3);font-family:var(--mono)}
+.chain-note{font-size:13px;color:var(--ink-2);margin-top:14px;font-weight:300}
+
+/* 六條流卡片 */
+.flow{
+  background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c);
+  border-radius:3px;padding:26px 24px;margin-bottom:16px;
+}
+.flow-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.flow-code{font-family:var(--mono);font-size:12px;color:var(--c);font-weight:700;letter-spacing:.1em}
+.flow-head h3{font-family:var(--serif);font-size:25px;font-weight:700}
+.flow-en{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.06em}
+.flow-def{font-size:15px;color:var(--ink-2);font-weight:300;margin-bottom:20px;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.flow-def b{font-weight:500;color:var(--ink)}
+
+.nodes{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px}
+.node{
+  font-size:13px;background:color-mix(in srgb,var(--c) 8%,#fff);
+  border:1px solid color-mix(in srgb,var(--c) 26%,#fff);
+  color:var(--ink);padding:5px 11px;border-radius:20px;
+}
+.node em{font-style:normal;font-family:var(--mono);font-size:10px;color:var(--c);margin-right:5px;font-weight:700}
+
+.lbl{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink-3);margin-bottom:8px;display:block}
+
+table{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:20px}
+th{
+  text-align:left;font-weight:700;font-size:12px;letter-spacing:.06em;
+  padding:8px 10px;background:#F2F5F8;border-bottom:1px solid var(--line);color:var(--ink-2);
+}
+td{padding:9px 10px;border-bottom:1px solid #EAF0F4;vertical-align:top;color:var(--ink-2);font-weight:300}
+td:first-child{color:var(--ink);font-weight:500;width:33%}
+tr:last-child td{border-bottom:none}
+
+.endpoint{
+  background:#F7F9FB;border:1px solid var(--line);border-radius:3px;
+  padding:14px 16px;font-size:15px;margin-bottom:18px;
+}
+.endpoint span{font-family:var(--mono);font-size:11px;color:var(--ink-3);display:block;letter-spacing:.14em;margin-bottom:5px}
+.endpoint b{color:var(--c);font-weight:700}
+.endpoint del{color:var(--ink-3);text-decoration-color:var(--ink-3)}
+
+.case{background:color-mix(in srgb,var(--c) 5%,#fff);border-radius:3px;padding:15px 17px;font-size:14px;color:var(--ink-2);font-weight:300}
+.case b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--c);margin-bottom:6px;font-weight:700}
+
+/* ---------- 儀表 ---------- */
+.meter{background:var(--ink);color:#fff;border-radius:4px;padding:30px 26px;margin-top:8px}
+.meter h3{font-family:var(--serif);font-size:21px;font-weight:700;margin-bottom:6px}
+.meter .sub{font-size:14px;color:#9FB2C6;font-weight:300;margin-bottom:26px}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-bottom:28px}
+.cbox{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:15px 16px}
+.cbox h4{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.cbox h4 .dot{width:8px;height:8px}
+.cbox label{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:#C6D3DF;font-weight:300;padding:4px 0;cursor:pointer}
+.cbox input{margin-top:5px;accent-color:#fff;flex-shrink:0;cursor:pointer}
+.cbox label:hover{color:#fff}
+
+.readout{display:grid;grid-template-columns:minmax(190px,1fr) 2fr;gap:26px;align-items:center;border-top:1px solid rgba(255,255,255,.15);padding-top:24px}
+.score{font-family:var(--mono);font-size:60px;font-weight:700;line-height:1}
+.score sup{font-size:22px;opacity:.5}
+.score-l{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:#8FA3B8;margin-bottom:6px}
+.diag{font-size:14px;color:#C6D3DF;font-weight:300}
+.diag b{color:#fff;font-weight:500}
+.funnel{display:flex;gap:5px;height:96px;align-items:flex-end;margin-bottom:10px}
+.fn{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:5px;text-align:center}
+.fn .b{background:#5B7FA8;border-radius:2px 2px 0 0;min-height:2px;transition:height .45s ease,background .3s}
+.fn small{font-size:10px;color:#7E93AA;font-family:var(--mono)}
+.reset{
+  background:none;border:1px solid rgba(255,255,255,.3);color:#C6D3DF;
+  font-family:var(--sans);font-size:12px;padding:6px 14px;border-radius:3px;cursor:pointer;margin-top:14px;
+}
+.reset:hover{background:rgba(255,255,255,.1);color:#fff}
+
+/* 修復四步 */
+.fix{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.fix div{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:18px}
+.fix i{font-family:var(--mono);font-style:normal;font-size:11px;color:var(--ink-3);letter-spacing:.1em}
+.fix b{display:block;font-size:16px;margin:6px 0 6px}
+.fix span{font-size:13.5px;color:var(--ink-2);font-weight:300}
+
+.closing{
+  background:var(--ink);color:#fff;border-radius:4px;padding:38px 30px;text-align:center;margin-top:30px;
+}
+.closing p{font-family:var(--serif);font-size:clamp(19px,3vw,27px);font-weight:700;line-height:1.6}
+.closing p em{font-style:normal;color:#FFC24D}
+
+footer{padding:38px 0 60px;color:var(--ink-3);font-size:12.5px;font-weight:300;border-top:1px solid var(--line);margin-top:40px}
+footer b{color:var(--ink-2);font-weight:500}
+
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.reveal.on{opacity:1;transform:none}
+
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--f1);outline-offset:2px}
+
+@media(max-width:760px){
+  .compare{grid-template-columns:1fr}
+  .readout{grid-template-columns:1fr}
+  .topnav{display:none}
+  .hero{padding:44px 0 30px}
+  .op{display:none}
+  .fx{flex:1 1 44%}
+  td:first-child{width:40%}
+}
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand">行政工作流的底層邏輯<span>001–008</span></div>
+    <nav class="topnav">
+      <a href="#path">七階段</a>
+      <a href="#model">乘法模型</a>
+      <a href="#flows">六條流</a>
+      <a href="#meter">效能儀表</a>
+      <a href="#fix">斷點修復</a>
+    </nav>
+  </div>
+  <div class="progress" id="progress"></div>
+</div>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="eyebrow">底層邏輯 · 整合版</div>
+    <h1>行政不是把事情做完，<br>而是讓事情<em>順利流動</em>。</h1>
+    <p class="lede">
+      行政真正管理的，不是一張表單或一份文件，而是<strong>一件事情如何從開始出發，經過不同的人、資料與判斷，最後穩定抵達完成</strong>。
+      看得見流動，才看得見卡在哪裡。
+    </p>
+
+    <div class="formula">
+      <div class="fx" style="--c:var(--f1)"><b>任務流</b><small>TASK</small></div>
+      <div class="op">×</div>
+      <div class="fx" style="--c:var(--f2)"><b>資訊流</b><small>INFO</small></div>
+      <div class="op">×</div>
+      <div class="fx" style="--c:var(--f3)"><b>責任流</b><small>DUTY</small></div>
+      <div class="op">×</div>
+      <div class="fx" style="--c:var(--f4)"><b>時間流</b><small>TIME</small></div>
+      <div class="op">×</div>
+      <div class="fx" style="--c:var(--f5)"><b>決策流</b><small>DECISION</small></div>
+      <div class="op">×</div>
+      <div class="fx" style="--c:var(--f6)"><b>證據流</b><small>EVIDENCE</small></div>
+      <div class="op">=</div>
+      <div class="fx-out"><b>整體行政效能</b><small>高效 · 穩定 · 可持續</small></div>
+    </div>
+  </header>
+
+  <!-- 七階段 -->
+  <section id="path" class="reveal">
+    <div class="sec-head">
+      <div class="sec-num">01 / 路徑</div>
+      <h2>一件事情的完整路徑：七個階段</h2>
+      <p>任何一件行政工作，不論大小，都會走過同一條路徑。管理的對象是這條路徑，不是路徑上的某一份文件。</p>
+    </div>
+
+    <div class="stages">
+      <div class="stage"><i>1</i><b>收到任務</b><span>明確任務內容與期望目標，確認起點。</span></div>
+      <div class="stage"><i>2</i><b>蒐集資訊</b><span>蒐集所需資料、背景與條件，掌握全貌。</span></div>
+      <div class="stage"><i>3</i><b>分工處理</b><span>指派與協調，讓對的人做對的事。</span></div>
+      <div class="stage"><i>4</i><b>時間推進</b><span>依時程推進，追蹤進度，確保不停滯。</span></div>
+      <div class="stage"><i>5</i><b>判斷決策</b><span>依據資訊與情境做出判斷，選擇最佳行動。</span></div>
+      <div class="stage"><i>6</i><b>完成留痕</b><span>產出結果並記錄過程與依據，形成可追溯紀錄。</span></div>
+      <div class="stage"><i>7</i><b>穩定完成</b><span>結果被接受、可驗證，並可持續被複用。</span></div>
+    </div>
+
+    <div class="compare">
+      <div class="panel bad">
+        <h3>只是在做事，常見結果</h3>
+        <ul>
+          <li>每個人都很忙，事情卻沒往前</li>
+          <li>一直靠催辦與追問才會動</li>
+          <li>承辦人一離開，流程就中斷</li>
+          <li>做完了，卻說不清做到哪裡</li>
+        </ul>
+      </div>
+      <div class="panel good">
+        <h3>真正的行政工作流</h3>
+        <ul>
+          <li>每一步都有清楚的起點與下一步</li>
+          <li>參與者知道自己要做什麼</li>
+          <li>管理者看得見卡點在哪裡</li>
+          <li>不靠個人記憶也能穩定運作</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 乘法模型 -->
+  <section id="model" class="reveal">
+    <div class="sec-head">
+      <div class="sec-num">02 / 模型</div>
+      <h2>行政效能不是加法，而是乘法</h2>
+      <p>六條流彼此依賴，不是各做各的。加法是各自努力、成果有限；乘法是系統協同、產生倍數效應——但也代表任何一條流斷裂，整體效能就會大幅下降。</p>
+    </div>
+
+    <div class="mult" style="--c:var(--f3)">
+      <h3><span class="dot"></span>六條流都順暢：效能大幅提升</h3>
+      <div class="chain" id="chain-good"></div>
+      <p class="chain-note">每一條流都通過，前一條的產出直接成為下一條的輸入，沒有回頭、沒有重做。</p>
+    </div>
+
+    <div class="mult" style="--c:var(--alert)">
+      <h3><span class="dot"></span>任一條流接近 0：整體效能就接近 0</h3>
+      <div class="chain" id="chain-bad"></div>
+      <p class="chain-note">圖例：時間流斷裂（案件卡在等待，無人追蹤）。其餘五條流做得再好，整體仍然接近 0。</p>
+    </div>
+
+    <table style="margin-top:26px">
+      <thead><tr><th>觀點</th><th>加法思維</th><th>乘法思維</th></tr></thead>
+      <tbody>
+        <tr><td>改善方式</td><td>要求每個人更努力、更快</td><td>找出斷點，讓那一條流重新通過</td></tr>
+        <tr><td>效能來源</td><td>個人產出的總和</td><td>系統協同產生的倍數</td></tr>
+        <tr><td>失敗型態</td><td>某人做得少，總量略減</td><td>某一環為 0，整體歸零</td></tr>
+        <tr><td>管理焦點</td><td>誰做了多少</td><td>事情現在停在哪裡</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 六條流 -->
+  <section id="flows" class="reveal">
+    <div class="sec-head">
+      <div class="sec-num">03 / 拆解</div>
+      <h2>六條流的定義、節點與判準</h2>
+      <p>每一條流都有自己的節點路徑、常見誤區，以及一個明確的「終點判準」。判準是用來檢查這條流是否真的通過，而不是感覺上有在做。</p>
+    </div>
+
+    <!-- 任務流 -->
+    <article class="flow" style="--c:var(--f1)">
+      <div class="flow-head">
+        <span class="flow-code">FLOW 01</span>
+        <h3>任務流</h3>
+        <span class="flow-en">Task Flow</span>
+      </div>
+      <p class="flow-def">一件事情從開始到完成的<b>路徑</b>。事情不是有人做就好，而是要隨時知道下一步是什麼。</p>
+
+      <span class="lbl">節點路徑</span>
+      <div class="nodes">
+        <span class="node"><em>1</em>收到需求</span>
+        <span class="node"><em>2</em>確認目標</span>
+        <span class="node"><em>3</em>拆解工作</span>
+        <span class="node"><em>4</em>分派執行</span>
+        <span class="node"><em>5</em>檢查進度</span>
+        <span class="node"><em>6</em>處理例外</span>
+        <span class="node"><em>7</em>完成驗收</span>
+        <span class="node"><em>8</em>留下紀錄</span>
+      </div>
+
+      <table>
+        <thead><tr><th>常見問題</th><th>好的任務流要看見三件事</th></tr></thead>
+        <tbody>
+          <tr><td>做了一半停住</td><td><b>輸入是什麼</b>：明確來源與需求</td></tr>
+          <tr><td>重複做、漏掉做</td><td><b>要做什麼</b>：步驟清楚、不遺漏</td></tr>
+          <tr><td>以為別人會做</td><td><b>怎樣才算完成</b>：標準明確、可驗收</td></tr>
+        </tbody>
+      </table>
+
+      <div class="endpoint">
+        <span>終點判準</span>
+        真正要管理的，不只是<del>「誰在做」</del>，而是<b>「這件事現在走到哪裡、下一步要往哪裡走」</b>。
+      </div>
+
+      <div class="case">
+        <b>業務對照</b>
+        訓練案委外辦理：需求（各消防局師資缺口）→ 目標（年度培訓場次與人數）→ 拆解（規格書、招標、開課、成果驗收）→ 分派（承辦、會計、政風）→ 進度（決標與開課節點）→ 例外（流標、講座異動）→ 驗收（結案報告與成效指標）→ 紀錄（歸檔與次年參考）。任一節點沒有承接者，案子就停在那裡。
+      </div>
+    </article>
+
+    <!-- 資訊流 -->
+    <article class="flow" style="--c:var(--f2)">
+      <div class="flow-head">
+        <span class="flow-code">FLOW 02</span>
+        <h3>資訊流</h3>
+        <span class="flow-en">Information Flow</span>
+      </div>
+      <p class="flow-def">資訊不是有傳出去就好，而是要能<b>推動下一步</b>。同一份訊息，對不同對象要有不同的重點。</p>
+
+      <span class="lbl">節點路徑</span>
+      <div class="nodes">
+        <span class="node"><em>1</em>接收資訊</span>
+        <span class="node"><em>2</em>判讀內容</span>
+        <span class="node"><em>3</em>整理重點</span>
+        <span class="node"><em>4</em>傳給對的人</span>
+        <span class="node"><em>5</em>啟動下一步</span>
+      </div>
+
+      <table>
+        <thead><tr><th>常見誤會</th><th>為什麼不算數</th></tr></thead>
+        <tbody>
+          <tr><td>「我已經在群組說了」</td><td>訊息被淹沒，沒有指定承接者</td></tr>
+          <tr><td>「公文已經轉寄了」</td><td>對方不知道自己要做什麼、何時做</td></tr>
+          <tr><td>「資料放在雲端了」</td><td>沒人被通知，也沒人知道要看哪一份</td></tr>
+          <tr><td>「表單連結也傳出去了」</td><td>沒有期限與回收機制，等於沒有啟動</td></tr>
+        </tbody>
+      </table>
+
+      <span class="lbl">同一件事，對不同對象要說不同重點</span>
+      <table>
+        <thead><tr><th>對象</th><th>他真正需要的資訊</th></tr></thead>
+        <tbody>
+          <tr><td>各消防局承辦</td><td>時間、地點、報名方式與名額</td></tr>
+          <tr><td>單位主管</td><td>是否派員、是否影響勤務編排</td></tr>
+          <tr><td>人事</td><td>公假、差勤與出國核准程序</td></tr>
+          <tr><td>主計</td><td>經費來源、科目與核銷方式</td></tr>
+        </tbody>
+      </table>
+
+      <div class="endpoint">
+        <span>終點判準</span>
+        資訊流的終點，不是<del>「已讀」</del>，而是<b>「下一步已經開始」</b>。
+      </div>
+    </article>
+
+    <!-- 責任流 -->
+    <article class="flow" style="--c:var(--f3)">
+      <div class="flow-head">
+        <span class="flow-code">FLOW 03</span>
+        <h3>責任流</h3>
+        <span class="flow-en">Responsibility Flow</span>
+      </div>
+      <p class="flow-def">事情有分出去，不代表<b>責任已經完成轉移</b>。責任要有人承接、有人完成、有人確認。</p>
+
+      <span class="lbl">責任釐清四問</span>
+      <div class="nodes">
+        <span class="node"><em>1</em>誰負責 · 明確承接者</span>
+        <span class="node"><em>2</em>負責到哪裡 · 說清任務邊界</span>
+        <span class="node"><em>3</em>何時完成 · 設定完成時點</span>
+        <span class="node"><em>4</em>向誰回報 · 建立回報路徑</span>
+      </div>
+
+      <table>
+        <thead><tr><th>常見誤會</th><th>責任流模糊的結果</th></tr></thead>
+        <tbody>
+          <tr><td>「我已經交代了」</td><td>大家都以為別人會處理</td></tr>
+          <tr><td>「我有在群組標註他」</td><td>出了問題才開始找負責人</td></tr>
+          <tr><td>「公文已經轉給承辦人」</td><td>真正可靠的人不斷被追加任務</td></tr>
+          <tr><td>「這件事應該是某某科負責」</td><td>案件在單位之間來回，時程流失</td></tr>
+        </tbody>
+      </table>
+
+      <span class="lbl">真正完整的責任流</span>
+      <div class="nodes">
+        <span class="node"><em>1</em>交付者說清楚任務邊界</span>
+        <span class="node"><em>2</em>承接者確認責任內容</span>
+        <span class="node"><em>3</em>過程中追蹤進度</span>
+        <span class="node"><em>4</em>完成後明確回報</span>
+        <span class="node"><em>5</em>主管確認結案</span>
+      </div>
+
+      <div class="endpoint">
+        <span>終點判準</span>
+        責任流的終點，不是<del>「已交辦」</del>，而是<b>「有人承接、有人完成、有人確認」</b>。
+      </div>
+    </article>
+
+    <!-- 時間流 -->
+    <article class="flow" style="--c:var(--f4)">
+      <div class="flow-head">
+        <span class="flow-code">FLOW 04</span>
+        <h3>時間流</h3>
+        <span class="flow-en">Time Flow</span>
+      </div>
+      <p class="flow-def">事情有在做，不代表事情正在前進。時間流要讓<b>每個節點都在正確時間發生</b>。</p>
+
+      <span class="lbl">行政工作常見的時間卡關點</span>
+      <table>
+        <thead><tr><th>卡關型態</th><th>對應處置</th></tr></thead>
+        <tbody>
+          <tr><td>等對方回覆</td><td>設定回覆期限，逾期主動電洽並留紀錄</td></tr>
+          <tr><td>等主管決定</td><td>備妥選項與建議方案，讓決策可以當場做出</td></tr>
+          <tr><td>等資料補齊</td><td>先行推進不受影響的節點，資料另案催補</td></tr>
+          <tr><td>等有空再處理</td><td>排入時程，給定明確啟動日而非「有空」</td></tr>
+        </tbody>
+      </table>
+
+      <span class="lbl">核心作法：把期限拆成多個節點</span>
+      <table>
+        <thead><tr><th>節點</th><th>要回答的問題</th></tr></thead>
+        <tbody>
+          <tr><td>1. 啟動時間</td><td>何時開始？收到任務就啟動，不要等到最後一刻。</td></tr>
+          <tr><td>2. 處理時間</td><td>需要多少時間？估算並預留緩衝空間。</td></tr>
+          <tr><td>3. 等待時間</td><td>可能等多久？明確等待項目，設定可接受的等待時長。</td></tr>
+          <tr><td>4. 追蹤時間</td><td>何時要追蹤？超過時間就主動追蹤，避免無限期等待。</td></tr>
+          <tr><td>5. 完成時間</td><td>何時完成？確認完成與驗收，並回報下一步。</td></tr>
+        </tbody>
+      </table>
+
+      <div class="endpoint">
+        <span>終點判準</span>
+        時間管理的重點不是快，而是<b>可見、可控、可追蹤</b>；終點不是<del>「準時交件」</del>，而是<b>「每一個節點都在正確時間發生」</b>。
+      </div>
+    </article>
+
+    <!-- 決策流 -->
+    <article class="flow" style="--c:var(--f5)">
+      <div class="flow-head">
+        <span class="flow-code">FLOW 05</span>
+        <h3>決策流</h3>
+        <span class="flow-en">Decision Flow</span>
+      </div>
+      <p class="flow-def">決策不是把問題呈上去，而是讓<b>該由誰決定的事，在該決定的時間、用該有的依據決定</b>。</p>
+
+      <span class="lbl">節點路徑</span>
+      <div class="nodes">
+        <span class="node"><em>1</em>辨識決策點</span>
+        <span class="node"><em>2</em>備齊判斷依據</span>
+        <span class="node"><em>3</em>提出選項與影響</span>
+        <span class="node"><em>4</em>在權責層級拍板</span>
+        <span class="node"><em>5</em>回饋執行與落文</span>
+      </div>
+
+      <table>
+        <thead><tr><th>常見誤區</th><th>正確作法</th></tr></thead>
+        <tbody>
+          <tr><td>只呈報問題，未提選項</td><td>提出 2–3 個可行方案，並列出優缺與風險</td></tr>
+          <tr><td>依據只有「慣例」</td><td>回到法規、前例、資料與風險評估四項依據</td></tr>
+          <tr><td>口頭裁示未落文</td><td>當日以簽或會議紀錄留存，並註明決行層級</td></tr>
+          <tr><td>決策點懸空或越級</td><td>依分層負責明細表確認權責層級後再陳核</td></tr>
+        </tbody>
+      </table>
+
+      <div class="endpoint">
+        <span>終點判準</span>
+        決策流的終點，不是<del>「已經呈上去了」</del>，而是<b>「決定已經做出、依據可以說明、執行單位已經知道」</b>。
+      </div>
+    </article>
+
+    <!-- 證據流 -->
+    <article class="flow" style="--c:var(--f6)">
+      <div class="flow-head">
+        <span class="flow-code">FLOW 06</span>
+        <h3>證據流</h3>
+        <span class="flow-en">Evidence Flow</span>
+      </div>
+      <p class="flow-def">紀錄要完整、留下<b>可驗證依據</b>。證據流決定了這件事能不能被審計、被考核、被交接、被重用。</p>
+
+      <span class="lbl">節點路徑</span>
+      <div class="nodes">
+        <span class="node"><em>1</em>產生紀錄</span>
+        <span class="node"><em>2</em>歸屬案件</span>
+        <span class="node"><em>3</em>可檢索保存</span>
+        <span class="node"><em>4</em>可被引用重用</span>
+      </div>
+
+      <table>
+        <thead><tr><th>常見誤區</th><th>後果</th></tr></thead>
+        <tbody>
+          <tr><td>做過但查無紀錄</td><td>考核、審計無法舉證，等同沒做</td></tr>
+          <tr><td>紀錄只在個人電腦或私人通訊</td><td>人一調動，案件脈絡全失</td></tr>
+          <tr><td>版本不一致、無最終版標示</td><td>後續引用錯誤資料，衍生新的錯誤</td></tr>
+          <tr><td>只留結果，未留判斷依據</td><td>下次遇到同案，必須從頭再判斷一次</td></tr>
+        </tbody>
+      </table>
+
+      <div class="endpoint">
+        <span>終點判準</span>
+        證據流的終點，不是<del>「有存檔」</del>，而是<b>「別人不靠你，也找得到、看得懂、用得上」</b>。
+      </div>
+    </article>
+  </section>
+
+  <!-- 儀表 -->
+  <section id="meter" class="reveal">
+    <div class="sec-head">
+      <div class="sec-num">04 / 診斷</div>
+      <h2>效能乘法儀表</h2>
+      <p>就手上正在辦的一件案子，勾選「目前確實做到」的項目。六條流的分數相乘，會直接顯示斷點在哪裡。</p>
+    </div>
+
+    <div class="meter">
+      <h3>盤點手上這件案子</h3>
+      <p class="sub">每條流 3 題，每題約 33%。相乘後的數字通常遠低於直覺——這正是乘法模型要說明的事。</p>
+
+      <div class="checks" id="checks"></div>
+
+      <div class="funnel" id="funnel"></div>
+
+      <div class="readout">
+        <div>
+          <div class="score-l">整體行政效能指數</div>
+          <div class="score"><span id="score">0</span><sup>%</sup></div>
+        </div>
+        <div class="diag" id="diag">尚未勾選任何項目。先選一件正在辦的案子，逐條誠實勾選。</div>
+      </div>
+
+      <button class="reset" id="reset">全部清除</button>
+    </div>
+  </section>
+
+  <!-- 修復 -->
+  <section id="fix" class="reveal">
+    <div class="sec-head">
+      <div class="sec-num">05 / 修復</div>
+      <h2>找出斷點，讓每一條流重新通過</h2>
+      <p>行政改善，不是讓每個人更忙，而是讓每一條流順利通過。修復斷點的成本，遠低於全員加班的成本。</p>
+    </div>
+
+    <div class="fix">
+      <div><i>STEP 01</i><b>觀察</b><span>案子現在停在哪一個節點？停多久了？是誰在等誰？</span></div>
+      <div><i>STEP 02</i><b>歸因</b><span>斷的是哪一條流：沒人承接（責任）、沒人知道（資訊）、沒人決定（決策）？</span></div>
+      <div><i>STEP 03</i><b>修復</b><span>只修那一條流。補上承接者、補上期限、補上選項、補上紀錄。</span></div>
+      <div><i>STEP 04</i><b>固化</b><span>把這次的修法寫成表單、範本或檢核表，讓下一件案子不必再靠記憶。</span></div>
+    </div>
+
+    <table style="margin-top:26px">
+      <thead><tr><th>斷點徵兆</th><th>斷的是哪一條流</th><th>優先修復動作</th></tr></thead>
+      <tbody>
+        <tr><td>不知道這件事現在到哪了</td><td>任務流</td><td>畫出節點路徑，標示目前位置</td></tr>
+        <tr><td>大家說法不一致</td><td>資訊流</td><td>指定單一版本來源與通知對象</td></tr>
+        <tr><td>沒人認為自己該處理</td><td>責任流</td><td>用四問指定承接者與回報對象</td></tr>
+        <tr><td>案子躺著沒人動</td><td>時間流</td><td>設定追蹤日，逾期主動催辦</td></tr>
+        <tr><td>一直在等長官</td><td>決策流</td><td>備妥選項、影響與建議方案再陳核</td></tr>
+        <tr><td>要用時找不到資料</td><td>證據流</td><td>建立案件資料夾與命名規則</td></tr>
+      </tbody>
+    </table>
+
+    <div class="closing">
+      <p>行政效能，不只看有沒有做完，<br>更要看事情能不能<em>持續、清楚、穩定</em>地流動。</p>
+    </div>
+  </section>
+
+  <footer>
+    <b>行政工作流的底層邏輯 001–008</b>　｜　001 路徑總論、002 乘法模型、003 任務流、004 資訊流、005 責任流、006 時間流為附件內容整理；007 決策流、008 證據流依同一架構補齊，以完成六條流的完整模型。
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* 進度列 */
+  var bar=document.getElementById("progress");
+  function prog(){
+    var h=document.documentElement;
+    var p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+    bar.style.width=(p*100)+"%";
+  }
+  document.addEventListener("scroll",prog,{passive:true});prog();
+
+  /* 進場 */
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){e.target.classList.add("on");io.unobserve(e.target);} });
+  },{threshold:.08});
+  document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
+
+  /* 資料 */
+  var FLOWS=[
+    {name:"任務流",color:"var(--f1)",items:["這件案子有明確的節點路徑，我說得出現在停在第幾步","每個步驟都有明確的完成標準，可以被驗收","進度不必靠我的記憶，看紀錄就知道走到哪"]},
+    {name:"資訊流",color:"var(--f2)",items:["相關人都收到了「他需要的那一版」重點，不是整包轉寄","每次傳出資訊時，都附帶了明確的下一步與期限","有單一版本來源，不會出現各拿各的舊檔案"]},
+    {name:"責任流",color:"var(--f3)",items:["每一項工作都有具名的承接者，不是「某某科」","承接者已確認任務邊界與完成時點","完成後有明確回報對象，主管會確認結案"]},
+    {name:"時間流",color:"var(--f4)",items:["已設定啟動日、追蹤日與完成日，不是只有一個死線","所有「在等的事」都被列出來，且有可接受的等待上限","逾期會主動被發現，不是等到被催才知道"]},
+    {name:"決策流",color:"var(--f5)",items:["需要決定的事項都已辨識，並確認權責層級","陳核時附有選項、影響與建議方案，不是只呈問題","裁示當日已落文，執行單位已收到並知悉"]},
+    {name:"證據流",color:"var(--f6)",items:["過程紀錄與判斷依據都已留存於案件資料夾","檔案有版本與命名規則，找得到最終版","我調離後，接手的人不必問我就能接續辦理"]}
+  ];
+
+  /* 乘法示意圖 */
+  function chain(id,vals){
+    var box=document.getElementById(id);
+    var cum=1;
+    vals.forEach(function(v,i){
+      cum*=v;
+      var col=document.createElement("div");col.className="ch";
+      var b=document.createElement("div");
+      b.className="bar"+(v<=0.05?" dead":"");
+      b.style.setProperty("--c",FLOWS[i].color);
+      b.style.height=Math.max(cum*100,2)+"%";
+      var l=document.createElement("label");l.textContent=FLOWS[i].name.slice(0,2);
+      col.appendChild(b);col.appendChild(l);box.appendChild(col);
+    });
+  }
+  chain("chain-good",[0.95,0.95,0.95,0.95,0.95,0.95]);
+  chain("chain-bad",[0.95,0.95,0.95,0.04,0.95,0.95]);
+
+  /* 檢核表 */
+  var wrap=document.getElementById("checks");
+  FLOWS.forEach(function(f,fi){
+    var d=document.createElement("div");d.className="cbox";
+    var h=document.createElement("h4");
+    h.innerHTML='<span class="dot" style="background:'+f.color+'"></span>'+f.name;
+    d.appendChild(h);
+    f.items.forEach(function(t,ii){
+      var lab=document.createElement("label");
+      var cb=document.createElement("input");
+      cb.type="checkbox";cb.dataset.flow=fi;cb.dataset.item=ii;
+      cb.addEventListener("change",calc);
+      lab.appendChild(cb);
+      lab.appendChild(document.createTextNode(t));
+      d.appendChild(lab);
+    });
+    wrap.appendChild(d);
+  });
+
+  /* 漏斗 */
+  var funnel=document.getElementById("funnel");
+  var segs=FLOWS.map(function(f){
+    var c=document.createElement("div");c.className="fn";
+    var b=document.createElement("div");b.className="b";b.style.height="2px";
+    var s=document.createElement("small");s.textContent=f.name.slice(0,2);
+    c.appendChild(b);c.appendChild(s);funnel.appendChild(c);
+    return {bar:b,color:f.color};
+  });
+
+  var scoreEl=document.getElementById("score"),diagEl=document.getElementById("diag");
+
+  function calc(){
+    var scores=FLOWS.map(function(_,fi){
+      var n=document.querySelectorAll('input[data-flow="'+fi+'"]:checked').length;
+      return n/3;
+    });
+    var total=scores.reduce(function(a,b){return a*b;},1);
+    var cum=1;
+    scores.forEach(function(v,i){
+      cum*=v;
+      segs[i].bar.style.height=Math.max(cum*100,2)+"%";
+      segs[i].bar.style.background=v===0?"#8A4038":(v<1?"#5B7FA8":"#4FA678");
+    });
+    scoreEl.textContent=(total*100).toFixed(total>0&&total<1?1:0);
+
+    var zeros=[],weak=[];
+    scores.forEach(function(v,i){
+      if(v===0)zeros.push(FLOWS[i].name);
+      else if(v<1)weak.push(FLOWS[i].name);
+    });
+    var msg;
+    if(scores.every(function(v){return v===0;})){
+      msg="尚未勾選任何項目。先選一件正在辦的案子，逐條誠實勾選。";
+    }else if(zeros.length){
+      msg="<b>斷點："+zeros.join("、")+"</b>。這條流接近 0，其餘做得再好，整體效能仍接近 0。請優先修復這一條，不要先加強其他五條。";
+    }else if(weak.length){
+      msg="六條流都有通過，但 <b>"+weak.join("、")+"</b> 尚未補滿。乘法之下，這些缺口會被放大——補齊最弱的一條，效益高於平均加強。";
+    }else{
+      msg="<b>六條流全數通過。</b>接下來要做的是固化：把這次的作法寫成範本與檢核表，讓下一件案子不必再靠個人記憶。";
+    }
+    diagEl.innerHTML=msg;
+  }
+
+  document.getElementById("reset").addEventListener("click",function(){
+    document.querySelectorAll('#checks input').forEach(function(c){c.checked=false;});
+    calc();
+  });
+
+  calc();
+})();
+</script>
+</body>
+</html>

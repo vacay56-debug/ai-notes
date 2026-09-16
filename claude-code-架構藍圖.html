@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLAUDE CODE ｜ 智能體開發套件 —— 分層架構藍圖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;600;700;800&family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0B1B33;
+    --navy-2:#0F2444;
+    --navy-3:#132C52;
+    --grid-line: rgba(125,211,232,.10);
+    --cyan:#6FE3FF;
+    --cyan-dim:#3E8CA6;
+    --paper:#F3EEDD;
+    --paper-2:#E8E0C4;
+    --ink:#15223A;
+    --ink-soft:#3A4A66;
+    --amber:#F0A93B;
+    --guard:#FF7A6B;
+    --white:#EAF4FB;
+    --muted:#8FA9C4;
+    --line-hair: rgba(234,244,251,.14);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--navy);
+    color:var(--white);
+    font-family:'Noto Sans TC','Big Shoulders Display',sans-serif;
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+    overflow-x:hidden;
+  }
+  /* blueprint grid backdrop */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size:34px 34px;
+    pointer-events:none;
+    z-index:0;
+  }
+  body::after{
+    content:"";
+    position:fixed; inset:0;
+    background:radial-gradient(ellipse 80% 50% at 50% -10%, rgba(111,227,255,.08), transparent 60%);
+    pointer-events:none;
+    z-index:0;
+  }
+  main, header, footer{position:relative; z-index:1;}
+
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.72rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--cyan);
+    display:flex; align-items:center; gap:.6em;
+  }
+  .eyebrow::before{content:"//"; color:var(--cyan-dim);}
+
+  h1,h2,h3{font-family:'Noto Serif TC', serif; margin:0; font-weight:900;}
+  .en{font-family:'Big Shoulders Display', sans-serif; text-transform:uppercase; letter-spacing:.02em;}
+
+  a{color:var(--cyan);}
+
+  /* ===== corner crop marks — used on every framed panel ===== */
+  .framed{
+    position:relative;
+    border:1px solid var(--line-hair);
+  }
+  .framed::before,.framed::after,
+  .framed .ct-tl,.framed .ct-tr,.framed .ct-bl,.framed .ct-br{position:absolute; width:14px; height:14px; pointer-events:none;}
+  .framed .ct-tl{top:-1px; left:-1px; border-top:2px solid var(--cyan); border-left:2px solid var(--cyan);}
+  .framed .ct-tr{top:-1px; right:-1px; border-top:2px solid var(--cyan); border-right:2px solid var(--cyan);}
+  .framed .ct-bl{bottom:-1px; left:-1px; border-bottom:2px solid var(--cyan); border-left:2px solid var(--cyan);}
+  .framed .ct-br{bottom:-1px; right:-1px; border-bottom:2px solid var(--cyan); border-right:2px solid var(--cyan);}
+
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
+
+  /* ===================== TITLE BLOCK / HERO ===================== */
+  header.titleblock{
+    padding:56px 0 0;
+    border-bottom:1px solid var(--line-hair);
+  }
+  .tb-top{display:flex; align-items:center; gap:14px; margin-bottom:22px;}
+  .tb-mark{
+    width:34px; height:34px; flex:none;
+    background:conic-gradient(from 45deg, var(--amber), var(--cyan), var(--amber));
+    clip-path:polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
+  }
+  .tb-top .eyebrow::before{content:none;}
+  h1.title{
+    font-size:clamp(2.1rem, 6vw, 3.6rem);
+    line-height:1.15;
+    color:var(--white);
+    margin-bottom:10px;
+  }
+  h1.title .accent{color:var(--cyan);}
+  .subtitle{
+    font-family:'JetBrains Mono',monospace;
+    font-size:clamp(.85rem,2vw,1.05rem);
+    color:var(--amber);
+    letter-spacing:.02em;
+    margin-bottom:22px;
+  }
+  .lede{
+    max-width:66ch;
+    color:var(--muted);
+    font-size:1.02rem;
+    margin-bottom:34px;
+  }
+  /* title block strip like architectural drawing stamp */
+  .stamp{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    border-top:1px solid var(--line-hair);
+    margin-top:0;
+  }
+  .stamp div{
+    padding:14px 18px;
+    border-right:1px solid var(--line-hair);
+    font-family:'JetBrains Mono',monospace;
+    font-size:.72rem;
+  }
+  .stamp div:last-child{border-right:none;}
+  .stamp .k{color:var(--muted); letter-spacing:.1em; text-transform:uppercase; display:block; margin-bottom:4px; font-size:.66rem;}
+  .stamp .v{color:var(--white); font-weight:500;}
+
+  /* ===================== SECTION GENERIC ===================== */
+  section{padding:64px 0;}
+  .sec-head{margin-bottom:36px;}
+  .sec-head h2{
+    font-size:clamp(1.5rem,4vw,2.1rem);
+    color:var(--white);
+  }
+  .sec-head .num{
+    font-family:'Big Shoulders Display',sans-serif;
+    font-size:.85rem;
+    color:var(--cyan-dim);
+    letter-spacing:.15em;
+  }
+  .intro-grid{display:grid; grid-template-columns: 1.1fr .9fr; gap:40px;}
+  @media(max-width:760px){.intro-grid{grid-template-columns:1fr;}}
+  .intro-grid p{color:var(--muted); margin:0 0 14px;}
+  .intro-card{
+    background:var(--navy-3);
+    padding:22px 24px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.82rem;
+    color:var(--white);
+  }
+  .intro-card .eyebrow{margin-bottom:10px;}
+  .intro-card ul{margin:0; padding-left:1.1em; color:var(--muted);}
+  .intro-card li{margin-bottom:6px;}
+
+  /* ===================== LAYER STACK ===================== */
+  .stack{
+    display:grid;
+    grid-template-columns:64px 1fr;
+    column-gap:0;
+  }
+  .ruler{
+    position:relative;
+    border-right:1px dashed var(--cyan-dim);
+  }
+  .ruler .tick{
+    position:absolute; left:0; right:-6px;
+    display:flex; align-items:center; justify-content:flex-end;
+  }
+  .layer-row{
+    position:relative;
+    display:grid;
+    grid-template-columns:64px 1fr;
+    grid-column:1/-1;
+    margin-bottom:26px;
+  }
+  .layer-row .marker{
+    grid-column:1;
+    position:relative;
+    display:flex; justify-content:flex-end; align-items:flex-start;
+    padding-top:24px;
+  }
+  .layer-row .marker .dot{
+    width:11px; height:11px; border-radius:50%;
+    background:var(--navy);
+    border:2px solid var(--cyan);
+    transform:translateX(6px);
+  }
+  .layer-row .marker .lv{
+    position:absolute; top:2px; right:20px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.62rem; color:var(--cyan-dim); letter-spacing:.1em;
+  }
+  .layer-card{
+    grid-column:2;
+    background:var(--navy-2);
+    padding:26px 26px 24px;
+    border-left:1px dashed var(--cyan-dim);
+  }
+  .layer-card .lhead{
+    display:flex; flex-wrap:wrap; align-items:baseline; gap:12px 18px;
+    margin-bottom:6px;
+  }
+  .layer-card .lhead h3{
+    font-size:clamp(1.15rem,3vw,1.5rem);
+    color:var(--white);
+  }
+  .layer-card .lhead .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.68rem;
+    color:var(--navy);
+    background:var(--cyan);
+    padding:3px 9px;
+    letter-spacing:.06em;
+  }
+  .layer-card.guard .lhead .tag{background:var(--guard);}
+  .layer-card .tagline{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--amber);
+    font-size:.82rem;
+    margin-bottom:16px;
+  }
+  .layer-card p{color:var(--muted); margin:0 0 14px; max-width:70ch;}
+  .layer-card p strong{color:var(--white); font-weight:500;}
+
+  .chip-row{display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 4px;}
+  .chip{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.72rem;
+    color:var(--white);
+    background:rgba(111,227,255,.08);
+    border:1px solid rgba(111,227,255,.28);
+    padding:5px 10px;
+  }
+
+  .spec-list{list-style:none; margin:14px 0; padding:0; display:grid; gap:8px;}
+  .spec-list li{
+    display:grid; grid-template-columns:150px 1fr; gap:12px;
+    font-size:.92rem; color:var(--muted);
+    border-top:1px dashed var(--line-hair);
+    padding-top:8px;
+  }
+  .spec-list li:first-child{border-top:none; padding-top:0;}
+  .spec-list b{color:var(--white); font-weight:500; font-family:'JetBrains Mono',monospace; font-size:.8rem;}
+
+  .paper-block{
+    background:var(--paper);
+    color:var(--ink);
+    margin-top:18px;
+    padding:16px 18px;
+    position:relative;
+  }
+  .paper-block .eyebrow{color:var(--ink-soft); margin-bottom:8px;}
+  .paper-block .eyebrow::before{color:#B7A96A;}
+  .paper-block pre{
+    margin:0;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.78rem;
+    white-space:pre-wrap;
+    color:var(--ink);
+    line-height:1.65;
+  }
+  .paper-note{
+    background:var(--paper);
+    color:var(--ink);
+    padding:14px 18px;
+    margin-top:16px;
+    font-size:.9rem;
+  }
+  .paper-note .eyebrow{color:var(--ink-soft); margin-bottom:6px;}
+  .paper-note .eyebrow::before{color:#B7A96A;}
+  .paper-note strong{font-weight:700;}
+
+  .flow{
+    display:flex; align-items:center; flex-wrap:wrap; gap:8px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.78rem;
+    color:var(--white);
+    margin:14px 0;
+  }
+  .flow .step{background:rgba(255,255,255,.06); padding:5px 10px; border:1px solid var(--line-hair);}
+  .flow .arrow{color:var(--cyan-dim);}
+
+  /* ===================== SIDE PANELS ===================== */
+  .panels{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+  @media(max-width:720px){.panels{grid-template-columns:1fr;}}
+  .panel{background:var(--navy-2); padding:24px;}
+  .panel h3{color:var(--white); font-size:1.15rem; margin-bottom:6px;}
+  .panel .tagline{font-family:'JetBrains Mono',monospace; color:var(--amber); font-size:.8rem; margin-bottom:14px;}
+  .panel p{color:var(--muted); font-size:.92rem; margin:0 0 14px;}
+  .panel ul{margin:0; padding-left:1.1em; color:var(--muted); font-size:.88rem; display:grid; gap:6px;}
+  .panel ul b{color:var(--white); font-weight:500;}
+
+  /* ===================== CROSS CUTTING ===================== */
+  .ccc-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--line-hair);}
+  @media(max-width:900px){.ccc-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:480px){.ccc-grid{grid-template-columns:1fr;}}
+  .ccc-item{background:var(--navy); padding:20px 18px;}
+  .ccc-item .en{color:var(--cyan); font-size:1.1rem; display:block; margin-bottom:4px;}
+  .ccc-item h4{margin:0 0 8px; color:var(--white); font-family:'Noto Serif TC',serif; font-size:1rem;}
+  .ccc-item p{margin:0; color:var(--muted); font-size:.85rem;}
+
+  /* ===================== LIFECYCLE ===================== */
+  .lifecycle{display:flex; flex-wrap:wrap; align-items:stretch; gap:0; margin-top:8px;}
+  .lc-step{
+    flex:1 1 150px;
+    background:var(--navy-2);
+    padding:18px 16px;
+    position:relative;
+    border-right:1px dashed var(--cyan-dim);
+  }
+  .lc-step:last-child{border-right:none;}
+  .lc-step .n{font-family:'Big Shoulders Display',sans-serif; color:var(--cyan-dim); font-size:1.6rem; display:block; margin-bottom:6px;}
+  .lc-step p{margin:0; font-size:.85rem; color:var(--white);}
+
+  /* ===================== FAQ ===================== */
+  .faq{display:grid; gap:1px; background:var(--line-hair);}
+  .faq-item{background:var(--navy); padding:20px 24px;}
+  .faq-item .q{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--amber);
+    font-size:.86rem;
+    margin-bottom:8px;
+    display:flex; gap:10px;
+  }
+  .faq-item .a{color:var(--muted); margin:0; font-size:.92rem;}
+
+  /* ===================== GLOSSARY ===================== */
+  table.glossary{width:100%; border-collapse:collapse; font-size:.88rem;}
+  table.glossary th{
+    text-align:left; font-family:'JetBrains Mono',monospace; font-size:.68rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--cyan-dim);
+    padding:10px 14px; border-bottom:1px solid var(--line-hair);
+  }
+  table.glossary td{padding:12px 14px; border-bottom:1px solid var(--line-hair); color:var(--muted); vertical-align:top;}
+  table.glossary td.term{color:var(--white); font-family:'JetBrains Mono',monospace; font-size:.82rem; white-space:nowrap;}
+  table.glossary td.cn{color:var(--amber); white-space:nowrap;}
+
+  /* ===================== FOOTER ===================== */
+  footer{
+    border-top:1px solid var(--line-hair);
+    padding:56px 0 40px;
+    text-align:center;
+  }
+  footer .quote{
+    font-family:'Noto Serif TC',serif;
+    font-weight:900;
+    font-size:clamp(1.3rem,4vw,2rem);
+    color:var(--white);
+    max-width:18ch;
+    margin:0 auto 10px;
+  }
+  footer .quote .accent{color:var(--amber);}
+  footer .quote-en{
+    font-family:'Big Shoulders Display',sans-serif;
+    color:var(--cyan-dim);
+    letter-spacing:.05em;
+    margin-bottom:30px;
+    font-size:.9rem;
+  }
+  footer .foot-note{font-family:'JetBrains Mono',monospace; font-size:.7rem; color:var(--muted); letter-spacing:.05em;}
+
+  .reveal{opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1; transform:none; transition:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<header class="titleblock">
+  <div class="wrap">
+    <div class="tb-top">
+      <div class="tb-mark" aria-hidden="true"></div>
+      <span class="eyebrow">CLAUDE CODE / EXTENSION LAYERS</span>
+    </div>
+    <h1 class="title">智能體開發套件<br><span class="accent">分層架構藍圖</span></h1>
+    <div class="subtitle">CLAUDE.md + SKILLS + HOOKS + SUBAGENTS + PLUGINS</div>
+    <p class="lede">
+      這是一套讓 Claude Code 從「單次問答工具」進化為「可長期維運之工作系統」的架構。
+      七個元件各司其職、彼此分層——如同一份建築剖面圖：從最底層恆常生效的核心規則，
+      逐層向上擴充知識、安全機制、任務委派，最終打包成可供整個科室安裝使用的套件。
+      本頁在原始資訊圖的基礎上，補充機制細節、實際範例與行政文書工作的應用情境。
+    </p>
+  </div>
+  <div class="stamp wrap" style="padding-left:0;padding-right:0;">
+  </div>
+  <div class="stamp">
+    <div><span class="k">圖名 Drawing</span><span class="v">Agent Development Kit</span></div>
+    <div><span class="k">比例 Scale</span><span class="v">NTS（不按比例）</span></div>
+    <div><span class="k">版本 Rev</span><span class="v">A · 2026.07</span></div>
+    <div><span class="k">用途 For</span><span class="v">公部門文書工作參考</span></div>
+  </div>
+</header>
+
+<main>
+
+  <div class="wrap">
+    <section class="reveal" id="intro">
+      <div class="sec-head">
+        <span class="num">00 / 導論</span>
+        <h2>為什麼需要「架構」，而不只是「提示詞」？</h2>
+      </div>
+      <div class="intro-grid">
+        <div>
+          <p>
+            許多人使用 Claude 的方式，是每次開新對話就重新交代一次規則、重新貼上範例文件、重新解釋一次業務背景。
+            這種做法在偶爾使用時沒有問題，但一旦進入每天都要處理公文、預算書、簡報、採購文件的常態工作，
+            重複交代規則本身就會變成一種成本。
+          </p>
+          <p>
+            <strong>智能體開發套件（Agent Development Kit）</strong>的核心精神，是把「規則要交代幾次」與「規則有多重要、多需要被強制遵守」
+            拆成不同的層級來管理：有些事情永遠生效（CLAUDE.md）、有些事情按需喚起（Skills）、
+            有些事情必須被程式鎖死而非依賴 AI 自律（Hooks）、有些事情最好交給獨立分身處理（Subagents），
+            最後再把整套設定打包分享出去（Plugins）。
+          </p>
+          <p>
+            這七層彼此不是互相取代的關係，而是<strong>解決不同問題的工具</strong>——
+            官方文件將其歸納為：CLAUDE.md 處理「恆常情境」、Skills 處理「隨需知識與流程」、
+            MCP 處理「外部連接」、Subagents 與 Agent Teams 處理「隔離」、Hooks 處理「自動化」、Plugins 處理「打包分享」。
+          </p>
+        </div>
+        <div class="framed intro-card">
+          <span class="ct-tl"></span><span class="ct-tr"></span><span class="ct-bl"></span><span class="ct-br"></span>
+          <div class="eyebrow">建議導入順序</div>
+          <ul>
+            <li>先建立 <b>CLAUDE.md</b>，定義最基本、不常變動的規則（語言、格式、禁止事項）</li>
+            <li>發現自己重複交代同一套「流程」時，把它收進 <b>Skill</b></li>
+            <li>發現某條規則「AI 有時會忘記遵守」時，改用 <b>Hook</b> 鎖死</li>
+            <li>發現某項任務「查證過程很長、但只需要看結論」時，交給 <b>Subagent</b></li>
+            <li>整套設定穩定之後，打包成 <b>Plugin</b> 供同仁安裝</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="wrap">
+    <section class="reveal" id="stack">
+      <div class="sec-head">
+        <span class="num">01–05 / 核心分層</span>
+        <h2>五層核心架構</h2>
+      </div>
+
+      <div class="stack">
+
+        <!-- LAYER 1 -->
+        <div class="layer-row">
+          <div class="marker"><span class="lv">LV.01</span><span class="dot"></span></div>
+          <div class="layer-card framed">
+            <span class="ct-tl"></span><span class="ct-tr"></span><span class="ct-bl"></span><span class="ct-br"></span>
+            <div class="lhead">
+              <h3>CLAUDE.md — 記憶層</h3>
+              <span class="tag">THE MEMORY LAYER</span>
+            </div>
+            <div class="tagline">永遠載入、永遠生效——智能體的「憲法」</div>
+            <p>
+              CLAUDE.md 是一份純文字規則文件，Claude Code 每次啟動都會自動讀入，<strong>不需要每次重新說明</strong>。
+              角色類似機關內部的「作業要點」：不是拿來查閱的參考資料，而是每次執行任務都必須遵守的基本規範。
+              多層 CLAUDE.md 是<strong>疊加生效</strong>的：所有層級同時貢獻內容，指示衝突時，較具體的規則通常優先。
+            </p>
+            <div class="chip-row">
+              <span class="chip">架構規則 Architecture rules</span>
+              <span class="chip">命名慣例 Naming conventions</span>
+              <span class="chip">測試期望 Test expectations</span>
+              <span class="chip">專案地圖 Repo map</span>
+              <span class="chip">代理人指引 Agent guidelines</span>
+            </div>
+            <ul class="spec-list">
+              <li><b>全域 Global</b> ~/.claude/CLAUDE.md ——適用這台電腦上所有工作，例如固定使用繁體中文、慣用語氣</li>
+              <li><b>專案 Project</b> .claude/CLAUDE.md ——只適用於特定資料夾，例如某次法規研修案的專屬術語與格式</li>
+            </ul>
+            <div class="paper-block">
+              <div class="eyebrow">範例：救護業務科文書規則片段</div>
+<pre># CLAUDE.md — 緊急救護科文書工作規則
+
+## 語言與格式
+- 一律使用繁體中文（教育部標準字體、臺灣慣用語）
+- 英文專業術語首次出現：中文（英文全稱，英文縮寫）
+- 公文一律採三段式：主旨／說明／辦法（或擬辦）
+
+## 檔案組織
+- 簽稿存放於 /公文/簽/
+- 預算文件依年度存放於 /預算/{年度}/
+
+## 禁止事項
+- 未經確認，不得逕行變更正式發文字號
+- 不得於文件中臆測未經證實之統計數據</pre>
+            </div>
+            <div class="paper-note">
+              <div class="eyebrow">要點提醒</div>
+              保持精簡。CLAUDE.md 不是用來塞入完整法規全文或大量參考資料的地方——那是 <b>Skills</b> 的工作。
+              內容塞得越多，每次對話消耗的上下文就越多，反而可能讓 Claude 抓不到重點。
+            </div>
+          </div>
+        </div>
+
+        <!-- LAYER 2 -->
+        <div class="layer-row">
+          <div class="marker"><span class="lv">LV.02</span><span class="dot"></span></div>
+          <div class="layer-card framed">
+            <span class="ct-tl"></span><span class="ct-tr"></span><span class="ct-bl"></span><span class="ct-br"></span>
+            <div class="lhead">
+              <h3>Skills — 技能層</h3>
+              <span class="tag">THE KNOWLEDGE LAYER</span>
+            </div>
+            <div class="tagline">隨需載入的模組化知識包，不常駐上下文</div>
+            <p>
+              若 CLAUDE.md 是「憲法」，Skill 就是「業務手冊櫃」——平常收在櫃子裡，
+              只有遇到對應業務時才被取出參考，用完即釋放，不會一直佔用主線的思考空間。
+              現行版本的 Skills 已<strong>整合了原本的自訂指令（Slash Commands）</strong>：
+              一個 Skill 既可以被 Claude 依情境自動喚起，也可以用 <code>/技能名稱</code> 手動呼叫。
+            </p>
+            <div class="flow">
+              <span class="step">描述比對 Description matching</span>
+              <span class="arrow">→</span>
+              <span class="step">自動觸發 Auto-invoked</span>
+              <span class="arrow">→</span>
+              <span class="step">任務專屬情境 Task-specific context</span>
+            </div>
+            <ul class="spec-list">
+              <li><b>結構 Structure</b> 每個 Skill 是一個資料夾：SKILL.md（何時啟用、如何操作）+ 參考文件／腳本／範本／範例</li>
+              <li><b>關鍵 Key</b> 可於獨立子代理中執行——即使參考資料龐大，也不會拖垮主線對話的上下文空間</li>
+            </ul>
+            <div class="paper-note">
+              <div class="eyebrow">對照你目前的設定</div>
+              你在 Claude 中已經配置了對應救災救護組不同業務的 Skills：公文起草、預算說明書、政策簡報、
+              採購文件、EMS 國際政策研究、出國考察報告——這正是「技能層」在實務上的樣子：
+              每個 Skill 只在對應情境被喚起，彼此互不干擾，也不會平白佔用其他業務的上下文空間。
+            </div>
+          </div>
+        </div>
+
+        <!-- LAYER 3 -->
+        <div class="layer-row">
+          <div class="marker"><span class="lv">LV.03</span><span class="dot"></span></div>
+          <div class="layer-card guard framed">
+            <span class="ct-tl"></span><span class="ct-tr"></span><span class="ct-bl"></span><span class="ct-br"></span>
+            <div class="lhead">
+              <h3>Hooks — 掛鉤層</h3>
+              <span class="tag">THE GUARDRAIL LAYER</span>
+            </div>
+            <div class="tagline">確定性規則，不是 AI 判斷——如同 Git 的 hooks 機制</div>
+            <p>
+              Hooks 是寫死的自動化規則，在特定事件發生時<strong>強制執行</strong>，不經過、也不受 AI 自行判斷是否遵守。
+              這一點對公部門工作特別關鍵：某些「絕對不可以」的紅線，可以用程式規則鎖死，
+              而不是只靠提示詞去「拜託」AI 遵守——測試顯示，僅在 CLAUDE.md 寫「禁止執行某危險指令」，
+              遵守率約七成；改用 Hook 攔截後，可達到百分之百強制封鎖。
+            </p>
+            <div class="flow">
+              <span class="step">事件觸發 Event fires</span>
+              <span class="arrow">→</span>
+              <span class="step">比對條件 Matcher checks</span>
+              <span class="arrow">→</span>
+              <span class="step">執行指令 Command runs</span>
+            </div>
+            <div class="chip-row">
+              <span class="chip">PreToolUse 動作執行前</span>
+              <span class="chip">PostToolUse 動作執行後</span>
+              <span class="chip">SessionStart 工作階段開始</span>
+              <span class="chip">Stop 任務結束</span>
+              <span class="chip">SubagentStop 子代理結束</span>
+            </div>
+            <ul class="spec-list">
+              <li><b>類型 Types</b> command（指令）、http、mcp_tool、prompt、agent 五種掛鉤類型</li>
+              <li><b>硬性攔截 Hard block</b> PreToolUse 掛鉤回傳 exit code 2，即可在動作執行前直接擋下，無法被繞過</li>
+            </ul>
+            <div class="paper-note">
+              <div class="eyebrow">情境應用</div>
+              例如：寫入檔案時自動排版、封鎖危險指令（如 <code>rm -rf</code>）、任務完成時發送通知——
+              延伸到文書工作，也可以設定「覆寫正式簽核文件前，先自動備份一份存檔」，避免正在處理的公文草稿被意外覆蓋。
+            </div>
+          </div>
+        </div>
+
+        <!-- LAYER 4 -->
+        <div class="layer-row">
+          <div class="marker"><span class="lv">LV.04</span><span class="dot"></span></div>
+          <div class="layer-card framed">
+            <span class="ct-tl"></span><span class="ct-tr"></span><span class="ct-bl"></span><span class="ct-br"></span>
+            <div class="lhead">
+              <h3>Subagents — 子代理層</h3>
+              <span class="tag">THE DELEGATION LAYER</span>
+            </div>
+            <div class="tagline">委派專職任務給獨立上下文視窗，讓主線保持乾淨</div>
+            <p>
+              可以想像成把一項專門工作外包給科內的專責承辦人——你只交代任務、只收結果，
+              不需要知道對方過程中查了多少資料、改了多少次。子代理擁有<strong>自己的上下文視窗、工具與權限</strong>，
+              過程中的雜訊不會回流到主線對話。
+            </p>
+            <div class="chip-row">
+              <span class="chip">委派 Delegate only</span>
+              <span class="chip">← 結果 Results only</span>
+            </div>
+            <ul class="spec-list">
+              <li><b>單向 One-way</b> 子代理不能再委派給其他子代理，避免無限遞迴、失控增生</li>
+              <li><b>與 Agent Teams 的差異</b> Subagent 為單向回報；Agent Teams 則是多個獨立行程之間可雙向溝通、平行協作</li>
+              <li><b>範例 Examples</b> 程式碼審查員（Code Reviewer）、測試執行員（Test Runner）、探索員（Explorer）——各自擁有獨立上下文、工具與權限</li>
+            </ul>
+            <div class="paper-note">
+              <div class="eyebrow">延伸思考（非既有功能，示範同一邏輯的應用方式）</div>
+              同樣的委派邏輯，理論上也能延伸到行政工作：例如設定一個專職比對法規異動的子代理，
+              或是專職檢查公文格式是否符合三段式規範的子代理。重點在於——把「過程很長、但只需要看結論」的工作，
+              交給獨立子代理處理，而不是塞滿主線對話。
+            </div>
+          </div>
+        </div>
+
+        <!-- LAYER 5 -->
+        <div class="layer-row" style="margin-bottom:0;">
+          <div class="marker"><span class="lv">LV.05</span><span class="dot"></span></div>
+          <div class="layer-card framed">
+            <span class="ct-tl"></span><span class="ct-tr"></span><span class="ct-bl"></span><span class="ct-br"></span>
+            <div class="lhead">
+              <h3>Plugins — 外掛層</h3>
+              <span class="tag">THE DISTRIBUTION LAYER</span>
+            </div>
+            <div class="tagline">打包 skills / agents / hooks / commands，如同 npm 套件之於軟體開發</div>
+            <p>
+              前四層通常是個人或單一專案在使用；外掛層則是把整套規則、技能、掛鉤與指令包裝成單一單位，
+              讓同仁可以<strong>一鍵安裝</strong>，不必每個人重新設定一次。外掛中的 Skill 會自動加上命名空間
+              （例如 <code>/公文起草外掛:簽稿</code>），避免與個人本機設定的技能同名衝突。
+            </p>
+            <div class="chip-row">
+              <span class="chip">skills/</span>
+              <span class="chip">agents/</span>
+              <span class="chip">hooks/</span>
+              <span class="chip">commands/</span>
+            </div>
+            <ul class="spec-list">
+              <li><b>散布方式 Distribution</b> Marketplace（市集）／ Team install（團隊安裝）</li>
+              <li><b>適用時機 When</b> 需要在多個資料夾重複使用相同設定，或要分享給科內、跨科同仁時</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div class="wrap">
+    <section class="reveal" id="side">
+      <div class="sec-head">
+        <span class="num">06–07 / 對外連接與協作</span>
+        <h2>兩項延伸能力</h2>
+      </div>
+      <div class="panels">
+        <div class="panel framed">
+          <span class="ct-tl"></span><span class="ct-tr"></span><span class="ct-bl"></span><span class="ct-br"></span>
+          <h3>MCP 伺服器</h3>
+          <div class="tagline">模型上下文協定（Model Context Protocol, MCP）</div>
+          <p>一套開放標準，讓 Claude 得以連接外部系統，而不需要為每個系統各自寫一套整合程式。</p>
+          <ul>
+            <li>外部工具 External tools</li>
+            <li>GitHub</li>
+            <li>資料庫 Databases</li>
+            <li>API</li>
+            <li>向量資料庫 Vector DBs</li>
+            <li>檔案系統 File systems</li>
+            <li>自訂整合（例如機關內部系統）Custom integrations</li>
+          </ul>
+        </div>
+        <div class="panel framed">
+          <span class="ct-tl"></span><span class="ct-tr"></span><span class="ct-bl"></span><span class="ct-br"></span>
+          <h3>智能體團隊</h3>
+          <div class="tagline">Agent Teams</div>
+          <p>多個獨立行程同時運作、彼此可雙向溝通，用於需要「平行分工＋即時協調」而非單向委派的場景。</p>
+          <ul>
+            <li><b>平行執行</b> Parallel execution</li>
+            <li><b>訊息傳遞</b> Message passing</li>
+            <li><b>主導協調</b> Lead orchestration</li>
+            <li><b>共用權限</b> Shared permissions</li>
+            <li><b>稽核與可觀測性</b> Audit &amp; observability</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="wrap">
+    <section class="reveal" id="ccc">
+      <div class="sec-head">
+        <span class="num">08 / 橫向規範</span>
+        <h2>貫穿所有層級的共同規範</h2>
+      </div>
+      <p style="color:var(--muted); max-width:70ch; margin:-16px 0 24px;">
+        如同建築法規不專屬於哪一層樓、卻適用於整棟建築，以下五項規範不隸屬於任何單一層級，而是所有層級都必須共同遵守的底線。
+      </p>
+      <div class="ccc-grid">
+        <div class="ccc-item">
+          <span class="en">01</span>
+          <h4>安全與權限</h4>
+          <p>Security &amp; Permissions —— 每一層的動作都需經過權限檢查，尤其涉及檔案寫入與外部連接時。</p>
+        </div>
+        <div class="ccc-item">
+          <span class="en">02</span>
+          <h4>可觀測性與日誌</h4>
+          <p>Observability &amp; Logging —— 記錄每次工具呼叫與子代理行為，便於事後稽核與除錯。</p>
+        </div>
+        <div class="ccc-item">
+          <span class="en">03</span>
+          <h4>錯誤處理與重試</h4>
+          <p>Error Handling &amp; Retries —— 任務失敗時如何重試、如何回報，而不是靜默中斷。</p>
+        </div>
+        <div class="ccc-item">
+          <span class="en">04</span>
+          <h4>成本與權杖管理</h4>
+          <p>Cost &amp; Token Management —— 每加入一項功能都會消耗上下文，過多反而降低準確度。</p>
+        </div>
+        <div class="ccc-item">
+          <span class="en">05</span>
+          <h4>測試與評估</h4>
+          <p>Testing &amp; Evaluation —— 規則與技能是否真的達到預期效果，需要持續驗證，而非設定完就不管。</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="wrap">
+    <section class="reveal" id="lifecycle">
+      <div class="sec-head">
+        <span class="num">09 / 導入流程</span>
+        <h2>智能體生命週期</h2>
+      </div>
+      <div class="lifecycle framed">
+        <span class="ct-tl"></span><span class="ct-tr"></span><span class="ct-bl"></span><span class="ct-br"></span>
+        <div class="lc-step"><span class="n">01</span><p>於 CLAUDE.md<br>定義規則</p></div>
+        <div class="lc-step"><span class="n">02</span><p>組織技能<br>Skills</p></div>
+        <div class="lc-step"><span class="n">03</span><p>加入安全掛鉤<br>Hooks</p></div>
+        <div class="lc-step"><span class="n">04</span><p>委派子代理<br>Subagents</p></div>
+        <div class="lc-step"><span class="n">05</span><p>透過外掛擴充<br>Plugins</p></div>
+        <div class="lc-step"><span class="n">06</span><p>上線並<br>持續迭代</p></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="wrap">
+    <section class="reveal" id="faq">
+      <div class="sec-head">
+        <span class="num">10 / 常見誤解釐清</span>
+        <h2>三個關鍵提問</h2>
+      </div>
+      <div class="faq framed">
+        <span class="ct-tl"></span><span class="ct-tr"></span><span class="ct-bl"></span><span class="ct-br"></span>
+        <div class="faq-item">
+          <div class="q">Q ── Hooks 是不是 AI 自己決定要不要執行？</div>
+          <p class="a">不是。Hooks 是寫死的確定性規則，事件一觸發就執行，不涉及 AI 臨場判斷。這也是它能用來守住「絕對不可以」紅線的原因——一般指示的遵守率約七成，Hook 攔截則接近百分之百。</p>
+        </div>
+        <div class="faq-item">
+          <div class="q">Q ── Subagent 可以再委派給另一個 Subagent 嗎？</div>
+          <p class="a">不行。系統刻意限制子代理不能再產生子代理，只能單向委派、單向回報結果，避免無限遞迴、失控增生。</p>
+        </div>
+        <div class="faq-item">
+          <div class="q">Q ── Skills 會不會一直佔用上下文，拖慢對話？</div>
+          <p class="a">不會。Skill 的內容平常「收在櫃子裡」，只有被判斷相關時才載入，且可在獨立子代理中執行，用完即釋放，不會持續佔用主線的上下文空間。</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="wrap">
+    <section class="reveal" id="glossary">
+      <div class="sec-head">
+        <span class="num">11 / 詞彙對照</span>
+        <h2>快速查閱表</h2>
+      </div>
+      <div class="framed" style="padding:6px 24px;">
+        <span class="ct-tl"></span><span class="ct-tr"></span><span class="ct-bl"></span><span class="ct-br"></span>
+        <table class="glossary">
+          <thead>
+            <tr><th>英文原文</th><th>中文譯名</th><th>一句話定義</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="term">CLAUDE.md</td><td class="cn">智能體規則檔</td><td>每次啟動皆自動載入的核心、恆常規範文件</td></tr>
+            <tr><td class="term">Skill</td><td class="cn">技能</td><td>隨需載入的模組化知識包與可呼叫流程，已整合原本的自訂指令</td></tr>
+            <tr><td class="term">Hook</td><td class="cn">掛鉤</td><td>特定事件觸發的確定性自動化規則，無法被 AI 判斷繞過</td></tr>
+            <tr><td class="term">Subagent</td><td class="cn">子代理</td><td>擁有獨立上下文視窗的專職委派單位，單向回報結果</td></tr>
+            <tr><td class="term">Agent Teams</td><td class="cn">智能體團隊</td><td>多個獨立行程並行運作、可雙向溝通協作</td></tr>
+            <tr><td class="term">Plugin</td><td class="cn">外掛</td><td>打包技能、代理、掛鉤與指令，供安裝與分享的單位</td></tr>
+            <tr><td class="term">MCP</td><td class="cn">模型上下文協定</td><td>連接外部工具與系統的開放標準</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="quote">智能體是新一代的<span class="accent">應用程式</span>；架構，才是真正的優勢。</p>
+    <p class="quote-en">AGENTS ARE THE NEW APPS. ARCHITECTURE IS THE ADVANTAGE.</p>
+    <p class="foot-note">CLAUDE CODE — AGENT DEVELOPMENT KIT 分層架構藍圖 · 依 Anthropic 官方文件與原始資訊圖整理 · 僅供學習參考</p>
+  </div>
+</footer>
+
+<script>
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const els = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    els.forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  }
+</script>
+
+</body>
+</html>

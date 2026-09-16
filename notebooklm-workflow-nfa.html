@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NotebookLM 導入完整流程（救護科實務版）｜從法規到公文</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E7ECEF;
+  --paper-2:#DDE4E8;
+  --card:#FFFFFF;
+  --ink:#0F1F33;
+  --ink-2:#33465C;
+  --muted:#6D7F8F;
+  --rule:#C3CED6;
+  --rule-soft:#DCE3E8;
+  --flame:#C4102B;
+  --verde:#0B6357;
+  --amber:#8A5A00;
+  --shadow:0 1px 0 rgba(15,31,51,.06), 0 12px 28px -20px rgba(15,31,51,.5);
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'Noto Sans TC',system-ui,sans-serif;
+  --serif:'Noto Serif TC',serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);
+  background-image:linear-gradient(var(--rule-soft) 1px,transparent 1px);
+  background-size:100% 34px;
+  color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+:focus-visible{outline:2px solid var(--flame);outline-offset:3px}
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--rule)}
+
+header.mast{border-bottom:2px solid var(--ink);background:var(--card);padding:52px 0 34px}
+.mast-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+.doc-id{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--muted)}
+h1{font-family:var(--serif);font-weight:900;font-size:clamp(32px,5.6vw,58px);line-height:1.14;margin:0 0 18px;letter-spacing:-.01em}
+h1 .lat{font-family:var(--mono);font-weight:600;font-size:.8em;letter-spacing:-.02em}
+h1 em{font-style:normal;color:var(--flame)}
+.lede{font-size:17px;max-width:54ch;color:var(--ink-2);margin:0 0 22px}
+.lede strong{font-weight:700;color:var(--ink);box-shadow:inset 0 -8px 0 rgba(196,16,43,.13)}
+
+.overview{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--rule);border-radius:2px;overflow:hidden}
+.ov{padding:14px 12px;border-right:1px solid var(--rule);background:#fff;text-decoration:none;color:inherit;display:block;transition:background .18s}
+.ov:last-child{border-right:0}
+.ov:hover{background:var(--paper)}
+.ov b{display:block;font-family:var(--mono);font-size:11px;color:var(--flame);letter-spacing:.1em}
+.ov span{display:block;font-size:13.5px;font-weight:700;margin-top:4px;line-height:1.4}
+.ov i{display:block;font-style:normal;font-size:11.5px;color:var(--muted);margin-top:2px}
+
+/* 紅線警示 */
+.redline{background:var(--card);border:1.5px solid var(--flame);border-radius:2px;padding:18px 20px;margin:26px 0 0}
+.redline h3{margin:0 0 10px;font-size:15px;font-family:var(--mono);letter-spacing:.06em;color:var(--flame)}
+.redline ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:4px 24px}
+.redline li{font-size:13.5px;padding-left:16px;position:relative;color:var(--ink-2)}
+.redline li::before{content:"×";position:absolute;left:0;color:var(--flame);font-weight:700}
+.redline li.ok::before{content:"✓";color:var(--verde)}
+
+main{padding:0 0 40px}
+.spine{position:relative;padding-left:78px}
+.rail{position:absolute;left:26px;top:0;bottom:0;width:2px;background:var(--rule)}
+.rail-fill{position:absolute;left:0;top:0;width:2px;background:var(--flame);height:0}
+.stage{position:relative;padding:44px 0 8px;opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.stage.in{opacity:1;transform:none}
+.token{position:absolute;left:-78px;top:46px;width:54px;height:54px;border:2px solid var(--ink);background:var(--card);border-radius:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--mono);line-height:1}
+.token b{font-size:18px;font-weight:600}
+.token i{font-style:normal;font-size:9px;letter-spacing:.1em;color:var(--muted);margin-top:3px}
+.stage h2{font-family:var(--serif);font-weight:600;font-size:clamp(22px,3.1vw,30px);margin:0 0 6px;letter-spacing:-.01em}
+.stage .aim{color:var(--ink-2);margin:0 0 22px;max-width:64ch}
+
+.trip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.cell{background:var(--card);border:1px solid var(--rule);border-radius:2px;padding:16px 16px 18px;box-shadow:var(--shadow)}
+.cell.act{border-color:var(--ink);border-width:1.5px}
+.cell h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;font-weight:500}
+.cell.act h3{color:var(--flame)}
+.cell ul{margin:0;padding:0;list-style:none}
+.cell li{font-size:13.5px;line-height:1.6;padding:5px 0 5px 17px;position:relative;border-bottom:1px dashed var(--rule-soft)}
+.cell li:last-child{border-bottom:0}
+.cell li::before{content:"";position:absolute;left:0;top:12px;width:7px;height:1px;background:var(--flame)}
+.cell.out li::before{background:var(--verde)}
+
+.gate{display:flex;gap:12px;align-items:flex-start;border-left:3px solid var(--verde);background:rgba(11,99,87,.05);padding:11px 14px;border-radius:0 2px 2px 0;margin-bottom:8px}
+.gate .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--verde);white-space:nowrap;padding-top:2px}
+.gate p{margin:0;font-size:13.5px;color:var(--ink-2)}
+
+.apps{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:6px}
+.app{background:var(--card);border:1px solid var(--rule);border-top:3px solid var(--ink);border-radius:2px;padding:14px}
+.app .n{font-family:var(--mono);font-size:11px;color:var(--flame);letter-spacing:.1em}
+.app h4{margin:3px 0 8px;font-size:15px;font-weight:700}
+.app p{margin:0 0 10px;font-size:12.5px;color:var(--muted);line-height:1.6}
+.app .q{font-size:12.5px;background:var(--paper);border-radius:2px;padding:7px 9px;border-left:2px solid var(--flame);line-height:1.55}
+.app .who{margin-top:10px;font-family:var(--mono);font-size:10.5px;color:var(--ink-2);letter-spacing:.04em}
+
+.section{padding:56px 0;border-top:1px solid var(--rule)}
+.section > .wrap > h2{font-family:var(--serif);font-weight:600;font-size:clamp(22px,3vw,30px);margin:14px 0 8px}
+.section > .wrap > p.sub{color:var(--ink-2);margin:0 0 26px;max-width:62ch}
+.chain{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.link{background:var(--card);border:1px solid var(--rule);border-radius:2px;padding:14px 13px;position:relative}
+.link .s{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.14em}
+.link b{display:block;font-size:14px;margin:4px 0 6px}
+.link p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.55}
+.link .tool{margin-top:9px;font-family:var(--mono);font-size:10.5px;color:var(--flame)}
+.link::after{content:"→";position:absolute;right:-8px;top:50%;transform:translateY(-50%);color:var(--rule);font-size:15px;z-index:2;background:var(--paper);padding:2px 0}
+.link:last-child::after{content:none}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--rule);font-size:13.5px}
+caption{text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted);padding-bottom:8px;text-transform:uppercase}
+th,td{padding:9px 12px;border-bottom:1px solid var(--rule-soft);text-align:left;vertical-align:top}
+thead th{background:var(--ink);color:#fff;font-weight:500;font-size:12.5px;letter-spacing:.04em;border-bottom:0}
+tbody th{font-weight:500;color:var(--ink-2);width:26%}
+tbody tr:last-child td,tbody tr:last-child th{border-bottom:0}
+.bar{font-family:var(--mono);letter-spacing:.12em;font-size:13px}
+.bar .on{color:var(--flame)}
+.bar .off{color:var(--rule)}
+.verdict{font-size:12.5px}
+.keys{display:grid;grid-template-columns:1fr;gap:12px}
+.key{border-top:2px solid var(--flame);padding-top:12px}
+.key b{display:block;font-size:14.5px;margin-bottom:5px}
+.key p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.6}
+
+.close{background:var(--ink);color:#fff;padding:44px 0;margin-top:10px}
+.close .wrap{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:start}
+.close .mark{font-family:var(--serif);font-size:56px;line-height:.8;color:var(--flame)}
+.close h2{font-family:var(--serif);font-weight:600;font-size:clamp(20px,2.6vw,27px);margin:0 0 12px}
+.close p{margin:0 0 8px;color:#C6D2DC;max-width:62ch;font-size:14.5px}
+.close p strong{color:#fff}
+footer{padding:22px 0 46px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em}
+
+@media (max-width:1000px){
+  .apps{grid-template-columns:repeat(2,1fr)}
+  .chain{grid-template-columns:repeat(3,1fr)}
+  .link:nth-child(3)::after{content:none}
+  .overview{grid-template-columns:repeat(3,1fr)}
+  .ov:nth-child(3){border-right:0}
+  .redline ul{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  body{background-image:none}
+  .wrap{padding:0 18px}
+  .spine{padding-left:0}
+  .rail{display:none}
+  .token{position:static;margin-bottom:14px;flex-direction:row;gap:9px;width:auto;height:auto;padding:6px 12px;display:inline-flex}
+  .token i{margin-top:0}
+  .trip{grid-template-columns:1fr}
+  .grid2{grid-template-columns:1fr;gap:34px}
+  .chain{grid-template-columns:1fr}
+  .link::after{content:"↓";right:auto;left:20px;top:auto;bottom:-13px;transform:none}
+  .apps{grid-template-columns:1fr}
+  .overview{grid-template-columns:1fr}
+  .ov{border-right:0;border-bottom:1px solid var(--rule)}
+  .close .wrap{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.stage{opacity:1;transform:none;transition:none}}
+@media print{
+  body{background:#fff;background-image:none}
+  .stage{opacity:1;transform:none}
+  .rail,.rail-fill{display:none}
+  .close{background:#fff;color:#000}
+  .close p{color:#333}
+  .section{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="mast-top">
+      <div class="doc-id">內政部消防署 · 救災救護組緊急救護科</div>
+      <div class="doc-id">導入流程規劃 V1.0</div>
+    </div>
+    <h1><span class="lat">NotebookLM</span> 怎麼<em>接進</em>救護科的工作流</h1>
+    <p class="lede">科內業務的共同型態是：<strong>法規要查得準、公文要出得快、專案要盯得住</strong>。以下是把文件轉為可引用知識、再轉為公文產出的六階段流程，含每階段的檢核點與不可跨越的資安紅線。</p>
+
+    <div class="overview">
+      <a class="ov" href="#s1"><b>S1</b><span>資料治理</span><i>法規與案卷盤點</i></a>
+      <a class="ov" href="#s2"><b>S2</b><span>知識治理</span><i>建立法規知識庫</i></a>
+      <a class="ov" href="#s3"><b>S3</b><span>知識應用</span><i>科內五類場景</i></a>
+      <a class="ov" href="#s4"><b>S4</b><span>文書產製</span><i>簽稿、預算、簡報</i></a>
+      <a class="ov" href="#s5"><b>S5</b><span>流程治理</span><i>陳核與列管</i></a>
+      <a class="ov" href="#s6"><b>S6</b><span>自動化</span><i>提醒與跨系統</i></a>
+    </div>
+
+    <div class="redline">
+      <h3>資安紅線：先確認，再上傳</h3>
+      <ul>
+        <li>國家機密與密等公文（機密、密、極機密）</li>
+        <li>傷病患姓名、身分證號、病歷與到院前紀錄</li>
+        <li>未決標之採購底價、評選委員名單</li>
+        <li>人事考評、申訴與調查案卷</li>
+        <li class="ok">已公布之法規、函釋、公開標案文件</li>
+        <li class="ok">去識別化後之統計數據與教材</li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+<div class="spine">
+  <div class="rail"><div class="rail-fill" id="railFill"></div></div>
+
+  <!-- S1 -->
+  <section class="stage" id="s1">
+    <div class="token"><b>S1</b><i>治理</i></div>
+    <h2>資料治理：先讓法規與案卷乾淨可用</h2>
+    <p class="aim">目標是把散在個人電腦、共用磁碟與公文系統的檔案，收斂成一套<b>有版本、有密等、有維護人</b>的文件集。法規版本錯誤會直接導致公文引據錯誤，這一步不能省。</p>
+    <div class="trip">
+      <div class="cell">
+        <h3>Input</h3>
+        <ul>
+          <li>《緊急醫療救護法》及施行細則</li>
+          <li>《救護技術員管理辦法》</li>
+          <li>歷年函釋、解釋令與會議決議</li>
+          <li>各直轄市、縣（市）消防局來文</li>
+          <li>TECC／PCC／CIT 教材與師資名冊</li>
+          <li>預算書、招標文件、出國考察報告</li>
+        </ul>
+      </div>
+      <div class="cell act">
+        <h3>Action</h3>
+        <ul>
+          <li>逐份標註<b>密等</b>，密件一律排除</li>
+          <li>法規以最新修正公布日期版本為準</li>
+          <li>移除個資與可識別之傷病患資料</li>
+          <li>刪除舊版與重複檔，統一命名</li>
+          <li>指定每一主題之維護承辦人</li>
+        </ul>
+      </div>
+      <div class="cell out">
+        <h3>Output</h3>
+        <ul>
+          <li>可上傳文件清單與不可上傳清單</li>
+          <li>單一版本之法規與教材文件集</li>
+          <li>維護分工與更新頻率表</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gate"><span class="k">GATE 01</span><p>任抽 10 份文件，均能立即回答「密等為何、是否最新版、誰維護」。有一份答不出來就不要進入 S2。</p></div>
+  </section>
+
+  <!-- S2 -->
+  <section class="stage" id="s2">
+    <div class="token"><b>S2</b><i>知識</i></div>
+    <h2>知識治理：建立可回溯條次的法規知識庫</h2>
+    <p class="aim">依業務屬性切分筆記本，不要全部塞在一起。NotebookLM 的關鍵價值在於<b>答案可回溯到條次與頁碼</b>，這是它能作為公文引據來源的前提。</p>
+    <div class="trip">
+      <div class="cell">
+        <h3>Input</h3>
+        <ul>
+          <li>S1 產出之可上傳文件集</li>
+          <li>主題切分原則（依業務別）</li>
+        </ul>
+      </div>
+      <div class="cell act">
+        <h3>Action</h3>
+        <ul>
+          <li>建立五本主題筆記本：<b>法規</b>、<b>訓練體系</b>、<b>預算與採購</b>、<b>國際交流</b>、<b>專案管理</b></li>
+          <li>檢視 AI 摘要，確認未曲解法條文義</li>
+          <li>以實際函詢問題測試問答</li>
+          <li>逐題驗證引用是否指向正確條次</li>
+        </ul>
+      </div>
+      <div class="cell out">
+        <h3>Output</h3>
+        <ul>
+          <li>可查詢、可引用之主題知識庫</li>
+          <li>常見函詢問題與標準答復</li>
+          <li>新進承辦人自學入口</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gate"><span class="k">GATE 02</span><p>以 20 題實際法規問題測試，答案正確且引用條次可核對者須達八成以上。未達標即補件或重切主題。</p></div>
+  </section>
+
+  <!-- S3 -->
+  <section class="stage" id="s3">
+    <div class="token"><b>S3</b><i>應用</i></div>
+    <h2>知識應用：科內五類優先落地場景</h2>
+    <p class="aim">先挑一項業務試點，做出可展示的成果，再橫向推廣至組內其他科。下列五類回收最快。</p>
+    <div class="apps">
+      <div class="app">
+        <div class="n">01</div>
+        <h4>法規查詢</h4>
+        <p>回答同時附上條次與函釋出處，可直接引為簽稿依據。</p>
+        <div class="q">「中級救護技術員（EMT-2）得執行之救護項目有哪些？依據為何？」</div>
+        <div class="who">科內承辦 · 地方消防局諮詢</div>
+      </div>
+      <div class="app">
+        <div class="n">02</div>
+        <h4>作業程序</h4>
+        <p>把辦法條文拆成可執行的辦理步驟與應備文件。</p>
+        <div class="q">「救護技術員證照展延資格不符，應如何處理？」→ 查核時數、通知補正、審查、函復</div>
+        <div class="who">證照管理 · 訓練業務</div>
+      </div>
+      <div class="app">
+        <div class="n">03</div>
+        <h4>專案管理</h4>
+        <p>將計畫書、預算表、會議紀錄放進同一筆記本，掌握全案進度。</p>
+        <div class="q">「CIT 國際研討會目前有哪些未決事項？經費尚有多少可用？」</div>
+        <div class="who">研討會 · 出國考察 · 採購案</div>
+      </div>
+      <div class="app">
+        <div class="n">04</div>
+        <h4>會議整理</h4>
+        <p>跨機關協調會議錄音轉文字後，自動抽出決議與主協辦分工。</p>
+        <div class="q">決議事項／辦理期限／主辦機關／列管與否</div>
+        <div class="who">衛福部 · 國防部 · 22 縣市</div>
+      </div>
+      <div class="app">
+        <div class="n">05</div>
+        <h4>教育訓練</h4>
+        <p>TECC、PCC、CIT 教材與師資制度的隨問隨答，縮短接手業務的學習期。</p>
+        <div class="q">「TECC 師資認證的資格條件與換證週期為何？」</div>
+        <div class="who">新進承辦 · 種子教官 · 地方訓練單位</div>
+      </div>
+    </div>
+    <div class="gate" style="margin-top:14px"><span class="k">GATE 03</span><p>試點承辦人在無人督促下持續使用滿一個月，且至少一件公文實際引用其查得之依據，才算落地。</p></div>
+  </section>
+
+  <!-- S4 -->
+  <section class="stage" id="s4">
+    <div class="token"><b>S4</b><i>產製</i></div>
+    <h2>文書產製：把答案寫成可陳核的文件</h2>
+    <p class="aim">NotebookLM 負責<b>查得準</b>，通用模型負責<b>寫得好</b>。查詢留在知識庫，撰寫交由 Claude、Gemini 或 ChatGPT，並依三段式架構產出。</p>
+    <div class="trip">
+      <div class="cell">
+        <h3>Input</h3>
+        <ul>
+          <li>知識庫查得之法條與函釋</li>
+          <li>公文格式範本與行文慣例</li>
+          <li>預算與採購既有文件格式</li>
+        </ul>
+      </div>
+      <div class="cell act">
+        <h3>Action</h3>
+        <ul>
+          <li>依<b>主旨／說明／辦法</b>產出簽稿初稿</li>
+          <li>比對初稿引據與原文，剔除臆測內容</li>
+          <li>人工複核法條字號、日期、金額</li>
+          <li>依機關用字慣例調整（臺、爰、爰此）</li>
+        </ul>
+      </div>
+      <div class="cell out">
+        <h3>Output</h3>
+        <ul>
+          <li>簽、函、書函初稿</li>
+          <li>預算說明書與績效指標</li>
+          <li>招標規格書與評選基準</li>
+          <li>政策簡報與出國報告</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gate"><span class="k">GATE 04</span><p>法條字號、公布日期、預算金額、機關全銜須 100% 人工複核，不得直接採信生成內容。</p></div>
+  </section>
+
+  <!-- S5 -->
+  <section class="stage" id="s5">
+    <div class="token"><b>S5</b><i>流程</i></div>
+    <h2>流程治理：陳核路徑與案件列管</h2>
+    <p class="aim">文稿產出只是半套。把陳核層級、辦理期限與列管節點固定下來，人只在需要判斷的節點介入。</p>
+    <div class="trip">
+      <div class="cell">
+        <h3>Input</h3>
+        <ul>
+          <li>S4 之定稿文件</li>
+          <li>分層負責明細表</li>
+          <li>來文限辦日期</li>
+        </ul>
+      </div>
+      <div class="cell act">
+        <h3>Action</h3>
+        <ul>
+          <li>依承辦、科長、組長、署長設定節點</li>
+          <li>設定限辦前提醒與逾期警示</li>
+          <li>保留人工審核關卡，不全自動決行</li>
+          <li>建立專案列管清單與辦理情形回報</li>
+        </ul>
+      </div>
+      <div class="cell out">
+        <h3>Output</h3>
+        <ul>
+          <li>可追溯之標準辦理流程</li>
+          <li>逾期預警與催辦通知</li>
+          <li>各案件耗時與瓶頸統計</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gate"><span class="k">GATE 05</span><p>任一案件均能回答「現在停留在哪一層、已滯留幾日、距限辦日剩幾日」。</p></div>
+  </section>
+
+  <!-- S6 -->
+  <section class="stage" id="s6">
+    <div class="token"><b>S6</b><i>自動</i></div>
+    <h2>自動化：先停在提醒層級，再談跨系統</h2>
+    <p class="aim">公務系統介接涉及資安規範與權責，導入應審慎分段。建議<b>先做通知與提醒，不做代為決行</b>；跨系統寫入須另案評估。</p>
+    <div class="trip">
+      <div class="cell">
+        <h3>Input</h3>
+        <ul>
+          <li>已驗證之知識庫（S2）</li>
+          <li>已標準化之流程（S5）</li>
+          <li>資通安全責任等級規範</li>
+        </ul>
+      </div>
+      <div class="cell act">
+        <h3>Action</h3>
+        <ul>
+          <li>第一階段：限辦提醒、會議行事曆同步</li>
+          <li>第二階段：預算執行率與採購時程追蹤</li>
+          <li>界定<b>不得由系統自動執行</b>之事項</li>
+          <li>全程留存執行紀錄供稽核</li>
+        </ul>
+      </div>
+      <div class="cell out">
+        <h3>Output</h3>
+        <ul>
+          <li>例行性提醒自動化</li>
+          <li>人力回到政策判斷與跨機關協調</li>
+          <li>可持續累積之科務知識資產</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gate"><span class="k">GATE 06</span><p>每一自動化動作均可查出「依據哪份文件、依哪條規定、經誰核准」。無法回答者不得上線。</p></div>
+  </section>
+
+</div>
+</div>
+</main>
+
+<section class="section">
+  <div class="wrap">
+    <div class="eyebrow">端到端範例</div>
+    <h2>從地方消防局函詢，到函復發文</h2>
+    <p class="sub">同一條流程走完六階段的實際樣子，每一步標示負責角色或工具。</p>
+    <div class="chain">
+      <div class="link"><div class="s">01</div><b>收文</b><p>某市消防局函詢救護技術員執行項目疑義。</p><div class="tool">承辦人</div></div>
+      <div class="link"><div class="s">02</div><b>知識庫查詢</b><p>查法條、施行細則與歷年函釋，取得條次出處。</p><div class="tool">NotebookLM</div></div>
+      <div class="link"><div class="s">03</div><b>比對前案</b><p>檢視有無相同疑義之既有函復，維持見解一致。</p><div class="tool">NotebookLM</div></div>
+      <div class="link"><div class="s">04</div><b>產製簽稿</b><p>依主旨／說明／辦法產出初稿，附引據。</p><div class="tool">Claude／Gemini</div></div>
+      <div class="link"><div class="s">05</div><b>陳核</b><p>承辦複核條次後，陳科長、組長核章。</p><div class="tool">分層負責</div></div>
+      <div class="link"><div class="s">06</div><b>決行發文</b><p>函復地方機關，並回存知識庫供後續引用。</p><div class="tool">公文系統</div></div>
+    </div>
+    <p class="sub" style="margin-top:22px;font-size:13px;color:var(--muted)">回存這一步最容易被略過，卻是知識庫能持續增值的唯一途徑：每一件函復都是下一件的前案。</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="grid2">
+      <div>
+        <div class="eyebrow">選型判斷</div>
+        <h2 style="font-family:var(--serif);font-weight:600;font-size:26px;margin:14px 0 18px">NotebookLM 與自建 RAG 怎麼選</h2>
+        <table>
+          <caption>■ 越多表示越強</caption>
+          <thead><tr><th>比較項目</th><th>NotebookLM</th><th>自建 RAG</th></tr></thead>
+          <tbody>
+            <tr><th>建置速度</th><td class="bar"><span class="on">■■■■■</span></td><td class="bar"><span class="on">■■</span><span class="off">■■■</span></td></tr>
+            <tr><th>維護成本</th><td class="bar"><span class="on">■■■■■</span></td><td class="bar"><span class="on">■■</span><span class="off">■■■</span></td></tr>
+            <tr><th>客製流程</th><td class="bar"><span class="on">■■</span><span class="off">■■■</span></td><td class="bar"><span class="on">■■■■■</span></td></tr>
+            <tr><th>系統整合</th><td class="bar"><span class="on">■■</span><span class="off">■■■</span></td><td class="bar"><span class="on">■■■■■</span></td></tr>
+            <tr><th>公務資料適用</th><td class="verdict">限公開及去識別化資料</td><td class="verdict">可依資安規範建於內網</td></tr>
+            <tr><th>採購程序</th><td class="verdict">免採購，個人即可使用</td><td class="verdict">須依《政府採購法》辦理</td></tr>
+            <tr><th>適合對象</th><td class="verdict">承辦人與科層級</td><td class="verdict">署級或跨機關平臺</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13px;color:var(--muted);margin-top:12px">實務建議：以 NotebookLM 在 S1 至 S4 快速驗證效益，取得可量化成果後，再據以評估是否編列預算辦理 S5 至 S6 之系統建置。</p>
+      </div>
+      <div>
+        <div class="eyebrow">導入成功關鍵</div>
+        <h2 style="font-family:var(--serif);font-weight:600;font-size:26px;margin:14px 0 18px">五件不能省的事</h2>
+        <div class="keys">
+          <div class="key"><b>密等分級先於一切</b><p>上傳前逐份確認密等與個資。這是唯一沒有補救機會的環節。</p></div>
+          <div class="key"><b>法規版本即時更新</b><p>法規一經修正公布，知識庫同步汰換舊版，避免引據錯誤。</p></div>
+          <div class="key"><b>先做一項業務試點</b><p>選一項有明確痛點的業務，做出可展示成果再擴散至他科。</p></div>
+          <div class="key"><b>以真實函文示範推廣</b><p>拿同仁自己辦過的案子示範，比講解功能有效得多。</p></div>
+          <div class="key"><b>函復回存形成循環</b><p>每件辦畢案件回存知識庫，見解才能一致、經驗才會累積。</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="close">
+  <div class="wrap">
+    <div class="mark">&ldquo;</div>
+    <div>
+      <h2>結論</h2>
+      <p><strong>NotebookLM 是科務知識管理的第一步，不是最後一步。</strong>它讓法規與案卷變成可引用的答案；要讓答案變成行政效能，還需要接上文書產製、陳核治理與例行自動化。</p>
+      <p>六階段依序完成、每個檢核點確實通過，並守住資安紅線，才能在合規前提下，把時間還給政策研判與跨機關協調。</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">內政部消防署救災救護組緊急救護科 · NotebookLM 導入流程規劃 · 單檔 HTML</div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stages = document.querySelectorAll('.stage');
+  if(reduce){
+    stages.forEach(function(s){s.classList.add('in');});
+  } else if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+    },{threshold:0.12});
+    stages.forEach(function(s){io.observe(s);});
+  } else {
+    stages.forEach(function(s){s.classList.add('in');});
+  }
+  var spine = document.querySelector('.spine');
+  var fill = document.getElementById('railFill');
+  function paint(){
+    if(!spine || !fill) return;
+    var r = spine.getBoundingClientRect();
+    var mid = window.innerHeight * 0.5;
+    var p = (mid - r.top) / r.height;
+    p = Math.max(0, Math.min(1, p));
+    fill.style.height = (p * r.height) + 'px';
+  }
+  paint();
+  window.addEventListener('scroll', paint, {passive:true});
+  window.addEventListener('resize', paint);
+})();
+</script>
+</body>
+</html>

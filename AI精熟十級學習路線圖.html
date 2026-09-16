@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 精熟十級・玉山攻頂學習路線圖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EFF3F7; --ink:#14202B; --sub:#4A5B6B; --line:#D5DEE7; --card:#FFFFFF;
+  --blue:#1B5FA8; --sky:#E3EDF7;
+  --l1:#D9463E; --l2:#E06B2D; --l3:#E3A31F; --l4:#4FA83D; --l5:#1E9E8A;
+  --l6:#1D8FBF; --l7:#2B6FD4; --l8:#3D5BD9; --l9:#6A4FD0; --l10:#2C3E9E;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}
+.mono{font-family:'IBM Plex Mono',monospace}
+.wrap{max-width:920px;margin:0 auto;padding:0 24px}
+
+/* ===== 頂部固定海拔計 ===== */
+#altbar{position:fixed;top:0;left:0;right:0;background:var(--ink);color:#fff;z-index:99;box-shadow:0 2px 12px rgba(20,32,43,.25)}
+#altbar .in{max-width:920px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:14px}
+#altbar .lab{font-size:12px;letter-spacing:.18em;color:#8FB4D9;white-space:nowrap}
+#altbar .num{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:15px;white-space:nowrap}
+#altbar .track{flex:1;height:6px;background:#2A3B4A;border-radius:3px;overflow:hidden}
+#altbar .fill{height:100%;width:0%;border-radius:3px;background:linear-gradient(90deg,var(--l1),var(--l3),var(--l5),var(--l7),var(--l10));transition:width .5s ease}
+#altbar .peak{font-size:12px;color:#8FB4D9;white-space:nowrap}
+
+/* ===== Hero ===== */
+.hero{padding:96px 0 40px;border-bottom:2px solid var(--ink)}
+.hero .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.25em;color:var(--blue);margin-bottom:14px}
+.hero h1{font-weight:900;font-size:clamp(34px,6vw,56px);line-height:1.2;letter-spacing:.02em}
+.hero h1 .en{display:block;font-size:clamp(14px,2vw,18px);font-weight:500;color:var(--sub);letter-spacing:.12em;margin-top:8px}
+.hero .thesis{margin-top:22px;background:var(--ink);color:#fff;padding:18px 22px;border-radius:10px;font-size:15px}
+.hero .thesis b{color:#9CC7F0}
+.meta3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:20px}
+.meta3 div{background:var(--card);padding:14px 16px;text-align:center}
+.meta3 .k{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:22px;color:var(--blue)}
+.meta3 .v{font-size:12.5px;color:var(--sub)}
+
+/* ===== 節標題 ===== */
+section{padding:44px 0 8px}
+.sec-h{display:flex;align-items:baseline;gap:12px;margin-bottom:18px}
+.sec-h .no{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--blue);letter-spacing:.15em}
+.sec-h h2{font-size:24px;font-weight:900}
+.sec-note{font-size:14px;color:var(--sub);margin:-8px 0 18px}
+
+/* ===== 表格 ===== */
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:14px}
+thead th{background:var(--ink);color:#fff;padding:10px 12px;text-align:left;font-weight:700;font-size:13.5px;white-space:nowrap}
+tbody td{padding:10px 12px;border-top:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:#F7FAFC}
+.tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;color:#fff;border-radius:4px;padding:1px 7px;white-space:nowrap}
+
+/* ===== 攻頂路線(spine) ===== */
+.route{position:relative;padding-left:56px;margin-top:8px}
+.route::before{content:'';position:absolute;left:19px;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,var(--l10),var(--l8),var(--l6),var(--l5),var(--l4),var(--l3),var(--l2),var(--l1));border-radius:2px}
+.lv{position:relative;background:var(--card);border:1px solid var(--line);border-left:6px solid var(--lc,var(--blue));border-radius:10px;padding:20px 22px;margin-bottom:26px}
+.lv::before{content:'';position:absolute;left:-46px;top:26px;width:16px;height:16px;border-radius:50%;
+  background:var(--lc,var(--blue));border:3px solid var(--paper);box-shadow:0 0 0 2px var(--lc,var(--blue))}
+.lv .alt{position:absolute;left:-56px;top:52px;transform:rotate(-90deg);transform-origin:left top;
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--sub);white-space:nowrap;letter-spacing:.05em}
+.lv-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:4px}
+.lv-head .n{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px;color:#fff;background:var(--lc);border-radius:5px;padding:1px 9px}
+.lv-head h3{font-size:19px;font-weight:900}
+.lv-head .en{font-size:12.5px;color:var(--sub);font-weight:500}
+.lv-head .wk{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--sub);white-space:nowrap}
+.lv .goal{font-size:14.5px;color:var(--ink);margin:6px 0 12px}
+.lv .goal b{color:var(--lc)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.box{background:#F7FAFC;border:1px solid var(--line);border-radius:8px;padding:12px 14px;font-size:13.5px}
+.box .bt{font-weight:700;font-size:12.5px;letter-spacing:.08em;color:var(--sub);margin-bottom:6px}
+.box ul{padding-left:18px}
+.box li{margin-bottom:3px}
+.pass{margin-top:12px;background:var(--sky);border:1px dashed var(--blue);border-radius:8px;padding:12px 14px}
+.pass .bt{font-weight:700;font-size:12.5px;color:var(--blue);letter-spacing:.08em;margin-bottom:6px}
+.pass label{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;margin-bottom:5px;cursor:pointer}
+.pass input{margin-top:4px;accent-color:var(--blue)}
+.pass label.done span{text-decoration:line-through;color:var(--sub)}
+
+/* ===== 70-20-10 ===== */
+.mode{display:grid;grid-template-columns:7fr 2fr 1fr;gap:8px;margin:16px 0 8px}
+.mode div{border-radius:8px;padding:14px 12px;color:#fff;font-size:13px}
+.mode .m70{background:var(--blue)} .mode .m20{background:#1E9E8A} .mode .m10{background:#E06B2D}
+.mode .pct{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:20px;display:block}
+
+.callout{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--l3);border-radius:10px;padding:16px 20px;font-size:14.5px;margin:14px 0}
+.callout b{color:var(--blue)}
+
+footer{margin-top:56px;padding:28px 0 40px;border-top:2px solid var(--ink);font-size:12.5px;color:var(--sub)}
+
+@media(max-width:640px){
+  .grid2{grid-template-columns:1fr}
+  .route{padding-left:44px}
+  .lv .alt{display:none}
+  .mode{grid-template-columns:1fr;}
+  #altbar .peak{display:none}
+  thead{display:none}
+  table,tbody,tr,td{display:block;width:100%}
+  tbody tr{border-top:2px solid var(--line);padding:6px 0}
+  tbody td{border-top:none;padding:4px 12px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- 海拔計 -->
+<div id="altbar">
+  <div class="in">
+    <span class="lab">目前海拔</span>
+    <span class="num" id="altnum">0 m</span>
+    <div class="track"><div class="fill" id="altfill"></div></div>
+    <span class="peak">玉山主峰 3,952 m</span>
+  </div>
+</div>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">LEVELS OF AI MASTERY — 完整學習規劃</div>
+    <h1>AI 精熟十級<span class="en">玉山攻頂學習路線圖|從基礎使用者到 AI 領航者</span></h1>
+    <div class="thesis">
+      <b>結論先行:</b>本路線圖將附件十個等級整編為 <b>三大階段、24 週、每週 5–7 小時</b> 的漸進式課程。每一級皆含「目標、技能、學法、實作、通關標準」五要素;實作任務以公務情境(公文、預算、採購、簡報、政策研究)為例,可直接替換為任何領域。<b>勾選各級通關標準,上方海拔即同步上升,登頂 3,952 公尺即完訓。</b>
+    </div>
+    <div class="meta3">
+      <div><span class="k">3</span><br><span class="v">階段(應用者→建造者→領航者)</span></div>
+      <div><span class="k">10</span><br><span class="v">等級(L1–L10)</span></div>
+      <div><span class="k">24</span><br><span class="v">週(約 150 小時)</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- 01 總覽 -->
+<section>
+  <div class="sec-h"><span class="no">01</span><h2>三階段總覽</h2></div>
+  <p class="sec-note">先看全局再入門:三個階段的能力躍升點各不相同——「會用」、「會造」、「會領導」。</p>
+  <table>
+    <thead><tr><th>階段</th><th>涵蓋等級</th><th>週次</th><th>能力躍升點</th><th>完成後你能做到</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>Ⅰ 應用者</b><br><span class="tag" style="background:var(--l2)">基地營</span></td>
+        <td>L1 使用者<br>L2 提示工程師<br>L3 進階使用者</td>
+        <td>第 1–6 週</td>
+        <td>從「隨手問」到「可重複的工作流」</td>
+        <td>用 AI 穩定產出高品質文件、摘要、研究;建立專案知識庫,同事問你怎麼用</td>
+      </tr>
+      <tr>
+        <td><b>Ⅱ 建造者</b><br><span class="tag" style="background:var(--l5)">攀升段</span></td>
+        <td>L4 自動化者<br>L5 應用建造者<br>L6 代理人建造者<br>L7 多代理架構師</td>
+        <td>第 7–18 週</td>
+        <td>從「自己操作」到「系統替你工作」</td>
+        <td>打造自動化流程、AI 小工具、具記憶與工具的智慧代理人,乃至多代理分工系統</td>
+      </tr>
+      <tr>
+        <td><b>Ⅲ 領航者</b><br><span class="tag" style="background:var(--l10)">峰頂線</span></td>
+        <td>L8 系統工程師<br>L9 策略家<br>L10 大師</td>
+        <td>第 19–24 週</td>
+        <td>從「個人生產力」到「組織轉型」</td>
+        <td>部署安全可靠的正式系統、重新設計業務流程、規劃 AI 原生組織藍圖</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 02 十級路線 -->
+<section>
+  <div class="sec-h"><span class="no">02</span><h2>十級攻頂路線</h2></div>
+  <p class="sec-note">由山腳往上讀。每級通關標準全數勾選後,才建議進入下一級——寧可紮實,不求速度。</p>
+
+  <div class="route">
+
+    <!-- L10 -->
+    <div class="lv" style="--lc:var(--l10)">
+      <span class="alt">ALT 3,952 m・主峰</span>
+      <div class="lv-head"><span class="n">L10</span><h3>AI 大師</h3><span class="en">AI Master</span><span class="wk">第 23–24 週</span></div>
+      <p class="goal"><b>目標:</b>設計 AI 原生(AI-native)的組織與生態系——不是「把 AI 加進流程」,而是「以 AI 為前提重新設計組織」。</p>
+      <div class="grid2">
+        <div class="box"><div class="bt">核心技能</div><ul><li>系統思考(Systems Thinking)</li><li>創新治理與 AI 領導力</li><li>生態系設計(跨機關、跨產業協作)</li></ul></div>
+        <div class="box"><div class="bt">學習方法</div><ul><li>研讀 2–3 個組織 AI 轉型個案(政府與企業各一)</li><li>撰寫自己單位的「AI 原生營運藍圖」</li><li>對外分享:授課、演講或發表文章,以教代學</li></ul></div>
+      </div>
+      <div class="box" style="margin-top:12px"><div class="bt">實作任務(以公務情境為例)</div><ul><li>撰寫一份 3 年期「單位 AI 轉型藍圖」:願景、階段目標、人才梯隊、風險治理、預算估算</li><li>設計跨科室 AI 能力分級培訓制度(可直接沿用本路線圖的 L1–L10 架構)</li></ul></div>
+      <div class="pass"><div class="bt">通關標準 ☑</div>
+        <label><input type="checkbox" data-alt="200"><span>完成一份可供決策層審閱的 AI 轉型藍圖(含期程與經費)</span></label>
+        <label><input type="checkbox" data-alt="195"><span>對 10 人以上進行過一次 AI 教學或分享,並收到回饋</span></label>
+      </div>
+    </div>
+
+    <!-- L9 -->
+    <div class="lv" style="--lc:var(--l9)">
+      <span class="alt">ALT 3,557 m</span>
+      <div class="lv-head"><span class="n">L9</span><h3>AI 策略家</h3><span class="en">AI Strategist</span><span class="wk">第 21–22 週</span></div>
+      <p class="goal"><b>目標:</b>以 AI 轉型業務運作——挑選高價值流程,重新設計並量化效益。</p>
+      <div class="grid2">
+        <div class="box"><div class="bt">核心技能</div><ul><li>領導與變革管理</li><li>AI 導入(Adoption)策略</li><li>流程再設計(Process Redesign)</li></ul></div>
+        <div class="box"><div class="bt">學習方法</div><ul><li>用「流程盤點表」列出 10 項日常業務,依「耗時 × 重複性 × 錯誤成本」排序</li><li>挑前 3 名做 AI 再設計,前後對照計時</li><li>學習估算投資報酬:節省工時 × 時薪 − 導入成本</li></ul></div>
+      </div>
+      <div class="box" style="margin-top:12px"><div class="bt">實作任務(以公務情境為例)</div><ul><li>將「會議紀錄→決議追蹤→簽辦」全流程重新設計為 AI 輔助流程,量測節省工時</li><li>撰寫一頁式效益報告(Before/After 對照表)呈報主管</li></ul></div>
+      <div class="pass"><div class="bt">通關標準 ☑</div>
+        <label><input type="checkbox" data-alt="198"><span>完成 3 項業務流程的 AI 再設計,且有量化前後對照數據</span></label>
+        <label><input type="checkbox" data-alt="197"><span>至少 1 項再設計流程被同事或單位實際採用</span></label>
+      </div>
+    </div>
+
+    <!-- L8 -->
+    <div class="lv" style="--lc:var(--l8)">
+      <span class="alt">ALT 3,162 m</span>
+      <div class="lv-head"><span class="n">L8</span><h3>AI 系統工程師</h3><span class="en">AI Systems Engineer</span><span class="wk">第 19–20 週</span></div>
+      <p class="goal"><b>目標:</b>讓做出來的東西「可靠、安全、能上線」——從能動的原型,升級為可託付的系統。</p>
+      <div class="grid2">
+        <div class="box"><div class="bt">核心技能</div><ul><li>監控(Monitoring):記錄、告警、稽核軌跡</li><li>治理(Governance):權限、個資、機敏資料分級</li><li>安全(Security):提示注入(Prompt Injection)防護、金鑰管理</li></ul></div>
+        <div class="box"><div class="bt">學習方法</div><ul><li>為 L5–L7 的成品補上:錯誤處理、使用紀錄、輸入驗證</li><li>研讀機關資安規範與個資法對 AI 應用的要求</li><li>建立「上線前檢核表」:資料來源、留存、當機備援</li></ul></div>
+      </div>
+      <div class="box" style="margin-top:12px"><div class="bt">實作任務(以公務情境為例)</div><ul><li>為自建工具撰寫「使用規範與風險評估」一頁文件(機敏資料不上傳、輸出須人工複核等)</li><li>設計 AI 產出文件的「人工複核簽章」流程,確保責任歸屬明確</li></ul></div>
+      <div class="pass"><div class="bt">通關標準 ☑</div>
+        <label><input type="checkbox" data-alt="198"><span>完成 1 份 AI 應用風險評估與使用規範文件</span></label>
+        <label><input type="checkbox" data-alt="197"><span>自建工具具備錯誤處理與使用紀錄,連續運作 2 週無重大故障</span></label>
+      </div>
+    </div>
+
+    <!-- L7 -->
+    <div class="lv" style="--lc:var(--l7)">
+      <span class="alt">ALT 2,766 m</span>
+      <div class="lv-head"><span class="n">L7</span><h3>多代理架構師</h3><span class="en">Multi-Agent Architect</span><span class="wk">第 16–18 週</span></div>
+      <p class="goal"><b>目標:</b>組建「AI 分工團隊」——多個專職代理人各司其職,由協調者分派與整合。</p>
+      <div class="grid2">
+        <div class="box"><div class="bt">核心技能</div><ul><li>代理人協調(Coordination)</li><li>任務路由(Routing):判斷該交給誰</li><li>委派(Delegation)與結果整合</li></ul></div>
+        <div class="box"><div class="bt">學習方法</div><ul><li>先在紙上畫「組織圖」:每個代理人的職掌、輸入、輸出</li><li>從 2 個代理人的「研究員+撰稿員」流水線開始</li><li>再加入「審核員」形成三角制衡,比較品質差異</li></ul></div>
+      </div>
+      <div class="box" style="margin-top:12px"><div class="bt">實作任務(以公務情境為例)</div><ul><li>建立「政策簡報生產線」:資料蒐集代理人 → 大綱代理人 → 撰稿代理人 → 格式審核代理人</li><li>以同一題目比較「單一 AI 一次完成」與「多代理分工」的成品品質</li></ul></div>
+      <div class="pass"><div class="bt">通關標準 ☑</div>
+        <label><input type="checkbox" data-alt="198"><span>完成 1 條三個以上代理人協作的工作流,並能說明分工邏輯</span></label>
+        <label><input type="checkbox" data-alt="197"><span>多代理成品品質經自評或他評優於單一 AI 產出</span></label>
+      </div>
+    </div>
+
+    <!-- L6 -->
+    <div class="lv" style="--lc:var(--l6)">
+      <span class="alt">ALT 2,371 m</span>
+      <div class="lv-head"><span class="n">L6</span><h3>AI 代理人建造者</h3><span class="en">AI Agent Builder</span><span class="wk">第 13–15 週</span></div>
+      <p class="goal"><b>目標:</b>打造具備<b>記憶、工具、推理</b>三要素的智慧代理人(Agent)——它不只回答,還能自主完成多步驟任務。</p>
+      <div class="grid2">
+        <div class="box"><div class="bt">核心技能</div><ul><li>代理人框架(Agent Framework)概念</li><li>工具呼叫(Tool Use):讓 AI 查資料、算數字、讀寫檔案</li><li>任務編排(Orchestration)與中止條件</li></ul></div>
+        <div class="box"><div class="bt">學習方法</div><ul><li>理解「代理人迴圈」:觀察→思考→行動→再觀察</li><li>從 Claude 專案(Projects)+ 自訂技能(Skills)入手,再嘗試 Claude Code</li><li>每個代理人先寫「職務說明書」:目標、可用工具、禁止事項</li></ul></div>
+      </div>
+      <div class="box" style="margin-top:12px"><div class="bt">實作任務(以公務情境為例)</div><ul><li>建立「法規研究代理人」:給一條條文,自動完成查詢沿革、比較外國立法例、產出研析摘要</li><li>建立「會議籌備代理人」:輸入會議主題,自動產出開會通知單、議程、簽到表、紀錄模板</li></ul></div>
+      <div class="pass"><div class="bt">通關標準 ☑</div>
+        <label><input type="checkbox" data-alt="198"><span>完成 1 個能自主執行 3 步驟以上任務的代理人</span></label>
+        <label><input type="checkbox" data-alt="197"><span>能口頭解釋「記憶、工具、推理」三要素在自己作品中的對應位置</span></label>
+      </div>
+    </div>
+
+    <!-- L5 -->
+    <div class="lv" style="--lc:var(--l5)">
+      <span class="alt">ALT 1,976 m・半山腰</span>
+      <div class="lv-head"><span class="n">L5</span><h3>AI 應用建造者</h3><span class="en">AI Builder</span><span class="wk">第 10–12 週</span></div>
+      <p class="goal"><b>目標:</b>親手做出 AI 驅動的應用程式與工具——不必成為工程師,但要能「讓 AI 幫你寫程式,你負責定義與驗收」。</p>
+      <div class="grid2">
+        <div class="box"><div class="bt">核心技能</div><ul><li>Python 基礎(讀懂、會改、能執行)</li><li>應用程式介面(Application Programming Interface, API)串接</li><li>檢索增強生成(Retrieval-Augmented Generation, RAG)概念</li><li>資料庫基本觀念(表、欄位、查詢)</li></ul></div>
+        <div class="box"><div class="bt">學習方法</div><ul><li>採「氛圍編程(Vibe Coding)」:用自然語言請 AI 寫,自己學看懂與除錯</li><li>每週完成 1 個小工具,發布到 GitHub Pages 累積作品集</li><li>Python 只學四件事:變數、迴圈、函式、套件安裝</li></ul></div>
+      </div>
+      <div class="box" style="margin-top:12px"><div class="bt">實作任務(以公務情境為例)</div><ul><li>做一個「預算執行率儀表板」網頁:貼上 Excel 資料即產出圖表</li><li>做一個「教育訓練模擬器」或互動式教材網頁,部署至 GitHub Pages 供同仁使用</li></ul></div>
+      <div class="pass"><div class="bt">通關標準 ☑</div>
+        <label><input type="checkbox" data-alt="198"><span>完成並上線 2 個可供他人使用的 AI 輔助工具</span></label>
+        <label><input type="checkbox" data-alt="197"><span>能獨立完成「描述需求→AI 產碼→測試→修正→部署」完整循環</span></label>
+      </div>
+    </div>
+
+    <!-- L4 -->
+    <div class="lv" style="--lc:var(--l4)">
+      <span class="alt">ALT 1,581 m</span>
+      <div class="lv-head"><span class="n">L4</span><h3>AI 自動化者</h3><span class="en">AI Automator</span><span class="wk">第 7–9 週</span></div>
+      <p class="goal"><b>目標:</b>讓重複性工作跨應用程式自動執行——「設定一次,天天替你做」。</p>
+      <div class="grid2">
+        <div class="box"><div class="bt">核心技能</div><ul><li>自動化平台:n8n、Make、Zapier(擇一深入)</li><li>API 基本觀念:什麼是端點、金鑰、請求與回應</li><li>觸發器(Trigger)→ 動作(Action)的流程思維</li></ul></div>
+        <div class="box"><div class="bt">學習方法</div><ul><li>先徒手畫流程圖:「當___發生,就自動___」寫出 5 個場景</li><li>從最簡單的兩步驟自動化開始(如:收到郵件→AI 摘要→存筆記)</li><li>每個自動化都加「失敗通知」,養成監控習慣</li></ul></div>
+      </div>
+      <div class="box" style="margin-top:12px"><div class="bt">實作任務(以公務情境為例)</div><ul><li>建立「每日新聞輿情自動摘要」:定時抓取關鍵字新聞→AI 摘要分類→寄送晨報</li><li>建立「檔案歸檔自動化」:雲端資料夾新增檔案→自動命名分類→更新索引表</li></ul></div>
+      <div class="pass"><div class="bt">通關標準 ☑</div>
+        <label><input type="checkbox" data-alt="198"><span>有 2 條自動化流程穩定運作滿 2 週</span></label>
+        <label><input type="checkbox" data-alt="197"><span>估算出自動化每週節省的工時(寫成一行結論)</span></label>
+      </div>
+    </div>
+
+    <!-- L3 -->
+    <div class="lv" style="--lc:var(--l3)">
+      <span class="alt">ALT 1,186 m</span>
+      <div class="lv-head"><span class="n">L3</span><h3>AI 進階使用者</h3><span class="en">AI Power User</span><span class="wk">第 5–6 週</span></div>
+      <p class="goal"><b>目標:</b>把「一次性的好對話」升級為「可重複的工作流」——同樣品質,任何時候、任何案件都能再現。</p>
+      <div class="grid2">
+        <div class="box"><div class="bt">核心技能</div><ul><li>專案(Projects)與自訂指令(Custom GPTs / Skills)</li><li>知識庫(Knowledge Base)建置與維護</li><li>模板化:把常用提示詞沉澱為標準作業程序(SOP)</li></ul></div>
+        <div class="box"><div class="bt">學習方法</div><ul><li>盤點每週重複 3 次以上的任務,各建 1 個專屬工作流</li><li>為每類文件建立「範本+範例+檢核表」三件組</li><li>知識庫原則:寧少而精,過期資料立即汰換</li></ul></div>
+      </div>
+      <div class="box" style="margin-top:12px"><div class="bt">實作任務(以公務情境為例)</div><ul><li>建立「公文助手」專案:內含格式規範、用語對照、優良範本,任何案件貼上即可產稿</li><li>建立「簡報助手」與「研究助手」專案,形成個人 AI 工具箱</li></ul></div>
+      <div class="pass"><div class="bt">通關標準 ☑</div>
+        <label><input type="checkbox" data-alt="198"><span>建成 3 個以上可重複使用的專案／自訂工作流</span></label>
+        <label><input type="checkbox" data-alt="197"><span>同類任務的處理時間比 L1 時期縮短一半以上</span></label>
+      </div>
+    </div>
+
+    <!-- L2 -->
+    <div class="lv" style="--lc:var(--l2)">
+      <span class="alt">ALT 790 m</span>
+      <div class="lv-head"><span class="n">L2</span><h3>AI 提示工程師</h3><span class="en">AI Prompt Engineer</span><span class="wk">第 3–4 週</span></div>
+      <p class="goal"><b>目標:</b>學會「把話說清楚」的工程方法——同一個問題,你的提問方式決定產出品質的八成。</p>
+      <div class="grid2">
+        <div class="box"><div class="bt">核心技能</div><ul><li>提示工程(Prompt Engineering):角色、任務、格式、範例、限制</li><li>脈絡工程(Context Engineering):給對背景資料,而非給更多字</li><li>迭代追問:先求有、再修正、後定稿</li></ul></div>
+        <div class="box"><div class="bt">學習方法</div><ul><li>背熟五段式提問框架:<b>角色→背景→任務→格式→範例</b></li><li>同一任務寫 3 種提示詞,比較產出優劣並記錄心得</li><li>建立個人「提示詞筆記本」,好用的立即存檔</li></ul></div>
+      </div>
+      <div class="box" style="margin-top:12px"><div class="bt">實作任務(以公務情境為例)</div><ul><li>為「簽稿撰擬」「長官談參」「資料研析」各寫一條可重複使用的黃金提示詞</li><li>用「範例引導法」:附上 1 篇優良舊稿,讓 AI 模仿其格式與語氣產新稿</li></ul></div>
+      <div class="pass"><div class="bt">通關標準 ☑</div>
+        <label><input type="checkbox" data-alt="198"><span>累積 10 條以上經實測有效的提示詞並分類保存</span></label>
+        <label><input type="checkbox" data-alt="197"><span>能將一次失敗的產出,透過修改提示詞救回為可用成品</span></label>
+      </div>
+    </div>
+
+    <!-- L1 -->
+    <div class="lv" style="--lc:var(--l1)">
+      <span class="alt">ALT 395 m・登山口</span>
+      <div class="lv-head"><span class="n">L1</span><h3>AI 使用者</h3><span class="en">AI User</span><span class="wk">第 1–2 週</span></div>
+      <p class="goal"><b>目標:</b>建立日常使用習慣——用 AI 處理問答、寫作、摘要、研究,消除「不知道能拿它做什麼」的陌生感。</p>
+      <div class="grid2">
+        <div class="box"><div class="bt">核心技能</div><ul><li>基礎提問(Basic Prompting)</li><li>判讀能力:知道 AI 會出錯,重要資訊必查證</li><li>工具地圖:知道問答、搜尋、簡報、筆記各用哪個工具</li></ul></div>
+        <div class="box"><div class="bt">學習方法</div><ul><li>「每日三問」:每天至少用 AI 解決 3 件真實工作</li><li>刻意涵蓋四類:問答、改寫、摘要、翻譯</li><li>寫「使用日誌」:哪些好用、哪些翻車,是 L2 的教材</li></ul></div>
+      </div>
+      <div class="box" style="margin-top:12px"><div class="bt">實作任務(以公務情境為例)</div><ul><li>把一份 20 頁報告丟給 AI,要求「一頁摘要+三個重點+給主管的兩句話結論」</li><li>把一段口語逐字稿改寫為正式書面文字,體會語氣控制</li></ul></div>
+      <div class="pass"><div class="bt">通關標準 ☑</div>
+        <label><input type="checkbox" data-alt="198"><span>連續 14 天每日使用 AI 完成至少 3 件真實任務</span></label>
+        <label><input type="checkbox" data-alt="197"><span>能舉出 3 個 AI 答錯而被你查證抓到的實例</span></label>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 03 每日模式 -->
+<section>
+  <div class="sec-h"><span class="no">03</span><h2>每日學習模式:70–20–10</h2></div>
+  <p class="sec-note">每週投入 5–7 小時即可,關鍵在配比而非時數。</p>
+  <div class="mode">
+    <div class="m70"><span class="pct">70%</span><b>做中學</b>——直接把 AI 用在今天的真實工作上,產出可交付成品</div>
+    <div class="m20"><span class="pct">20%</span><b>向人學</b>——看教學、讀案例、加入社群、請教高手</div>
+    <div class="m10"><span class="pct">10%</span><b>系統學</b>——讀官方文件、原理文章,補理論地基</div>
+  </div>
+  <div class="callout">
+    <b>三個鐵律:</b>① 每級的實作任務務必用「真實工作」而非練習題,學完即用、用了就留下成果;② 每週五花 15 分鐘寫「本週 AI 復盤」:最省時的一次、最翻車的一次、下週要試的一件事;③ 卡關超過 2 小時就直接問 AI 本身——「我想達成___,目前卡在___,請給我三種解法」。
+  </div>
+</section>
+
+<!-- 04 24週進程 -->
+<section>
+  <div class="sec-h"><span class="no">04</span><h2>24 週進程表</h2></div>
+  <table>
+    <thead><tr><th>週次</th><th>等級</th><th>本期重點</th><th>應交付成果</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">W1–2</td><td><span class="tag" style="background:var(--l1)">L1</span></td><td>建立每日使用習慣,認識工具地圖</td><td>14 天使用日誌</td></tr>
+      <tr><td class="mono">W3–4</td><td><span class="tag" style="background:var(--l2)">L2</span></td><td>五段式提問框架、範例引導法</td><td>10 條黃金提示詞庫</td></tr>
+      <tr><td class="mono">W5–6</td><td><span class="tag" style="background:var(--l3)">L3</span></td><td>專案化、知識庫、SOP 模板</td><td>3 個可重複工作流</td></tr>
+      <tr><td class="mono">W7–9</td><td><span class="tag" style="background:var(--l4)">L4</span></td><td>跨應用自動化、觸發器思維</td><td>2 條穩定運作的自動化流程</td></tr>
+      <tr><td class="mono">W10–12</td><td><span class="tag" style="background:var(--l5)">L5</span></td><td>AI 協作寫程式、部署上線</td><td>2 個上線工具(作品集)</td></tr>
+      <tr><td class="mono">W13–15</td><td><span class="tag" style="background:var(--l6)">L6</span></td><td>記憶+工具+推理的代理人</td><td>1 個多步驟自主代理人</td></tr>
+      <tr><td class="mono">W16–18</td><td><span class="tag" style="background:var(--l7)">L7</span></td><td>多代理分工、路由與整合</td><td>1 條三代理人以上生產線</td></tr>
+      <tr><td class="mono">W19–20</td><td><span class="tag" style="background:var(--l8)">L8</span></td><td>監控、治理、安全上線</td><td>風險評估與使用規範文件</td></tr>
+      <tr><td class="mono">W21–22</td><td><span class="tag" style="background:var(--l9)">L9</span></td><td>流程盤點、再設計、效益量化</td><td>3 項流程再設計+效益報告</td></tr>
+      <tr><td class="mono">W23–24</td><td><span class="tag" style="background:var(--l10)">L10</span></td><td>組織藍圖、以教代學</td><td>AI 轉型藍圖+1 場教學分享</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 05 工具對照 -->
+<section>
+  <div class="sec-h"><span class="no">05</span><h2>各級推薦工具對照</h2></div>
+  <table>
+    <thead><tr><th>等級</th><th>首選工具</th><th>輔助工具</th><th>費用門檻</th></tr></thead>
+    <tbody>
+      <tr><td>L1–L2</td><td>Claude / ChatGPT / Gemini(擇一主力)</td><td>NotebookLM(文件研究)、Perplexity(查證)</td><td>免費即可起步</td></tr>
+      <tr><td>L3</td><td>Claude 專案+Skills、Custom GPTs</td><td>Obsidian(知識庫)、Notion</td><td>建議付費一個主力平台</td></tr>
+      <tr><td>L4</td><td>n8n(可自架、彈性最大)或 Make(易上手)</td><td>Zapier、Google Apps Script</td><td>免費方案可完成多數練習</td></tr>
+      <tr><td>L5</td><td>Claude(Artifacts / Code)、Cursor</td><td>GitHub + GitHub Pages(部署)、Python</td><td>付費 AI + 免費部署</td></tr>
+      <tr><td>L6–L7</td><td>Claude Code、Claude 專案(多代理提示設計)</td><td>LangChain / CrewAI(進階選修)</td><td>付費 AI 為主</td></tr>
+      <tr><td>L8–L10</td><td>前述全部+機關資安與個資規範文件</td><td>流程圖工具、效益試算表</td><td>以既有工具為主</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 06 常見失敗 -->
+<section>
+  <div class="sec-h"><span class="no">06</span><h2>常見失敗與對策</h2></div>
+  <table>
+    <thead><tr><th>失敗樣態</th><th>發生在</th><th>對策</th></tr></thead>
+    <tbody>
+      <tr><td>只看教學不動手,三週後全忘</td><td>L1–L2</td><td>嚴守 70% 做中學;沒有真實產出的一天視同沒學</td></tr>
+      <tr><td>提示詞越寫越長,品質反而下降</td><td>L2–L3</td><td>改用「範例引導」取代長篇描述;一次只改一個變因</td></tr>
+      <tr><td>工具收集癖:每個都試、沒一個精</td><td>L3–L5</td><td>每級只允許一個主力工具,通關後才能換</td></tr>
+      <tr><td>自動化做完沒人維護,默默壞掉</td><td>L4</td><td>每條流程必配失敗通知;每月固定巡檢 10 分鐘</td></tr>
+      <tr><td>AI 寫的程式不敢改、不會修</td><td>L5</td><td>要求 AI 逐行加中文註解;先讀懂再上線</td></tr>
+      <tr><td>代理人越建越複雜,自己都失控</td><td>L6–L7</td><td>先寫職務說明書再動工;能用 1 個代理人就不用 3 個</td></tr>
+      <tr><td>機敏資料誤上傳雲端服務</td><td>全程</td><td>L1 第一天就立規矩:個資、機密一律不進 AI;養成脫敏習慣</td></tr>
+      <tr><td>學完不分享,能力停在個人</td><td>L8–L10</td><td>每完成一級,向 1 位同事示範 15 分鐘;教學是最強的複習</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 07 跨領域遷移 -->
+<section>
+  <div class="sec-h"><span class="no">07</span><h2>跨領域套用心法</h2></div>
+  <div class="callout" style="border-left-color:var(--l5)">
+    本路線圖的實作任務以公務情境示範,但<b>十級架構是通用的</b>。要套用到任何領域(醫療、教育、行銷、投資、研究……),只需替換三個變數:<b>① 你的重複性任務是什麼</b>(L3–L4 的自動化對象)、<b>② 你的專業文件長什麼樣</b>(L2–L3 的範本與知識庫)、<b>③ 你的利害關係人是誰</b>(L9–L10 的流程再設計與轉型對象)。等級順序與通關標準完全不變。
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    AI 精熟十級・玉山攻頂學習路線圖|依「Levels of AI Mastery」十級架構編製|建議每 6 個月依工具演進更新一次工具對照表
+  </div>
+</footer>
+
+<script>
+(function(){
+  var boxes=document.querySelectorAll('.pass input[type=checkbox]');
+  var fill=document.getElementById('altfill');
+  var num=document.getElementById('altnum');
+  var PEAK=3952;
+  function update(){
+    var sum=0;
+    boxes.forEach(function(b){
+      b.closest('label').classList.toggle('done',b.checked);
+      if(b.checked) sum+=parseInt(b.dataset.alt||'0',10);
+    });
+    if(sum>PEAK) sum=PEAK;
+    fill.style.width=(sum/PEAK*100)+'%';
+    num.textContent=sum.toLocaleString()+' m';
+  }
+  boxes.forEach(function(b){b.addEventListener('change',update);});
+  update();
+})();
+</script>
+</body>
+</html>

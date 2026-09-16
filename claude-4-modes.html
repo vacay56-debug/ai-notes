@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude 的四種工作模式｜規格對照與業務應用</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F1F2F4;
+  --panel:#FFFFFF;
+  --ink:#191C21;
+  --ink-2:#4A515B;
+  --ink-3:#818894;
+  --rule:#D2D6DC;
+  --m1:#41529B;
+  --m2:#8A5E18;
+  --m3:#1F6E5E;
+  --m4:#8A3F7E;
+  --good:#2C6B4A;
+  --warn:#9B3A34;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Noto Sans TC","Helvetica Neue",Arial,sans-serif;
+  font-weight:400;
+  line-height:1.75;
+  letter-spacing:.01em;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:"Noto Serif TC",Georgia,serif;line-height:1.3;margin:0}
+
+/* ── 頁首 ── */
+header{padding:72px 0 40px;border-bottom:2px solid var(--ink)}
+.kicker{font-size:.8rem;color:var(--ink-3);letter-spacing:.18em;margin-bottom:18px}
+h1{font-size:clamp(2.1rem,5.4vw,3.6rem);font-weight:900;letter-spacing:-.01em}
+h1 span{display:block;font-size:clamp(1.1rem,2.6vw,1.6rem);font-weight:500;color:var(--ink-2);margin-top:14px;letter-spacing:.02em}
+.thesis{
+  margin-top:34px;padding-left:20px;border-left:4px solid var(--ink);
+  font-size:1.05rem;color:var(--ink-2);max-width:62ch;
+}
+.thesis b{color:var(--ink);font-weight:700}
+
+/* ── 區塊 ── */
+section{padding:60px 0;border-bottom:1px solid var(--rule)}
+.sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:12px;flex-wrap:wrap}
+.sec-head h2{font-size:1.65rem;font-weight:700}
+.sec-head em{font-style:normal;font-size:.85rem;color:var(--ink-3)}
+.lede{color:var(--ink-2);max-width:66ch;margin:0 0 32px}
+
+/* ── 對照表 ── */
+.matrix-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:800px;background:var(--panel)}
+caption{text-align:left;font-size:.85rem;color:var(--ink-3);padding-bottom:10px}
+th,td{padding:14px 16px;text-align:left;vertical-align:top;font-size:.92rem;border-bottom:1px solid var(--rule)}
+thead th{
+  font-family:"Noto Serif TC",serif;font-size:1.05rem;font-weight:700;
+  color:#fff;border-bottom:none;line-height:1.4;
+}
+thead th:first-child{background:var(--ink);font-size:.85rem;font-weight:500}
+thead th small{display:block;font-family:"Noto Sans TC",sans-serif;font-size:.72rem;font-weight:400;opacity:.85;letter-spacing:.06em;margin-top:2px}
+th[scope=row]{width:14%;font-weight:500;color:var(--ink-2);background:#FAFAFB;font-size:.86rem}
+.c1{background:var(--m1)} .c2{background:var(--m2)} .c3{background:var(--m3)} .c4{background:var(--m4)}
+tbody tr:last-child td,tbody tr:last-child th{border-bottom:none}
+
+/* ── 模式詳述 ── */
+.mode{
+  background:var(--panel);margin-bottom:20px;
+  border-left:10px solid var(--ink);
+  display:grid;grid-template-columns:minmax(220px,26%) 1fr;
+}
+.mode.m1{border-left-color:var(--m1)} .mode.m2{border-left-color:var(--m2)}
+.mode.m3{border-left-color:var(--m3)} .mode.m4{border-left-color:var(--m4)}
+.mode-id{padding:30px 28px;border-right:1px solid var(--rule)}
+.mode-no{font-family:"Noto Serif TC",serif;font-size:2.6rem;font-weight:900;line-height:1;color:var(--rule)}
+.mode.m1 .mode-no{color:var(--m1)} .mode.m2 .mode-no{color:var(--m2)}
+.mode.m3 .mode-no{color:var(--m3)} .mode.m4 .mode-no{color:var(--m4)}
+.mode-id h3{font-size:1.5rem;font-weight:700;margin:10px 0 4px}
+.mode-en{font-size:.78rem;color:var(--ink-3);letter-spacing:.08em}
+.mode-verb{margin-top:16px;font-size:1.05rem;color:var(--ink-2);font-weight:500}
+.mode-body{padding:30px 28px}
+.mode-body p.def{margin:0 0 20px;color:var(--ink-2)}
+.mode-body h4{
+  font-size:.82rem;font-weight:700;margin:0 0 8px;color:var(--ink);
+  padding-bottom:6px;border-bottom:1px solid var(--rule);
+}
+ul{margin:0 0 22px;padding-left:1.15em}
+li{margin-bottom:5px;font-size:.93rem}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.split h4.g{color:var(--good);border-bottom-color:var(--good)}
+.split h4.w{color:var(--warn);border-bottom-color:var(--warn)}
+.bestfor{margin-top:4px;padding:14px 16px;background:#F5F6F8;font-size:.9rem}
+.bestfor b{font-weight:700}
+
+/* ── 演進 ── */
+.timeline{counter-reset:step;margin-top:8px}
+.step{display:grid;grid-template-columns:56px 1fr;gap:18px;padding:16px 0;border-top:1px solid var(--rule)}
+.step:last-child{border-bottom:1px solid var(--rule)}
+.step .n{font-family:"Noto Serif TC",serif;font-size:1.4rem;font-weight:700;color:var(--ink-3)}
+.step p{margin:0;font-size:.98rem}
+.step p b{font-weight:700}
+
+/* ── 應用建議 ── */
+.apply td:first-child{font-weight:500}
+.tag{display:inline-block;padding:2px 9px;font-size:.75rem;color:#fff;white-space:nowrap}
+.t1{background:var(--m1)} .t2{background:var(--m2)} .t3{background:var(--m3)} .t4{background:var(--m4)}
+
+/* ── 註記與頁尾 ── */
+.note{font-size:.86rem;color:var(--ink-2);background:var(--panel);padding:22px 24px;border-top:3px solid var(--ink)}
+.note ul{margin:10px 0 0}
+.note li{font-size:.86rem}
+footer{padding:64px 0 80px}
+.closing{font-family:"Noto Serif TC",serif;font-size:clamp(1.2rem,3vw,1.8rem);font-weight:700;line-height:1.6;max-width:26ch}
+.closing q{quotes:"「" "」"}
+.closing .dim{display:block;font-size:.95rem;font-weight:400;font-family:"Noto Sans TC",sans-serif;color:var(--ink-3);margin-top:22px;max-width:48ch;line-height:1.8}
+
+@media (max-width:760px){
+  header{padding:48px 0 32px}
+  section{padding:44px 0}
+  .mode{grid-template-columns:1fr;border-left-width:8px}
+  .mode-id{border-right:none;border-bottom:1px solid var(--rule);padding:24px 22px 20px}
+  .mode-body{padding:24px 22px}
+  .split{grid-template-columns:1fr;gap:0}
+  .matrix-scroll{margin:0 -24px;padding:0 24px}
+}
+@media print{
+  body{background:#fff}
+  section{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header>
+  <div class="kicker">附件資訊完整轉譯｜Claude has 4 Modes</div>
+  <h1>Claude 的四種工作模式
+    <span>多數人只用其中一種——不同工作，應選用不同工具</span>
+  </h1>
+  <p class="thesis">附件核心論點：人工智慧（Artificial Intelligence, AI）正從<b>回答問題</b>，轉變為<b>實際參與工作</b>。四種模式並非版本高低之分，而是依「工作型態」區隔的四種介面。</p>
+</header>
+
+<section>
+  <div class="sec-head"><h2>一、四模式規格對照</h2><em>Overview Matrix</em></div>
+  <p class="lede">以七項欄位並列比較，可在選擇工具前快速定位任務屬性。</p>
+  <div class="matrix-scroll">
+  <table>
+    <caption>表一：Claude 四種工作模式綜合比較</caption>
+    <thead>
+      <tr>
+        <th scope="col">比較項目</th>
+        <th scope="col" class="c1">① Claude AI<small>THINK WITH IT</small></th>
+        <th scope="col" class="c2">② Claude Code<small>BUILD WITH IT</small></th>
+        <th scope="col" class="c3">③ Claude Cowork<small>OPERATE WITH IT</small></th>
+        <th scope="col" class="c4">④ Claude Design<small>DESIGN WITH IT</small></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">定位</th>
+        <td>日常對話層</td>
+        <td>終端機內的自主編碼代理</td>
+        <td>非開發者專用的桌面助理</td>
+        <td>視覺工作的創意夥伴</td>
+      </tr>
+      <tr>
+        <th scope="row">操作介面</th>
+        <td>網頁／行動裝置對話視窗</td>
+        <td>命令列（Command Line）</td>
+        <td>桌面應用程式</td>
+        <td>畫布式設計工具</td>
+      </tr>
+      <tr>
+        <th scope="row">自主程度</th>
+        <td>低（人機一問一答）</td>
+        <td>高（可連續自主執行）</td>
+        <td>中高（跨應用自動化）</td>
+        <td>中（人機共同迭代）</td>
+      </tr>
+      <tr>
+        <th scope="row">核心用途</th>
+        <td>撰寫、研究、發想、摘要、分析</td>
+        <td>跨檔案作業、除錯、重構、測試、開發功能</td>
+        <td>檔案整理、PDF 取值、填表、重複作業、跨系統搬運資訊</td>
+        <td>網站、線框圖、簡報、版面探索、概念生成</td>
+      </tr>
+      <tr>
+        <th scope="row">優點</th>
+        <td>零設定、泛用性高</td>
+        <td>完全自主、深度理解程式庫脈絡</td>
+        <td>免寫程式、支援跨應用流程</td>
+        <td>概念產出快、視覺發想能力強</td>
+      </tr>
+      <tr>
+        <th scope="row">限制</th>
+        <td>無系統存取權；仍須由使用者自行採取行動與串接</td>
+        <td>須審慎覆核產出；有使用成本</td>
+        <td>測試／早期階段；可控性與設定彈性較低</td>
+        <td>仍需人為審美判斷；最終精修不可省</td>
+      </tr>
+      <tr>
+        <th scope="row">最適對象</th>
+        <td>需要思考、學習、更快得到較佳答案者</td>
+        <td>需要 AI 代理實際動手處理程式碼的開發者</td>
+        <td>想跨工具與檔案自動化實際業務的任何人</td>
+        <td>需從草案到細節反覆打磨視覺產出者</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>二、各模式詳述</h2><em>Mode by Mode</em></div>
+
+  <article class="mode m1">
+    <div class="mode-id">
+      <div class="mode-no">1</div>
+      <h3>Claude AI</h3>
+      <div class="mode-en">THINK WITH IT</div>
+      <div class="mode-verb">用它「思考」</div>
+    </div>
+    <div class="mode-body">
+      <p class="def">定位為日常對話層，是最通用、無須任何前置設定的入口。</p>
+      <h4>適用任務</h4>
+      <ul><li>撰寫（Write）</li><li>研究（Research）</li><li>發想（Brainstorm）</li><li>摘要（Summarize）</li><li>分析（Analyze）</li><li>釐清構想（Work through ideas）</li></ul>
+      <div class="split">
+        <div><h4 class="g">優點</h4><ul><li>零設定即可使用</li><li>泛用、彈性高</li></ul></div>
+        <div><h4 class="w">限制</h4><ul><li>無系統存取權限</li><li>後續行動與資訊串接仍須由使用者完成</li></ul></div>
+      </div>
+      <div class="bestfor"><b>最適用於：</b>思考、學習，以及更快取得較佳答案。</div>
+    </div>
+  </article>
+
+  <article class="mode m2">
+    <div class="mode-id">
+      <div class="mode-no">2</div>
+      <h3>Claude Code</h3>
+      <div class="mode-en">BUILD WITH IT</div>
+      <div class="mode-verb">用它「建造」</div>
+    </div>
+    <div class="mode-body">
+      <p class="def">在終端機中運作的自主編碼代理（Autonomous Coding Agent），可直接對程式庫動手。</p>
+      <h4>適用任務</h4>
+      <ul><li>跨檔案協同作業</li><li>功能除錯</li><li>程式庫重構</li><li>撰寫並執行測試</li><li>開發完整功能模組</li></ul>
+      <div class="split">
+        <div><h4 class="g">優點</h4><ul><li>完全自主執行</li><li>具備深度程式庫脈絡理解</li></ul></div>
+        <div><h4 class="w">限制</h4><ul><li>產出須審慎覆核</li><li>產生使用成本</li></ul></div>
+      </div>
+      <div class="bestfor"><b>最適用於：</b>希望 AI 代理能真正動手處理程式碼的開發者。</div>
+    </div>
+  </article>
+
+  <article class="mode m3">
+    <div class="mode-id">
+      <div class="mode-no">3</div>
+      <h3>Claude Cowork</h3>
+      <div class="mode-en">OPERATE WITH IT</div>
+      <div class="mode-verb">用它「執行」</div>
+    </div>
+    <div class="mode-body">
+      <p class="def">面向非開發者的桌面助理，把代理能力帶到一般行政與知識工作。</p>
+      <h4>適用任務</h4>
+      <ul><li>整理與重新命名檔案</li><li>自 PDF 擷取資料</li><li>填寫試算表</li><li>處理重複性作業</li><li>在不同應用程式之間搬運資訊</li></ul>
+      <div class="split">
+        <div><h4 class="g">優點</h4><ul><li>無須撰寫程式</li><li>支援跨應用工作流</li></ul></div>
+        <div><h4 class="w">限制</h4><ul><li>測試／早期階段產品</li><li>可控性與組態彈性較低</li></ul></div>
+      </div>
+      <div class="bestfor"><b>最適用於：</b>想橫跨自身工具與檔案、自動化實際業務的任何使用者。</div>
+    </div>
+  </article>
+
+  <article class="mode m4">
+    <div class="mode-id">
+      <div class="mode-no">4</div>
+      <h3>Claude Design</h3>
+      <div class="mode-en">DESIGN WITH IT</div>
+      <div class="mode-verb">用它「設計」</div>
+    </div>
+    <div class="mode-body">
+      <p class="def">視覺工作的創意夥伴，以畫布搭配對話進行迭代。</p>
+      <h4>適用任務</h4>
+      <ul><li>建立網站</li><li>設計線框圖（Wireframe）</li><li>製作簡報</li><li>探索版面配置</li><li>生成創意概念</li></ul>
+      <div class="split">
+        <div><h4 class="g">優點</h4><ul><li>概念成形速度快</li><li>視覺發想能力強</li></ul></div>
+        <div><h4 class="w">限制</h4><ul><li>仍需人為審美判斷</li><li>最終精修環節不可省略</li></ul></div>
+      </div>
+      <div class="bestfor"><b>最適用於：</b>從快速構想到細緻設計的視覺產出與打磨。</div>
+    </div>
+  </article>
+</section>
+
+<section>
+  <div class="sec-head"><h2>三、演進脈絡</h2><em>The Bigger Picture</em></div>
+  <p class="lede">附件將四種模式視為一條能力擴散的時序，而非並列的四項功能。</p>
+  <div class="timeline">
+    <div class="step"><div class="n">1</div><p>最初，它讓我們<b>思考得更快</b>。</p></div>
+    <div class="step"><div class="n">2</div><p>接著，它讓開發者<b>建造得更快</b>。</p></div>
+    <div class="step"><div class="n">3</div><p>然後，它讓任何人都能輕易<b>自動化任務</b>。</p></div>
+    <div class="step"><div class="n">4</div><p>現在，它幫助我們<b>設計得更好</b>。</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>四、對應至緊急救護科業務之應用建議</h2><em>Application Mapping</em></div>
+  <p class="lede">以下為依附件架構延伸之業務對應建議，非附件原有內容，供選擇工具時參考。</p>
+  <div class="matrix-scroll">
+  <table class="apply">
+    <caption>表二：業務類型與建議模式對應</caption>
+    <thead>
+      <tr>
+        <th scope="col" style="width:34%">業務情境</th>
+        <th scope="col" class="c1" style="width:16%">建議模式</th>
+        <th scope="col" style="background:var(--ink);width:50%">使用要點</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>公文（簽、函、書函）草擬與法規條文研修比對</td><td><span class="tag t1">Claude AI</span></td><td>以對話逐段推敲三段式結構與法制用語，成果直接複製套用。</td></tr>
+      <tr><td>國際 EMS 制度比較、文獻整理與政策研究</td><td><span class="tag t1">Claude AI</span></td><td>需要思辨與多方觀點對照的工作，維持人機往復討論最有效率。</td></tr>
+      <tr><td>年度預算表、採購執行計畫等大量表格彙整與 PDF 取值</td><td><span class="tag t3">Cowork</span></td><td>重複性、跨檔案的行政作業；仍須逐筆抽驗校核數據正確性。</td></tr>
+      <tr><td>招標文件、規格書之版本管理與批次更名歸檔</td><td><span class="tag t3">Cowork</span></td><td>適合檔案整理與跨應用搬運，但屬早期階段產品，重要文件應保留原檔。</td></tr>
+      <tr><td>政策簡報、研討會視覺素材、海報與活動網頁</td><td><span class="tag t4">Design</span></td><td>快速產出多種版面方案供選擇，最終仍須人工調整字體與品牌一致性。</td></tr>
+      <tr><td>訓練模擬器、互動式教材等 HTML 工具開發與除錯</td><td><span class="tag t2">Code</span></td><td>可自主跨檔案修改與測試；上線前務必完整覆核產出程式碼。</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section style="border-bottom:none;padding-bottom:0">
+  <div class="note">
+    <b>補充說明（就附件內容之校正與延伸）</b>
+    <ul>
+      <li>附件為第三方製作之整理圖卡，四種模式之描述大致正確，惟部分細節已有更新。</li>
+      <li>Claude Code 除終端機外，亦可於桌面應用程式及行動裝置應用程式操作；Claude Code 與 Claude Cowork 均可透過行動裝置遠端使用。</li>
+      <li>Claude Cowork 可再調用瀏覽器、Excel、PowerPoint 及 Design 等代理功能作為其工具。</li>
+      <li>附件未涵蓋其他存取途徑，例如應用程式介面（Application Programming Interface, API）及 Slack 版的 Claude Tag。</li>
+      <li>就本科業務而言，四種模式的實質差異在於「有無系統與檔案存取權」及「自主執行程度」；凡涉及正式公文、預算數字與採購條款，無論使用何種模式，均須維持人工最終覆核。</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <p class="closing">
+    不要問<q>我該不該用 Claude</q>，<br>而要問<q>我現在要做的是哪一類工作</q>。
+    <span class="dim">附件結語：真正的生產力提升，正是從這個問題開始。</span>
+  </p>
+</footer>
+
+</div>
+</body>
+</html>

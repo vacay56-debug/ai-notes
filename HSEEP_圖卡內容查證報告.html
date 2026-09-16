@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HSEEP 圖卡內容查證報告｜以 FEMA 2020 年版 doctrine 為基準</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E1D28;
+  --ink-2:#33454F;
+  --paper:#F1F3F2;
+  --card:#FFFFFF;
+  --rule:#C6CFD3;
+  --doctrine:#1C4B70;
+  --ok:#2C6A4F;
+  --note:#9A6014;
+  --fix:#9C2C2C;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:'Noto Sans TC',system-ui,'PingFang TC','Microsoft JhengHei',sans-serif;
+  font-size:16px;line-height:1.75;-webkit-text-size-adjust:100%;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px 96px}
+
+/* ── 頁首 ───────────────────────────── */
+header.doc{
+  background:var(--ink);color:#EDF1F3;padding:44px 0 36px;margin-bottom:40px;
+  border-bottom:6px solid var(--doctrine);
+}
+header.doc .wrap{padding-bottom:0}
+.eyebrow{
+  font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  color:#8FB3C9;margin:0 0 14px;
+}
+h1{
+  font-family:'Noto Serif TC',serif;font-weight:700;font-size:clamp(26px,4.2vw,40px);
+  line-height:1.3;margin:0 0 14px;letter-spacing:.01em;
+}
+.sub{color:#B9C7CF;max-width:58ch;margin:0 0 26px;font-size:15px}
+.meta{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.16);
+}
+.meta div{background:var(--ink);padding:12px 14px}
+.meta dt{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:#8FB3C9;margin:0 0 4px}
+.meta dd{margin:0;font-size:14px;color:#EDF1F3}
+
+/* ── 區塊 ───────────────────────────── */
+section{margin:0 0 56px}
+h2{
+  font-family:'Noto Serif TC',serif;font-size:22px;font-weight:700;margin:0 0 6px;
+  padding-bottom:10px;border-bottom:2px solid var(--ink);
+  display:flex;align-items:baseline;gap:12px;
+}
+h2 .num{font-family:var(--mono);font-size:13px;color:var(--doctrine);letter-spacing:.08em}
+h3{font-size:16px;font-weight:700;margin:28px 0 8px;color:var(--doctrine)}
+p{margin:12px 0}
+.lead{font-size:15px;color:var(--ink-2);margin-top:14px}
+
+/* ── 結論卡 ─────────────────────────── */
+.verdict{
+  background:var(--card);border:1px solid var(--rule);border-left:5px solid var(--doctrine);
+  padding:22px 24px;margin-top:18px;
+}
+.verdict ul{margin:10px 0 0;padding-left:20px}
+.verdict li{margin:8px 0}
+
+/* ── 表格 ───────────────────────────── */
+.tablebox{overflow-x:auto;border:1px solid var(--rule);background:var(--card);margin-top:16px}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:14.5px}
+th,td{padding:12px 14px;border-bottom:1px solid var(--rule);vertical-align:top;text-align:left}
+thead th{
+  background:#E4E9EB;font-size:12.5px;letter-spacing:.06em;font-weight:700;color:var(--ink);
+  border-bottom:2px solid var(--ink);position:sticky;top:0;
+}
+tbody tr:last-child td{border-bottom:none}
+td.k{font-weight:700;width:26%}
+.en{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);display:block;font-weight:400}
+
+/* ── 狀態標籤（本文件的識別元素）──────── */
+.chip{
+  display:inline-block;font-family:var(--mono);font-size:11.5px;font-weight:600;
+  letter-spacing:.06em;padding:3px 9px;border:1.5px solid currentColor;white-space:nowrap;
+}
+.chip.ok{color:var(--ok)}
+.chip.note{color:var(--note)}
+.chip.fix{color:var(--fix)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin:16px 0 0;font-size:13.5px;color:var(--ink-2);align-items:center}
+
+/* ── 查證條目 ───────────────────────── */
+.audit{border:1px solid var(--rule);background:var(--card);margin-top:16px}
+.item{border-bottom:1px solid var(--rule);padding:20px 22px;display:grid;grid-template-columns:112px 1fr;gap:20px}
+.item:last-child{border-bottom:none}
+.item .left{display:flex;flex-direction:column;gap:8px}
+.item .id{font-family:var(--mono);font-size:12px;color:var(--ink-2);letter-spacing:.1em}
+.claim{font-weight:700;margin:0 0 6px;font-size:15.5px}
+.item p{margin:6px 0;font-size:14.5px}
+.src{font-family:var(--mono);font-size:12px;color:var(--doctrine);margin-top:8px}
+
+/* ── 循環對照 ───────────────────────── */
+.cyclegrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px}
+.cyclecard{background:var(--card);border:1px solid var(--rule);padding:18px 20px}
+.cyclecard h4{margin:0 0 4px;font-size:15px}
+.cyclecard .tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--ink-2);display:block;margin-bottom:12px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{
+  counter-increment:s;padding:7px 0 7px 34px;position:relative;font-size:14.5px;
+  border-top:1px dashed var(--rule);
+}
+.steps li:first-child{border-top:none}
+.steps li::before{
+  content:counter(s,decimal-leading-zero);position:absolute;left:0;top:7px;
+  font-family:var(--mono);font-size:12px;color:var(--doctrine);font-weight:600;
+}
+
+/* ── 提示 ───────────────────────────── */
+.callout{background:#EAF0F4;border:1px solid #B9CBD8;padding:16px 20px;margin-top:16px;font-size:14.5px}
+.callout strong{color:var(--doctrine)}
+
+/* ── 來源 ───────────────────────────── */
+ol.sources{font-size:13.5px;color:var(--ink-2);padding-left:22px}
+ol.sources li{margin:10px 0;word-break:break-word}
+ol.sources a{color:var(--doctrine)}
+
+footer.doc{border-top:2px solid var(--ink);padding-top:18px;font-size:13px;color:var(--ink-2)}
+
+@media (max-width:720px){
+  .cyclegrid{grid-template-columns:1fr}
+  .item{grid-template-columns:1fr;gap:10px}
+  .item .left{flex-direction:row;align-items:center;gap:12px}
+}
+@media print{
+  body{background:#fff;font-size:11pt}
+  header.doc{background:#fff;color:#000;border-bottom:3px solid #000}
+  .eyebrow,.sub,.meta dt{color:#444}
+  .meta div{background:#fff}
+  .meta dd{color:#000}
+  section{page-break-inside:avoid}
+  thead th{position:static}
+}
+</style>
+</head>
+<body>
+
+<header class="doc">
+  <div class="wrap">
+    <p class="eyebrow">Source Verification / 逐項查證</p>
+    <h1>HSEEP 圖卡內容查證報告</h1>
+    <p class="sub">以美國聯邦緊急事務管理署（Federal Emergency Management Agency, FEMA）2020 年 1 月版《國土安全演習與評估計畫》（Homeland Security Exercise and Evaluation Program, HSEEP）doctrine 原文為唯一基準，逐項核對附件圖卡之敘述，標示相符、應補充與應修正之處。本報告不新增任何未見於來源文件之內容。</p>
+    <dl class="meta">
+      <div><dt>基準文件</dt><dd>HSEEP Doctrine, January 2020（取代 2013 年版）</dd></div>
+      <div><dt>主管機關</dt><dd>美國國土安全部 FEMA 國家演習組（NED）</dd></div>
+      <div><dt>查證範圍</dt><dd>七種演習類型、核心原則、循環架構、用語</dd></div>
+      <div><dt>製表日期</dt><dd>115 年 8 月 15 日</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- 1 結論 -->
+<section>
+  <h2><span class="num">01</span>查證結論</h2>
+  <div class="verdict">
+    <p style="margin-top:0"><strong>整體結論：圖卡主體正確，但有二處架構性用語需修正、一處英文誤植需更正。</strong></p>
+    <ul>
+      <li><span class="chip ok">相符</span>　<strong>七種演習類型的分類與定義</strong>完全對應 doctrine 第 2 章：討論型 4 類（研討會、工作坊、桌上型演習、遊戲）、操作型 3 類（戰技操演、功能演習、全尺度演習）。</li>
+      <li><span class="chip ok">相符</span>　<strong>「無責備環境（no-fault environment）」</strong>確為 doctrine 原文用語，載於桌上型演習之執行特性欄位。</li>
+      <li><span class="chip ok">相符</span>　<strong>「不必然逐一闖關」</strong>之敘述正確；doctrine 明載漸進式演習規劃不必然是演習類型的線性推進。</li>
+      <li><span class="chip note">應補充</span>　<strong>「三大核心原則」非 doctrine 用語。</strong>2020 年版明列<strong>六項</strong>基本原則（Fundamental Principles），圖卡三項屬教學濃縮，且遺漏「高階領導指導」「以風險為依據」「全社會整合」「共同方法論」四項。</li>
+      <li><span class="chip fix">應修正</span>　<strong>「六步驟循環」與 doctrine 不符。</strong>HSEEP Cycle 為<strong>五階段</strong>（專案管理、設計與開發、執行、評核、精進規劃）；圖卡之六步驟較接近我國基礎課程「設計—執行—評核—精進」的教學轉譯，不宜標示為 HSEEP 原架構。</li>
+      <li><span class="chip fix">應修正</span>　圖卡英文誤植「Improvement Planing」，正確為 <strong>Improvement Planning</strong>；且 doctrine 之標準用語為事後檢討報告／精進計畫（After-Action Report / Improvement Plan, AAR/IP）併稱。</li>
+    </ul>
+  </div>
+  <div class="legend">
+    <span><span class="chip ok">相符</span> 圖卡敘述可於 doctrine 原文對應</span>
+    <span><span class="chip note">應補充</span> 敘述無誤但不完整或非原文用語</span>
+    <span><span class="chip fix">應修正</span> 與 doctrine 架構或用語不一致</span>
+  </div>
+</section>
+
+<!-- 2 逐項查證 -->
+<section>
+  <h2><span class="num">02</span>逐項查證明細</h2>
+  <p class="lead">依圖卡版面由上而下編號，逐段核對。</p>
+
+  <div class="audit">
+
+    <div class="item">
+      <div class="left"><span class="id">A-01</span><span class="chip ok">相符</span></div>
+      <div>
+        <p class="claim">「HSEEP 是美國國土安全體系所發展的演習與評核方法，用來建立、維持與驗證能力。」</p>
+        <p>doctrine 定義 HSEEP 為一套演習計畫的基本原則與共同方法，涵蓋專案管理、設計與開發、執行、評核及精進規劃。演習被定位為整備的重要環節，讓全社會有機會形塑計畫、評估與驗證能力並找出待改善事項。</p>
+        <p>其適用性具彈性、可調整規模、可調適，適用於預防、保護、減災、應變、復原五大任務領域。</p>
+        <p class="src">來源：HSEEP 2020, Introduction／Applicability and Scope</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="left"><span class="id">A-02</span><span class="chip ok">相符</span></div>
+      <div>
+        <p class="claim">「七種演習類型：討論型四類、操作型三類。」</p>
+        <p>doctrine 第 2 章明列討論型演習包含研討會、工作坊、桌上型演習與遊戲，用於熟悉或發展新的計畫、政策、程序與協定，聚焦策略與政策層次議題，由引導者或簡報者主持。操作型演習包含戰技操演、功能演習與全尺度演習，用於驗證計畫、政策、程序與協定，釐清角色職責並找出資源缺口，且涉及即時反應行動（如啟動通信、動員人力與資源）。</p>
+        <p class="src">來源：HSEEP 2020, §2 Discussion-Based / Operations-Based Exercises</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="left"><span class="id">A-03</span><span class="chip note">應補充</span></div>
+      <div>
+        <p class="claim">「掌握 HSEEP 的三大核心原則。」</p>
+        <p>doctrine 第 1 章列出的是<strong>六項</strong>基本原則，缺一不可（完整內容見第 4 節）。圖卡三項可對應其中：第 1 項「演習、計畫與政策必須連結」對應「以能力為基礎、以目標為導向」及整合整備計畫（IPP）的串接邏輯；第 2 項「循序漸進」對應「漸進式演習規劃取向」；第 3 項「找問題、改問題」對應評核與精進規劃的目的。</p>
+        <p>圖卡未呈現之四項為：高階領導指導、以風險為依據、全社會整合、共同方法論。其中「高階領導指導」在 doctrine 中被列為演習計畫成功的關鍵，於機關導入時不宜省略。</p>
+        <p class="src">來源：HSEEP 2020, §1 Fundamental Principles</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="left"><span class="id">A-04</span><span class="chip ok">相符</span></div>
+      <div>
+        <p class="claim">「桌上型演習應鼓勵參與者在無責備環境（no-fault environment）中自由探索問題。」</p>
+        <p>doctrine 桌上型演習的「執行特性」欄位明載：應鼓勵所有參與者投入討論，並提醒其係在無責備環境下作成決策。同欄位另載明桌上型演習需要具經驗的引導者、深度討論與解決問題的環境。</p>
+        <p class="src">來源：HSEEP 2020, Table 2.5 Tabletop Exercise</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="left"><span class="id">A-05</span><span class="chip ok">相符</span></div>
+      <div>
+        <p class="claim">「這並不代表一定要按照七種演習一個一個『闖關』。」</p>
+        <p>doctrine 於基本原則中明確載明：漸進式演習規劃取向係指運用多種演習、錨定同一組計畫優先事項與目標，並隨時間提高複雜度；此一取向<strong>不必然意味演習類型的線性推進</strong>。圖卡此段敘述與原文一致。</p>
+        <p class="src">來源：HSEEP 2020, §1 Progressive Exercise Planning Approach</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="left"><span class="id">A-06</span><span class="chip note">應補充</span></div>
+      <div>
+        <p class="claim">階梯圖示「戰技操演 → 功能演習 → 全尺度演習」。</p>
+        <p>此圖示僅呈現操作型三類，易被解讀為「唯有操作型演習才算能力進階」。doctrine 的漸進性描述為：多年期演習計畫使機關參與一系列複雜度漸增的演習，每場演習均建立在前一場之上；而全尺度演習的設計目的之一，正是實作與分析<strong>在討論型演習中發展、並於先前較小型演習中打磨過</strong>的計畫、政策與程序。</p>
+        <p>建議於階梯前端補入討論型演習，以完整呈現「先討論建立、再操作驗證」的路徑。</p>
+        <p class="src">來源：HSEEP 2020, §2 Progressive Approach；Table 2.9 Full-Scale Exercise</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="left"><span class="id">A-07</span><span class="chip fix">應修正</span></div>
+      <div>
+        <p class="claim">「HSEEP 的循環：討論 → 規劃 → 執行 → 評核 → 精進 → 再規劃（六步驟）。」</p>
+        <p>doctrine 定義之 HSEEP Cycle 為<strong>五階段</strong>：專案管理、演習設計與開發、演習執行、演習評核、精進規劃。另有一個層級更高的<strong>整合整備循環</strong>（Integrated Preparedness Cycle）：規劃、組織／裝備、訓練、演習、評核／精進，演習階段即由此銜接進入 HSEEP Cycle。</p>
+        <p>圖卡六步驟並非上述任一架構之原文，且將「討論」列為循環起點易與「討論型演習」混淆。建議改採五階段原架構，或明確註記為教學轉譯版本。</p>
+        <p class="src">來源：HSEEP 2020, §1 The HSEEP Cycle；§2 Integrated Preparedness Cycle</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="left"><span class="id">A-08</span><span class="chip fix">應修正</span></div>
+      <div>
+        <p class="claim">「事件後報告（AAR）與精進規劃（Improvement Planing）」。</p>
+        <p>英文誤植，正確拼寫為 Improvement Planning。另 doctrine 之標準用語為事後檢討報告／精進計畫（After-Action Report / Improvement Plan, AAR/IP）併稱：演習評核透過記錄優勢、待改善事項、能力表現與矯正措施於 AAR/IP 中，評估目標與能力之達成程度；再透過精進規劃落實矯正措施。矯正措施本身亦須符合 SMART 原則並追蹤至結案。</p>
+        <p class="src">來源：HSEEP 2020, Introduction；§5 AAR/IP；§6 SMART Corrective Actions</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="left"><span class="id">A-09</span><span class="chip ok">相符</span></div>
+      <div>
+        <p class="claim">「用了 HSEEP 的名詞，不代表就用了 HSEEP 的精神。」</p>
+        <p>此為觀點性表述，doctrine 無對應原句，但方向與 FEMA 官方立場一致：FEMA 已不使用「HSEEP compliant（符合 HSEEP）」「HSEEP certified（HSEEP 認證）」等說法，正式用語為「與 HSEEP 一致（HSEEP consistent）」；HSEEP 提供的是指導與工具，並不強制對齊特定格式或產出物。</p>
+        <p class="src">來源：HSEEP Frequently Asked Questions（2020）</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 3 七類型 -->
+<section>
+  <h2><span class="num">03</span>七種演習類型：doctrine 原文要點對照</h2>
+  <p class="lead">下表為 doctrine 第 2 章 Table 2.3–2.9 之重點整理（繁體中文摘譯，非逐字翻譯）。圖卡各欄位文字均可於本表找到對應依據。</p>
+
+  <h3>討論型演習（Discussion-Based Exercises）</h3>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th style="width:16%">類型</th><th style="width:30%">目的</th><th style="width:28%">執行特性</th><th>主要產出</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="k">研討會<span class="en">Seminar</span></td>
+        <td>建立共同理解框架；作為新訂或大幅修訂計畫、政策、程序的起點。</td>
+        <td>授課式，多為簡報、專家小組或個案討論；由引導者／簡報者帶領；參與者回饋與互動有限；時間限制少，適用大小規模團體。</td>
+        <td>紀錄討論內容、所提議題與行動事項之報告；AAR/IP。</td>
+      </tr>
+      <tr>
+        <td class="k">工作坊<span class="en">Workshop</span></td>
+        <td>發展政策、計畫或程序；聚焦特定議題並產出具體成果。</td>
+        <td>參與者互動高於授課；目標與產出明確；常運用分組討論探討議題不同面向；相關利害關係人廣泛出席。</td>
+        <td>緊急應變計畫、相互支援協定、標準作業程序、營運持續計畫、工作坊摘要報告；AAR/IP。</td>
+      </tr>
+      <tr>
+        <td class="k">桌上型演習<span class="en">Tabletop Exercise, TTX</span></td>
+        <td>就情境引發各項議題討論，促成概念性理解、找出優勢與待改善事項，或改變對計畫、政策、程序的認知。</td>
+        <td>設定模擬時間點的情境；參與者就引導者提出的問題群運用知識與技能，以團體方式討論並可作成結論供後續分析；需具經驗的引導者；<strong>無責備環境</strong>。</td>
+        <td>對現行計畫、政策、程序的修正建議；AAR/IP。</td>
+      </tr>
+      <tr>
+        <td class="k">遊戲<span class="en">Game</span></td>
+        <td>模擬作業運作以探索參與者決策與行動的後果；辨識關鍵決策點為評估成效的重要因素。</td>
+        <td>結構化的競賽或非競賽形式，依規則、資料與程序進行，通常兩隊以上；決策節奏可緩慢審慎或快速高壓；可納入「若則（what-if）」提問；<strong>不動用實際資源</strong>。</td>
+        <td>驗證計畫、政策、程序或評估資源需求；AAR/IP。</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>操作型演習（Operations-Based Exercises）</h3>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th style="width:16%">類型</th><th style="width:30%">目的</th><th style="width:28%">執行特性</th><th>主要產出</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="k">戰技操演<span class="en">Drill</span></td>
+        <td>驗證單一機關內的特定功能或能力；提供新裝備訓練、驗證程序或維持既有技能。</td>
+        <td>可獨立辦理或成系列辦理；須先具備明確的計畫、程序與協定；即時回饋、擬真環境、焦點狹窄、單項表現，並依既定標準衡量結果。</td>
+        <td>判斷計畫是否可依設計執行、是否需追加訓練、強化最佳實務；AAR/IP。</td>
+      </tr>
+      <tr>
+        <td class="k">功能演習<span class="en">Functional Exercise, FE</span></td>
+        <td>在擬真、即時的環境中驗證多項功能、次功能或相互依存的活動群；檢驗管理、指揮與管制層級的計畫、政策、程序與人員。</td>
+        <td>以情境事件推進，驅動管理層級活動；管制人員運用主要情境事件清單（Master Scenario Events List, MSEL）確保演習在預定範圍內；<strong>資源與人力調度通常為模擬</strong>；設模擬小組（SimCell）與管制、評核人員。</td>
+        <td>對災害應變中心（EOC）、指揮所、幕僚之管理評估；表現分析；強化協力關係；AAR/IP。</td>
+      </tr>
+      <tr>
+        <td class="k">全尺度演習<span class="en">Full-Scale Exercise, FSE</span></td>
+        <td>通常為最複雜、資源最密集的類型；聚焦實作與分析先前於討論型演習中發展、於較小型演習中打磨過的計畫、政策與程序。</td>
+        <td>涉及多機關、多組織、多轄區，並有<strong>資源之即時實際調度</strong>；常於事故指揮體系（ICS）統一指揮下運作；以 MSEL 驅動、模擬小組投入事件；場地大、活動同時進行，後勤與安全（含道具與特效使用）須嚴密監控。</td>
+        <td>驗證計畫、政策、程序；評估資源需求；AAR/IP。</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- 4 六原則 -->
+<section>
+  <h2><span class="num">04</span>doctrine 六項基本原則（圖卡三項之完整版）</h2>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th style="width:30%">原則</th><th>doctrine 要點</th><th style="width:16%">圖卡是否呈現</th></tr></thead>
+    <tbody>
+      <tr><td class="k">高階領導指導<span class="en">Senior Leader Guidance</span></td><td>及早且頻繁納入高階領導，是任何演習計畫成功的關鍵；由其提供整體方向與個別演習的具體意圖。</td><td><span class="chip fix">未呈現</span></td></tr>
+      <tr><td class="k">以風險為依據<span class="en">Informed by Risk</span></td><td>辨識並評估風險與其衝擊，據以確認優先事項、目標與待驗證能力。</td><td><span class="chip fix">未呈現</span></td></tr>
+      <tr><td class="k">以能力為基礎、以目標為導向<span class="en">Capability-Based, Objective-Driven</span></td><td>透過演習評估現行能力水準與目標值、辨識落差；聚焦於能力導向目標的表現評估。</td><td><span class="chip ok">原則 1</span></td></tr>
+      <tr><td class="k">漸進式演習規劃取向<span class="en">Progressive Exercise Planning Approach</span></td><td>運用多種演習，錨定同一組優先事項與目標，複雜度隨時間遞增；<strong>不必然為演習類型的線性推進</strong>。</td><td><span class="chip ok">原則 2</span></td></tr>
+      <tr><td class="k">全社會整合<span class="en">Whole Community Integration</span></td><td>鼓勵規劃者在專案管理、設計與開發、執行、評核及精進規劃全程適時納入全社會各方參與。</td><td><span class="chip fix">未呈現</span></td></tr>
+      <tr><td class="k">共同方法論<span class="en">Common Methodology</span></td><td>跨所有任務領域採用共同方法，使各機關對演習全程有共同理解，促進互通與協作。</td><td><span class="chip fix">未呈現</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout">
+    <strong>導入建議：</strong>圖卡若作為對外教育素材，三項濃縮原則可保留；若作為機關內部作業依據（如演習計畫審查表），應回歸六項原則，特別是「高階領導指導」與「以風險為依據」二項，直接對應我國演習計畫的核定層級與風險評估作業。
+  </div>
+</section>
+
+<!-- 5 循環 -->
+<section>
+  <h2><span class="num">05</span>循環架構對照</h2>
+  <div class="cyclegrid">
+    <div class="cyclecard">
+      <h4>HSEEP Cycle（doctrine 原架構）</h4>
+      <span class="tag">FIVE PHASES</span>
+      <ol class="steps">
+        <li><strong>專案管理</strong>　整合資源與各方，確認並達成計畫優先事項，由高階領導提供長期監督。</li>
+        <li><strong>演習設計與開發</strong>　依領導意圖與優先事項形塑單場或系列演習，納入風險評估、計畫政策程序、補助要求及既往 AAR/IP。</li>
+        <li><strong>演習執行</strong>　含演習前準備、演習進行管理與立即性收尾；操作型演習涵蓋自演習開始（StartEx）至演習結束（EndEx）之全部作業。</li>
+        <li><strong>演習評核</strong>　依演習目標評估表現，記錄優勢與待改善事項；自訂定目標階段即應納入考量。</li>
+        <li><strong>精進規劃</strong>　落實矯正措施，強化機關在規劃、組織／裝備、訓練、演習各面向的能力。</li>
+      </ol>
+    </div>
+    <div class="cyclecard">
+      <h4>整合整備循環（Integrated Preparedness Cycle）</h4>
+      <span class="tag">HIGHER-LEVEL CYCLE</span>
+      <ol class="steps">
+        <li><strong>規劃</strong>　Planning</li>
+        <li><strong>組織／裝備</strong>　Organizing / Equipping</li>
+        <li><strong>訓練</strong>　Training</li>
+        <li><strong>演習</strong>　Exercising　<span class="en" style="display:inline">← 由此銜接進入 HSEEP Cycle</span></li>
+        <li><strong>評核／精進</strong>　Evaluating / Improving</li>
+      </ol>
+      <p style="font-size:14px;margin-top:14px;color:var(--ink-2)">此循環持續檢視變動中的威脅、危害與風險，透過多年期整合整備計畫（Integrated Preparedness Plan, IPP）與整合整備規劃工作坊（Integrated Preparedness Planning Workshop, IPPW）產生演習計畫優先事項。</p>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>與圖卡差異：</strong>圖卡的六步驟（討論→規劃→執行→評核→精進→再規劃）在 doctrine 中並無對應條文，較接近我國基礎課程「演習設計、執行、評核及精進」的教學表述。建議標示為「教學轉譯版」，避免與 doctrine 原架構混用。
+  </div>
+</section>
+
+<!-- 6 圖卡未涵蓋 -->
+<section>
+  <h2><span class="num">06</span>圖卡未涵蓋但屬制度核心的元素</h2>
+  <p class="lead">下列元素為 doctrine 明列之必要作業，圖卡因版面限制未及呈現，於機關實際導入時不可省略。</p>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th style="width:26%">元素</th><th>doctrine 要點</th></tr></thead>
+    <tbody>
+      <tr><td class="k">整合整備規劃工作坊<span class="en">IPPW</span></td><td>依高階領導指導確認整備優先事項，並訂定多年期整備活動時程；確保跨域協調、避免重複投入、確保資源與經費有效運用、避免關鍵機關與人員過度負荷。</td></tr>
+      <tr><td class="k">多年期整合整備計畫<span class="en">IPP</span></td><td>整合規劃、組織／裝備、訓練、演習、評核／精進各面向，使每項活動成為整體整備優先事項的支撐元件。</td></tr>
+      <tr><td class="k">威脅危害辨識與風險評估<span class="en">THIRA</span></td><td>情境所依據的威脅、危害與風險，源自機關的 THIRA 或其他風險評估，用以辨識足以考驗整備能力的潛在事件。</td></tr>
+      <tr><td class="k">SMART 演習目標</td><td>目標須具體、可衡量、可達成、相關且有時限；演習規劃團隊應選定合理數量的目標，以利情境設計、執行與評核。</td></tr>
+      <tr><td class="k">五種籌備會議</td><td>概念與目標會議（C&amp;O）、初期籌備會議（IPM）、期中籌備會議（MPM）、主要情境事件清單會議（MSEL Meeting）、最終籌備會議（FPM）。FPM 為籌備程序的正式終點，其後不應再有設計、範圍或文件的重大變更。</td></tr>
+      <tr><td class="k">文件體系</td><td>討論型：情境手冊（SitMan）、引導者指南、演習評核指引（EEG）、參與者回饋表。操作型：演習計畫（ExPlan）、管制／評核人員手冊（C/E Handbook）、MSEL、地面實況（Ground Truth）、參演程度協議、評核計畫（EvalPlan）。</td></tr>
+      <tr><td class="k">評核與資料分析</td><td>評核團隊、觀察與資料蒐集、資料綜整、事件重建、趨勢分析、根本原因分析，最終產出 AAR/IP 並召開事後檢討會議（AAM）。</td></tr>
+      <tr><td class="k">收尾作業</td><td>演習結束後即進行參演人員熱洗（Hotwash）與檢討（Debrief）。</td></tr>
+      <tr><td class="k">安全與保安</td><td>涉及具危險性之實地演練或機敏資料時，管制團隊應指定安全與／或保安管制官，並安排不參演的實地醫療與緊急救護支援。</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- 7 我國 -->
+<section>
+  <h2><span class="num">07</span>我國導入現況（公開資料查證）</h2>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th style="width:22%">時間</th><th style="width:24%">推動單位</th><th>內容</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="k">114 年 12 月 1 日</td>
+        <td>內政部消防署訓練中心</td>
+        <td>舉辦「災害防救演習規劃與評估（HSEEP）基礎課程」開訓典禮，共 300 名學員分 5 梯次參訓，學員來自各縣市政府局（處）、協力團隊、衛生福利部、內政部民政司、役政司、替代役訓練及管理中心、中央警察大學及臺灣警察專科學校。課程依循美國國土安全部 HSEEP 訓練模式，內容涵蓋演習設計、執行、評核及精進之完整流程。</td>
+      </tr>
+      <tr>
+        <td class="k">115 年 7 月 6 日</td>
+        <td>新北市政府（與臺灣大學氣候天氣災害研究中心合作）</td>
+        <td>於災害應變中心辦理「115 年颱洪教育訓練與防災專題講習」，市府 30 個任務編組局處及 29 個區公所參與，導入 HSEEP 演習規劃與評估機制及桌上型演習（TTX）規劃，強調演習不應僅依既定腳本執行。</td>
+      </tr>
+      <tr>
+        <td class="k">115 年 8 月 10 日至 14 日</td>
+        <td>臺中市政府</td>
+        <td>辦理 5 日「115 年度災害防救演習規劃與評估（HSEEP）基礎課程培訓」，內容涵蓋專案管理（演習優先次序與 THIRA 風險評估流程）、設計與開發、執行與管制架構、評核（觀察與資料蒐集、事後報告）及精進規劃，末日安排演習實作。</td>
+      </tr>
+      <tr>
+        <td class="k">行政院中央災害防救會報</td>
+        <td>教學影片</td>
+        <td>參考 HSEEP 機制製作 4 支系列課程影片：基礎概論及演習規劃、演習基本元素、演習推進與執行、演習評估與精進。</td>
+      </tr>
+      <tr>
+        <td class="k">111 年 11 月</td>
+        <td>國家災害防救科技中心（NCDR）</td>
+        <td>災害防救電子報第 208 期刊載「縣市層級災害防救演習計畫撰寫指引」，以 HSEEP 對演習之定義為參考，檢視我國災防兵推演習現況。</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout">
+    <strong>觀察：</strong>我國各級課程普遍採「設計—執行—評核—精進」四段式教學表述，與圖卡六步驟循環的來源一致；此為本土化轉譯結果，非 doctrine 原文之五階段架構。撰擬正式文件引述時，宜區分「HSEEP doctrine 原架構」與「我國基礎課程教學架構」。
+  </div>
+</section>
+
+<!-- 8 修正清單 -->
+<section>
+  <h2><span class="num">08</span>圖卡建議修正清單</h2>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th style="width:8%">序</th><th style="width:34%">現行圖卡文字</th><th>建議修正</th></tr></thead>
+    <tbody>
+      <tr><td class="k">1</td><td>掌握 HSEEP 的三大核心原則</td><td>改為「HSEEP 六項基本原則（本圖擇要說明其中三項）」，或於標題加註「教學摘要」。</td></tr>
+      <tr><td class="k">2</td><td>HSEEP 的循環：討論→規劃→執行→評核→精進→再規劃</td><td>改為 doctrine 五階段：專案管理→設計與開發→執行→評核→精進規劃；如保留六步驟，須加註「我國基礎課程教學版」。</td></tr>
+      <tr><td class="k">3</td><td>Improvement Planing</td><td>更正為 Improvement Planning；並將「事件後報告（AAR）」調整為「事後檢討報告／精進計畫（AAR/IP）」。</td></tr>
+      <tr><td class="k">4</td><td>階梯圖僅列 Drill → FE → FSE</td><td>於階梯前端補入討論型演習，或加註「複雜度示意，非必經順序」。</td></tr>
+      <tr><td class="k">5</td><td>（未標示版本）</td><td>頁尾加註來源版本：FEMA, HSEEP Doctrine, January 2020（取代 2013 年版）。</td></tr>
+      <tr><td class="k">6</td><td>戰技操演（Drill）</td><td>我國各文件譯名不一（另有「操作演練」等）；建議於同一系列教材中統一譯名，並保留英文原文以利對照。</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- 9 來源 -->
+<section>
+  <h2><span class="num">09</span>查證來源</h2>
+  <ol class="sources">
+    <li>FEMA, <em>Homeland Security Exercise and Evaluation Program (HSEEP)</em>, January 2020（doctrine 全文 PDF，本報告主要基準）。<br><a href="https://www.fema.gov/sites/default/files/2020-04/Homeland-Security-Exercise-and-Evaluation-Program-Doctrine-2020-Revision-2-2-25.pdf">https://www.fema.gov/sites/default/files/2020-04/Homeland-Security-Exercise-and-Evaluation-Program-Doctrine-2020-Revision-2-2-25.pdf</a></li>
+    <li>FEMA, <em>Homeland Security Exercise and Evaluation Program</em> 官方頁面。<br><a href="https://www.fema.gov/emergency-managers/national-preparedness/exercises/hseep">https://www.fema.gov/emergency-managers/national-preparedness/exercises/hseep</a></li>
+    <li>FEMA Preparedness Toolkit, <em>HSEEP Policy and Guidance</em>（doctrine 最後更新為 2020 年版；並載有 HSEEP 與國家持續精進指引（NCIG）之關聯問答）。<br><a href="https://preptoolkit.fema.gov/web/hseep-resources/policy-and-guidance">https://preptoolkit.fema.gov/web/hseep-resources/policy-and-guidance</a></li>
+    <li>FEMA, <em>HSEEP Frequently Asked Questions</em>, 2020（說明不使用「HSEEP compliant／certified」用語）。</li>
+    <li>FEMA EMI／NDEMU, <em>National Standard Exercise Curriculum – HSEEP</em>（E/L/K0146 課程）。<br><a href="https://training.fema.gov/programs/nsec/hseep/">https://training.fema.gov/programs/nsec/hseep/</a></li>
+    <li>聯合新聞網，〈消防署 HSEEP 災防基礎課程 強化跨域應變量能〉，114 年 12 月 1 日。<br><a href="https://udn.com/news/story/7314/9175171">https://udn.com/news/story/7314/9175171</a></li>
+    <li>蕃新聞，〈消防署辦理本土化 HSEEP 基礎課程強化跨域應變量能〉，114 年 12 月 1 日。</li>
+    <li>壹蘋新聞網，〈深化功能分組與 HSEEP 演習設計 新北防災講習提升跨機關應變韌性〉，115 年 7 月 6 日。</li>
+    <li>蕃新聞，〈強化全社會防災韌性 台中啟動 115 年度 HSEEP 基礎培訓〉，115 年 8 月。</li>
+    <li>行政院中央災害防救會報，〈災害防救演習規劃與評估(1)~(4)系列教學影片〉。<br><a href="https://cdprc.ey.gov.tw/Page/B370E7DF675168E1/d16061c9-4ecc-4e7a-b999-cd05c30d00a1">https://cdprc.ey.gov.tw/Page/B370E7DF675168E1/d16061c9-4ecc-4e7a-b999-cd05c30d00a1</a></li>
+    <li>國家災害防救科技中心，《災害防救電子報》第 208 期，〈縣市層級災害防救演習計畫撰寫指引〉，111 年 11 月。<br><a href="https://www.ncdr.nat.gov.tw/UploadFile/Newsletter/d8d7020acd644239af7dda65786e1e22.pdf">https://www.ncdr.nat.gov.tw/UploadFile/Newsletter/d8d7020acd644239af7dda65786e1e22.pdf</a></li>
+  </ol>
+</section>
+
+<footer class="doc">
+  <p>本報告所載 doctrine 內容均為繁體中文摘譯，非逐字翻譯，正式引用請以 FEMA 英文原文為準。所有敘述均可回溯至上列來源，未加入來源以外之推論或補充事實。</p>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>管理常用的12種高效工作方法</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B1A2A;
+  --navy:#12314F;
+  --steel:#4A6580;
+  --paper:#EDF0F3;
+  --card:#FFFFFF;
+  --signal:#F4C430;
+  --line:#D3DBE3;
+  --serif:"Noto Serif TC",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"JetBrains Mono","SFMono-Regular",Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-weight:400;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* ---------- 索引牆 ---------- */
+.hero{
+  background:var(--navy);
+  color:#fff;
+  padding:64px 0 0;
+  position:relative;
+  overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;inset:auto 0 0 0;height:6px;
+  background:repeating-linear-gradient(90deg,var(--signal) 0 40px,var(--navy) 40px 52px);
+}
+.eyebrow{
+  font-family:var(--mono);font-size:12px;letter-spacing:.28em;
+  color:var(--signal);text-transform:uppercase;
+}
+.hero h1{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(32px,5.4vw,58px);line-height:1.15;
+  margin:14px 0 10px;letter-spacing:.02em;
+}
+.hero p.lede{
+  color:#B9CBDC;max-width:46em;font-weight:300;font-size:15px;
+}
+.index-wall{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:1px;background:rgba(255,255,255,.14);
+  margin:40px 0 0;border-top:1px solid rgba(255,255,255,.14);
+}
+.index-wall a{
+  background:var(--navy);color:#fff;text-decoration:none;
+  padding:16px 14px 14px;display:block;transition:background .18s ease;
+}
+.index-wall a:hover,.index-wall a:focus-visible{background:#1B4570;outline:none}
+.index-wall .code{
+  font-family:var(--mono);font-weight:700;font-size:19px;color:var(--signal);
+  display:block;line-height:1.2;
+}
+.index-wall .zh{font-size:13px;color:#C7D6E4;font-weight:300}
+
+/* ---------- 篩選列 ---------- */
+.filters{
+  position:sticky;top:0;z-index:20;
+  background:rgba(237,240,243,.94);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.filters .wrap{display:flex;gap:8px;flex-wrap:wrap;padding-top:14px;padding-bottom:14px}
+.filters button{
+  font-family:var(--mono);font-size:12px;letter-spacing:.06em;
+  background:transparent;border:1px solid var(--line);color:var(--steel);
+  padding:7px 14px;border-radius:2px;cursor:pointer;transition:.18s ease;
+}
+.filters button:hover{border-color:var(--navy);color:var(--navy)}
+.filters button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.filters button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+
+/* ---------- 家族分區 ---------- */
+.family{padding:56px 0 8px}
+.family-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.family-head h2{
+  font-family:var(--serif);font-weight:700;font-size:24px;letter-spacing:.03em;
+}
+.family-head .count{font-family:var(--mono);font-size:12px;color:var(--steel)}
+.family-note{color:var(--steel);font-size:14px;font-weight:300;max-width:52em;
+  border-left:3px solid var(--signal);padding-left:14px;margin-bottom:26px}
+
+/* ---------- 方法卡 ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:20px}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:3px;
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(11,26,42,.10)}
+.card-head{
+  background:var(--navy);color:#fff;padding:14px 18px;
+  display:flex;align-items:center;gap:12px;
+}
+.card-head .code{
+  font-family:var(--mono);font-weight:700;font-size:12px;
+  background:var(--signal);color:var(--ink);padding:3px 8px;border-radius:2px;
+  white-space:nowrap;
+}
+.card-head h3{font-family:var(--serif);font-weight:700;font-size:19px;letter-spacing:.03em;line-height:1.3}
+.card-body{padding:18px;display:flex;flex-direction:column;gap:16px;flex:1}
+.en{font-family:var(--mono);font-size:11px;color:var(--steel);letter-spacing:.04em;
+  display:block;margin-top:-8px}
+.def{font-size:14.5px}
+.elements{list-style:none;display:grid;gap:0;border-top:1px solid var(--line)}
+.elements li{
+  display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:baseline;
+  padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;
+}
+.elements .n{font-family:var(--mono);font-size:11px;color:var(--steel)}
+.elements .term{font-weight:500}
+.elements .gloss{font-family:var(--mono);font-size:11px;color:var(--steel);margin-left:6px}
+.elements .desc{display:block;font-size:12.5px;color:var(--steel);font-weight:300;line-height:1.6}
+.apply{
+  margin-top:auto;background:#F5F8FA;border-left:3px solid var(--signal);
+  padding:12px 14px;font-size:13px;color:var(--navy);
+}
+.apply b{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  display:block;color:var(--steel);margin-bottom:4px;font-weight:700}
+
+footer{
+  margin-top:64px;background:var(--ink);color:#8FA6BC;
+  font-size:12.5px;font-weight:300;padding:28px 0;
+}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer span{font-family:var(--mono);font-size:11px}
+
+@media (max-width:640px){
+  .hero{padding-top:44px}
+  .index-wall{grid-template-columns:repeat(2,1fr)}
+  .family{padding-top:40px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  html{scroll-behavior:auto}
+}
+@media print{
+  body{background:#fff}
+  .filters,.index-wall{display:none}
+  .hero{padding:0 0 12px;background:#fff;color:#000}
+  .hero h1{color:#000}.hero p.lede{color:#333}.eyebrow{color:#666}
+  .card{break-inside:avoid;box-shadow:none}
+  .card-head{background:#fff;color:#000;border-bottom:2px solid #000}
+  footer{background:#fff;color:#000;border-top:1px solid #000}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Management Toolkit · 12 Methods</p>
+    <h1>管理常用的<br>12種高效工作方法</h1>
+    <p class="lede">十二套通用管理工具的完整拆解：定義、構成要素與應用時機。依「溝通與識人／目標與策略／現場與流程／問題解決」四類編排，點選代號直接跳至該卡。</p>
+  </div>
+  <nav class="index-wall" aria-label="方法索引">
+    <a href="#m01"><span class="code">7C</span><span class="zh">溝通的7C法則</span></a>
+    <a href="#m02"><span class="code">4R</span><span class="zh">管理的4R法則</span></a>
+    <a href="#m03"><span class="code">DISC</span><span class="zh">DISC性格模型</span></a>
+    <a href="#m04"><span class="code">SWOT</span><span class="zh">SWOT分析</span></a>
+    <a href="#m05"><span class="code">SMART</span><span class="zh">SMART法則</span></a>
+    <a href="#m06"><span class="code">2×2</span><span class="zh">時間四象限</span></a>
+    <a href="#m07"><span class="code">5S</span><span class="zh">5S管理</span></a>
+    <a href="#m08"><span class="code">4M1E</span><span class="zh">4M1E要素</span></a>
+    <a href="#m09"><span class="code">PDCA</span><span class="zh">PDCA循環</span></a>
+    <a href="#m10"><span class="code">ISHI</span><span class="zh">魚骨圖分析法</span></a>
+    <a href="#m11"><span class="code">5W1H</span><span class="zh">5W1H六何法</span></a>
+    <a href="#m12"><span class="code">8D</span><span class="zh">8D問題解決步驟</span></a>
+  </nav>
+</header>
+
+<div class="filters">
+  <div class="wrap" role="group" aria-label="依類別篩選">
+    <button data-filter="all" aria-pressed="true">全部 12</button>
+    <button data-filter="people" aria-pressed="false">溝通與識人 3</button>
+    <button data-filter="goal" aria-pressed="false">目標與策略 3</button>
+    <button data-filter="ops" aria-pressed="false">現場與流程 3</button>
+    <button data-filter="solve" aria-pressed="false">問題解決 3</button>
+  </div>
+</div>
+
+<main class="wrap">
+
+<!-- ============ 家族一 ============ -->
+<section class="family" data-family="people">
+  <div class="family-head"><h2>一、溝通與識人</h2><span class="count">03 methods</span></div>
+  <p class="family-note">處理「人」的變數：把話說清楚、把人帶對、把對象看準。</p>
+  <div class="grid">
+
+    <article class="card" id="m01" data-cat="people">
+      <div class="card-head"><span class="code">7C</span><h3>溝通的7C法則</h3></div>
+      <div class="card-body">
+        <span class="en">Seven Cs of Communication</span>
+        <p class="def">有效溝通的7項基本要求，作為訊息發出前的自我檢核清單，確保對方「收得到、聽得懂、願意接受」。</p>
+        <ul class="elements">
+          <li><span class="n">01</span><span><span class="term">正確</span><span class="gloss">Correct</span><span class="desc">事實、數據、用語、對象職稱皆無誤。</span></span></li>
+          <li><span class="n">02</span><span><span class="term">完整</span><span class="gloss">Complete</span><span class="desc">對方採取行動所需資訊一次給足，不須追問。</span></span></li>
+          <li><span class="n">03</span><span><span class="term">言之有物</span><span class="gloss">Concrete</span><span class="desc">具體、可查證，避免空泛形容。</span></span></li>
+          <li><span class="n">04</span><span><span class="term">清晰</span><span class="gloss">Clear</span><span class="desc">單一訊息單一重點，結論先行。</span></span></li>
+          <li><span class="n">05</span><span><span class="term">禮貌</span><span class="gloss">Courteous</span><span class="desc">語氣尊重，對事不對人。</span></span></li>
+          <li><span class="n">06</span><span><span class="term">簡明</span><span class="gloss">Concise</span><span class="desc">刪去贅詞，不重複、不繞路。</span></span></li>
+          <li><span class="n">07</span><span><span class="term">體貼</span><span class="gloss">Considerate</span><span class="desc">站在收訊者立場，考量其立場與資訊落差。</span></span></li>
+        </ul>
+        <p class="apply"><b>應用時機</b>公文、跨機關協調函件、對外新聞稿發出前的最後檢核。</p>
+      </div>
+    </article>
+
+    <article class="card" id="m02" data-cat="people">
+      <div class="card-head"><span class="code">4R</span><h3>管理的4R法則</h3></div>
+      <div class="card-body">
+        <span class="en">Four Rs of People Management</span>
+        <p class="def">對下屬的管理法則，涵蓋「交辦—相處—激勵—評價」的完整循環。</p>
+        <ul class="elements">
+          <li><span class="n">01</span><span><span class="term">明確提出要求</span><span class="gloss">Requirement</span><span class="desc">工作標準、交付期限、驗收條件講明白。</span></span></li>
+          <li><span class="n">02</span><span><span class="term">尊重下屬</span><span class="gloss">Respect</span><span class="desc">保留專業判斷空間，不越級指揮、不當眾責難。</span></span></li>
+          <li><span class="n">03</span><span><span class="term">表揚亮點</span><span class="gloss">Recognition</span><span class="desc">具體指出做對的地方，即時且公開。</span></span></li>
+          <li><span class="n">04</span><span><span class="term">全面評估下屬</span><span class="gloss">Review</span><span class="desc">依整體表現而非單一事件定評，並回饋改善方向。</span></span></li>
+        </ul>
+        <p class="apply"><b>應用時機</b>年度考核、專案分工、新進人員帶領。另有一套執行力4R（成果、責任、檢查、獎懲），使用時宜先界定所指版本。</p>
+      </div>
+    </article>
+
+    <article class="card" id="m03" data-cat="people">
+      <div class="card-head"><span class="code">DISC</span><h3>DISC性格模型</h3></div>
+      <div class="card-body">
+        <span class="en">Dominance · Influence · Steadiness · Conscientiousness</span>
+        <p class="def">將行為傾向分為4種典型性格類型，用以調整對不同對象的溝通與任務配置方式。</p>
+        <ul class="elements">
+          <li><span class="n">01</span><span><span class="term">支配型</span><span class="gloss">D / Dominance</span><span class="desc">重結果、決斷快。溝通宜直接給結論與選項。</span></span></li>
+          <li><span class="n">02</span><span><span class="term">影響型</span><span class="gloss">I / Influence</span><span class="desc">重關係、善表達。適合對外協調與簡報。</span></span></li>
+          <li><span class="n">03</span><span><span class="term">穩健型</span><span class="gloss">S / Steadiness</span><span class="desc">重合作、抗拒突變。宜預告改變並給予適應期。</span></span></li>
+          <li><span class="n">04</span><span><span class="term">謹慎型</span><span class="gloss">C / Conscientiousness</span><span class="desc">重規範與細節。溝通須備齊數據與依據。</span></span></li>
+        </ul>
+        <p class="apply"><b>應用時機</b>團隊角色分派、談判與會議前的對象分析。屬行為傾向描述，非能力評斷。</p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============ 家族二 ============ -->
+<section class="family" data-family="goal">
+  <div class="family-head"><h2>二、目標與策略</h2><span class="count">03 methods</span></div>
+  <p class="family-note">決定「做什麼、做到什麼程度、先做哪一件」。</p>
+  <div class="grid">
+
+    <article class="card" id="m04" data-cat="goal">
+      <div class="card-head"><span class="code">SWOT</span><h3>SWOT分析</h3></div>
+      <div class="card-body">
+        <span class="en">Strengths · Weaknesses · Opportunities · Threats</span>
+        <p class="def">策略分析的4個維度，以「內部／外部」與「有利／不利」兩軸交叉，盤點處境後推導策略。</p>
+        <ul class="elements">
+          <li><span class="n">01</span><span><span class="term">優勢</span><span class="gloss">S / Strengths</span><span class="desc">內部有利條件：資源、專業、既有制度。</span></span></li>
+          <li><span class="n">02</span><span><span class="term">劣勢</span><span class="gloss">W / Weaknesses</span><span class="desc">內部不利條件：人力、預算、技術缺口。</span></span></li>
+          <li><span class="n">03</span><span><span class="term">機會</span><span class="gloss">O / Opportunities</span><span class="desc">外部有利趨勢：政策風向、法規鬆綁、新技術。</span></span></li>
+          <li><span class="n">04</span><span><span class="term">威脅</span><span class="gloss">T / Threats</span><span class="desc">外部不利變數：競爭、輿論、環境風險。</span></span></li>
+        </ul>
+        <p class="apply"><b>應用時機</b>計畫書現況分析章節。進階可作SO／ST／WO／WT交叉矩陣，直接產出策略選項。</p>
+      </div>
+    </article>
+
+    <article class="card" id="m05" data-cat="goal">
+      <div class="card-head"><span class="code">SMART</span><h3>SMART法則</h3></div>
+      <div class="card-body">
+        <span class="en">Specific · Measurable · Achievable · Relevant · Time-bound</span>
+        <p class="def">制定目標的5項標準，把模糊期待轉換成可追蹤、可驗收的目標敘述。</p>
+        <ul class="elements">
+          <li><span class="n">01</span><span><span class="term">具體的</span><span class="gloss">Specific</span><span class="desc">明確指出對象、範圍與行動。</span></span></li>
+          <li><span class="n">02</span><span><span class="term">可衡量的</span><span class="gloss">Measurable</span><span class="desc">有數量、比率或完成件數等指標。</span></span></li>
+          <li><span class="n">03</span><span><span class="term">可達成的</span><span class="gloss">Achievable</span><span class="desc">在現有資源與權限下具可行性。</span></span></li>
+          <li><span class="n">04</span><span><span class="term">相關的</span><span class="gloss">Relevant</span><span class="desc">與上位政策目標具明確連結。</span></span></li>
+          <li><span class="n">05</span><span><span class="term">有時限的</span><span class="gloss">Time-bound</span><span class="desc">訂有完成期限與期中查核點。</span></span></li>
+        </ul>
+        <p class="apply"><b>應用時機</b>年度計畫績效指標訂定、專案里程碑設定、交辦事項書面化。</p>
+      </div>
+    </article>
+
+    <article class="card" id="m06" data-cat="goal">
+      <div class="card-head"><span class="code">2×2</span><h3>時間四象限</h3></div>
+      <div class="card-body">
+        <span class="en">Eisenhower Matrix</span>
+        <p class="def">重要的時間管理法則，核心是「要事第一」：依重要性與緊急度分為4個象限，決定處置方式。</p>
+        <ul class="elements">
+          <li><span class="n">01</span><span><span class="term">重要且緊急</span><span class="gloss">Q1 / Do</span><span class="desc">危機與到期案件，立即親自處理。</span></span></li>
+          <li><span class="n">02</span><span><span class="term">重要不緊急</span><span class="gloss">Q2 / Plan</span><span class="desc">規劃、制度建置、能力培養，應主動配置時間，為真正的主戰場。</span></span></li>
+          <li><span class="n">03</span><span><span class="term">緊急不重要</span><span class="gloss">Q3 / Delegate</span><span class="desc">臨時插件與例行雜務，授權或簡化流程。</span></span></li>
+          <li><span class="n">04</span><span><span class="term">不重要不緊急</span><span class="gloss">Q4 / Delete</span><span class="desc">無產出的消耗，果斷刪除。</span></span></li>
+        </ul>
+        <p class="apply"><b>應用時機</b>每日待辦排序、業務量超載時的取捨依據。長期績效多來自第二象限的投入比例。</p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============ 家族三 ============ -->
+<section class="family" data-family="ops">
+  <div class="family-head"><h2>三、現場與流程</h2><span class="count">03 methods</span></div>
+  <p class="family-note">維持日常運作品質：管好環境、管好要素、管好推進節奏。</p>
+  <div class="grid">
+
+    <article class="card" id="m07" data-cat="ops">
+      <div class="card-head"><span class="code">5S</span><h3>5S管理</h3></div>
+      <div class="card-body">
+        <span class="en">Seiri · Seiton · Seiso · Seiketsu · Shitsuke</span>
+        <p class="def">源自生產型企業的現場管理方法，以5個步驟建立整潔、有序且可持續的作業環境。</p>
+        <ul class="elements">
+          <li><span class="n">01</span><span><span class="term">整理</span><span class="gloss">Seiri / Sort</span><span class="desc">區分要與不要，清除不用之物。</span></span></li>
+          <li><span class="n">02</span><span><span class="term">整頓</span><span class="gloss">Seiton / Set in order</span><span class="desc">定位、定量、定標示，取用即得。</span></span></li>
+          <li><span class="n">03</span><span><span class="term">清掃</span><span class="gloss">Seiso / Shine</span><span class="desc">清除髒污，同時發現異常與耗損。</span></span></li>
+          <li><span class="n">04</span><span><span class="term">清潔</span><span class="gloss">Seiketsu / Standardize</span><span class="desc">將前3S標準化，形成書面規範。</span></span></li>
+          <li><span class="n">05</span><span><span class="term">素養</span><span class="gloss">Shitsuke / Sustain</span><span class="desc">養成依規範行事的習慣，落實自主管理。</span></span></li>
+        </ul>
+        <p class="apply"><b>應用時機</b>倉儲與器材室管理、車輛裝備定位、檔案與資料夾架構整理。</p>
+      </div>
+    </article>
+
+    <article class="card" id="m08" data-cat="ops">
+      <div class="card-head"><span class="code">4M1E</span><h3>4M1E要素</h3></div>
+      <div class="card-body">
+        <span class="en">Man · Machine · Material · Method · Environment</span>
+        <p class="def">現場管理的五大要素，用於盤點影響作業品質的所有變因，亦常作為異常排查的第一層分類。</p>
+        <ul class="elements">
+          <li><span class="n">01</span><span><span class="term">人</span><span class="gloss">Man</span><span class="desc">人員資格、訓練、編組與熟練度。</span></span></li>
+          <li><span class="n">02</span><span><span class="term">機</span><span class="gloss">Machine</span><span class="desc">設備、器材、系統之堪用與校驗狀態。</span></span></li>
+          <li><span class="n">03</span><span><span class="term">物</span><span class="gloss">Material</span><span class="desc">耗材、藥品、物料之規格與供應。</span></span></li>
+          <li><span class="n">04</span><span><span class="term">法</span><span class="gloss">Method</span><span class="desc">作業程序、標準作業流程與法規依據。</span></span></li>
+          <li><span class="n">05</span><span><span class="term">環</span><span class="gloss">Environment</span><span class="desc">場地、氣候、時間與外部條件。</span></span></li>
+        </ul>
+        <p class="apply"><b>應用時機</b>作業品質稽核、事故原因初步分類，可直接接續魚骨圖作為主骨分類。</p>
+      </div>
+    </article>
+
+    <article class="card" id="m09" data-cat="ops">
+      <div class="card-head"><span class="code">PDCA</span><h3>PDCA循環</h3></div>
+      <div class="card-body">
+        <span class="en">Plan · Do · Check · Act（Deming Cycle）</span>
+        <p class="def">每一項工作的推進都應包含4個環節，且循環往復、逐輪提升，是持續改善的基本骨架。</p>
+        <ul class="elements">
+          <li><span class="n">01</span><span><span class="term">計畫</span><span class="gloss">Plan</span><span class="desc">界定問題、設定目標與作法。</span></span></li>
+          <li><span class="n">02</span><span><span class="term">執行</span><span class="gloss">Do</span><span class="desc">依計畫實施，並記錄過程數據。</span></span></li>
+          <li><span class="n">03</span><span><span class="term">查核</span><span class="gloss">Check</span><span class="desc">比對結果與目標差異，分析落差原因。</span></span></li>
+          <li><span class="n">04</span><span><span class="term">行動</span><span class="gloss">Act</span><span class="desc">有效者標準化，無效者修正後帶入下一循環。</span></span></li>
+        </ul>
+        <p class="apply"><b>應用時機</b>年度計畫管考、訓練課程改版、制度試辦後的修正機制。</p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============ 家族四 ============ -->
+<section class="family" data-family="solve">
+  <div class="family-head"><h2>四、問題解決</h2><span class="count">03 methods</span></div>
+  <p class="family-note">從表象追到真因，再把處置做成不再復發的制度。</p>
+  <div class="grid">
+
+    <article class="card" id="m10" data-cat="solve">
+      <div class="card-head"><span class="code">ISHI</span><h3>魚骨圖分析法</h3></div>
+      <div class="card-body">
+        <span class="en">Ishikawa / Cause-and-Effect Diagram</span>
+        <p class="def">分析並找到問題根本原因的方法：將問題的可能原因分為幾大類，在大類之下逐層查找細分原因，從而鎖定真正的問題原因。</p>
+        <ul class="elements">
+          <li><span class="n">01</span><span><span class="term">界定問題</span><span class="desc">將問題寫在魚頭，需具體且可觀察。</span></span></li>
+          <li><span class="n">02</span><span><span class="term">設定主骨分類</span><span class="desc">常用4M1E或6M（人、機、料、法、環、量測）。</span></span></li>
+          <li><span class="n">03</span><span><span class="term">展開細分原因</span><span class="desc">每一大類下追問「為什麼」，可搭配5Why逐層下探。</span></span></li>
+          <li><span class="n">04</span><span><span class="term">鎖定真因</span><span class="desc">以數據驗證候選原因，避免停在假設。</span></span></li>
+          <li><span class="n">05</span><span><span class="term">擬定對策</span><span class="desc">針對已驗證真因設計改善措施。</span></span></li>
+        </ul>
+        <p class="apply"><b>應用時機</b>案件檢討會、品質異常分析、稽核缺失原因歸納。</p>
+      </div>
+    </article>
+
+    <article class="card" id="m11" data-cat="solve">
+      <div class="card-head"><span class="code">5W1H</span><h3>5W1H六何法</h3></div>
+      <div class="card-body">
+        <span class="en">What · Where · When · Who · Why · How</span>
+        <p class="def">將事情講清楚的6個維度，又稱六何法；既是敘述框架，也是資訊完整性的檢核工具。</p>
+        <ul class="elements">
+          <li><span class="n">01</span><span><span class="term">何事</span><span class="gloss">What</span><span class="desc">事件內容與工作項目。</span></span></li>
+          <li><span class="n">02</span><span><span class="term">何地</span><span class="gloss">Where</span><span class="desc">地點、場域或適用範圍。</span></span></li>
+          <li><span class="n">03</span><span><span class="term">何時</span><span class="gloss">When</span><span class="desc">時間、期程與期限。</span></span></li>
+          <li><span class="n">04</span><span><span class="term">何人</span><span class="gloss">Who</span><span class="desc">權責單位、執行者與對象。</span></span></li>
+          <li><span class="n">05</span><span><span class="term">為何</span><span class="gloss">Why</span><span class="desc">目的、緣由與法規依據。</span></span></li>
+          <li><span class="n">06</span><span><span class="term">如何</span><span class="gloss">How</span><span class="desc">作法、程序與資源配置。</span></span></li>
+        </ul>
+        <p class="apply"><b>應用時機</b>簽稿說明段撰寫、活動企劃、狀況回報。延伸為5W2H時，另加How much（經費）。</p>
+      </div>
+    </article>
+
+    <article class="card" id="m12" data-cat="solve">
+      <div class="card-head"><span class="code">8D</span><h3>8D問題解決步驟</h3></div>
+      <div class="card-body">
+        <span class="en">Eight Disciplines Problem Solving</span>
+        <p class="def">解決問題的8個步驟，特點在於「先止血、再治本、最後制度化」，適用於重大或重複發生的缺失。</p>
+        <ul class="elements">
+          <li><span class="n">D1</span><span><span class="term">成立小組</span><span class="desc">召集具權責與專業的跨單位成員。</span></span></li>
+          <li><span class="n">D2</span><span><span class="term">問題說明</span><span class="desc">以5W1H量化描述問題與影響範圍。</span></span></li>
+          <li><span class="n">D3</span><span><span class="term">實施並驗證臨時措施</span><span class="desc">先行圍堵，防止損害擴大並確認有效。</span></span></li>
+          <li><span class="n">D4</span><span><span class="term">確定並驗證根本原因</span><span class="desc">以魚骨圖／5Why找出真因並以數據佐證。</span></span></li>
+          <li><span class="n">D5</span><span><span class="term">選擇並確認矯正措施</span><span class="desc">評估方案可行性與副作用後定案。</span></span></li>
+          <li><span class="n">D6</span><span><span class="term">實施矯正措施</span><span class="desc">正式導入並持續追蹤成效，解除臨時措施。</span></span></li>
+          <li><span class="n">D7</span><span><span class="term">預防再發生</span><span class="desc">修訂標準作業程序、規範與訓練，橫向展開至同類單位。</span></span></li>
+          <li><span class="n">D8</span><span><span class="term">祝賀小組</span><span class="desc">肯定貢獻並留存知識，完成經驗傳承。</span></span></li>
+        </ul>
+        <p class="apply"><b>應用時機</b>重大事故檢討、廠商履約瑕疵處理、重複性缺失的根絕。</p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>管理常用的12種高效工作方法 · 完整拆解版</span>
+    <span>依原圖整理並補充構成要素與英文對照</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var buttons = document.querySelectorAll('.filters button');
+  var cards = document.querySelectorAll('.card');
+  var families = document.querySelectorAll('.family');
+
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var f = btn.dataset.filter;
+      buttons.forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+      cards.forEach(function(c){
+        c.style.display = (f === 'all' || c.dataset.cat === f) ? '' : 'none';
+      });
+      families.forEach(function(sec){
+        sec.style.display = (f === 'all' || sec.dataset.family === f) ? '' : 'none';
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

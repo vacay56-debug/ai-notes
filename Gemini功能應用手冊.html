@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Gemini 功能應用手冊｜公務應用強化版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14213D;        /* 深墨藍：主文字 */
+    --paper:#FBFBF9;      /* 米白紙面 */
+    --line:#D8DBE2;       /* 分隔線 */
+    --accent:#B33A2B;     /* 署徽紅：強調 */
+    --steel:#3E5C76;      /* 鋼青藍：次強調 */
+    --mist:#EEF1F5;       /* 淺灰藍底 */
+    --gold:#8A6D3B;       /* 註記金褐 */
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Noto Sans TC',-apple-system,'PingFang TC','Microsoft JhengHei',sans-serif;
+    background:var(--paper);color:var(--ink);
+    line-height:1.85;font-size:16px;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px;}
+
+  /* ===== 封面 ===== */
+  header{
+    border-bottom:3px double var(--ink);
+    padding:64px 0 40px;
+  }
+  .doc-class{
+    display:inline-block;font-size:13px;letter-spacing:.35em;
+    color:var(--accent);border:1px solid var(--accent);
+    padding:4px 14px 4px 18px;margin-bottom:24px;
+  }
+  h1{
+    font-family:'Noto Serif TC',serif;font-weight:900;
+    font-size:clamp(30px,5vw,44px);letter-spacing:.06em;line-height:1.35;
+  }
+  h1 .en{
+    display:block;font-family:'Noto Sans TC',sans-serif;font-weight:500;
+    font-size:15px;letter-spacing:.18em;color:var(--steel);margin-top:10px;
+  }
+  .meta{
+    margin-top:26px;display:flex;flex-wrap:wrap;gap:8px 32px;
+    font-size:13.5px;color:var(--steel);
+  }
+  .meta b{color:var(--ink);font-weight:700;margin-right:6px;}
+
+  /* ===== 前言 ===== */
+  .preface{
+    margin:44px 0;padding:26px 30px;background:var(--mist);
+    border-left:4px solid var(--steel);font-size:15.5px;
+  }
+  .preface p+p{margin-top:12px;}
+
+  /* ===== 總覽表 ===== */
+  h2{
+    font-family:'Noto Serif TC',serif;font-weight:700;
+    font-size:24px;letter-spacing:.1em;margin:56px 0 20px;
+    display:flex;align-items:center;gap:14px;
+  }
+  h2::before{content:'';width:10px;height:26px;background:var(--accent);}
+  table{
+    width:100%;border-collapse:collapse;font-size:14.5px;
+    background:#fff;border:1px solid var(--line);
+  }
+  th{
+    background:var(--ink);color:#fff;font-weight:500;
+    padding:10px 14px;text-align:left;letter-spacing:.08em;
+  }
+  td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  td a{color:var(--steel);text-decoration:none;font-weight:700;}
+  td a:hover{color:var(--accent);}
+  td .en-s{color:var(--steel);font-size:12.5px;display:block;}
+
+  /* ===== 功能卡 ===== */
+  .feature{
+    background:#fff;border:1px solid var(--line);
+    margin:34px 0;position:relative;
+  }
+  .feature-head{
+    display:flex;align-items:baseline;gap:18px;
+    padding:22px 28px 16px;border-bottom:1px solid var(--line);
+  }
+  .fno{
+    font-family:'Noto Serif TC',serif;font-weight:900;font-size:34px;
+    color:var(--accent);line-height:1;min-width:56px;
+  }
+  .fname{font-family:'Noto Serif TC',serif;font-weight:700;font-size:21px;letter-spacing:.04em;}
+  .fname .en{font-family:'Noto Sans TC',sans-serif;font-weight:500;font-size:13px;color:var(--steel);letter-spacing:.12em;display:block;margin-top:2px;}
+  .feature-body{padding:22px 28px 26px;}
+
+  .label{
+    display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.2em;
+    color:#fff;background:var(--steel);padding:2px 12px;margin-bottom:10px;
+  }
+  .label.red{background:var(--accent);}
+  .label.gold{background:var(--gold);}
+  .block{margin-bottom:20px;}
+  .block:last-child{margin-bottom:0;}
+  .block p{font-size:15px;}
+
+  /* 操作路徑：步驟籤 */
+  .path{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:2px;}
+  .step{
+    background:var(--mist);border:1px solid var(--line);
+    padding:4px 14px;font-size:13.5px;white-space:nowrap;
+  }
+  .arrow{color:var(--accent);font-weight:700;font-size:14px;}
+
+  .apply{
+    background:#FBF7EF;border:1px solid #E4D9C3;
+    padding:16px 20px;
+  }
+  .apply ul{margin:4px 0 0 22px;}
+  .apply li{font-size:14.5px;margin-bottom:6px;}
+  .apply li:last-child{margin-bottom:0;}
+  .apply li b{color:var(--gold);}
+
+  /* ===== 注意事項 ===== */
+  .notice{
+    margin:40px 0 0;background:#fff;border:1px solid var(--accent);
+  }
+  .notice-head{
+    background:var(--accent);color:#fff;padding:10px 24px;
+    font-weight:700;letter-spacing:.15em;font-size:15px;
+  }
+  .notice-body{padding:20px 26px;}
+  .notice-body ol{margin-left:24px;}
+  .notice-body li{font-size:14.5px;margin-bottom:10px;}
+  .notice-body li:last-child{margin-bottom:0;}
+
+  footer{
+    margin-top:64px;border-top:3px double var(--ink);
+    padding:22px 0 56px;font-size:12.5px;color:var(--steel);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+    letter-spacing:.08em;
+  }
+
+  @media (max-width:600px){
+    .feature-head{padding:18px 18px 14px;gap:12px;}
+    .feature-body{padding:18px;}
+    .fno{font-size:26px;min-width:40px;}
+    .step{white-space:normal;}
+  }
+  @media print{
+    body{font-size:12px;}
+    .feature{break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="doc-class">工具應用參考資料</span>
+    <h1>Google Gemini 功能應用手冊
+      <span class="en">GEMINI FEATURE GUIDE · ENHANCED EDITION FOR GOVERNMENT USE</span>
+    </h1>
+    <div class="meta">
+      <span><b>適用對象</b>公務機關同仁（緊急救護政策業務為例）</span>
+      <span><b>功能項目</b>共 10 項</span>
+      <span><b>版本</b>強化版 v1.0</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="preface">
+    <p>本手冊以原始功能介紹為基礎，重新編修為公務應用導向之參考文件。每項功能統一以「操作路徑、功能說明、核心效益、公務應用建議」四段架構呈現，其中「公務應用建議」係新增內容，對應政策規劃、法規研修、預算採購、國際交流等實際業務情境，可作為機關內部教育訓練或個人工作流建置之參考。</p>
+    <p>使用前請先詳閱文末「使用注意事項」，確認符合行政院及所屬機關使用生成式人工智慧（Artificial Intelligence, AI）相關參考指引。</p>
+  </div>
+
+  <h2>功能總覽</h2>
+  <table>
+    <thead>
+      <tr><th style="width:56px;">編號</th><th style="width:220px;">功能名稱</th><th>主要用途</th><th style="width:170px;">建議業務情境</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>01</td><td><a href="#f1">深度研究<span class="en-s">Deep Research</span></a></td><td>自動規劃、搜尋、分析並產出附引註之研究報告</td><td>國際制度比較、政策研究</td></tr>
+      <tr><td>02</td><td><a href="#f2">互動畫布<span class="en-s">Canvas</span></a></td><td>即時協作編修文件與程式碼之工作區</td><td>報告草擬、長文件迭代</td></tr>
+      <tr><td>03</td><td><a href="#f3">即時語音對話<span class="en-s">Gemini Live</span></a></td><td>即時語音互動、簡報演練與問題討論</td><td>簡報預演、外賓接待準備</td></tr>
+      <tr><td>04</td><td><a href="#f4">自訂助理<span class="en-s">Gems</span></a></td><td>建立具固定指令與專業設定之客製化 AI 助理</td><td>公文、採購等重複性文書</td></tr>
+      <tr><td>05</td><td><a href="#f5">檔案分析<span class="en-s">File Analysis</span></a></td><td>摘要、比對與解析上傳文件</td><td>法規條文比對、報告審閱</td></tr>
+      <tr><td>06</td><td><a href="#f6">Workspace 整合<span class="en-s">Google Workspace Integration</span></a></td><td>串接 Gmail、Drive、Docs 等進行跨應用作業</td><td>信件彙整、行程管理</td></tr>
+      <tr><td>07</td><td><a href="#f7">圖像生成<span class="en-s">Image Generation</span></a></td><td>以文字描述產生插圖與視覺素材</td><td>簡報配圖、宣導素材</td></tr>
+      <tr><td>08</td><td><a href="#f8">圖像理解<span class="en-s">Image Understanding</span></a></td><td>解析圖表、截圖、手寫紀錄等視覺內容</td><td>統計圖表判讀、文件數位化</td></tr>
+      <tr><td>09</td><td><a href="#f9">排程任務<span class="en-s">Scheduled Actions</span></a></td><td>定時自動執行重複性任務</td><td>輿情追蹤、定期彙報</td></tr>
+      <tr><td>10</td><td><a href="#f10">長上下文處理<span class="en-s">Long Context Window</span></a></td><td>單一對話中跨多份大量文件推理分析</td><td>跨文件整合、專案總覽</td></tr>
+    </tbody>
+  </table>
+
+  <h2>功能詳述</h2>
+
+  <!-- 01 -->
+  <section class="feature" id="f1">
+    <div class="feature-head">
+      <span class="fno">01</span>
+      <div class="fname">深度研究<span class="en">DEEP RESEARCH</span></div>
+    </div>
+    <div class="feature-body">
+      <div class="block">
+        <span class="label">操作路徑</span>
+        <div class="path"><span class="step">開啟 Gemini</span><span class="arrow">→</span><span class="step">點選模型選單</span><span class="arrow">→</span><span class="step">選擇 Deep Research</span><span class="arrow">→</span><span class="step">輸入研究主題</span></div>
+      </div>
+      <div class="block">
+        <span class="label">功能說明</span>
+        <p>Gemini 依主題自動擬定研究計畫，搜尋相關線上來源，進行資訊分析與交叉比對，最終產出結構完整、附引註之研究報告。可一併納入 Google 雲端硬碟（Google Drive）、Gmail 或自行上傳之檔案，產出更貼近需求之客製化結果。</p>
+      </div>
+      <div class="block">
+        <span class="label red">核心效益</span>
+        <p>原需數小時之人工文獻蒐集與整理，可縮短為單一指令、數分鐘內完成，並保留來源引註以利查證。</p>
+      </div>
+      <div class="block apply">
+        <span class="label gold">公務應用建議</span>
+        <ul>
+          <li><b>國際制度比較：</b>研析各國緊急醫療救護（Emergency Medical Services, EMS）制度，如美國國家救護技術員登錄制度與日本救急救命士制度之訓練時數、認證架構比較。</li>
+          <li><b>訓練體系研究：</b>蒐整戰術緊急傷患救護（Tactical Emergency Casualty Care, TECC）、延長傷患照護（Prolonged Casualty Care, PCC）等課程之國際實施現況與師資制度。</li>
+          <li><b>法規研修佐證：</b>產出附來源之研究報告，作為法規修正說明或簽陳附件之參考基礎（引用前應逐一查證原始來源）。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="feature" id="f2">
+    <div class="feature-head">
+      <span class="fno">02</span>
+      <div class="fname">互動畫布<span class="en">CANVAS</span></div>
+    </div>
+    <div class="feature-body">
+      <div class="block">
+        <span class="label">操作路徑</span>
+        <div class="path"><span class="step">開啟 Gemini</span><span class="arrow">→</span><span class="step">點選 Canvas</span><span class="arrow">→</span><span class="step">開始撰寫、發想或編寫程式</span></div>
+      </div>
+      <div class="block">
+        <span class="label">功能說明</span>
+        <p>Canvas 為互動式工作區，可與 Gemini 即時協作草擬文件、修訂內容、產生程式碼。支援直接編輯文字、調整語氣與篇幅、反覆迭代構想，並可將成果直接匯出至 Google 文件（Google Docs）。</p>
+      </div>
+      <div class="block">
+        <span class="label red">核心效益</span>
+        <p>免除在多個工具間反覆複製貼上，於單一工作區內即可完成大型文件或專案之撰寫、修改與定稿。</p>
+      </div>
+      <div class="block apply">
+        <span class="label gold">公務應用建議</span>
+        <ul>
+          <li><b>長文件迭代：</b>出國考察報告、政策白皮書等章節較多之文件，可於 Canvas 內逐段修訂，避免版本混亂。</li>
+          <li><b>語氣調校：</b>同一內容依對象改寫為長官簡報版、對外新聞稿版或機關間函文版。</li>
+          <li><b>提示詞模板開發：</b>集中管理與測試常用之研究提示詞（prompt）模板，逐步優化後再定版留存。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section class="feature" id="f3">
+    <div class="feature-head">
+      <span class="fno">03</span>
+      <div class="fname">即時語音對話<span class="en">GEMINI LIVE</span></div>
+    </div>
+    <div class="feature-body">
+      <div class="block">
+        <span class="label">操作路徑</span>
+        <div class="path"><span class="step">開啟 Gemini</span><span class="arrow">→</span><span class="step">點選 Live</span><span class="arrow">→</span><span class="step">直接以自然語音對話</span></div>
+      </div>
+      <div class="block">
+        <span class="label">功能說明</span>
+        <p>Gemini Live 提供即時語音對話能力，可用於構想發想、問題討論、簡報或面談演練、新知學習，並在不中斷語境之情況下持續追問。於支援之裝置上，另可分享螢幕或鏡頭畫面取得即時協助。</p>
+      </div>
+      <div class="block">
+        <span class="label red">核心效益</span>
+        <p>免除輸入冗長文字指令，以口語即可完成互動，適合行進間思考、快速討論與臨場演練。</p>
+      </div>
+      <div class="block apply">
+        <span class="label gold">公務應用建議</span>
+        <ul>
+          <li><b>簡報預演：</b>重大政策專案對長官或跨機關會議簡報前，口頭演練並請其模擬提問。</li>
+          <li><b>英語接待準備：</b>國際研討會或外賓接待前，演練英語致詞、專業術語問答與議程說明。</li>
+          <li><b>通勤思考：</b>於移動途中以語音整理政策構想，回辦公室後再轉為正式文字。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section class="feature" id="f4">
+    <div class="feature-head">
+      <span class="fno">04</span>
+      <div class="fname">自訂助理<span class="en">GEMS</span></div>
+    </div>
+    <div class="feature-body">
+      <div class="block">
+        <span class="label">操作路徑</span>
+        <div class="path"><span class="step">開啟 Gemini</span><span class="arrow">→</span><span class="step">點選 Gems</span><span class="arrow">→</span><span class="step">選擇「建立 Gem」</span></div>
+      </div>
+      <div class="block">
+        <span class="label">功能說明</span>
+        <p>Gems 可建立具備專屬指令、專業領域、語氣與工作流程之客製化 AI 助理，並可連結 Google 雲端硬碟內之相關檔案，使回覆具備業務脈絡。適用於寫作、程式、研究、專案管理等固定型任務。</p>
+      </div>
+      <div class="block">
+        <span class="label red">核心效益</span>
+        <p>免除每次重複輸入相同背景說明與格式要求，依任務切換對應 Gem 即可取得一致、快速且符合需求之產出。</p>
+      </div>
+      <div class="block apply">
+        <span class="label gold">公務應用建議</span>
+        <ul>
+          <li><b>分工定位：</b>此功能定位類似 Claude Projects 之 Skill 架構；建議將網路資料蒐集類任務置於 Gemini 端、精確文書產製置於 Claude 端，避免兩套系統重複維護相同規則。</li>
+          <li><b>研究型 Gem：</b>建立「EMS 國際制度研究助理」，固定要求以「中文（英文全稱，英文縮寫）」格式呈現術語並附來源。</li>
+          <li><b>版本管理：</b>Gem 指令內容涉及時效性法規者，應標註版本日期並定期檢視更新。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section class="feature" id="f5">
+    <div class="feature-head">
+      <span class="fno">05</span>
+      <div class="fname">檔案分析<span class="en">FILE ANALYSIS</span></div>
+    </div>
+    <div class="feature-body">
+      <div class="block">
+        <span class="label">操作路徑</span>
+        <div class="path"><span class="step">開啟 Gemini</span><span class="arrow">→</span><span class="step">上傳 PDF、Word、試算表、簡報或圖片等檔案</span><span class="arrow">→</span><span class="step">直接提問</span></div>
+      </div>
+      <div class="block">
+        <span class="label">功能說明</span>
+        <p>Gemini 可對上傳檔案進行摘要、問答、關鍵資訊擷取、多檔比對、趨勢判讀與概念解說，並支援針對特定段落追問，深入探討細節。</p>
+      </div>
+      <div class="block">
+        <span class="label red">核心效益</span>
+        <p>數百頁文件之閱讀、比對與重點萃取，可於數分鐘內完成，大幅縮短文件審閱時間。</p>
+      </div>
+      <div class="block apply">
+        <span class="label gold">公務應用建議</span>
+        <ul>
+          <li><b>法規條文比對：</b>上傳修正草案與現行條文，產出逐條對照重點，輔助研修作業（正式對照表仍應人工核對定稿）。</li>
+          <li><b>會議資料消化：</b>跨機關會議前快速摘要衛生福利部、國防部等單位提供之背景資料。</li>
+          <li><b>敏感性分級：</b>涉及未公開政策、個人資料或機密性文件，不得上傳至外部雲端服務。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section class="feature" id="f6">
+    <div class="feature-head">
+      <span class="fno">06</span>
+      <div class="fname">Workspace 整合<span class="en">GOOGLE WORKSPACE INTEGRATION</span></div>
+    </div>
+    <div class="feature-body">
+      <div class="block">
+        <span class="label">操作路徑</span>
+        <div class="path"><span class="step">將 Gemini 連結至 Gmail、Drive、Docs、Sheets、Slides 及 Calendar</span></div>
+      </div>
+      <div class="block">
+        <span class="label">功能說明</span>
+        <p>Gemini 可搜尋電子郵件、檢索雲端硬碟檔案、摘要文件、草擬郵件、於 Docs 產製內容、分析試算表資料，並協助管理行事曆，於單一對話中完成跨應用作業。</p>
+      </div>
+      <div class="block">
+        <span class="label red">核心效益</span>
+        <p>免除在多個 Google 應用間反覆切換與搜尋，縮短資訊查找時間，提高既有工具之整體效率。</p>
+      </div>
+      <div class="block apply">
+        <span class="label gold">公務應用建議</span>
+        <ul>
+          <li><b>信件彙整：</b>快速彙整特定專案（如國際研討會籌辦）之往來郵件重點與待辦事項。</li>
+          <li><b>行程協調：</b>依多方行事曆建議跨機關會議時段，減少往返確認。</li>
+          <li><b>帳號區隔：</b>公務資料應使用機關核可之帳號與環境處理，私人帳號不宜存放公務文件。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section class="feature" id="f7">
+    <div class="feature-head">
+      <span class="fno">07</span>
+      <div class="fname">圖像生成<span class="en">IMAGE GENERATION</span></div>
+    </div>
+    <div class="feature-body">
+      <div class="block">
+        <span class="label">操作路徑</span>
+        <div class="path"><span class="step">開啟 Gemini</span><span class="arrow">→</span><span class="step">以文字描述欲產生之圖像</span></div>
+      </div>
+      <div class="block">
+        <span class="label">功能說明</span>
+        <p>Gemini 採用 Google Imagen 模型，依自然語言描述產生高品質圖像，可用於插圖、社群圖文、行銷視覺、概念圖與簡報素材。結果不符需求時，可調整描述或指定修改特定元素。</p>
+      </div>
+      <div class="block">
+        <span class="label red">核心效益</span>
+        <p>無需設計背景或專業軟體，即可於數秒內將構想轉為可用之視覺素材。</p>
+      </div>
+      <div class="block apply">
+        <span class="label gold">公務應用建議</span>
+        <ul>
+          <li><b>簡報配圖：</b>產製政策簡報所需之示意插圖，如救護情境概念圖、訓練流程意象圖。</li>
+          <li><b>宣導素材草稿：</b>快速產出宣導文宣視覺初稿，供設計廠商後續精修之參考方向。</li>
+          <li><b>使用界線：</b>正式對外文宣應確認圖像授權與機關識別規範；涉及真實人物、機關徽章者不宜以生成圖像替代。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 -->
+  <section class="feature" id="f8">
+    <div class="feature-head">
+      <span class="fno">08</span>
+      <div class="fname">圖像理解<span class="en">IMAGE UNDERSTANDING</span></div>
+    </div>
+    <div class="feature-body">
+      <div class="block">
+        <span class="label">操作路徑</span>
+        <div class="path"><span class="step">開啟 Gemini</span><span class="arrow">→</span><span class="step">上傳截圖、圖表、手寫筆記或照片</span><span class="arrow">→</span><span class="step">搭配文字提問</span></div>
+      </div>
+      <div class="block">
+        <span class="label">功能說明</span>
+        <p>Gemini 可解析視覺內容，包括文字擷取、圖表與示意圖解說、物件辨識、統計圖判讀，並可結合文字指令進行深入說明或解決視覺性問題。</p>
+      </div>
+      <div class="block">
+        <span class="label red">核心效益</span>
+        <p>將任何圖像轉化為可運用之資訊，降低判讀複雜視覺內容之門檻，輔助學習、除錯與決策。</p>
+      </div>
+      <div class="block apply">
+        <span class="label gold">公務應用建議</span>
+        <ul>
+          <li><b>統計圖判讀：</b>快速解讀各直轄市、縣（市）救護出勤統計圖表，萃取趨勢重點供簽陳引用。</li>
+          <li><b>手寫紀錄數位化：</b>將會議手寫筆記或白板照片轉為結構化文字紀錄。</li>
+          <li><b>數據複核：</b>AI 判讀之數值仍應與原始統計資料核對後，方可納入正式文件。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 -->
+  <section class="feature" id="f9">
+    <div class="feature-head">
+      <span class="fno">09</span>
+      <div class="fname">排程任務<span class="en">SCHEDULED ACTIONS</span></div>
+    </div>
+    <div class="feature-body">
+      <div class="block">
+        <span class="label">操作路徑</span>
+        <div class="path"><span class="step">開啟 Gemini</span><span class="arrow">→</span><span class="step">建立 Scheduled Action</span><span class="arrow">→</span><span class="step">描述任務內容與執行時間</span></div>
+      </div>
+      <div class="block">
+        <span class="label">功能說明</span>
+        <p>Gemini 可自動執行一次性或週期性任務，例如每日摘要、每週研究更新、內容發想或重要事項提醒。設定完成後，任務於指定時間自動執行，無需重複下達指令。</p>
+      </div>
+      <div class="block">
+        <span class="label red">核心效益</span>
+        <p>將例行性、重複性任務交由系統背景執行，維持工作節奏並釋放人力處理核心業務。</p>
+      </div>
+      <div class="block apply">
+        <span class="label gold">公務應用建議</span>
+        <ul>
+          <li><b>輿情與新知追蹤：</b>每週自動彙整國際 EMS 政策動態、國際創傷救命術（International Trauma Life Support, ITLS）等組織之課程更新資訊。</li>
+          <li><b>期程提醒：</b>設定預算執行、採購招標等關鍵期程之定期提醒。</li>
+          <li><b>結果查核：</b>自動產出之摘要屬初步資訊，重要決策引用前仍應查證原始來源。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="feature" id="f10">
+    <div class="feature-head">
+      <span class="fno">10</span>
+      <div class="fname">長上下文處理<span class="en">LONG CONTEXT WINDOW</span></div>
+    </div>
+    <div class="feature-body">
+      <div class="block">
+        <span class="label">操作路徑</span>
+        <div class="path"><span class="step">上傳多份文件</span><span class="arrow">或</span><span class="step">於單一對話中持續深入討論</span></div>
+      </div>
+      <div class="block">
+        <span class="label">功能說明</span>
+        <p>Gemini 具備處理大量資訊並全程維持語境之能力，可橫跨多份文件、長篇報告、筆記與程式檔案進行推理，串聯各項資訊間之關聯，提供整體性、具脈絡之回覆。</p>
+      </div>
+      <div class="block">
+        <span class="label red">核心效益</span>
+        <p>免除逐檔分析之片段化限制，於單一對話中即可完成複雜專案之跨文件整合與深度洞察。</p>
+      </div>
+      <div class="block apply">
+        <span class="label gold">公務應用建議</span>
+        <ul>
+          <li><b>專案總覽：</b>同時載入重大政策專案之計畫書、歷次會議紀錄、預算資料與執行報告，進行進度盤點與風險分析。</li>
+          <li><b>制度全貌比對：</b>一次載入多國 EMS 法規文件，產出跨國制度架構比較。</li>
+          <li><b>與知識庫工具搭配：</b>長期性、需反覆查詢之內部文件知識庫，建議搭配 NotebookLM 建置；單次跨文件深度分析則適用本功能。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="notice">
+    <div class="notice-head">使用注意事項</div>
+    <div class="notice-body">
+      <ol>
+        <li><b>合規要求：</b>公務機關使用生成式 AI，應遵循行政院及所屬機關（構）使用生成式 AI 參考指引及各機關內部規範；涉及機密公文、未公開政策、個人資料之內容，不得輸入外部生成式 AI 服務。</li>
+        <li><b>資訊查證：</b>AI 產出內容（含引註來源、統計數據、法規條文）均應由承辦人員逐一查證後方可引用於正式文件；生成式 AI 產出僅屬輔助草稿性質。</li>
+        <li><b>權責歸屬：</b>以 AI 輔助產製之公文、報告及採購文件，其正確性與適法性仍由承辦人員及機關負最終責任。</li>
+        <li><b>工具分工：</b>建議依任務性質選用工具——公開網路資料研究適用 Deep Research、內部文件知識庫適用 NotebookLM、正式文書精確產製適用 Claude，避免單一工具承擔全部流程。</li>
+        <li><b>版本時效：</b>本手冊所述功能名稱與操作路徑以撰寫時之產品介面為準，實際功能請以 Google 官方最新公告為準。</li>
+      </ol>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+    <span>GEMINI FEATURE GUIDE · ENHANCED EDITION</span>
+    <span>本文件為內部工具應用參考資料，非 Google 官方文件</span>
+  </div>
+</footer>
+
+</body>
+</html>

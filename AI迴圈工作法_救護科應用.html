@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 迴圈工作法｜Loop Engineering 與救護科工作應用</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0f2340;
+    --navy-deep:#081627;
+    --paper:#f6f4ee;
+    --paper-line:#d8d3c4;
+    --ink:#1c2230;
+    --ink-soft:#4a5164;
+    --amber:#c98a2b;
+    --amber-soft:#eddcb7;
+    --ems-red:#a4293a;
+    --line-dash: repeating-linear-gradient(90deg, var(--paper-line) 0 8px, transparent 8px 16px);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:#e9e5d8;
+    color:var(--ink);
+    font-family:"Noto Sans TC","Noto Serif TC",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .sheet{
+    max-width:900px;
+    margin:0 auto;
+    background:var(--paper);
+    box-shadow:0 0 60px rgba(0,0,0,0.18);
+  }
+
+  /* ---------- Cover ---------- */
+  .cover{
+    background:
+      radial-gradient(circle at 82% 18%, rgba(201,138,43,0.18), transparent 45%),
+      linear-gradient(160deg, var(--navy-deep), var(--navy) 60%, #14335e 100%);
+    color:#f3efe4;
+    padding:64px 48px 44px;
+    position:relative;
+    overflow:hidden;
+  }
+  .cover::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:0; height:10px;
+    background: repeating-linear-gradient(90deg, var(--amber) 0 14px, transparent 14px 28px);
+    opacity:.55;
+  }
+  .cover .eyebrow{
+    font-family:"JetBrains Mono",monospace;
+    font-size:12.5px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--amber-soft); opacity:.85; margin-bottom:18px;
+  }
+  .cover h1{
+    font-family:"Noto Serif TC",serif;
+    font-weight:900;
+    font-size:clamp(30px,5.4vw,46px);
+    line-height:1.25;
+    margin:0 0 14px;
+  }
+  .cover h1 span{color:var(--amber);}
+  .cover p.lede{
+    font-size:15.5px; line-height:1.9; color:#d9d4c3; max-width:60ch; margin:0 0 30px;
+  }
+  .cover .quote{
+    border-left:2px solid var(--amber);
+    padding:6px 0 6px 18px;
+    font-size:13.5px; line-height:1.85; color:#c9c4b2; max-width:52ch;
+  }
+  .cover .quote cite{
+    display:block; margin-top:8px; font-style:normal; font-size:12px; color:var(--amber-soft); letter-spacing:.04em;
+  }
+
+  /* ---------- shift timeline (signature element) ---------- */
+  .timeline{
+    padding:30px 48px 36px;
+    background:var(--navy-deep);
+    color:#eee9db;
+  }
+  .timeline h3{
+    font-family:"JetBrains Mono",monospace;
+    font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--amber-soft); margin:0 0 16px; opacity:.9;
+  }
+  .tl-bar{
+    position:relative;
+    height:64px;
+    border-radius:6px;
+    background:linear-gradient(90deg,#122844 0%, #122844 48%, #1b3454 48%, #1b3454 100%);
+    display:flex; align-items:center;
+    overflow:hidden;
+  }
+  .tl-bar .seg{
+    flex:1; text-align:center; font-size:11.5px; font-family:"JetBrains Mono",monospace;
+    letter-spacing:.05em; color:#a9b3c7; position:relative; z-index:2;
+  }
+  .tl-bar .seg b{display:block; color:#f3efe4; font-size:13px; margin-bottom:2px; font-weight:500;}
+  .tl-bar .divider{width:1px; align-self:stretch; background:rgba(255,255,255,0.14);}
+  .tl-caption{
+    display:flex; justify-content:space-between; margin-top:10px;
+    font-size:11.5px; color:#8b93a6; font-family:"JetBrains Mono",monospace;
+  }
+
+  /* ---------- Section shell ---------- */
+  section{ padding:40px 48px; }
+  .divider-dash{
+    height:1px; background:var(--line-dash); margin:0 48px;
+  }
+  .sec-head{
+    display:flex; align-items:baseline; gap:14px; margin-bottom:22px;
+  }
+  .sec-num{
+    font-family:"Noto Serif TC",serif; font-weight:900; font-size:22px;
+    color:#fff; background:var(--navy); border-radius:3px;
+    width:34px; height:34px; display:flex; align-items:center; justify-content:center;
+    flex:none;
+  }
+  .sec-head h2{
+    font-family:"Noto Serif TC",serif; font-weight:700; font-size:22px; margin:0; color:var(--navy);
+  }
+  .sec-head .en{
+    font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--ink-soft); letter-spacing:.05em;
+  }
+  p{ line-height:1.95; font-size:14.5px; color:var(--ink-soft); }
+  strong{ color:var(--ink); font-weight:500; }
+
+  /* ---------- compare table ---------- */
+  .compare{
+    display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--paper-line); border-radius:4px; overflow:hidden;
+  }
+  .compare > div{ padding:20px 22px; }
+  .compare .old{ background:#efece2; }
+  .compare .new{ background:#fff; border-left:1px solid var(--paper-line); }
+  .compare h4{
+    margin:0 0 12px; font-size:13px; font-family:"JetBrains Mono",monospace; letter-spacing:.04em;
+    color:var(--ink-soft); text-transform:uppercase;
+  }
+  .compare ol{ margin:0; padding-left:18px; font-size:14px; color:var(--ink); line-height:2.1; }
+  .compare .new h4{ color:var(--amber); }
+
+  /* ---------- loop diagram ---------- */
+  .loop-wrap{ display:flex; justify-content:center; margin:38px 0 10px; }
+  .loop-diagram{
+    position:relative; width:100%; max-width:520px; aspect-ratio:1/1;
+  }
+  .loop-diagram .center{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:132px; height:132px; border-radius:50%;
+    background:var(--navy); color:#f3efe4;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; font-family:"Noto Serif TC",serif; font-weight:700; font-size:14px;
+    box-shadow:0 0 0 6px #fff, 0 0 0 7px var(--paper-line);
+    z-index:3; line-height:1.5;
+  }
+  .loop-diagram .center small{
+    display:block; font-family:"JetBrains Mono",monospace; font-weight:400; font-size:9.5px; color:var(--amber-soft); margin-top:4px;
+  }
+  .loop-diagram svg{ position:absolute; inset:0; width:100%; height:100%; z-index:1; }
+  .node{
+    position:absolute; width:150px;
+    transform:translate(-50%,-50%);
+    text-align:center; z-index:2;
+  }
+  .node .dot{
+    width:40px; height:40px; border-radius:50%; background:#fff; border:2px solid var(--navy);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 8px;
+    font-family:"Noto Serif TC",serif; font-weight:700; color:var(--navy); font-size:15px;
+  }
+  .node .label{ font-size:12.5px; font-weight:500; color:var(--ink); }
+  .node .sub{ font-size:10.5px; color:var(--ink-soft); font-family:"JetBrains Mono",monospace; margin-top:2px; }
+  .n1{ top:8%; left:50%; }
+  .n2{ top:29%; left:86%; }
+  .n3{ top:71%; left:86%; }
+  .n4{ top:92%; left:50%; }
+  .n5{ top:71%; left:14%; }
+  .n6{ top:29%; left:14%; }
+
+  /* ---------- component detail list ---------- */
+  .comp-list{ margin-top:28px; display:flex; flex-direction:column; gap:0; }
+  .comp-item{
+    display:grid; grid-template-columns:46px 1fr; gap:16px;
+    padding:18px 0; border-top:1px dashed var(--paper-line);
+  }
+  .comp-item:last-child{ border-bottom:1px dashed var(--paper-line); }
+  .comp-item .num{
+    font-family:"Noto Serif TC",serif; font-weight:900; font-size:20px; color:var(--amber);
+  }
+  .comp-item h4{ margin:0 0 6px; font-size:15px; color:var(--navy); }
+  .comp-item h4 .tag{
+    font-family:"JetBrains Mono",monospace; font-size:10.5px; color:#fff; background:var(--navy);
+    padding:2px 7px; border-radius:3px; margin-left:8px; vertical-align:1px;
+  }
+  .comp-item p{ margin:0; font-size:13.8px; }
+  code{
+    font-family:"JetBrains Mono",monospace; background:#eee8d8; color:var(--navy);
+    padding:1px 6px; border-radius:3px; font-size:12.5px;
+  }
+
+  /* ---------- clarify table ---------- */
+  .clarify{ width:100%; border-collapse:collapse; margin-top:8px; font-size:13.6px; }
+  .clarify th{
+    text-align:left; font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.04em;
+    color:#fff; background:var(--navy); padding:10px 14px; text-transform:uppercase;
+  }
+  .clarify td{ padding:12px 14px; border-bottom:1px solid var(--paper-line); vertical-align:top; color:var(--ink-soft); }
+  .clarify tr:nth-child(even) td{ background:#fbfaf5; }
+  .pill{
+    display:inline-block; font-size:11px; font-family:"JetBrains Mono",monospace;
+    padding:2px 9px; border-radius:20px; font-weight:500;
+  }
+  .pill.ok{ background:#e4ecdf; color:#3d6b3f; }
+  .pill.need{ background:var(--amber-soft); color:#8a5c14; }
+
+  /* ---------- case cards ---------- */
+  .case{
+    border:1px solid var(--paper-line); border-radius:4px; margin-bottom:22px; overflow:hidden; background:#fff;
+  }
+  .case-head{
+    background:var(--navy); color:#fff; padding:12px 20px;
+    display:flex; align-items:baseline; gap:10px;
+  }
+  .case-head .cletter{
+    font-family:"Noto Serif TC",serif; font-weight:900; font-size:18px; color:var(--amber);
+  }
+  .case-head h4{ margin:0; font-size:15px; font-weight:500; }
+  .case-body{ padding:6px 20px 14px; }
+  .krow{
+    display:grid; grid-template-columns:88px 1fr; gap:14px; padding:10px 0; border-top:1px dashed var(--paper-line);
+  }
+  .krow:first-child{ border-top:none; }
+  .krow .k{
+    font-family:"JetBrains Mono",monospace; font-size:11px; color:#fff; background:var(--ink-soft);
+    align-self:start; padding:3px 8px; border-radius:3px; text-align:center; height:fit-content;
+  }
+  .krow.stop .k{ background:var(--ems-red); }
+  .krow.trigger .k{ background:var(--amber); color:#3a2604; }
+  .krow .v{ font-size:13.6px; color:var(--ink); line-height:1.8; }
+
+  /* ---------- callout ---------- */
+  .callout{
+    background:var(--amber-soft); border-left:4px solid var(--amber);
+    padding:16px 20px; border-radius:2px; font-size:13.8px; color:#5a3f0f; line-height:1.9;
+  }
+  .callout strong{ color:#5a3f0f; }
+
+  .steps{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:8px; }
+  .step-card{ border:1px solid var(--paper-line); border-radius:4px; padding:20px; background:#fff; }
+  .step-card .stag{
+    font-family:"JetBrains Mono",monospace; font-size:10.5px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--amber); margin-bottom:8px; display:block;
+  }
+  .step-card h4{ margin:0 0 8px; font-size:14.5px; color:var(--navy); }
+  .step-card p{ font-size:13.4px; margin:0; }
+
+  footer{
+    background:var(--navy-deep); color:#8b93a6; padding:24px 48px; font-size:11.8px;
+    font-family:"JetBrains Mono",monospace; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+  footer a{ color:var(--amber-soft); }
+
+  @media (max-width:680px){
+    section{ padding:32px 22px; }
+    .cover{ padding:44px 22px 34px; }
+    .timeline{ padding:24px 22px 30px; }
+    .divider-dash{ margin:0 22px; }
+    .compare{ grid-template-columns:1fr; }
+    .compare .new{ border-left:none; border-top:1px solid var(--paper-line); }
+    .steps{ grid-template-columns:1fr; }
+    footer{ padding:20px 22px; }
+    .loop-diagram{ max-width:380px; }
+    .node{ width:118px; }
+    .node .label{ font-size:11px; }
+    .node .sub{ display:none; }
+    .loop-diagram .center{ width:104px; height:104px; font-size:12px; }
+    .tl-bar .seg{ font-size:9.5px; }
+    .tl-bar .seg b{ font-size:11px; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="eyebrow">NFA 救災救護組．緊急救護科 ｜ AI 工作方法筆記</div>
+    <h1>AI 迴圈工作法<br><span>讓代理人在你休息時完成任務</span></h1>
+    <p class="lede">Loop Engineering（迴圈工程）不是新工具，而是一種設計方式：把「你每一步下指令」的工作，改造成「自己執行、自己驗證、自己決定何時停止」的迴圈——概念上很接近勤務中心的排班表，一旦設定完成，就依表運作。</p>
+    <div class="quote">
+      Claude Code 創建者 Boris Cherny 描述的轉變，可以濃縮成一句話：使用者的角色不再是「逐步下指令」，而是「同時經營多個自行運作的迴圈」。
+      <cite>— 摘要自 Claude Code 團隊訪談，非逐字引述</cite>
+    </div>
+  </div>
+
+  <!-- SIGNATURE: 24hr duty timeline -->
+  <div class="timeline">
+    <h3>迴圈生命週期 ｜ 對照 24 小時勤務時間軸</h3>
+    <div class="tl-bar">
+      <div class="seg"><b>設定</b>目標與停止條件</div>
+      <div class="divider"></div>
+      <div class="seg"><b>執行</b>代理自動運作</div>
+      <div class="divider"></div>
+      <div class="seg"><b>驗證</b>每輪自動檢查</div>
+      <div class="divider"></div>
+      <div class="seg"><b>回報</b>條件達成即停止</div>
+    </div>
+    <div class="tl-caption"><span>你在班：設定與交接</span><span>迴圈值班：無人值守運作</span></div>
+  </div>
+
+  <!-- 壹 -->
+  <section>
+    <div class="sec-head"><div class="sec-num">壹</div><h2>核心差異：對話模式 vs 迴圈模式</h2></div>
+    <p>兩者的差別不在「AI 變聰明」，而在於<strong>誰負責推進流程</strong>。對話模式下，每一次修正都要你重新輸入；迴圈模式下，「什麼時候算完成」被明文寫進設定裡，推進的責任交給系統本身。</p>
+    <div class="compare">
+      <div class="old">
+        <h4>傳統對話模式</h4>
+        <ol>
+          <li>你下達提示</li>
+          <li>Claude 回應</li>
+          <li>你檢查、你修改</li>
+          <li>重複，直到你滿意為止</li>
+        </ol>
+      </div>
+      <div class="new">
+        <h4>迴圈模式</h4>
+        <ol>
+          <li>你設定目標與停止條件</li>
+          <li>Claude 自動執行一輪</li>
+          <li>系統自動驗證是否達標</li>
+          <li>未達標則自動接續下一輪</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider-dash"></div>
+
+  <!-- 貳 -->
+  <section>
+    <div class="sec-head"><div class="sec-num">貳</div><h2>六大組件與 Claude Code 實際對應功能</h2></div>
+    <p>原始資訊圖卡使用的是通用概念名稱；以下是這些概念在 <strong>Claude Code</strong>（Anthropic 的終端機／桌面版程式開發代理工具）中對應的<strong>實際指令與機制</strong>，已核對官方文件（2026 年 7 月版本）。</p>
+
+    <div class="loop-wrap">
+      <div class="loop-diagram">
+        <svg viewBox="0 0 500 500"><circle cx="250" cy="250" r="200" fill="none" stroke="#d8d3c4" stroke-width="1.5" stroke-dasharray="3 7"/></svg>
+        <div class="center">迴圈六要素<small>LOOP CORE</small></div>
+        <div class="node n1"><div class="dot">1</div><div class="label">觸發器</div><div class="sub">/loop · routines</div></div>
+        <div class="node n2"><div class="dot">2</div><div class="label">執行者</div><div class="sub">agentic loop</div></div>
+        <div class="node n3"><div class="dot">3</div><div class="label">驗證者</div><div class="sub">/goal evaluator</div></div>
+        <div class="node n4"><div class="dot">4</div><div class="label">停止規則</div><div class="sub">condition · cap</div></div>
+        <div class="node n5"><div class="dot">5</div><div class="label">記憶體</div><div class="sub">CLAUDE.md</div></div>
+        <div class="node n6"><div class="dot">6</div><div class="label">技能</div><div class="sub">Skills</div></div>
+      </div>
+    </div>
+
+    <div class="comp-list">
+      <div class="comp-item">
+        <div class="num">1</div>
+        <div>
+          <h4>觸發器（Trigger）<span class="tag">/loop · routines</span></h4>
+          <p><code>/loop</code> 在單一工作階段內依時間間隔重複執行，最長運作 7 天，工作階段結束即停止；若需要不受本機開關限制、可長期常駐或由外部事件（例如 GitHub 事件、API 呼叫）觸發，則要用 <code>routines</code>——在 Anthropic 雲端基礎架構上運作的排程機制。</p>
+        </div>
+      </div>
+      <div class="comp-item">
+        <div class="num">2</div>
+        <div>
+          <h4>執行者（Execution）<span class="tag">代理迴圈</span></h4>
+          <p>每一輪都是「取得脈絡 → 採取行動 → 驗證結果」的循環：Claude 讀取現有狀態、呼叫工具（讀寫檔案、執行指令、網路搜尋等），再依結果決定下一步，這個循環稱為代理迴圈（agentic loop）。</p>
+        </div>
+      </div>
+      <div class="comp-item">
+        <div class="num">3</div>
+        <div>
+          <h4>驗證者（Verifier）<span class="tag">/goal</span></h4>
+          <p><code>/goal</code> 讓你寫下一個可驗證的完成條件（例如「所有測試通過」）。每一輪結束後，一個較小的模型（預設為 Haiku）會依對話紀錄判斷條件是否成立；未成立就附上理由，自動進行下一輪。</p>
+        </div>
+      </div>
+      <div class="comp-item">
+        <div class="num">4</div>
+        <div>
+          <h4>停止規則（Stop Rules）<span class="tag">condition</span></h4>
+          <p><code>/goal</code> 的完成條件本身就是停止線，也可附加回合數或時間上限（如「20 回合後停止」）；<code>/loop</code> 的定期任務則以 7 天為運作上限，逾時或按 <code>Esc</code> 即結束。</p>
+        </div>
+      </div>
+      <div class="comp-item">
+        <div class="num">5</div>
+        <div>
+          <h4>記憶體（Memory）<span class="tag">CLAUDE.md</span></h4>
+          <p><code>CLAUDE.md</code> 是專案根目錄下的一份說明文件，每次工作階段啟動時自動載入，用來記錄規範、慣例與決策依據；Claude Code 另外也會在工作過程中自動累積經驗記憶。</p>
+        </div>
+      </div>
+      <div class="comp-item">
+        <div class="num">6</div>
+        <div>
+          <h4>技能（Skills）<span class="tag">已具備</span></h4>
+          <p>可重複使用的工作流程包，以指令形式呼叫。這個概念與您已經建置的 8 個 <code>nfa-</code> 開頭客製 Skills（<code>nfa-gongwen</code>、<code>nfa-ems-research</code> 等）在架構上完全一致——知識層已經到位。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider-dash"></div>
+
+  <!-- 參 -->
+  <section>
+    <div class="sec-head"><div class="sec-num">參</div><h2>重要釐清：這些功能現在能用嗎？</h2></div>
+    <p><code>/loop</code>、<code>/goal</code>、<code>routines</code> 屬於 <strong>Claude Code</strong>——一個獨立於 Claude.ai 聊天介面的產品，以終端機、桌面應用程式的「Code」分頁或瀏覽器版執行。您目前在 Claude 桌面版使用的「Customize → Skills」上傳功能，屬於 Claude.ai／桌面應用程式的知識層，兩者是不同的產品介面。</p>
+    <table class="clarify">
+      <tr><th>功能</th><th>所屬產品</th><th>您目前狀態</th></tr>
+      <tr><td>自訂 Skills（<code>SKILL.md</code>）</td><td>Claude.ai 桌面版</td><td><span class="pill ok">已建置 8 個</span></td></tr>
+      <tr><td>Google Drive／Gmail／Calendar MCP</td><td>Claude.ai 桌面版</td><td><span class="pill ok">已連接</span></td></tr>
+      <tr><td><code>/loop</code>（單一工作階段內定期執行）</td><td>Claude Code</td><td><span class="pill need">需另外啟用</span></td></tr>
+      <tr><td><code>/goal</code>（自動驗證並持續推進）</td><td>Claude Code（v2.1.139 以上）</td><td><span class="pill need">需另外啟用</span></td></tr>
+      <tr><td><code>routines</code>（雲端常駐排程／事件觸發）</td><td>Claude Code</td><td><span class="pill need">需另外啟用</span></td></tr>
+    </table>
+    <p style="margin-top:14px;">好消息是：<code>SKILL.md</code> 檔案格式在兩個產品之間共通，您既有的知識層可以直接沿用，不需要重做。</p>
+  </section>
+
+  <div class="divider-dash"></div>
+
+  <!-- 肆 -->
+  <section>
+    <div class="sec-head"><div class="sec-num">肆</div><h2>應用到救護科工作的三個情境</h2></div>
+    <p>以下依「觸發、執行、驗證、停止規則、記憶」五個欄位，示範如何把既有的三個 Skill 改寫成迴圈設計；即使暫不啟用 Claude Code，這套思考方式也能套用在目前逐輪手動操作上——重點是把「什麼時候算完成」講清楚。</p>
+
+    <div class="case">
+      <div class="case-head"><span class="cletter">A</span><h4>國際 EMS 政策監測迴圈</h4></div>
+      <div class="case-body">
+        <div class="krow trigger"><div class="k">觸發</div><div class="v">每週一次（<code>/loop</code> 或 <code>routines</code> 排程）</div></div>
+        <div class="krow"><div class="k">執行</div><div class="v">呼叫 <code>nfa-ems-research</code>，檢索美、日、澳最新 TECC／PCC 政策發布與修法動態</div></div>
+        <div class="krow"><div class="k">驗證</div><div class="v">是否出現「上次監測未曾記錄」的新文件</div></div>
+        <div class="krow stop"><div class="k">停止規則</div><div class="v">連續兩次無新資料即暫停，或達 10 次迭代上限</div></div>
+        <div class="krow"><div class="k">記憶</div><div class="v">每次寫入監測紀錄檔，並依既有負面表列排除 CIT 內容（屬警政署／衛福部業務）</div></div>
+      </div>
+    </div>
+
+    <div class="case">
+      <div class="case-head"><span class="cletter">B</span><h4>公文／預算文件品質驗證迴圈</h4></div>
+      <div class="case-body">
+        <div class="krow trigger"><div class="k">觸發</div><div class="v">初稿完成後手動啟動</div></div>
+        <div class="krow"><div class="k">執行</div><div class="v"><code>nfa-gongwen</code>／<code>nfa-budget-doc</code> 產出草案</div></div>
+        <div class="krow"><div class="k">驗證</div><div class="v">核對三段式架構（主旨／說明／辦法）、ROC 紀年、英文術語是否為「中文（英文全稱，縮寫）」格式</div></div>
+        <div class="krow stop"><div class="k">停止規則</div><div class="v">檢核清單全數通過即停止，最多修正 3 輪</div></div>
+        <div class="krow"><div class="k">記憶</div><div class="v">保留每輪修正差異，供簽核前比對</div></div>
+      </div>
+    </div>
+
+    <div class="case">
+      <div class="case-head"><span class="cletter">C</span><h4>簡報／出國報告迭代產製</h4></div>
+      <div class="case-body">
+        <div class="krow trigger"><div class="k">觸發</div><div class="v">NotebookLM 查證完成、素材備齊後啟動</div></div>
+        <div class="krow"><div class="k">執行</div><div class="v"><code>nfa-policy-slides</code>／<code>nfa-overseas-report</code> 依查證事實產出初版</div></div>
+        <div class="krow"><div class="k">驗證</div><div class="v">逐項比對原始考察筆記有無遺漏</div></div>
+        <div class="krow stop"><div class="k">停止規則</div><div class="v">比對完成、無遺漏事項即停止</div></div>
+        <div class="krow"><div class="k">記憶</div><div class="v">保留查證來源清單，供簡報附註引用</div></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>成本控管提醒：</strong>迴圈會持續消耗 token 與運算成本，性質上如同勤務預算控管——啟用前務必比照經費控管的習慣，設定明確的迭代上限與停止條件，避免無止盡運作。持續性、沒有明確終點的任務（如情境 A 的監測工作），較適合用 <code>/loop</code> 或 <code>routines</code>，而不是 <code>/goal</code>——因為 <code>/goal</code> 假設任務有明確終點，用在無終點任務上容易空轉。
+    </div>
+  </section>
+
+  <div class="divider-dash"></div>
+
+  <!-- 伍 -->
+  <section>
+    <div class="sec-head"><div class="sec-num">伍</div><h2>下一步建議</h2></div>
+    <div class="steps">
+      <div class="step-card">
+        <span class="stag">現在就能做</span>
+        <h4>把驗證條件寫進 SKILL.md</h4>
+        <p>在每個 <code>nfa-</code> Skill 中明文加入「驗收標準」段落，即使暫時手動逐輪操作，也能用同樣的紀律思考「什麼時候算完成」，減少來回修改的次數。</p>
+      </div>
+      <div class="step-card">
+        <span class="stag">若需要無人值守自動化</span>
+        <h4>評估啟用 Claude Code</h4>
+        <p>既有 <code>SKILL.md</code> 可直接沿用，搭配 <code>/loop</code> 或 <code>routines</code> 建立監測迴圈。實際版本與方案門檻請以官方文件 code.claude.com/docs 為準。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>資料來源：Claude Code 官方文件（code.claude.com/docs），核對日期 2026 年 7 月</span>
+    <span>NFA 救災救護組．緊急救護科 ｜ 內部工作筆記，非正式公文</span>
+  </footer>
+
+</div>
+</body>
+</html>

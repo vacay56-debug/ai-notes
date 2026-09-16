@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sheets canvas：讓試算表變成互動式迷你應用程式</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EFF3F1;
+  --white:#FFFFFF;
+  --ink:#0F1815;
+  --ink-2:#55635C;
+  --ink-3:#8C9992;
+  --line:#D8E0DC;
+  --sheet:#17694E;      /* 資料層：試算表 */
+  --canvas:#5340D9;     /* 介面層：canvas */
+  --canvas-soft:#EDEAFB;
+  --sheet-soft:#E3EFE9;
+  --serif:"Noto Serif TC",serif;
+  --sans:"Noto Sans TC",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --shell:1080px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+}
+.shell{max-width:var(--shell);margin:0 auto;padding:0 24px}
+
+/* ── 公式列 ── */
+.formulabar{
+  position:sticky;top:0;z-index:20;background:var(--white);
+  border-bottom:1px solid var(--line);
+}
+.formulabar .shell{display:flex;align-items:center;gap:14px;height:52px}
+.fx{font-family:var(--mono);font-style:italic;color:var(--ink-3);border-right:1px solid var(--line);padding-right:14px}
+.formula{font-family:var(--mono);font-size:13px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.formula b{color:var(--canvas);font-weight:500}
+
+/* ── Hero ── */
+.hero{
+  padding:76px 0 64px;
+  background:
+    linear-gradient(180deg,rgba(239,243,241,0) 62%,var(--paper) 100%),
+    repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 88px),
+    repeating-linear-gradient(180deg,var(--line) 0 1px,transparent 1px 40px);
+}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:var(--sheet);margin:0 0 22px}
+h1{
+  font-family:var(--serif);font-weight:700;margin:0;
+  font-size:clamp(34px,5.6vw,62px);line-height:1.24;letter-spacing:-.01em;max-width:15ch;
+}
+h1 .flip{color:var(--canvas)}
+.lede{max-width:46ch;margin:26px 0 0;color:var(--ink-2);font-size:17px}
+
+/* ── 示範區 ── */
+.demo{margin:44px 0 0;background:var(--white);border:1px solid var(--line);box-shadow:0 18px 44px -34px rgba(15,24,21,.5)}
+.prompt{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:16px 18px;border-bottom:1px solid var(--line);background:var(--canvas-soft)}
+.prompt-label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--canvas)}
+.prompt-text{flex:1;min-width:200px;font-size:15px;color:var(--ink)}
+.caret{display:inline-block;width:2px;height:1em;background:var(--canvas);vertical-align:-2px;animation:blink 1.1s steps(1,end) infinite}
+@keyframes blink{50%{opacity:0}}
+.btn{
+  font-family:var(--sans);font-size:14px;font-weight:500;cursor:pointer;
+  border:1px solid var(--canvas);background:var(--canvas);color:#fff;
+  padding:9px 20px;border-radius:999px;transition:background .2s,color .2s;
+}
+.btn:hover{background:#4433bd;border-color:#4433bd}
+.btn[aria-pressed="true"]{background:transparent;color:var(--canvas)}
+.btn:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+.stage{position:relative;padding:0}
+.layer{transition:opacity .38s ease}
+.layer[hidden]{display:none}
+
+/* 試算表層：直角、格線 */
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;white-space:nowrap}
+thead th{background:var(--sheet-soft);font-family:var(--mono);font-weight:500;font-size:11px;color:var(--sheet);text-align:center}
+tbody th{background:var(--paper);font-family:var(--mono);font-weight:400;font-size:11px;color:var(--ink-3);text-align:center;width:34px}
+.scroll{overflow-x:auto}
+
+/* canvas 層：圓角、卡片 */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:14px;padding:20px}
+.card{
+  border:1px solid var(--line);border-radius:14px;padding:16px 16px 18px;background:var(--white);
+  animation:rise .42s cubic-bezier(.2,.7,.3,1) backwards;animation-delay:calc(var(--i)*60ms);
+}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}
+.card h4{margin:0;font-size:15px;font-weight:700}
+.card .due{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin:4px 0 14px}
+.bar{height:6px;border-radius:999px;background:var(--paper);overflow:hidden}
+.bar span{display:block;height:100%;border-radius:999px;background:var(--canvas)}
+.card.done .bar span{background:var(--sheet)}
+.meta{display:flex;justify-content:space-between;align-items:baseline;margin-top:9px;font-family:var(--mono);font-size:11px;color:var(--ink-2)}
+.chip{border-radius:999px;padding:2px 9px;background:var(--canvas-soft);color:var(--canvas)}
+.card.done .chip{background:var(--sheet-soft);color:var(--sheet)}
+.stage-note{border-top:1px solid var(--line);padding:11px 18px;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+
+/* ── 一般區塊 ── */
+section{padding:64px 0;border-top:1px solid var(--line)}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(24px,3.2vw,32px);margin:0 0 8px;letter-spacing:-.01em}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--ink-3);margin:0 0 18px}
+p{margin:0 0 18px;max-width:60ch}
+.quote{
+  font-family:var(--serif);font-size:clamp(19px,2.5vw,26px);line-height:1.65;font-weight:600;
+  border-left:3px solid var(--canvas);padding-left:22px;margin:32px 0;max-width:26ch;
+}
+
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:26px}
+.feat{background:var(--white);padding:24px}
+.feat .tag{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--canvas);display:block;margin-bottom:10px}
+.feat h3{margin:0 0 8px;font-size:17px}
+.feat p{margin:0;font-size:14.5px;color:var(--ink-2)}
+
+.cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:26px}
+.case{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px}
+.case h3{margin:0 0 10px;font-size:17px}
+.case p{margin:0;font-size:14.5px;color:var(--ink-2)}
+.case .use{font-family:var(--mono);font-size:11px;color:var(--sheet);letter-spacing:.1em;display:block;margin-bottom:12px}
+
+.avail{width:100%;border-collapse:collapse;margin-top:24px;background:var(--white);font-size:14.5px}
+.avail th,.avail td{white-space:normal}
+.avail thead th{text-align:left;font-family:var(--sans);font-size:13px;letter-spacing:0;background:var(--sheet-soft);color:var(--sheet)}
+
+ol.steps{list-style:none;counter-reset:s;padding:0;margin:26px 0 0;display:grid;gap:14px}
+ol.steps li{counter-increment:s;display:flex;gap:16px;align-items:flex-start;background:var(--white);border:1px solid var(--line);padding:16px 18px}
+ol.steps li::before{content:counter(s,decimal-leading-zero);font-family:var(--mono);font-size:12px;color:var(--canvas);padding-top:4px}
+ol.steps p{margin:0;font-size:14.5px;color:var(--ink-2)}
+ol.steps b{color:var(--ink);font-weight:500}
+
+footer{border-top:1px solid var(--line);padding:34px 0 60px;font-size:13px;color:var(--ink-3)}
+footer p{max-width:64ch;margin:0 0 8px}
+
+@media (max-width:640px){
+  .hero{padding:52px 0 44px}
+  .cards{padding:14px}
+  section{padding:48px 0}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="formulabar">
+  <div class="shell">
+    <span class="fx">fx</span>
+    <span class="formula">=GEMINI(<b>"建立一個視覺化的讀書追蹤器"</b>, A1:D6)</span>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="shell">
+    <p class="eyebrow">GOOGLE WORKSPACE ／ 功能發表</p>
+    <h1>資料還在格子裡，<br>介面<span class="flip">不必是格子</span>。</h1>
+    <p class="lede">Google Sheets 推出 Sheets canvas，用一句自然語言提示，把整張試算表變成可讀可寫的互動式迷你應用程式。以下的資料表是真的，按一下就知道差別。</p>
+
+    <div class="demo" id="demo">
+      <div class="prompt">
+        <span class="prompt-label">ASK GEMINI</span>
+        <span class="prompt-text">建立一個視覺化的讀書追蹤器<span class="caret"></span></span>
+        <button class="btn" id="toggle" aria-pressed="false" aria-controls="sheet canvas">建立 canvas</button>
+      </div>
+
+      <div class="stage">
+        <div class="layer scroll" id="sheet">
+          <table>
+            <thead>
+              <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>1</th><td>科目</td><td>作業項目</td><td>截止日</td><td>完成度</td></tr>
+              <tr><th>2</th><td>生理學</td><td>第 3 章重點筆記</td><td>2026/08/18</td><td>80%</td></tr>
+              <tr><th>3</th><td>藥理學</td><td>劑量計算習題</td><td>2026/08/19</td><td>45%</td></tr>
+              <tr><th>4</th><td>急救技術</td><td>操作影片研讀</td><td>2026/08/21</td><td>100%</td></tr>
+              <tr><th>5</th><td>法規</td><td>條文比較表</td><td>2026/08/24</td><td>20%</td></tr>
+              <tr><th>6</th><td>統計</td><td>資料分析作業</td><td>2026/08/26</td><td>0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="layer" id="canvas" hidden>
+          <div class="cards">
+            <div class="card" style="--i:0"><h4>生理學</h4><p class="due">第 3 章重點筆記 ・ 08/18</p><div class="bar"><span style="width:80%"></span></div><div class="meta"><span>80%</span><span class="chip">進行中</span></div></div>
+            <div class="card" style="--i:1"><h4>藥理學</h4><p class="due">劑量計算習題 ・ 08/19</p><div class="bar"><span style="width:45%"></span></div><div class="meta"><span>45%</span><span class="chip">進行中</span></div></div>
+            <div class="card done" style="--i:2"><h4>急救技術</h4><p class="due">操作影片研讀 ・ 08/21</p><div class="bar"><span style="width:100%"></span></div><div class="meta"><span>100%</span><span class="chip">已完成</span></div></div>
+            <div class="card" style="--i:3"><h4>法規</h4><p class="due">條文比較表 ・ 08/24</p><div class="bar"><span style="width:20%"></span></div><div class="meta"><span>20%</span><span class="chip">進行中</span></div></div>
+            <div class="card" style="--i:4"><h4>統計</h4><p class="due">資料分析作業 ・ 08/26</p><div class="bar"><span style="width:0%"></span></div><div class="meta"><span>0%</span><span class="chip">尚未開始</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="stage-note" id="note">目前顯示：原始試算表（A1:D6）</p>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="shell">
+    <p class="kicker">SHEETS CANVAS 是什麼</p>
+    <h2>建在試算表資料上方的動態讀寫層</h2>
+    <p>資料仍然來自原本的試算表，但呈現方式可以依需求重新安排，讓使用者用比較直觀的畫面查看、編輯和瀏覽資料。使用時只要在 Ask Gemini 側邊面板輸入自然語言提示，Gemini 就會依照描述產生對應的畫面和功能，不需要另外寫公式或程式。</p>
+    <p>Google 舉出的適用情境包括規劃婚禮、追蹤學校作業、管理 fantasy football 球隊名單，以及比較副業收入等；原本分散在列與欄之間的資料，可以換成更容易操作的介面。</p>
+    <p class="quote">試算表擅長整理資料，不擅長讓人一眼看懂重點。</p>
+  </div>
+</section>
+
+<section>
+  <div class="shell">
+    <p class="kicker">四個核心特點</p>
+    <h2>它做到什麼</h2>
+    <div class="feats">
+      <div class="feat">
+        <span class="tag">免寫程式</span>
+        <h3>用文字描述就能建立</h3>
+        <p>不需要公式或程式，只要說明想做的東西，Gemini 就能從既有資料產生初版 canvas。</p>
+      </div>
+      <div class="feat">
+        <span class="tag">雙向同步</span>
+        <h3>兩邊改，兩邊都更新</h3>
+        <p>canvas 與原始試算表之間即時同步。無論在哪一側修改內容，資料都會一起更新。</p>
+      </div>
+      <div class="feat">
+        <span class="tag">持續調整</span>
+        <h3>初版之後還能再改</h3>
+        <p>可繼續下提示，要求 Gemini 修改版面配置、設計與操作方式，逐步調整成想要的樣子。</p>
+      </div>
+      <div class="feat">
+        <span class="tag">共同協作</span>
+        <h3>沿用試算表的分享機制</h3>
+        <p>canvas 會以 Google Sheets 裡的一個分頁存在，因此可以像一般試算表一樣分享給其他人使用。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shell">
+    <p class="kicker">三個可直接使用的情境</p>
+    <h2>拿來做什麼</h2>
+    <div class="cases">
+      <div class="case">
+        <span class="use">學習進度追蹤</span>
+        <h3>把科目、作業與截止日變成互動工具</h3>
+        <p>追蹤完成進度、設定提醒，也能查看接下來一週的安排，減少漏掉截止日期的情況。</p>
+      </div>
+      <div class="case">
+        <span class="use">球隊資料儀表板</span>
+        <h3>Fantasy football 專屬 dashboard</h3>
+        <p>追蹤球員表現、並排比較統計數字，把球隊名單和比賽相關資料集中在同一個畫面裡查看。</p>
+      </div>
+      <div class="case">
+        <span class="use">婚禮座位安排</span>
+        <h3>把 RSVP 資料變成可拖放的座位表</h3>
+        <p>賓客回覆與餐點選擇放進試算表後轉成互動式座位表，拖放安排座位，中央試算表同步更新。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shell">
+    <p class="kicker">開通範圍</p>
+    <h2>誰可以使用</h2>
+    <table class="avail">
+      <thead><tr><th>使用者類型</th><th>目前狀態</th></tr></thead>
+      <tbody>
+        <tr><td>Google AI Pro、Google AI Ultra 訂閱者</td><td>已於全球提供，僅英文版</td></tr>
+        <tr><td>Workspace Business Standard、Business Plus</td><td>自 2026 年 8 月 13 日起陸續取得</td></tr>
+        <tr><td>Workspace Enterprise Standard、Enterprise Plus</td><td>自 2026 年 8 月 13 日起陸續取得</td></tr>
+        <tr><td>Google AI Pro for Education add-on 訂閱者</td><td>在推出範圍內</td></tr>
+      </tbody>
+    </table>
+
+    <p class="kicker" style="margin-top:44px">三個步驟</p>
+    <h2>怎麼開始</h2>
+    <ol class="steps">
+      <li><p>開啟一份 Google Sheets 試算表，並選取要使用的資料範圍。</p></li>
+      <li><p>點開 <b>Ask Gemini</b> 側邊面板，在對話框右下角選擇 <b>Create canvas</b>。</p></li>
+      <li><p>用英文提示描述想建立的資料介面，取得第一版後再依需要繼續修改。</p></li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <div class="shell">
+    <p>功能說明整理自 Google Workspace 官方公告。官方公告的使用條件包含英文版本與特定 Google AI 或 Workspace 方案；實際帳號是否已看得到 Create canvas，仍受功能推出進度與方案狀態影響。</p>
+    <p style="font-family:var(--mono);font-size:11px;letter-spacing:.1em">SHEETS CANVAS ／ 功能筆記</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var btn=document.getElementById('toggle'),
+      sheet=document.getElementById('sheet'),
+      canvas=document.getElementById('canvas'),
+      note=document.getElementById('note');
+  btn.addEventListener('click',function(){
+    var on=btn.getAttribute('aria-pressed')==='true';
+    if(on){
+      canvas.hidden=true;sheet.hidden=false;
+      btn.setAttribute('aria-pressed','false');
+      btn.textContent='建立 canvas';
+      note.textContent='目前顯示：原始試算表（A1:D6）';
+    }else{
+      sheet.hidden=true;canvas.hidden=false;
+      // 重播卡片進場動畫
+      canvas.querySelectorAll('.card').forEach(function(c){
+        c.style.animation='none';void c.offsetWidth;c.style.animation='';
+      });
+      btn.setAttribute('aria-pressed','true');
+      btn.textContent='顯示原始試算表';
+      note.textContent='目前顯示：Sheets canvas ・ 資料仍與 A1:D6 同步';
+    }
+  });
+})();
+</script>
+</body>
+</html>

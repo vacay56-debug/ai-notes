@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NotebookLM 提示詞應用指引</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14202a;
+    --ink-soft:#4d5c67;
+    --paper:#eceeed;
+    --panel:#ffffff;
+    --rule:#c9cfcd;
+    --teal:#0e6655;
+    --mark:#f5d547;
+    --maxw:44rem;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    font-size:17px;
+    line-height:1.85;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:3.5rem 1.5rem 5rem;}
+
+  /* ── 頁首 ── */
+  header{border-bottom:2px solid var(--ink);padding-bottom:1.75rem;}
+  .kicker{
+    font-size:.82rem;letter-spacing:.14em;color:var(--ink-soft);
+    margin:0 0 1.1rem;
+  }
+  h1{
+    font-family:"Noto Serif TC","Songti TC",serif;
+    font-weight:700;
+    font-size:clamp(1.9rem,6.5vw,2.7rem);
+    line-height:1.35;
+    margin:0 0 .9rem;
+    letter-spacing:.01em;
+  }
+  .lede{
+    font-size:1.05rem;
+    color:var(--ink-soft);
+    margin:0;
+    max-width:34rem;
+  }
+  .mark{
+    background:linear-gradient(to top,var(--mark) 0,var(--mark) .62em,transparent .62em);
+    padding:0 .12em;
+  }
+
+  /* ── 對照區 ── */
+  .compare{
+    display:grid;grid-template-columns:1fr 1fr;gap:0;
+    margin:2.5rem 0 0;border:1px solid var(--rule);background:var(--panel);
+  }
+  .compare div{padding:1.15rem 1.25rem;}
+  .compare div + div{border-left:1px solid var(--rule);}
+  .compare h2{
+    font-size:.95rem;font-weight:700;margin:0 0 .5rem;
+  }
+  .compare .b h2{color:var(--teal);}
+  .compare ul{margin:0;padding-left:1.1em;font-size:.95rem;line-height:1.75;color:var(--ink-soft);}
+  .compare li{margin-bottom:.15rem;}
+
+  .note{
+    margin:1.5rem 0 0;font-size:.95rem;color:var(--ink-soft);
+    border-left:3px solid var(--mark);padding-left:.9rem;
+  }
+
+  /* ── 提示詞 ── */
+  .items{margin-top:3.25rem;}
+  .item{
+    display:grid;
+    grid-template-columns:3.25rem 1fr;
+    gap:0 1rem;
+    padding:2rem 0;
+    border-top:1px solid var(--rule);
+  }
+  .item:first-child{border-top:none;padding-top:0;}
+  .num{
+    font-family:"Noto Serif TC",serif;
+    font-size:1.6rem;font-weight:700;color:var(--teal);
+    line-height:1.4;
+  }
+  h3{
+    font-family:"Noto Serif TC","Songti TC",serif;
+    font-size:1.3rem;font-weight:700;margin:0 0 .35rem;line-height:1.5;
+  }
+  .en{font-size:.85rem;color:var(--ink-soft);margin:0 0 .75rem;}
+  .when{margin:0 0 1rem;font-size:.97rem;color:var(--ink-soft);}
+  .when b{color:var(--ink);font-weight:500;}
+
+  .prompt{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--teal);
+    padding:1.05rem 1.15rem .9rem;
+  }
+  .prompt p{margin:0;font-size:1rem;line-height:1.8;}
+  .promptbar{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:1rem;margin-top:.85rem;padding-top:.7rem;border-top:1px dashed var(--rule);
+  }
+  .promptbar span{font-size:.8rem;color:var(--ink-soft);}
+  button{
+    font-family:inherit;font-size:.85rem;
+    color:var(--teal);background:none;
+    border:1px solid var(--teal);border-radius:2px;
+    padding:.3rem .8rem;cursor:pointer;
+    transition:background .15s,color .15s;
+  }
+  button:hover,button:focus-visible{background:var(--teal);color:#fff;}
+  button:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+  button.done{background:var(--teal);color:#fff;border-color:var(--teal);}
+
+  footer{
+    margin-top:3.5rem;padding-top:1.25rem;border-top:2px solid var(--ink);
+    font-size:.85rem;color:var(--ink-soft);
+  }
+  footer p{margin:.25rem 0;}
+
+  @media (max-width:560px){
+    body{font-size:16px;}
+    .wrap{padding:2.25rem 1.1rem 3.5rem;}
+    .compare{grid-template-columns:1fr;}
+    .compare div + div{border-left:none;border-top:1px solid var(--rule);}
+    .item{grid-template-columns:1fr;gap:0;}
+    .num{font-size:1.1rem;margin-bottom:.2rem;}
+  }
+  @media print{
+    body{background:#fff;font-size:11pt;}
+    .wrap{max-width:none;padding:0;}
+    button{display:none;}
+    .item{break-inside:avoid;}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker">內部參考資料　文件研讀輔助工具</p>
+    <h1>NotebookLM 提示詞應用指引<br><span class="mark">把文件讀成理解，而不只是摘要</span></h1>
+    <p class="lede">五組可直接複製使用的提示詞，適用於法規條文、國際教材、研究論文及考察資料之研讀。</p>
+  </header>
+
+  <section class="compare">
+    <div class="a">
+      <h2>常見做法</h2>
+      <ul>
+        <li>上傳 PDF</li>
+        <li>要一份摘要</li>
+        <li>看完就忘</li>
+      </ul>
+    </div>
+    <div class="b">
+      <h2>建議做法</h2>
+      <ul>
+        <li>使用結構化提示詞</li>
+        <li>建立完整理解</li>
+        <li>學得快，也記得久</li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="note">NotebookLM 的價值不在於摘要文件，而在於忠實執行結構良好的提示詞。</p>
+
+  <div class="items">
+
+    <article class="item">
+      <div class="num">1</div>
+      <div>
+        <h3>從零開始教我</h3>
+        <p class="en">Teach Me Like I'm Starting From Scratch</p>
+        <p class="when">適用時機：初次接觸全新主題。<b>例：首次研讀 PCC（Prolonged Casualty Care，延長傷患照護）教材。</b></p>
+        <div class="prompt">
+          <p id="p1">請將本文件轉化為一堂引導式課程，從最基礎的概念開始，逐步說明至中階與進階內容，每一階段皆須完整解釋。請假設我是第一次接觸這個主題。</p>
+          <div class="promptbar">
+            <span>貼上 NotebookLM 對話框即可使用</span>
+            <button data-target="p1">複製</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="item">
+      <div class="num">2</div>
+      <div>
+        <h3>把長文件拆成微課程</h3>
+        <p class="en">Turn Any PDF into a Mini Course</p>
+        <p class="when">適用時機：長篇文件需分段學習或轉為訓練教材。<b>例：將《緊急醫療救護法》拆解為內部教育訓練單元。</b></p>
+        <div class="prompt">
+          <p id="p2">請將本文件切分為若干章節，並將每一章節改寫為可獨立閱讀的微課程，內容須包含清楚的說明、實務範例，並於結尾附上重點摘要。</p>
+          <div class="promptbar">
+            <span>貼上 NotebookLM 對話框即可使用</span>
+            <button data-target="p2">複製</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="item">
+      <div class="num">3</div>
+      <div>
+        <h3>用白話說明最難的部分</h3>
+        <p class="en">Explain the Hard Parts Like I'm New</p>
+        <p class="when">適用時機：研究論文、技術手冊、外文規範。<b>例：處理國外 EMS 研究之統計方法與制度名詞。</b></p>
+        <div class="prompt">
+          <p id="p3">請找出本文件中最難理解的段落，並以淺白語言、真實情境範例及易於理解的類比重新說明。</p>
+          <div class="promptbar">
+            <span>貼上 NotebookLM 對話框即可使用</span>
+            <button data-target="p3">複製</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="item">
+      <div class="num">4</div>
+      <div>
+        <h3>萃取所有值得記住的內容</h3>
+        <p class="en">Extract Everything Worth Remembering</p>
+        <p class="when">適用時機：會議、簡報、認證考試或考察行前準備。<b>例：出國考察前研讀對方機構資料，整理必問重點。</b></p>
+        <div class="prompt">
+          <p id="p4">請分析本文件，列出其中所有重要概念、定義、架構與關鍵觀點，並逐項清楚說明，以利後續複習。</p>
+          <div class="promptbar">
+            <span>貼上 NotebookLM 對話框即可使用</span>
+            <button data-target="p4">複製</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="item">
+      <div class="num">5</div>
+      <div>
+        <h3>將整份文件轉為心智圖</h3>
+        <p class="en">Turn the Entire Document into a Mind Map</p>
+        <p class="when">適用時機：需掌握概念之間的關聯，而非記憶零散事實。<b>例：比對 TCCC、TECC 與 PCC 三套課程之概念關聯。</b></p>
+        <div class="prompt">
+          <p id="p5">請將本文件轉換為結構化心智圖，串連主要論點、支持概念及其重要關聯，以利快速理解與記憶。</p>
+          <div class="promptbar">
+            <span>貼上 NotebookLM 對話框即可使用</span>
+            <button data-target="p5">複製</button>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <footer>
+    <p>使用方式：於 NotebookLM 建立筆記本並上傳來源文件後，將上列提示詞貼入對話框執行。</p>
+    <p>內容編譯自 AIForLeaders.com 之 NotebookLM Prompts 圖卡，並依業務需求增補應用範例。</p>
+  </footer>
+
+</div>
+
+<script>
+document.querySelectorAll('button[data-target]').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var text = document.getElementById(btn.dataset.target).textContent.trim();
+    var done = function(){
+      btn.textContent = '已複製';
+      btn.classList.add('done');
+      setTimeout(function(){ btn.textContent = '複製'; btn.classList.remove('done'); }, 1600);
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done).catch(function(){ fallback(text, done); });
+    } else {
+      fallback(text, done);
+    }
+  });
+});
+function fallback(text, done){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch(e) { alert('請手動選取複製'); }
+  document.body.removeChild(ta);
+}
+</script>
+</body>
+</html>

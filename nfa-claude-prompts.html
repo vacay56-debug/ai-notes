@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20 個決策提示框架｜EMS 政策問題解決工具箱</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#10131a;
+    --bg-elevated:#161a23;
+    --card:#1b212c;
+    --card-hover:#212836;
+    --border:#2b3240;
+    --text:#f2f0ea;
+    --text-muted:#8d93a2;
+    --text-faint:#5c6273;
+    --red:#e1372b;
+    --amber:#f2a93b;
+    --blue:#3e8ede;
+    --green:#3fa66b;
+    --mono-bg:#0b0e14;
+    --font-display:'Oswald','Noto Sans TC',sans-serif;
+    --font-body:'Noto Sans TC',sans-serif;
+    --font-mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--red); color:#fff;}
+
+  a{color:inherit;}
+
+  /* ---------- top light-bar ---------- */
+  .lightbar{
+    height:5px;
+    width:100%;
+    background:linear-gradient(90deg,var(--red) 0%,var(--red) 25%,var(--amber) 25%,var(--amber) 50%,var(--blue) 50%,var(--blue) 75%,var(--green) 75%,var(--green) 100%);
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:64px 24px 40px;
+    max-width:1200px;
+    margin:0 auto;
+    border-bottom:1px solid var(--border);
+  }
+  .hero-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:.08em;
+    color:var(--amber);
+    background:rgba(242,169,59,.08);
+    border:1px solid rgba(242,169,59,.35);
+    padding:5px 10px;
+    border-radius:3px;
+    margin-bottom:22px;
+  }
+  .hero-tag::before{
+    content:"";
+    width:7px; height:7px;
+    border-radius:50%;
+    background:var(--amber);
+    box-shadow:0 0 8px var(--amber);
+  }
+  h1{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(32px,5.2vw,58px);
+    line-height:1.08;
+    letter-spacing:.01em;
+    max-width:16ch;
+  }
+  h1 .accent{color:var(--red);}
+  .hero-sub{
+    margin-top:18px;
+    max-width:640px;
+    font-size:16px;
+    color:var(--text-muted);
+  }
+  .hero-meta{
+    margin-top:28px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:28px;
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    color:var(--text-faint);
+  }
+  .hero-meta strong{
+    color:var(--text-muted);
+    font-weight:500;
+  }
+  .hero-credit{
+    margin-top:22px;
+    font-size:12.5px;
+    color:var(--text-faint);
+  }
+
+  /* ---------- filter ---------- */
+  .filterbar{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:rgba(16,19,26,.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .filter-inner{
+    max-width:1200px;
+    margin:0 auto;
+    padding:14px 24px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .filter-label{
+    font-family:var(--font-mono);
+    font-size:11.5px;
+    color:var(--text-faint);
+    letter-spacing:.06em;
+    margin-right:6px;
+  }
+  .chip{
+    font-family:var(--font-body);
+    font-weight:500;
+    font-size:13.5px;
+    color:var(--text-muted);
+    background:transparent;
+    border:1px solid var(--border);
+    padding:7px 14px;
+    border-radius:100px;
+    cursor:pointer;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+  }
+  .chip .dot{width:7px; height:7px; border-radius:50%; background:currentColor; opacity:.55;}
+  .chip:hover{color:var(--text); border-color:var(--text-faint);}
+  .chip.active{color:var(--bg); background:var(--text); border-color:var(--text);}
+  .chip.active .dot{opacity:1;}
+  .chip[data-cat="diagnosis"].active{background:var(--red); border-color:var(--red); color:#fff;}
+  .chip[data-cat="strategy"].active{background:var(--amber); border-color:var(--amber); color:#1b1400;}
+  .chip[data-cat="decision"].active{background:var(--blue); border-color:var(--blue); color:#fff;}
+  .chip[data-cat="execution"].active{background:var(--green); border-color:var(--green); color:#fff;}
+
+  /* ---------- sections ---------- */
+  main{max-width:1200px; margin:0 auto; padding:8px 24px 80px;}
+  .section{margin-top:56px;}
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    margin-bottom:22px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--border);
+  }
+  .section-num{
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--text-faint);
+    white-space:nowrap;
+  }
+  .section-title{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:24px;
+    letter-spacing:.02em;
+  }
+  .section-title .en{
+    font-family:var(--font-mono);
+    font-weight:400;
+    font-size:13px;
+    color:var(--text-faint);
+    margin-left:10px;
+    letter-spacing:0;
+  }
+  .section-desc{
+    font-size:13.5px;
+    color:var(--text-muted);
+    margin-left:auto;
+    max-width:340px;
+    text-align:right;
+  }
+  .section[data-cat="diagnosis"] .section-num{color:var(--red);}
+  .section[data-cat="strategy"] .section-num{color:var(--amber);}
+  .section[data-cat="decision"] .section-num{color:var(--blue);}
+  .section[data-cat="execution"] .section-num{color:var(--green);}
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+    gap:16px;
+  }
+
+  /* ---------- card ---------- */
+  .card{
+    position:relative;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-left:3px solid var(--border-color,var(--text-faint));
+    border-radius:6px;
+    padding:20px 18px 18px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    transition:transform .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .card:hover{background:var(--card-hover); transform:translateY(-2px);}
+  .card[data-cat="diagnosis"]{border-left-color:var(--red);}
+  .card[data-cat="strategy"]{border-left-color:var(--amber);}
+  .card[data-cat="decision"]{border-left-color:var(--blue);}
+  .card[data-cat="execution"]{border-left-color:var(--green);}
+
+  .card-top{display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+  .case-tag{
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    color:var(--text-faint);
+    letter-spacing:.04em;
+  }
+  .icon{
+    width:30px; height:30px;
+    flex-shrink:0;
+    color:var(--text-muted);
+  }
+  .card[data-cat="diagnosis"] .icon{color:var(--red);}
+  .card[data-cat="strategy"] .icon{color:var(--amber);}
+  .card[data-cat="decision"] .icon{color:var(--blue);}
+  .card[data-cat="execution"] .icon{color:var(--green);}
+
+  .card h3{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:18px;
+    letter-spacing:.01em;
+  }
+  .card .en-name{
+    display:block;
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--text-faint);
+    margin-top:2px;
+    letter-spacing:.02em;
+  }
+  .card .desc{font-size:13.5px; color:var(--text-muted);}
+  .card .context{
+    font-size:12.5px;
+    color:var(--text-faint);
+    border-top:1px dashed var(--border);
+    padding-top:10px;
+  }
+  .card .context b{color:var(--text-muted); font-weight:500;}
+
+  .example{
+    background:var(--mono-bg);
+    border:1px solid var(--border);
+    border-radius:4px;
+    padding:12px 12px 10px;
+    margin-top:auto;
+  }
+  .example-label{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:6px;
+  }
+  .example-label span{
+    font-family:var(--font-mono);
+    font-size:10px;
+    color:var(--text-faint);
+    letter-spacing:.06em;
+  }
+  .copy-btn{
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    color:var(--text-faint);
+    background:transparent;
+    border:1px solid var(--border);
+    border-radius:3px;
+    padding:3px 8px;
+    cursor:pointer;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .copy-btn:hover{color:var(--text); border-color:var(--text-faint);}
+  .copy-btn.copied{color:var(--green); border-color:var(--green);}
+  .example-text{
+    font-family:var(--font-mono);
+    font-size:12.3px;
+    line-height:1.65;
+    color:#d7dbe4;
+    white-space:pre-wrap;
+  }
+  .example-text .prompt-arrow{color:var(--text-faint); margin-right:4px;}
+
+  /* ---------- footer ---------- */
+  footer{
+    max-width:1200px;
+    margin:0 auto;
+    padding:40px 24px 60px;
+    border-top:1px solid var(--border);
+    color:var(--text-faint);
+    font-size:12.5px;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  footer .font-mono{font-family:var(--font-mono);}
+
+  @media (max-width:640px){
+    .hero{padding:44px 18px 28px;}
+    .section-head{flex-direction:column; align-items:flex-start;}
+    .section-desc{text-align:left; margin-left:0;}
+    main{padding:8px 18px 60px;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important; scroll-behavior:auto !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="lightbar"></div>
+
+<section class="hero">
+  <span class="hero-tag">NFA · 救災救護組緊急救護科 · AI 工作方法</span>
+  <h1>20 個 Claude<br><span class="accent">決策提示框架</span></h1>
+  <p class="hero-sub">改編自 Natan Mohart 提出的 20 種問題解決思考模型，依「診斷、規劃、決策、執行」四階段重新分類，並全數改寫為到院前緊急救護（EMS）政策實務可直接套用的提示詞範例。</p>
+  <div class="hero-meta">
+    <span><strong>用途</strong>　政策研擬 · 專案管理 · 採購評選 · 訓練體系規劃</span>
+    <span><strong>使用方式</strong>　點選下方分類篩選，或直接複製範例提示詞代入 Claude</span>
+  </div>
+</section>
+
+<div class="filterbar">
+  <div class="filter-inner">
+    <span class="filter-label">篩選階段</span>
+    <button class="chip active" data-cat="all"><span class="dot"></span>全部 20 項</button>
+    <button class="chip" data-cat="diagnosis"><span class="dot"></span>情勢診斷</button>
+    <button class="chip" data-cat="strategy"><span class="dot"></span>策略規劃</button>
+    <button class="chip" data-cat="decision"><span class="dot"></span>決策評估</button>
+    <button class="chip" data-cat="execution"><span class="dot"></span>執行管理</button>
+  </div>
+</div>
+
+<main>
+
+  <!-- ================= PHASE 01 診斷 ================= -->
+  <section class="section" data-cat="diagnosis">
+    <div class="section-head">
+      <span class="section-num">PHASE&nbsp;01</span>
+      <h2 class="section-title">情勢診斷<span class="en">DIAGNOSIS</span></h2>
+      <p class="section-desc">釐清現況與根本原因，先看清楚問題再談對策</p>
+    </div>
+    <div class="grid">
+
+      <article class="card" data-cat="diagnosis">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;01</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>
+        </div>
+        <div>
+          <h3>SWOT 分析<span class="en-name">SWOT ANALYSIS</span></h3>
+        </div>
+        <p class="desc">以優勢、劣勢、機會、威脅四象限，完整盤點制度或方案的現況。</p>
+        <p class="context"><b>適用時機：</b>制度檢討、跨國比較、年度政策總檢視</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>請分析我國 EMT-P（進階救護員）培訓與授權制度的優勢、劣勢、機會與威脅，並比較日本、新加坡制度後，提出三項可行的強化建議。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="diagnosis">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;02</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h13"/><path d="M16 12l5-4M16 12l5 4"/><path d="M7 8v8M10 9v6M13 10v4"/></svg>
+        </div>
+        <div>
+          <h3>魚骨圖<span class="en-name">FISHBONE DIAGRAM</span></h3>
+        </div>
+        <p class="desc">將問題的可能成因依人員、制度、環境等面向分類，避免頭痛醫頭。</p>
+        <p class="context"><b>適用時機：</b>人力流失、異常事件檢討、服務品質下滑</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>近三年基層救護技術員離職率上升，請用魚骨圖從人員、訓練、待遇、勤務環境四個面向，歸納可能原因並排序優先處理項目。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="diagnosis">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;03</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="12" r="4"/><circle cx="17" cy="12" r="4"/></svg>
+        </div>
+        <div>
+          <h3>MECE 原則<span class="en-name">MECE PRINCIPLE</span></h3>
+        </div>
+        <p class="desc">確保分類彼此互斥、合計窮盡，不重疊、不遺漏。</p>
+        <p class="context"><b>適用時機：</b>資源分配研究、分級分類制度設計</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>請將全國 22 縣市消防局的 EMS 量能分類為 MECE 群組，作為資源分配研究基礎，避免「都會型」與「高負荷型」的定義重疊。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="diagnosis">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;04</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 3v7"/><path d="M12 10c-3 1-5 3-5 6a5 5 0 0010 0c0-3-2-5-5-6z"/><path d="M9 21h6"/></svg>
+        </div>
+        <div>
+          <h3>五個為什麼<span class="en-name">ROOT CAUSE — 5 WHYS</span></h3>
+        </div>
+        <p class="desc">連續追問「為什麼」直到觸及根本原因，而非停在表面症狀。</p>
+        <p class="context"><b>適用時機：</b>派遣延遲、KPI 異常、重複發生的行政缺失</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>某縣市救護派遣到院前時間近半年持續延長，請用「5 Whys」逐層追問找出根本原因，並提出對應的制度性改善措施。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="diagnosis">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;05</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.2 4.2l2.8 2.8M17 17l2.8 2.8M2 12h4M18 12h4M4.2 19.8L7 17M17 7l2.8-2.8"/></svg>
+        </div>
+        <div>
+          <h3>五力分析<span class="en-name">PORTER'S FIVE FORCES</span></h3>
+        </div>
+        <p class="desc">從五個構面檢視制度或服務體系所承受的競爭與替代壓力。</p>
+        <p class="context"><b>適用時機：</b>公私救護體系分工、服務市場結構分析</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>請用五力分析，評估民間救護車業者、醫院自設救護車隊對公務救護派遣體系造成的壓力，並提出因應策略。</div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= PHASE 02 策略 ================= -->
+  <section class="section" data-cat="strategy">
+    <div class="section-head">
+      <span class="section-num">PHASE&nbsp;02</span>
+      <h2 class="section-title">策略規劃<span class="en">STRATEGY</span></h2>
+      <p class="section-desc">在看清情勢後，規劃可行的中長期方向與路徑</p>
+    </div>
+    <div class="grid">
+
+      <article class="card" data-cat="strategy">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;06</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 12h9"/><path d="M8 8l-6 4 6 4"/><path d="M22 12h-9"/><path d="M16 8l6 4-6 4"/></svg>
+        </div>
+        <div>
+          <h3>力場分析<span class="en-name">FORCE FIELD ANALYSIS</span></h3>
+        </div>
+        <p class="desc">盤點推動變革的助力與阻力，據以擬定削弱阻力的策略。</p>
+        <p class="context"><b>適用時機：</b>制度改革、跨機關協調、法規修正推動</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>推動救護車收費制度改革時，請用力場分析盤點民眾、消防局、地方政府三方的助力與阻力，並提出降低抗拒的溝通策略。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="strategy">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;07</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M4 10L14 4l4 3-9 6"/><path d="M14 4l6 10-6 3"/></svg>
+        </div>
+        <div>
+          <h3>情境規劃<span class="en-name">SCENARIO PLANNING</span></h3>
+        </div>
+        <p class="desc">針對不確定的未來模擬多種情境，並為各情境備妥對應策略。</p>
+        <p class="context"><b>適用時機：</b>多年期計畫、預算編列前的風險沙盤推演</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>針對「韌性國家醫療整備計畫」未來三年執行，請模擬最佳、最差、最可能三種情境，並分別提出對應的資源調整方案。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="strategy">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;08</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M12 3v18M3 12h18"/></svg>
+        </div>
+        <div>
+          <h3>安索夫矩陣<span class="en-name">ANSOFF MATRIX</span></h3>
+        </div>
+        <p class="desc">以現有／新對象 × 現有／新課程兩軸，評估training 擴展方向。</p>
+        <p class="context"><b>適用時機：</b>訓練課程擴大、新政策服務對象評估</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>請用安索夫矩陣，評估 TECC 訓練課程應優先擴大受訓對象（納入消防員以外人員），或優先開發 PCC 進階模組課程，並說明理由。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="strategy">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;09</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 3v18h18"/><circle cx="8" cy="8" r="2.4"/><circle cx="17" cy="16" r="1.4"/><path d="M13 12l-1.5-1.5M16 8l1.5 1.5"/></svg>
+        </div>
+        <div>
+          <h3>BCG 矩陣<span class="en-name">BCG MATRIX</span></h3>
+        </div>
+        <p class="desc">依重要性與資源投入為專案定位，決定強化、維持或整併。</p>
+        <p class="context"><b>適用時機：</b>多專案盤點、年度計畫優先順序排定</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>請盤點救護科現行 10 項訓練與研究專案，依重要性與資源投入量以 BCG 矩陣分類，建議優先強化、維持或整併的項目。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="strategy">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;10</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15c2-3 4-3 6 0s4 3 6 0 4-3 6 0"/><path d="M2 10c2-3 4-3 6 0s4 3 6 0 4-3 6 0"/></svg>
+        </div>
+        <div>
+          <h3>藍海策略<span class="en-name">BLUE OCEAN STRATEGY</span></h3>
+        </div>
+        <p class="desc">跳脫既有競爭框架，開創具差異化辨識度的定位空間。</p>
+        <p class="context"><b>適用時機：</b>國際研討會定位、品牌化政策活動規劃</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>請用藍海策略思考，CIT 國際研討會如何跳脫同質化的政策研討會形式，開創具國際辨識度的差異化定位。</div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= PHASE 03 決策 ================= -->
+  <section class="section" data-cat="decision">
+    <div class="section-head">
+      <span class="section-num">PHASE&nbsp;03</span>
+      <h2 class="section-title">決策評估<span class="en">DECISION</span></h2>
+      <p class="section-desc">在多個方案之間，用結構化準則做出可被檢視的選擇</p>
+    </div>
+    <div class="grid">
+
+      <article class="card" data-cat="decision">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;11</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18"/><path d="M12 12.5l1.5 1.5 3-3"/></svg>
+        </div>
+        <div>
+          <h3>決策矩陣<span class="en-name">DECISION MATRIX</span></h3>
+        </div>
+        <p class="desc">以加權準則系統性比較多個方案，讓選擇過程透明可覆核。</p>
+        <p class="context"><b>適用時機：</b>採購評選、廠商比選、方案裁量</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>評選氰化物解毒劑供應廠商，請用決策矩陣比較價格、交貨時效、藥品穩定性、售後服務四項準則並給予權重，產出比較表。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="decision">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;12</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 3v3"/><path d="M4 8h16"/><path d="M6 8l-3 6a3 3 0 006 0z"/><path d="M18 8l-3 6a3 3 0 006 0z"/><path d="M8 21h8"/><path d="M12 6v15"/></svg>
+        </div>
+        <div>
+          <h3>成本效益分析<span class="en-name">COST-BENEFIT ANALYSIS</span></h3>
+        </div>
+        <p class="desc">量化比較各方案的投入成本與預期效益，作為裁示依據。</p>
+        <p class="context"><b>適用時機：</b>自辦 vs. 委外評估、預算配置優先順序</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>請比較「自辦 CIT 講師培訓」與「委外訓練」兩方案的三年期成本效益，列出量化比較表並提出建議方案。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="decision">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;13</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="2"/><ellipse cx="12" cy="12" rx="9" ry="3.5" transform="rotate(30 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3.5" transform="rotate(-30 12 12)"/></svg>
+        </div>
+        <div>
+          <h3>第一性原理<span class="en-name">FIRST PRINCIPLES</span></h3>
+        </div>
+        <p class="desc">拆解至最基本的事實與流程要素，捨棄慣性假設重新推導。</p>
+        <p class="context"><b>適用時機：</b>流程再造、長年慣例的成本檢討</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>救護車出勤成本持續上升，請用第一性原理拆解出勤流程的基本要素，捨棄既有假設，重新設計精簡化派遣模式。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="decision">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;14</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V11a6 6 0 0112 0v10"/><path d="M4 21h16"/><path d="M9 11h6"/></svg>
+        </div>
+        <div>
+          <h3>六頂思考帽<span class="en-name">SIX THINKING HATS</span></h3>
+        </div>
+        <p class="desc">依序切換數據、風險、效益、創意、疑慮、流程六種視角，避免討論失焦。</p>
+        <p class="context"><b>適用時機：</b>爭議性政策、跨單位共識會議</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>評估是否全面推動到院前輸血（PHBT）政策，請用六頂思考帽依序分析數據、風險、效益、創意方案、疑慮與執行流程。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="decision">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;15</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h3a2 2 0 012 2v2a2 2 0 002 2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 00-2 2v2a2 2 0 01-2 2H9"/></svg>
+        </div>
+        <div>
+          <h3>水平思考<span class="en-name">LATERAL THINKING</span></h3>
+        </div>
+        <p class="desc">跳脫線性邏輯與既有框架，尋找非傳統的解決路徑。</p>
+        <p class="context"><b>適用時機：</b>長年未解的招募、留任等結構性難題</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>各縣市消防局普遍反映 EMT 招募困難，請用水平思考提出三個跳脫傳統徵才管道的創新方案。</div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= PHASE 04 執行 ================= -->
+  <section class="section" data-cat="execution">
+    <div class="section-head">
+      <span class="section-num">PHASE&nbsp;04</span>
+      <h2 class="section-title">執行管理<span class="en">EXECUTION</span></h2>
+      <p class="section-desc">方向確定後，把計畫落地並在變動中維持節奏</p>
+    </div>
+    <div class="grid">
+
+      <article class="card" data-cat="execution">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;16</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M12 3v18M3 12h18"/><path d="M14.3 6.3l3.4 3.4"/></svg>
+        </div>
+        <div>
+          <h3>艾森豪矩陣<span class="en-name">EISENHOWER MATRIX</span></h3>
+        </div>
+        <p class="desc">依急迫性與重要性排序待辦事項，決定執行、排程、授權或捨棄。</p>
+        <p class="context"><b>適用時機：</b>多專案並行期的每日／每週工作排序</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>我手上同時有 CIT 國際研討會籌備、澳洲考察簽文、氰化物解毒劑採購案，請用艾森豪矩陣排出本週處理優先順序。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="execution">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;17</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>
+        </div>
+        <div>
+          <h3>事前驗屍法<span class="en-name">PRE-MORTEM ANALYSIS</span></h3>
+        </div>
+        <p class="desc">在專案啟動前假設「已經失敗」，回推最可能原因並預先防範。</p>
+        <p class="context"><b>適用時機：</b>大型活動、國際研討會、重大採購案上線前</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>CIT 國際研討會即將於 9 月 9 至 10 日舉行，請假設活動辦理失敗，列出最可能的五項原因，並提出對應預防措施。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="execution">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;18</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 3 6-8"/><circle cx="19" cy="7" r="1.6"/><path d="M17 20h.01"/></svg>
+        </div>
+        <div>
+          <h3>假設檢定<span class="en-name">HYPOTHESIS TESTING</span></h3>
+        </div>
+        <p class="desc">以可衡量指標驗證政策假設，避免憑印象推動全面性變革。</p>
+        <p class="context"><b>適用時機：</b>試辦計畫設計、新措施成效評估</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>假設擴大到院前給藥範圍可降低到院前死亡率，請設計一項試辦計畫，並列出可衡量的成效評估指標。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="execution">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;19</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 10-2.6 5.9"/><path d="M20 6v5h-5"/></svg>
+        </div>
+        <div>
+          <h3>OODA 循環<span class="en-name">OODA LOOP</span></h3>
+        </div>
+        <p class="desc">觀察—定向—決策—行動的快速應變循環，用於時間壓力下的即時反應。</p>
+        <p class="context"><b>適用時機：</b>臨時質詢、輿情應對、突發事件通報</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>立法院臨時質詢救護車收費改革議題，請用 OODA 循環在 48 小時內擬定觀察重點、定向判斷、決策方向與具體行動說帖。</div>
+        </div>
+      </article>
+
+      <article class="card" data-cat="execution">
+        <div class="card-top">
+          <span class="case-tag">CASE&nbsp;20</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="4" cy="18" r="1.8"/><circle cx="11" cy="8" r="1.8"/><circle cx="20" cy="14" r="1.8"/><path d="M5.5 17l4-8M12.5 8.5l6 4.3"/></svg>
+        </div>
+        <div>
+          <h3>要徑法<span class="en-name">CRITICAL PATH METHOD</span></h3>
+        </div>
+        <p class="desc">找出決定專案總工期的關鍵任務鏈，識別無緩衝的瓶頸環節。</p>
+        <p class="context"><b>適用時機：</b>大型活動籌備時程、跨機關協作進度管控</p>
+        <div class="example">
+          <div class="example-label"><span>範例提示詞</span><button class="copy-btn" onclick="copyPrompt(this)">複製</button></div>
+          <div class="example-text"><span class="prompt-arrow">&gt;</span>請針對 CIT 國際研討會 9 月 9 至 10 日籌備時程，用要徑法找出關鍵路徑任務，並標示出可能延誤的瓶頸環節。</div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span class="font-mono">改編自 Natan Mohart《20 Claude Prompts for Problem-Solving》· 內容已全數重寫為 EMS 政策實務情境</span>
+  <span class="font-mono">建立日期 2026-07-24</span>
+</footer>
+
+<script>
+  // ---- 分類篩選 ----
+  const chips = document.querySelectorAll('.chip');
+  const sections = document.querySelectorAll('.section');
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const cat = chip.dataset.cat;
+
+      sections.forEach(section => {
+        const cards = section.querySelectorAll('.card');
+        let visibleCount = 0;
+        cards.forEach(card => {
+          const show = (cat === 'all' || card.dataset.cat === cat);
+          card.style.display = show ? '' : 'none';
+          if (show) visibleCount++;
+        });
+        section.style.display = visibleCount > 0 ? '' : 'none';
+      });
+    });
+  });
+
+  // ---- 複製提示詞 ----
+  function copyPrompt(btn){
+    const text = btn.closest('.example').querySelector('.example-text').innerText.replace(/^>\s*/, '');
+    navigator.clipboard.writeText(text).then(() => {
+      const original = btn.textContent;
+      btn.textContent = '已複製';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 1600);
+    });
+  }
+</script>
+
+</body>
+</html>

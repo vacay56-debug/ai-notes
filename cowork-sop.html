@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Cowork 標準作業程序（SOP）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16233f;          /* Star of Life 藍－主色 */
+    --ink-2:#22303f;
+    --rescue:#c8422c;       /* 救護橘紅－警示 / 強調 */
+    --rescue-deep:#a3341f;
+    --paper:#faf8f3;
+    --paper-2:#f1ede2;
+    --line:#d9d2c2;
+    --ok:#2e6d4f;
+    --muted:#5c6b7a;
+    --white:#ffffff;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink-2);
+    font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;
+    line-height:1.75;
+    font-size:16px;
+  }
+  ::selection{background:var(--rescue);color:#fff;}
+
+  a{color:var(--ink);}
+
+  /* ---------- Header / letterhead ---------- */
+  header{
+    background:
+      linear-gradient(180deg, var(--ink) 0%, #1c2e52 100%);
+    color:#f4f1e8;
+    padding:56px 24px 40px;
+    position:relative;
+    overflow:hidden;
+    border-bottom:6px solid var(--rescue);
+  }
+  header::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 2px, transparent 2px 26px);
+    pointer-events:none;
+  }
+  .doc-tag{
+    position:absolute; top:22px; right:24px;
+    border:1px solid rgba(244,241,232,0.55);
+    color:rgba(244,241,232,0.85);
+    font-size:11px; letter-spacing:.14em;
+    padding:5px 10px;
+    font-family:"JetBrains Mono",monospace;
+  }
+  .eyebrow{
+    font-family:"JetBrains Mono",monospace;
+    letter-spacing:.18em;
+    font-size:12px;
+    color:#e8b199;
+    text-transform:uppercase;
+    margin:0 0 14px;
+  }
+  h1{
+    font-family:"Noto Serif TC",serif;
+    font-weight:900;
+    font-size:clamp(28px,5vw,44px);
+    margin:0 0 10px;
+    max-width:780px;
+    letter-spacing:.01em;
+  }
+  .subtitle{
+    font-size:16px;
+    color:#cfd6e4;
+    max-width:640px;
+    margin:0 0 26px;
+  }
+  .meta-row{
+    display:flex; flex-wrap:wrap; gap:10px 28px;
+    font-size:13px; color:#cfd6e4;
+    border-top:1px solid rgba(244,241,232,0.25);
+    padding-top:18px; max-width:820px;
+  }
+  .meta-row b{color:#f4f1e8; font-weight:600;}
+
+  /* ---------- Nav ---------- */
+  nav{
+    background:var(--paper-2);
+    border-bottom:1px solid var(--line);
+    position:sticky; top:0; z-index:30;
+    overflow-x:auto;
+    white-space:nowrap;
+  }
+  nav .inner{padding:0 20px; display:inline-flex;}
+  nav a{
+    display:inline-block;
+    padding:13px 16px;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--ink);
+    text-decoration:none;
+    border-right:1px solid var(--line);
+  }
+  nav a:hover{background:rgba(200,66,44,0.08); color:var(--rescue-deep);}
+
+  main{max-width:880px; margin:0 auto; padding:44px 22px 100px;}
+
+  section{margin-bottom:56px; scroll-margin-top:56px;}
+
+  .sec-head{
+    display:flex; align-items:baseline; gap:14px;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:10px; margin-bottom:22px;
+  }
+  .sec-num{
+    font-family:"Noto Serif TC",serif;
+    font-weight:900; font-size:15px;
+    color:#fff; background:var(--ink);
+    padding:3px 11px;
+  }
+  .sec-title{
+    font-family:"Noto Serif TC",serif;
+    font-weight:700; font-size:22px; margin:0;
+  }
+
+  p{margin:0 0 14px;}
+  .lede{font-size:16.5px; color:var(--ink-2);}
+
+  /* ---------- Overview flow ---------- */
+  .flow{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+    margin:8px 0 4px;
+  }
+  .flow-card{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-top:4px solid var(--ink);
+    padding:18px 16px;
+  }
+  .flow-card.b{border-top-color:var(--rescue);}
+  .flow-card.c{border-top-color:var(--ok);}
+  .flow-step{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px; letter-spacing:.1em; color:var(--muted);
+  }
+  .flow-name{font-family:"Noto Serif TC",serif; font-weight:700; font-size:18px; margin:4px 0 8px;}
+  .flow-desc{font-size:13.5px; color:var(--muted); margin:0;}
+
+  @media (max-width:680px){
+    .flow{grid-template-columns:1fr;}
+  }
+
+  /* ---------- Checklist ---------- */
+  .checklist{
+    list-style:none; margin:0; padding:0;
+    border:1px solid var(--line);
+    background:var(--white);
+  }
+  .checklist li{
+    display:flex; gap:14px; align-items:flex-start;
+    padding:14px 16px;
+    border-bottom:1px solid var(--line);
+  }
+  .checklist li:last-child{border-bottom:none;}
+  .checklist input[type="checkbox"]{
+    appearance:none; -webkit-appearance:none;
+    width:19px; height:19px; flex:0 0 19px;
+    margin-top:2px;
+    border:1.5px solid var(--ink);
+    cursor:pointer; position:relative;
+  }
+  .checklist input[type="checkbox"]:checked{background:var(--ok); border-color:var(--ok);}
+  .checklist input[type="checkbox"]:checked::after{
+    content:"✓"; color:#fff; font-size:13px; font-weight:700;
+    position:absolute; left:3px; top:-1px;
+  }
+  .item-title{font-weight:600; margin:0 0 4px;}
+  .item-title .idx{font-family:"JetBrains Mono",monospace; color:var(--rescue-deep); margin-right:6px;}
+  .item-note{font-size:13.5px; color:var(--muted); margin:0;}
+  .checklist li.done .item-title{color:var(--ok);}
+
+  .stamp-bar{
+    display:flex; align-items:center; gap:12px;
+    margin-top:14px; padding:12px 16px;
+    border:1.5px dashed var(--line);
+    font-size:13px; color:var(--muted);
+  }
+  .stamp{
+    font-family:"Noto Serif TC",serif; font-weight:900;
+    font-size:13px; letter-spacing:.06em;
+    color:var(--line); border:2px solid var(--line);
+    padding:4px 10px; transform:rotate(-3deg);
+    transition:all .25s ease;
+  }
+  .stamp.active{color:var(--rescue); border-color:var(--rescue); transform:rotate(-6deg) scale(1.05);}
+
+  /* ---------- Tables ---------- */
+  table{width:100%; border-collapse:collapse; background:var(--white); font-size:14.5px;}
+  caption{text-align:left; font-size:13px; color:var(--muted); margin-bottom:6px;}
+  th,td{border:1px solid var(--line); padding:10px 12px; text-align:left; vertical-align:top;}
+  th{background:var(--ink); color:#f4f1e8; font-weight:600; font-size:13px;}
+  tr:nth-child(even) td{background:#faf9f5;}
+  td code, p code, li code{
+    font-family:"JetBrains Mono",monospace; font-size:13px;
+    background:var(--paper-2); padding:1px 6px; border:1px solid var(--line);
+    color:var(--rescue-deep);
+  }
+
+  .col-narrow{width:15%;}
+
+  /* ---------- Case study ---------- */
+  .case{
+    border:1px solid var(--line);
+    background:var(--white);
+    margin-bottom:18px;
+    position:relative;
+  }
+  .case-head{
+    display:flex; justify-content:space-between; align-items:center;
+    background:var(--paper-2);
+    padding:10px 16px;
+    border-bottom:1px solid var(--line);
+  }
+  .case-head h3{font-family:"Noto Serif TC",serif; font-size:16px; margin:0; font-weight:700;}
+  .case-tag{
+    font-family:"JetBrains Mono",monospace; font-size:11px;
+    color:#fff; background:var(--rescue); padding:2px 9px;
+  }
+  .case-body{padding:16px;}
+  .case-body dt{font-weight:600; font-size:13px; color:var(--muted); margin-top:12px;}
+  .case-body dt:first-child{margin-top:0;}
+  .case-body dd{margin:4px 0 0; font-size:14.5px;}
+
+  /* ---------- Callouts ---------- */
+  .callout{
+    border-left:4px solid var(--rescue);
+    background:#fbf1ee;
+    padding:14px 16px; font-size:14px; margin:16px 0;
+  }
+  .callout b{color:var(--rescue-deep);}
+  .callout.info{border-left-color:var(--ink); background:#eef1f5;}
+  .callout.info b{color:var(--ink);}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:28px 22px 60px;
+    max-width:880px; margin:0 auto;
+    font-size:12.5px; color:var(--muted);
+  }
+  footer ul{padding-left:18px; margin:8px 0;}
+
+  @media print{
+    nav{display:none;}
+    header{border-bottom:2px solid #000; background:#fff !important; color:#000 !important;}
+    header *{color:#000 !important;}
+    .doc-tag{border-color:#000;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="doc-tag">工作手冊・非正式公文</div>
+  <p class="eyebrow">Standard Operating Procedure</p>
+  <h1>Claude Cowork<br>標準作業程序</h1>
+  <p class="subtitle">一次性設置、技能建構與日常執行流程，附救護科業務應用範例。</p>
+  <div class="meta-row">
+    <span><b>版本</b>　v1.0</span>
+    <span><b>發布日期</b>　2026 年 7 月 23 日</span>
+    <span><b>適用對象</b>　使用 Claude Cowork 之機關同仁</span>
+    <span><b>方案需求</b>　Pro（US$20／月）以上</span>
+  </div>
+</header>
+
+<nav>
+  <div class="inner">
+    <a href="#purpose">壹、目的與範圍</a>
+    <a href="#overview">貳、流程總覽</a>
+    <a href="#setup">一、建置設定</a>
+    <a href="#build">二、技能建構</a>
+    <a href="#work">三、日常執行</a>
+    <a href="#cases">肆、範例應用</a>
+    <a href="#caution">伍、注意事項</a>
+    <a href="#source">陸、資料來源</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="purpose">
+    <div class="sec-head"><span class="sec-num">壹</span><h2 class="sec-title">目的與適用範圍</h2></div>
+    <p class="lede">明定 Claude Cowork 由初次設置至日常公務應用之標準作業步驟，使同仁得以一致方式建置環境、建構可重複使用之技能（Skill），並於例行公文、簡報、採購及研究性業務中穩定產出。</p>
+    <p>適用對象為已取得 Claude Pro 方案（或 Max／Team／Enterprise）並使用 Cowork 功能之同仁；不涉及機關資通安全規範之修訂，相關規定仍以機關現行資安規定為準。</p>
+  </section>
+
+  <section id="overview">
+    <div class="sec-head"><span class="sec-num">貳</span><h2 class="sec-title">作業流程總覽</h2></div>
+    <p>整體作業分三階段：<b>建置設定</b>（一次性）、<b>技能建構</b>（依需要）、<b>日常執行</b>（例行使用）。</p>
+    <div class="flow">
+      <div class="flow-card a">
+        <div class="flow-step">PHASE 01 · 一次性</div>
+        <div class="flow-name">一、建置設定</div>
+        <p class="flow-desc">確認方案、清理預設範本、精簡全域設定，建立乾淨的工作環境。</p>
+      </div>
+      <div class="flow-card b">
+        <div class="flow-step">PHASE 02 · 依需要</div>
+        <div class="flow-name">二、技能建構</div>
+        <p class="flow-desc">以文字指令或螢幕錄製方式，將重複性流程封裝為可呼叫之技能。</p>
+      </div>
+      <div class="flow-card c">
+        <div class="flow-step">PHASE 03 · 例行</div>
+        <div class="flow-name">三、日常執行</div>
+        <p class="flow-desc">依原則下達指令、即時糾錯、歸檔，維持產出品質與效率。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="setup">
+    <div class="sec-head"><span class="sec-num">一</span><h2 class="sec-title">建置設定（SET UP）</h2></div>
+    <p>一次性完成即可，日後除方案異動外無須重複執行。</p>
+    <ul class="checklist" id="list-setup">
+      <li><input type="checkbox"><div><p class="item-title"><span class="idx">01</span>確認方案等級</p><p class="item-note">確認已具備 Pro 方案（US$20／月）以上，Cowork 於 Pro／Max／Team／Enterprise 方案均可使用；Windows 使用者請更新至最新版 Claude 桌面應用程式。</p></div></li>
+      <li><input type="checkbox"><div><p class="item-title"><span class="idx">02</span>開啟 Cowork 分頁</p><p class="item-note">於訊息輸入框切換「Cowork」（與一般 Chat 共用同一入口），無需另建資料夾即可開始。</p></div></li>
+      <li><input type="checkbox"><div><p class="item-title"><span class="idx">03</span>清理預設範本內容</p><p class="item-note">Cowork 預設建立之「About Me」資料夾（含 Background、Goals & Priorities、Work Standards 等範本檔）建議依本科實際業務重寫或先行清空，避免無關內容干擾技能判讀。</p></div></li>
+      <li><input type="checkbox"><div><p class="item-title"><span class="idx">04</span>精簡全域設定</p><p class="item-note">建議僅開啟業務實際需要之連接器（如 Google Drive、Gmail）與互動式圖表／Artifacts 顯示；全域指示（Global Instructions）先保持空白，待累積實際使用經驗後再逐步補充。</p></div></li>
+      <li><input type="checkbox"><div><p class="item-title"><span class="idx">05</span>設定預設模型</p><p class="item-note">法規研修、政策分析等高複雜度工作建議採 Opus（高推理強度）；例行格式性事務可另切換 Sonnet 或 Haiku，以節省用量額度。</p></div></li>
+    </ul>
+    <div class="stamp-bar">
+      <div class="stamp" id="stamp-setup">未完成</div>
+      <span>勾選以上 5 項後，本階段建置設定即完成。</span>
+    </div>
+  </section>
+
+  <section id="build">
+    <div class="sec-head"><span class="sec-num">二</span><h2 class="sec-title">技能建構（BUILD）</h2></div>
+    <p>將重複執行的工作流程封裝為技能（Skill），日後以 <code>/技能名稱</code> 一鍵呼叫。建構方式有二：</p>
+    <table>
+      <caption>表 2-1　技能建構之兩種方式</caption>
+      <thead><tr><th class="col-narrow">方式</th><th>操作說明</th><th>適用時機</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>文字指令建構</b></td>
+          <td>完成一次完整工作流程後，直接下指令「請將這個流程做成技能」，Claude 會自動萃取步驟、範本與資料來源並封裝。</td>
+          <td>流程本身可清楚以文字描述，且已有明確範本或格式依據。</td>
+        </tr>
+        <tr>
+          <td><b>螢幕錄製建構</b><br><span style="font-size:12px;color:var(--muted);">Record a Skill（2026/07/21 上線）</span></td>
+          <td>於桌面版 App「＋」選單選擇「Record a skill」，錄製畫面操作過程並口頭說明判斷邏輯與例外情形，結束後由 Claude 轉換為技能。目前開放 Pro／Max／Team 方案，採分階段開放。</td>
+          <td>流程涉及難以文字化的判斷經驗（如核稿慣例、跨系統操作）。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top:20px;">建構後之精修步驟：</p>
+    <ul class="checklist" id="list-build">
+      <li><input type="checkbox"><div><p class="item-title"><span class="idx">01</span>儲存並命名</p><p class="item-note">技能儲存後即可於側邊欄輸入 <code>/技能名稱</code> 呼叫（例：<code>/nfa-gongwen</code>）。</p></div></li>
+      <li><input type="checkbox"><div><p class="item-title"><span class="idx">02</span>以內建 skill-creator 精修</p><p class="item-note">可下達：「將此技能壓縮在 2,000 tokens 以內」「排除以下用語」「每段限制 3 句以內」「補充本科具體目標與應婉拒事項」等指令逐步調校。</p></div></li>
+      <li><input type="checkbox"><div><p class="item-title"><span class="idx">03</span>以真實業務資料驗證</p><p class="item-note">以既有簽稿範本、歷年預算書格式等實際文件測試產出，確認格式與用語符合機關慣例。</p></div></li>
+    </ul>
+  </section>
+
+  <section id="work">
+    <div class="sec-head"><span class="sec-num">三</span><h2 class="sec-title">日常執行（WORK）</h2></div>
+    <table>
+      <caption>表 3-1　日常執行原則</caption>
+      <thead><tr><th class="col-narrow">原則</th><th>作法</th></tr></thead>
+      <tbody>
+        <tr><td>先釐清再產出</td><td>指令末端可加註「請先提出釐清問題再開始」，避免方向錯誤後才發現需重做。</td></tr>
+        <tr><td>語音加速輸入</td><td>可搭配第三方聽打軟體（如 Wispr Flow）以口述方式下達指令、提供回覆與回饋。</td></tr>
+        <tr><td>即時糾錯</td><td>發現錯誤應立即指正、不逕行接受，避免技能日後沿用錯誤模式。</td></tr>
+        <tr><td>統一歸檔</td><td>產出檔案匯出至機關認可之雲端硬碟並依檔案管理規範歸檔，不僅留存於 Cowork 本機對話紀錄。</td></tr>
+        <tr><td>任務批次下達</td><td>相關子任務合併於同一則訊息交代，避免片斷式追加訊息（follow-up）。</td></tr>
+        <tr><td>適時另開對話</td><td>對話累積約 20 則後另開新對話，避免上下文過長影響判斷品質與權杖耗用。</td></tr>
+        <tr><td>依複雜度選模型</td><td>例行格式性工作切換 Sonnet／Haiku；政策分析、法規研修等保留給 Opus。</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="cases">
+    <div class="sec-head"><span class="sec-num">肆</span><h2 class="sec-title">範例應用</h2></div>
+    <p class="lede">以救護科現行業務為例，說明各階段實際操作情形。</p>
+
+    <div class="case">
+      <div class="case-head"><h3>範例一・技能建構</h3><span class="case-tag">BUILD</span></div>
+      <div class="case-body">
+        <dl>
+          <dt>情境</dt>
+          <dd>反覆撰寫「救在當下：CIT跨域整合與專業實務國際研討會」相關簽文、議程與經費估算表，格式與用語須維持一致。</dd>
+          <dt>作法</dt>
+          <dd>完成一次完整簽稿流程後，下指令「請將此公文起草流程做成技能，並依主旨／說明／辦法三段式格式封裝」；亦可改採螢幕錄製方式，示範核稿時的用語修正與判斷邏輯。</dd>
+          <dt>結果</dt>
+          <dd>後續澳洲EMS考察出國報告、氰化物解毒劑採購文件等其他公文，皆可直接呼叫已建立之 <code>/nfa-gongwen</code> 技能，維持格式與用語一致性。</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="case">
+      <div class="case-head"><h3>範例二・日常執行</h3><span class="case-tag">WORK</span></div>
+      <div class="case-body">
+        <dl>
+          <dt>情境</dt>
+          <dd>四人考察團赴澳洲新南威爾斯州與維多利亞省考察到院前輸血（PHBT）制度後，須產出出國報告。</dd>
+          <dt>作法</dt>
+          <dd>呼叫 <code>/nfa-overseas-report</code> 技能，以語音口述考察重點與初步心得，並於同一則訊息中交代報告章節架構、需引用之訪視紀錄與繳交期限；發現用詞不符機關慣例時立即指正、要求重新產出。</dd>
+          <dt>結果</dt>
+          <dd>報告初稿完成後匯出至 Google Drive 共用資料夾，供科內後續核稿使用。</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="case">
+      <div class="case-head"><h3>範例三・設定與資安考量</h3><span class="case-tag">SETUP</span></div>
+      <div class="case-body">
+        <dl>
+          <dt>情境</dt>
+          <dd>科內同時處理涉密採購文件（如底價、廠商評選）與一般性政策簡報。</dd>
+          <dt>作法</dt>
+          <dd>確認 Cowork 對話紀錄僅存於本機、非機關可集中稽核或匯出之範圍後，涉密資料暫不透過連接器提供予 Cowork，或先取得機關資安單位確認後再行開放。</dd>
+          <dt>結果</dt>
+          <dd>一般政策簡報、研討會文件維持 Cowork 高效產出；涉密採購文件另依機關現行資安程序處理。</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section id="caution">
+    <div class="sec-head"><span class="sec-num">伍</span><h2 class="sec-title">注意事項</h2></div>
+    <div class="callout">
+      <b>資料保存性質。</b>　Cowork 對話紀錄僅儲存於使用者本機，非屬機關可集中管理、稽核或匯出之範圍，亦不構成正式公文保存機制；經 Cowork 產出並經決行之內容，仍應依規定完成正式簽核與檔案歸檔。
+    </div>
+    <div class="callout">
+      <b>螢幕錄製之揭露風險。</b>　以 Record a Skill 錄製畫面時，可能連帶錄入無關之機密資訊（如同時開啟之另一份未結案文件、通訊視窗等），錄製前應先關閉不相關視窗與通知。
+    </div>
+    <div class="callout info">
+      <b>「建議設定」之定性。</b>　本SOP所列關閉功能、模型選擇等項目屬工作效率參考作法，非機關資通安全規範；遇有衝突，仍以機關現行資安規定為優先適用。
+    </div>
+  </section>
+
+  <section id="source">
+    <div class="sec-head"><span class="sec-num">陸</span><h2 class="sec-title">資料來源</h2></div>
+    <p>本SOP架構參考 Ruben Hassid（「How to AI」）公開發布之 Claude Cowork 設定資訊圖，並依內政部消防署救護科實際業務重新編排、翻譯與舉例；產品功能項目另依 Anthropic 官方說明頁面查證：</p>
+    <ul>
+      <li>Claude Help Center－Get started with Claude Cowork</li>
+      <li>Claude Help Center－Use Claude Cowork safely</li>
+      <li>Claude Help Center－Use skills in Claude</li>
+      <li>Claude Help Center－What is the Pro plan</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  本文件為機關內部工作參考手冊，非正式公文，其效力不及於機關資通安全規定。Claude 及 Claude Cowork 為 Anthropic, PBC 之商標。
+</footer>
+
+<script>
+  function bindChecklist(listId, stampId){
+    const list = document.getElementById(listId);
+    const stamp = document.getElementById(stampId);
+    if(!list) return;
+    const boxes = list.querySelectorAll('input[type="checkbox"]');
+    function update(){
+      let allDone = true;
+      boxes.forEach(b=>{
+        b.closest('li').classList.toggle('done', b.checked);
+        if(!b.checked) allDone = false;
+      });
+      if(stamp){
+        stamp.textContent = allDone ? '已完成' : '未完成';
+        stamp.classList.toggle('active', allDone);
+      }
+    }
+    boxes.forEach(b=>b.addEventListener('change', update));
+  }
+  bindChecklist('list-setup','stamp-setup');
+  bindChecklist('list-build', null);
+</script>
+
+</body>
+</html>

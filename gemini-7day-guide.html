@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini 操作七日速成｜EMS 政策工作應用指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8F9F5;
+    --ink:#22303A;
+    --grid:#DCE5D8;
+    --green:#3D7A5F;
+    --green-dark:#2C5A46;
+    --seal:#B5382C;
+    --tag-bg:#EEF2E8;
+    --line:#C9D4C4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Noto Sans TC',sans-serif;
+    background:var(--paper);
+    background-image:
+      repeating-linear-gradient(to right, transparent 0 31px, var(--grid) 31px 32px),
+      repeating-linear-gradient(to bottom, transparent 0 31px, var(--grid) 31px 32px);
+    background-size:32px 32px;
+    color:var(--ink);
+    line-height:1.85;
+    font-size:16px;
+  }
+  .sheet{
+    max-width:900px;
+    margin:0 auto;
+    background:rgba(255,255,255,.72);
+    border-left:1px solid var(--line);
+    border-right:1px solid var(--line);
+    min-height:100vh;
+    padding:0 clamp(20px, 5vw, 64px) 80px;
+  }
+  /* ---------- Hero：公文函頭 ---------- */
+  header{
+    position:relative;
+    padding:56px 0 36px;
+    border-bottom:3px double var(--green);
+  }
+  .agency{
+    font-family:'Noto Serif TC',serif;
+    font-weight:700;
+    letter-spacing:.35em;
+    font-size:14px;
+    color:var(--green-dark);
+    margin-bottom:18px;
+  }
+  h1{
+    font-family:'Noto Serif TC',serif;
+    font-weight:900;
+    font-size:clamp(30px, 5.4vw, 46px);
+    letter-spacing:.06em;
+    line-height:1.35;
+    max-width:11em;
+  }
+  h1 .en{
+    display:block;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:600;
+    font-size:.42em;
+    letter-spacing:.12em;
+    color:var(--green);
+    margin-top:10px;
+  }
+  .subject-box{
+    margin-top:26px;
+    border:1.5px solid var(--ink);
+    padding:14px 18px;
+    font-size:15px;
+    max-width:560px;
+    background:#fff;
+  }
+  .subject-box b{font-family:'Noto Serif TC',serif}
+  /* 印章 */
+  .seal{
+    position:absolute;
+    right:8px; top:64px;
+    width:118px; height:118px;
+    border:3px solid var(--seal);
+    border-radius:50%;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    color:var(--seal);
+    font-family:'Noto Serif TC',serif;
+    font-weight:900;
+    transform:rotate(8deg);
+    opacity:.88;
+    box-shadow:inset 0 0 0 2px rgba(181,56,44,.25);
+    animation:stamp .5s ease-out .3s both;
+    pointer-events:none;
+  }
+  .seal small{font-size:11px;letter-spacing:.2em;font-weight:700}
+  .seal span{font-size:26px;letter-spacing:.1em;line-height:1.2}
+  @keyframes stamp{
+    from{opacity:0;transform:rotate(8deg) scale(1.35)}
+    to{opacity:.88;transform:rotate(8deg) scale(1)}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .seal{animation:none}
+    html{scroll-behavior:auto}
+  }
+  @media (max-width:640px){
+    .seal{width:92px;height:92px;top:auto;bottom:110px;right:0}
+    .seal span{font-size:20px}
+  }
+  /* ---------- 章節 ---------- */
+  section{padding-top:52px}
+  h2{
+    font-family:'Noto Serif TC',serif;
+    font-weight:900;
+    font-size:clamp(21px, 3vw, 26px);
+    letter-spacing:.08em;
+    display:flex; align-items:baseline; gap:14px;
+    border-left:6px solid var(--green);
+    padding-left:16px;
+    margin-bottom:22px;
+  }
+  h2 .num{
+    font-size:.72em;
+    color:var(--green);
+    letter-spacing:.2em;
+    white-space:nowrap;
+  }
+  h3{
+    font-family:'Noto Serif TC',serif;
+    font-weight:700;
+    font-size:17px;
+    margin:20px 0 8px;
+    color:var(--green-dark);
+  }
+  p{margin-bottom:12px;max-width:44em}
+  .lead{font-size:17px}
+  em{font-style:normal;border-bottom:2px solid var(--seal);padding-bottom:1px}
+  code, .mono{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.86em;
+    background:var(--tag-bg);
+    padding:1px 6px;
+    border-radius:3px;
+  }
+  /* 80/20 清單 */
+  ol.key{counter-reset:k;list-style:none;max-width:46em}
+  ol.key li{
+    counter-increment:k;
+    position:relative;
+    padding:14px 0 14px 54px;
+    border-bottom:1px dashed var(--line);
+  }
+  ol.key li::before{
+    content:counter(k, cjk-ideographic);
+    position:absolute;left:0;top:14px;
+    width:36px;height:36px;
+    border:1.5px solid var(--green);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Noto Serif TC',serif;font-weight:700;
+    color:var(--green-dark);font-size:15px;
+    background:#fff;
+  }
+  ol.key b{display:block;font-size:15.5px}
+  ol.key span{font-size:14.5px;color:#45535E}
+  /* 天數卡 */
+  .day{
+    border:1px solid var(--line);
+    background:#fff;
+    margin-bottom:14px;
+    display:grid;
+    grid-template-columns:96px 1fr;
+  }
+  .day .d{
+    background:var(--tag-bg);
+    border-right:1px solid var(--line);
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    padding:12px 6px;
+    font-family:'Noto Serif TC',serif;font-weight:900;
+    color:var(--green-dark);
+  }
+  .day .d i{font-style:normal;font-size:22px}
+  .day .d u{text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--green)}
+  .day .body{padding:14px 18px}
+  .day .body b{font-size:15.5px}
+  .day .body ul{list-style:none;margin-top:6px}
+  .day .body ul li{
+    font-size:14.5px;padding-left:18px;position:relative;margin-bottom:4px;
+  }
+  .day .body ul li::before{content:"▸";position:absolute;left:0;color:var(--green)}
+  .outcome{
+    display:inline-block;margin-top:8px;
+    font-size:13px;font-weight:700;
+    color:var(--seal);
+    border:1px solid var(--seal);
+    padding:1px 10px;border-radius:2px;
+  }
+  @media (max-width:560px){
+    .day{grid-template-columns:1fr}
+    .day .d{flex-direction:row;gap:10px;border-right:none;border-bottom:1px solid var(--line);padding:8px}
+  }
+  /* 練習卡 */
+  .drill{
+    border:1px solid var(--line);
+    border-top:4px solid var(--green);
+    background:#fff;
+    padding:18px 22px;
+    margin-bottom:16px;
+  }
+  .drill.showcase{border-top-color:var(--seal)}
+  .drill h3{margin-top:0}
+  .meta{
+    display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 10px;
+  }
+  .meta span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;font-weight:600;
+    background:var(--tag-bg);
+    border:1px solid var(--line);
+    padding:2px 10px;border-radius:2px;
+    color:var(--green-dark);
+  }
+  .drill ol{margin-left:22px;font-size:14.5px}
+  .drill ol li{margin-bottom:4px}
+  /* 錯誤表 */
+  table{width:100%;border-collapse:collapse;background:#fff;font-size:14.5px}
+  th,td{border:1px solid var(--line);padding:10px 14px;text-align:left;vertical-align:top}
+  th{
+    background:var(--tag-bg);
+    font-family:'Noto Serif TC',serif;
+    letter-spacing:.1em;
+    color:var(--green-dark);
+  }
+  td:first-child{width:42%}
+  .x{color:var(--seal);font-weight:700;margin-right:6px}
+  .o{color:var(--green-dark);font-weight:700;margin-right:6px}
+  /* 資源 */
+  .res{list-style:none;max-width:46em}
+  .res li{
+    background:#fff;border:1px solid var(--line);
+    padding:12px 16px;margin-bottom:10px;
+    font-size:14.5px;
+  }
+  .res b{font-size:15px;display:block}
+  /* 12 週 */
+  .weeks{border-left:2px solid var(--green);margin-left:8px;padding-left:24px;max-width:46em}
+  .wk{position:relative;padding-bottom:20px}
+  .wk::before{
+    content:"";position:absolute;left:-30px;top:8px;
+    width:10px;height:10px;border-radius:50%;
+    background:var(--green);border:2px solid #fff;
+    box-shadow:0 0 0 1px var(--green);
+  }
+  .wk b{font-family:'Noto Serif TC',serif;color:var(--green-dark)}
+  .wk .check{font-size:13.5px;color:var(--seal);font-weight:700}
+  /* 案例 */
+  .case{
+    background:#fff;
+    border:1.5px solid var(--ink);
+    padding:22px 26px;
+    position:relative;
+    max-width:46em;
+  }
+  .case::before{
+    content:"案";
+    position:absolute;right:14px;top:10px;
+    font-family:'Noto Serif TC',serif;font-weight:900;
+    font-size:34px;color:var(--tag-bg);
+    -webkit-text-stroke:1px var(--line);
+  }
+  /* 提示詞範例 */
+  pre{
+    background:#243530;
+    color:#E8F0E8;
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;
+    line-height:1.75;
+    padding:20px 22px;
+    overflow-x:auto;
+    border-radius:4px;
+    white-space:pre-wrap;
+    max-width:46em;
+  }
+  footer{
+    margin-top:64px;
+    border-top:3px double var(--green);
+    padding-top:18px;
+    font-size:12.5px;
+    color:#5A6772;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  }
+  footer .mono{background:transparent;padding:0}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header>
+  <div class="agency">緊急救護政策工作．AI 工具應用系列</div>
+  <h1>Gemini 操作七日速成
+    <span class="en">A 7-DAY FIELD GUIDE · FOR EMS POLICY WORK</span>
+  </h1>
+  <div class="subject-box">
+    <b>主旨：</b>以七日建立 Gemini（含 Deep Research、NotebookLM、Gems）之實作能力，直接應用於到院前緊急救護（Emergency Medical Services, EMS）政策研究、公務文件與知識庫建置。
+  </div>
+  <div class="seal" aria-hidden="true">
+    <small>GEMINI</small>
+    <span>七日<br>速成</span>
+  </div>
+</header>
+
+<!-- 一、核心概念 -->
+<section id="s1">
+  <h2><span class="num">一</span>核心概念（白話說明）</h2>
+  <p class="lead">Gemini 是 Google 生態系的 AI 工作台，對政策工作者而言只需掌握三件事：<em>Gemini App 負責對話與起草</em>、<em>Deep Research 負責公開資料的深度研究</em>、<em>NotebookLM 負責把「你手上的文件」變成可問答、可引用的知識庫</em>。</p>
+  <p>一句話原則：<b>「公開資料交給 Deep Research，自有文件交給 NotebookLM，最終精修交給 Claude。」</b>學會分流，就學會了 Gemini 的本質。</p>
+</section>
+
+<!-- 二、80/20 -->
+<section id="s2">
+  <h2><span class="num">二</span>80／20 關鍵（最重要的 20%）</h2>
+  <ol class="key">
+    <li><b>模式切換：快捷／思考／Pro</b><span>簡單問答用快捷、法規分析用思考型、長篇研究用 Pro。任務難度對應模型，是效率的第一課。</span></li>
+    <li><b>Deep Research 提示詞四要素</b><span>範圍（地區、時間）＋來源要求（官方文件優先）＋比較維度＋輸出格式（先結論、後比較表）。四要素齊備，報告可用率倍增。</span></li>
+    <li><b>NotebookLM：一主題一筆記本</b><span>來源即邊界——只回答筆記本內的內容，每句可回溯出處。建「國際 EMS 制度」「採購法規」等專題筆記本。</span></li>
+    <li><b>Gems 自訂助理</b><span>把公文三段式格式、EMS 術語表（TECC、PCC、CIT⋯）寫進 Gem 指令，之後每次對話自動套用，免重複交代。</span></li>
+    <li><b>檔案上傳與 Workspace 連動</b><span>PDF、Word、簡報直接上傳分析；連結 Drive／Gmail 後可指定雲端文件作為研究來源。</span></li>
+    <li><b>查證習慣：點回原始來源</b><span>Deep Research 是研究底稿，不是事實審核。法規條文、統計數字，正式引用前必回原文確認。</span></li>
+  </ol>
+</section>
+
+<!-- 三、七日計畫 -->
+<section id="s3">
+  <h2><span class="num">三</span>七天速成計畫（每天具體任務）</h2>
+
+  <div class="day"><div class="d"><i>第一日</i><u>30–45 MIN</u></div><div class="body">
+    <b>環境建置與介面巡禮</b>
+    <ul>
+      <li>登入 <code>gemini.google.com</code>，安裝手機 App；確認方案（免費版已含 Deep Research、Canvas、Gems 基本額度）。</li>
+      <li>認識輸入框三區：＋號（上傳檔案／連 Drive）、工具選單（Deep Research、Canvas）、模式切換。</li>
+    </ul>
+    <span class="outcome">成果：完成首次對話，能說出三種模式的差別</span>
+  </div></div>
+
+  <div class="day"><div class="d"><i>第二日</i><u>45 MIN</u></div><div class="body">
+    <b>提問基本功：情境＋角色＋格式</b>
+    <ul>
+      <li>用同一問題測試三種模式，比較回答深度與速度。</li>
+      <li>練習結構化提示詞：「你是 EMS 政策分析人員，請以表格比較⋯」。</li>
+    </ul>
+    <span class="outcome">成果：完成 5 組結構化提問並記錄最佳寫法</span>
+  </div></div>
+
+  <div class="day"><div class="d"><i>第三日</i><u>60 MIN</u></div><div class="body">
+    <b>檔案上傳與長文處理</b>
+    <ul>
+      <li>上傳一份公開 PDF（如 NAEMT 之 TECC 課程介紹），要求摘要、名詞解釋、爭點列表。</li>
+      <li>練習追問：「第 X 節與臺灣現行制度的差異為何？」</li>
+    </ul>
+    <span class="outcome">成果：一份 500 字文件摘要，可貼入業務筆記</span>
+  </div></div>
+
+  <div class="day"><div class="d"><i>第四日</i><u>60 MIN</u></div><div class="body">
+    <b>Deep Research 初體驗</b>
+    <ul>
+      <li>套用「四要素」提示詞，執行第一份研究（見第八節範例）。</li>
+      <li>報告產出後檢查：來源日期、引用脈絡、是否混用不同國家口徑。</li>
+    </ul>
+    <span class="outcome">成果：第一份附來源的研究報告，並標註 3 處待查證點</span>
+  </div></div>
+
+  <div class="day"><div class="d"><i>第五日</i><u>60 MIN</u></div><div class="body">
+    <b>NotebookLM 建立第一個知識庫</b>
+    <ul>
+      <li>開 <code>notebooklm.google.com</code>，建立「國際 EMS 制度」筆記本，匯入 5–8 個公開來源（官方報告、法規、期刊）。</li>
+      <li>測試問答與引用回溯，試用語音摘要（Audio Overview）通勤聽。</li>
+    </ul>
+    <span class="outcome">成果：一個可問答、可溯源的專題筆記本</span>
+  </div></div>
+
+  <div class="day"><div class="d"><i>第六日</i><u>45 MIN</u></div><div class="body">
+    <b>Gems：打造專屬公務助理</b>
+    <ul>
+      <li>建立「EMS 政策幕僚」Gem：指定繁體中文（臺灣用語）、術語格式「中文（英文全稱，縮寫）」、極簡文風。</li>
+      <li>用 Gem 重寫第三日的摘要，比較品質差異。</li>
+    </ul>
+    <span class="outcome">成果：一個可重複使用、自動套用格式的 Gem</span>
+  </div></div>
+
+  <div class="day"><div class="d"><i>第七日</i><u>90 MIN</u></div><div class="body">
+    <b>整合實戰：研究 → 知識庫 → 產出</b>
+    <ul>
+      <li>Deep Research 產出報告 → 匯入 NotebookLM 與自有文件交叉比對 → 由 Gem 產出簡報大綱。</li>
+      <li>將大綱交給 Claude 或 Gamma 精修為正式簡報。</li>
+    </ul>
+    <span class="outcome">成果：完成一條「研究到簡報」的完整工作流</span>
+  </div></div>
+</section>
+
+<!-- 四、三個實作練習 -->
+<section id="s4">
+  <h2><span class="num">四</span>三個實作練習（由淺入深）</h2>
+
+  <div class="drill">
+    <h3>練習一｜文件摘要與追問</h3>
+    <div class="meta"><span>難度 ★☆☆</span><span>30–45 分鐘</span><span>工具：Gemini App</span></div>
+    <p><b>目標：</b>能把任一份 30 頁以上的英文政策文件變成 1 頁中文重點。</p>
+    <ol>
+      <li>上傳一份公開 PDF（建議：美國 NHTSA 的 EMS Agenda 2050 或 TECC 指引）。</li>
+      <li>要求「先給 3 點結論，再列 5 個關鍵段落與頁碼」。</li>
+      <li>針對其中 1 個段落追問「對臺灣制度的啟示」。</li>
+    </ol>
+  </div>
+
+  <div class="drill">
+    <h3>練習二｜Deep Research 國際比較</h3>
+    <div class="meta"><span>難度 ★★☆</span><span>60–90 分鐘</span><span>工具：Deep Research</span></div>
+    <p><b>目標：</b>產出一份「美、日 EMT-P 級救護技術員訓練時數與授權範圍」比較底稿。</p>
+    <ol>
+      <li>以四要素撰寫提示詞：限定美國 NREMT 與日本救急救命士制度、近 5 年官方資料、輸出比較表。</li>
+      <li>審閱 Gemini 提出的研究計畫，刪除不相關子題後再執行。</li>
+      <li>逐條點回來源查證訓練時數數字，標註口徑差異。</li>
+    </ol>
+  </div>
+
+  <div class="drill showcase">
+    <h3>練習三｜建置「國際 EMS 政策知識庫」＋政策比較報告（可展示作品）</h3>
+    <div class="meta"><span>難度 ★★★</span><span>2–3 小時</span><span>工具：Deep Research＋NotebookLM＋Gems</span></div>
+    <p><b>目標：</b>產出一份可上呈、可簡報的《主要國家到院前緊急救護制度比較》報告與知識庫。</p>
+    <ol>
+      <li>NotebookLM 建立筆記本，匯入 10 個以上來源：各國官方法規、Deep Research 報告、《緊急醫療救護法》現行條文。</li>
+      <li>以問答方式產出比較維度：法源、分級制度、訓練時數、醫療指導、品質管理。</li>
+      <li>由「EMS 政策幕僚」Gem 整理為三段式報告（主旨、說明、擬辦），並生成簡報大綱與語音摘要。</li>
+      <li>此筆記本即為長期資產——之後每次修法研究直接加來源續用。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 五、常見錯誤 -->
+<section id="s5">
+  <h2><span class="num">五</span>常見錯誤與避免方法</h2>
+  <table>
+    <tr><th>常見錯誤</th><th>修正方法</th></tr>
+    <tr><td><span class="x">✕</span>研究題目太大（「研究各國 EMS」）</td><td><span class="o">✓</span>限縮三軸：地區（美、日）、時間（近 5 年）、主題（EMT-P 訓練時數），題目越窄報告越能用。</td></tr>
+    <tr><td><span class="x">✕</span>不指定輸出格式，得到一篇散文</td><td><span class="o">✓</span>提示詞固定加一句：「先給結論，再給比較表，最後列風險與待辦。」</td></tr>
+    <tr><td><span class="x">✕</span>把 AI 報告當最終事實直接引用</td><td><span class="o">✓</span>法規條文與數據一律點回原始來源核對，養成「引用前必查」的公務紀律。</td></tr>
+    <tr><td><span class="x">✕</span>NotebookLM 一個筆記本塞所有東西</td><td><span class="o">✓</span>一主題一筆記本；來源命名加日期與機關（如「2025_NHTSA_報告」），問答品質立刻提升。</td></tr>
+    <tr><td><span class="x">✕</span>上傳含個資或機密之公務文件</td><td><span class="o">✓</span>遵循《行政院及所屬機關（構）使用生成式 AI 參考指引》：機密公文不得上傳，個資先去識別化，產出內容由承辦人負最終責任。</td></tr>
+  </table>
+</section>
+
+<!-- 六、資源 -->
+<section id="s6">
+  <h2><span class="num">六</span>精簡資源推薦（臺灣友善）</h2>
+  <ul class="res">
+    <li><b>Gemini 官方說明中心（繁體中文）</b>功能更新最快、最權威，Deep Research 與來源設定的操作步驟以此為準。</li>
+    <li><b>NotebookLM 官方網站與教學</b>知識庫建置的第一手指南，介面全面支援繁中，適合直接邊做邊學。</li>
+    <li><b>犬哥網站《Gemini 完整中文教學》</b>臺灣部落格，截圖完整、更新頻繁，免費版與付費版差異整理清楚，適合新手。</li>
+    <li><b>行政院及所屬機關（構）使用生成式 AI 參考指引</b>公務機關使用 AI 的合規底線，資安與責任歸屬必讀。</li>
+    <li><b>Google Prompting Essentials（Coursera）</b>Google 官方提示詞課程，短時數、有實作，適合建立系統化提問思維。</li>
+  </ul>
+</section>
+
+<!-- 七、每天 1 小時 -->
+<section id="s7">
+  <h2><span class="num">七</span>每天只有 1 小時：12 週優化策略</h2>
+  <div class="weeks">
+    <div class="wk"><b>第 1–2 週｜基礎操作</b><br>每日 1 小時完成七日計畫之第一至三日內容，放慢節奏、加倍練習量。<br><span class="check">檢核：能獨立完成文件摘要與結構化提問。</span></div>
+    <div class="wk"><b>第 3–4 週｜Deep Research 熟練</b><br>每週執行 2 份研究，建立自己的「四要素提示詞範本庫」。<br><span class="check">檢核：報告產出後 15 分鐘內完成來源查證。</span></div>
+    <div class="wk"><b>第 5–6 週｜NotebookLM 知識庫</b><br>建置 2 個業務專題筆記本（如：國際 EMS 制度、政府採購法規）。<br><span class="check">檢核：任一業務問題可在筆記本 3 分鐘內找到附出處的答案。</span></div>
+    <div class="wk"><b>第 7–8 週｜Gems 與工作流</b><br>建立 2 個 Gem（政策幕僚、公文潤飾），串接「研究→知識庫→產出」流程。<br><span class="check">檢核：完成一次端到端工作流，全程不超過 2 小時。</span></div>
+    <div class="wk"><b>第 9–10 週｜實案套用</b><br>挑一件手上真實業務（修法研析、出國報告、簡報）全程以新工作流完成。<br><span class="check">檢核：與傳統作法相比，工時縮短 30% 以上。</span></div>
+    <div class="wk"><b>第 11–12 週｜SOP 化與維運</b><br>將流程寫成科內可共用的 1 頁 SOP，設定每月更新知識庫來源的例行工作。<br><span class="check">檢核：同仁依 SOP 可在半天內上手同一流程。</span></div>
+  </div>
+</section>
+
+<!-- 八、應用案例 -->
+<section id="s8">
+  <h2><span class="num">八</span>實際應用案例（臺灣情境）</h2>
+  <div class="case">
+    <p><b>場景：</b>救護科研議修訂救護技術員分級訓練時數，需比較國際制度作為修法依據。<br>
+    <b>作法：</b>以 Deep Research 產出美國 NREMT 與日本救急救命士訓練制度比較底稿（約 30 分鐘），匯入 NotebookLM 與《救護技術員管理辦法》現行條文交叉比對，再由 Gem 產出三段式研析報告與長官簡報大綱。<br>
+    <b>可衡量成果：</b>文獻蒐集與初稿撰擬由原本約 2 週壓縮至 3 個工作天，且每項數據均附可回溯來源，提升審查通過率。</p>
+  </div>
+
+  <h3>使用說明（Deep Research 提示詞範例，可直接複製）</h3>
+<pre>請研究美國與日本到院前緊急救護人員之最高階訓練制度。
+
+研究範圍：
+一、美國以 NREMT 之 Paramedic 認證為主，日本以救急救命士制度為主。
+二、比較維度：法源依據、訓練總時數、課程架構、授權醫療處置範圍、
+    繼續教育與換證規定。
+三、資料以近五年官方文件為限。
+
+來源要求：
+優先使用政府機關、NREMT、日本總務省消防廳之官方文件；
+資料日期過舊請標註。
+
+輸出格式：
+先給三點結論，再給比較表（含來源連結），
+最後列出對臺灣修法之三項啟示與待查證清單。</pre>
+</section>
+
+<footer>
+  <div>Gemini 操作七日速成 · EMS 政策工作應用指南</div>
+  <div class="mono">DRAFTED WITH CLAUDE · 2026</div>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三層後送｜打造 Claude 專屬語氣建置流程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #0B111C;
+    --ink-2: #121A28;
+    --ink-3: #17223480;
+    --hairline: #253046;
+    --text: #E9ECF3;
+    --text-muted: #8792A8;
+    --text-dim: #566078;
+    --signal: #E8412C;
+    --signal-dim: #E8412C33;
+    --vital: #34D6A6;
+    --vital-dim: #34D6A633;
+    --amber: #F2A93B;
+    --font-display: 'Oswald', 'Noto Sans TC', sans-serif;
+    --font-body: 'Noto Sans TC', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    padding: 72px 0 40px;
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+    overflow: hidden;
+  }
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    color: var(--vital);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .eyebrow::before{
+    content:"";
+    width: 8px; height: 8px;
+    background: var(--vital);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px var(--vital-dim);
+  }
+  h1.title{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(40px, 6.2vw, 76px);
+    line-height: 1.04;
+    margin: 0 0 6px;
+    letter-spacing: 0.01em;
+  }
+  h1.title .accent{ color: var(--signal); }
+  p.subtitle{
+    max-width: 680px;
+    font-size: 17px;
+    color: var(--text-muted);
+    margin: 22px 0 0;
+  }
+  p.subtitle b{ color: var(--text); font-weight: 700; }
+
+  .hero-meta{
+    display:flex;
+    gap: 28px;
+    margin-top: 34px;
+    flex-wrap: wrap;
+  }
+  .hero-meta .m{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .hero-meta .m b{
+    display:block;
+    font-family: var(--font-body);
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+
+  /* ---------- VITALS DIVIDER (signature element) ---------- */
+  .vitals{
+    width: 100%;
+    display:block;
+    background: var(--ink-2);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .vitals svg{ display:block; width:100%; height:56px; }
+  .vitals path{
+    fill:none;
+    stroke: var(--vital);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 6px var(--vital-dim));
+    stroke-dasharray: 3200;
+    stroke-dashoffset: 3200;
+    animation: draw 3.2s ease-out forwards;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .vitals path{ animation: none; stroke-dashoffset: 0; }
+  }
+  @keyframes draw{ to { stroke-dashoffset: 0; } }
+
+  /* ---------- STACK INTRO ---------- */
+  .stack-intro{
+    display:grid;
+    grid-template-columns: 340px 1fr;
+    gap: 56px;
+    padding: 64px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  @media (max-width: 860px){
+    .stack-intro{ grid-template-columns: 1fr; }
+  }
+
+  .stack-visual{ display:flex; flex-direction:column; align-items:center; gap:0; }
+  .stack-bar{
+    width: 100%;
+    padding: 18px 22px;
+    font-family: var(--font-mono);
+    text-align:center;
+    border: 1px solid var(--hairline);
+    position: relative;
+  }
+  .stack-bar b{
+    display:block;
+    font-family: var(--font-display);
+    font-size: 19px;
+    letter-spacing: 0.03em;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .stack-bar span{ font-size: 11px; color: var(--text-dim); }
+  .stack-bar.l3{ width: 62%; background: var(--signal-dim); border-color: var(--signal); }
+  .stack-bar.l3 b{ color: var(--signal); }
+  .stack-bar.l2{ width: 80%; background: #1a2740; border-color: #2c4066; margin-top: -1px; }
+  .stack-bar.l2 b{ color: #6FA8FF; }
+  .stack-bar.l1{ width: 100%; background: var(--ink-2); margin-top: -1px; }
+  .stack-bar.l1 b{ color: var(--text); }
+
+  .stack-note{
+    text-align:center;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 16px;
+    font-family: var(--font-mono);
+  }
+
+  .stack-copy h2{
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 0 0 16px;
+  }
+  .stack-copy p{ color: var(--text-muted); font-size: 15px; margin: 0 0 14px; }
+  .stack-copy p b{ color: var(--text); font-weight: 700; }
+
+  table.rule-table{
+    width:100%;
+    border-collapse: collapse;
+    margin-top: 22px;
+    font-size: 13.5px;
+  }
+  table.rule-table th, table.rule-table td{
+    border-top: 1px solid var(--hairline);
+    padding: 11px 10px;
+    text-align: left;
+  }
+  table.rule-table th{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  table.rule-table td.num{ font-family: var(--font-mono); color: var(--vital); white-space: nowrap; }
+
+  /* ---------- LAYER CARDS ---------- */
+  section.layers{ padding: 64px 0 20px; }
+  .section-head{ margin-bottom: 36px; }
+  .section-head .eyebrow{ color: var(--amber); }
+  .section-head .eyebrow::before{ background: var(--amber); box-shadow: 0 0 0 4px #F2A93B33; }
+  .section-head h2{
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .layer-card{
+    border: 1px solid var(--hairline);
+    background: var(--ink-2);
+    border-radius: 2px;
+    margin-bottom: 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .layer-card::before{
+    content:"";
+    position:absolute; left:0; top:0; bottom:0;
+    width: 4px;
+  }
+  .layer-card.l1::before{ background: var(--text-dim); }
+  .layer-card.l2::before{ background: #6FA8FF; }
+  .layer-card.l3::before{ background: var(--signal); }
+
+  .layer-head{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 26px 30px 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .layer-head h3{
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+  .layer-head .layer-en{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+  .layer-tag{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 6px 12px;
+    border: 1px solid var(--hairline);
+    color: var(--text-muted);
+    white-space: nowrap;
+    height: fit-content;
+  }
+  .l1 .layer-tag{ color: var(--text-muted); }
+  .l2 .layer-tag{ color: #6FA8FF; border-color: #2c4066; }
+  .l3 .layer-tag{ color: var(--signal); border-color: var(--signal); }
+
+  .layer-body{
+    display:grid;
+    grid-template-columns: 1.5fr 1fr 1.3fr;
+    gap: 0;
+  }
+  @media (max-width: 900px){
+    .layer-body{ grid-template-columns: 1fr; }
+  }
+  .layer-col{
+    padding: 24px 30px;
+    border-left: 1px solid var(--hairline);
+  }
+  .layer-col:first-child{ border-left: none; }
+  @media (max-width: 900px){
+    .layer-col{ border-left: none; border-top: 1px solid var(--hairline); }
+    .layer-col:first-child{ border-top: none; }
+  }
+  .layer-col .col-label{
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .step-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap: 14px; }
+  .step-list li{ display:flex; gap: 12px; font-size: 14px; }
+  .step-list .n{
+    flex: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--hairline);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    display:flex; align-items:center; justify-content:center;
+    margin-top: 1px;
+  }
+  .l3 .step-list .n{ background: var(--signal-dim); color: var(--signal); }
+  .l2 .step-list .n{ background: #6FA8FF33; color: #6FA8FF; }
+  .step-list b{ color: var(--text); font-weight: 700; }
+  .step-list span{ color: var(--text-muted); }
+
+  .cap-number{
+    font-family: var(--font-display);
+    font-size: 40px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .l3 .cap-number{ color: var(--signal); }
+  .l2 .cap-number{ color: #6FA8FF; }
+  .cap-bar{ height: 4px; background: var(--hairline); margin-bottom: 12px; }
+  .cap-bar i{ display:block; height:100%; background: currentColor; }
+  .l1 .cap-bar i{ width: 20%; background: var(--text-dim); }
+  .l2 .cap-bar i{ width: 55%; background: #6FA8FF; }
+  .l3 .cap-bar i{ width: 40%; background: var(--signal); }
+  .cap-desc{ font-size: 13.5px; color: var(--text-muted); }
+
+  .pro-move p{ font-size: 13.5px; color: var(--text-muted); margin:0; }
+  .pro-move p b{ color: var(--text); }
+  .pro-move .ex{
+    display:block;
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: var(--ink);
+    border: 1px solid var(--hairline);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--vital);
+    line-height: 1.5;
+  }
+
+  /* ---------- ROLLOUT ---------- */
+  section.rollout{ padding: 64px 0 80px; }
+  .rollout-grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline);
+    border: 1px solid var(--hairline);
+  }
+  @media (max-width: 860px){
+    .rollout-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
+  .roll-card{
+    background: var(--ink-2);
+    padding: 26px 24px;
+    position: relative;
+  }
+  .roll-card .rn{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--signal);
+    margin-bottom: 18px;
+  }
+  .roll-card h4{
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 10px;
+  }
+  .roll-card p{ font-size: 13.5px; color: var(--text-muted); margin:0; }
+  .roll-card p b{ color: var(--text); }
+  .roll-arrow{
+    position:absolute; right:-1px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+    font-size: 18px;
+    z-index: 1;
+  }
+  @media (max-width: 860px){ .roll-arrow{ display:none; } }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top: 1px solid var(--hairline);
+    padding: 30px 0 50px;
+    display:flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  footer p{
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-dim);
+    margin:0;
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">AI 工作流建置指南 · Claude 個人化架構</div>
+    <h1 class="title">三層後送<span class="accent">。</span><br>打造 Claude 專屬語氣</h1>
+    <p class="subtitle">借鏡到院前救護「<b>分級後送</b>」的概念——依嚴重度與情境層層轉介、逐級補強——將 Claude 的語氣建置拆為<b>基礎層、專案層、技能層</b>三級架構。三層依序疊加於每一次對話，任何一層缺席，Claude 便會以通用 AI 語氣填補空缺。</p>
+    <div class="hero-meta">
+      <div class="m"><b>適用範圍</b>Claude.ai 帳號設定 ／ Projects ／ Skills</div>
+      <div class="m"><b>建置時間</b>初次設定約 60–90 分鐘</div>
+      <div class="m"><b>參考基礎</b>NFA 救護科既有 Skills 架構延伸</div>
+    </div>
+  </div>
+</header>
+
+<div class="vitals">
+  <svg viewBox="0 0 800 60" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,30 L20,30 L28,30 L34,8 L40,52 L46,20 L52,30 L200,30
+             L220,30 L228,30 L234,8 L240,52 L246,20 L252,30 L400,30
+             L420,30 L428,30 L434,8 L440,52 L446,20 L452,30 L600,30
+             L620,30 L628,30 L634,8 L640,52 L646,20 L652,30 L800,30"/>
+  </svg>
+</div>
+
+<div class="wrap">
+
+  <section class="stack-intro">
+    <div class="stack-visual">
+      <div class="stack-bar l3"><b>技能層</b><span>SKILLS · 語氣呈現</span></div>
+      <div class="stack-bar l2"><b>專案層</b><span>PROJECT · 業務大腦</span></div>
+      <div class="stack-bar l1"><b>基礎層</b><span>PROFILE · 最先載入</span></div>
+      <div class="stack-note">▲ 每次對話依序疊加，由下往上生效</div>
+    </div>
+    <div class="stack-copy">
+      <h2>三層各司其職，缺一層即失真</h2>
+      <p><b>基礎層（Profile）</b>決定 Claude 知道「你是誰」；<b>專案層（Project）</b>補足「這件業務的情境與知識」；<b>技能層（Skills）</b>決定「最終輸出的語氣與格式」。三層須分工明確，規則不可重複——重複規則反而會稀釋各層效果。</p>
+      <table class="rule-table">
+        <tr><th>層級</th><th>容量上限</th><th>套用範圍</th></tr>
+        <tr><td>基礎層 Profile</td><td class="num">1,500 字元</td><td>全帳號通用，每次對話最先載入</td></tr>
+        <tr><td>專案層 Project</td><td class="num">8,000 字元 + 20萬 tokens 知識庫</td><td>限定該專案內的對話（付費方案）</td></tr>
+        <tr><td>技能層 Skills</td><td class="num">3–5 份範例文件</td><td>依任務自動判斷是否啟用，可逐次開關</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="layers">
+    <div class="section-head">
+      <div class="eyebrow">建置細節 · 依層級展開</div>
+      <h2>三層建置 SOP</h2>
+    </div>
+
+    <!-- LAYER 1 -->
+    <div class="layer-card l1">
+      <div class="layer-head">
+        <div>
+          <h3>基礎層・個人化設定</h3>
+          <div class="layer-en">PROFILE SETUP</div>
+        </div>
+        <div class="layer-tag">LAYER 1 · 全帳號通用</div>
+      </div>
+      <div class="layer-body">
+        <div class="layer-col">
+          <div class="col-label">建置步驟</div>
+          <ul class="step-list">
+            <li><span class="n">1</span><span><b>路徑：</b>設定 ＞ 一般 ＞ 個人資料 ＞「給 Claude 的指示」。</span></li>
+            <li><span class="n">2</span><span><b>寫出身分＋不變原則：</b>職稱、業務範圍，加上 5–8 條永遠不變的規則（例：一律使用繁體中文、公文採三段式）。</span></li>
+            <li><span class="n">3</span><span><b>全帳號生效：</b>每次新對話最先載入，優先於「專案」與「風格」設定。</span></li>
+          </ul>
+        </div>
+        <div class="layer-col">
+          <div class="col-label">容量</div>
+          <div class="cap-number">1.5K</div>
+          <div class="cap-bar"><i></i></div>
+          <div class="cap-desc">字元上限，空間最緊。只收「不隨案件變動」的規則，每個字都要有存在價值。</div>
+        </div>
+        <div class="layer-col pro-move">
+          <div class="col-label">實務要訣</div>
+          <p><b>各層規則不可重複。</b>身分寫在這層，業務規則放進「專案」，語氣規則放進「技能」，重複只會稀釋三層效果。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAYER 2 -->
+    <div class="layer-card l2">
+      <div class="layer-head">
+        <div>
+          <h3>專案層・知識庫建置</h3>
+          <div class="layer-en">CLAUDE PROJECT</div>
+        </div>
+        <div class="layer-tag">LAYER 2 · 業務大腦</div>
+      </div>
+      <div class="layer-body">
+        <div class="layer-col">
+          <div class="col-label">建置步驟</div>
+          <ul class="step-list">
+            <li><span class="n">1</span><span><b>依業務別建立專案：</b>如「緊急救護科政策研究」「CIT 國際研討會」「解毒劑採購案」，規則寫入「自訂指示」。</span></li>
+            <li><span class="n">2</span><span><b>上傳專案知識庫：</b>法規條文、歷年公文、會議紀錄，Claude 會引用真實文件內容作答，而非憑空生成。</span></li>
+            <li><span class="n">3</span><span><b>加入「不可做」清單：</b>負面表列規則優先於正面表列，更能約束輸出。</span></li>
+          </ul>
+        </div>
+        <div class="layer-col">
+          <div class="col-label">容量</div>
+          <div class="cap-number">8K</div>
+          <div class="cap-bar"><i></i></div>
+          <div class="cap-desc">字元指示，另有 20 萬 tokens 上傳知識庫額度。需付費方案，該專案內每次對話自動套用。</div>
+        </div>
+        <div class="layer-col pro-move">
+          <div class="col-label">實務要訣</div>
+          <p><b>省略確認式提問：</b>在指示中加入「略過確認、直接產出草稿並註明假設」，每次都能省下一輪來回。</p>
+          <span class="ex">範例：「若使用者未指定文號或日期，逕以合理假設產出，並於文末註明待確認事項。」</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAYER 3 -->
+    <div class="layer-card l3">
+      <div class="layer-head">
+        <div>
+          <h3>技能層・語氣與格式</h3>
+          <div class="layer-en">CLAUDE SKILLS</div>
+        </div>
+        <div class="layer-tag">LAYER 3 · 語氣呈現</div>
+      </div>
+      <div class="layer-body">
+        <div class="layer-col">
+          <div class="col-label">建置步驟</div>
+          <ul class="step-list">
+            <li><span class="n">1</span><span><b>建立技能資料夾：</b>內含 SKILL.md（語氣規則）＋ 3–5 份範例文件。</span></li>
+            <li><span class="n">2</span><span><b>上傳或請 Claude 協助建置：</b>於「風格與偏好」上傳 ZIP，或直接與 Claude 對話共同建置。</span></li>
+            <li><span class="n">3</span><span><b>寫好 description：</b>這段文字決定 Claude 何時自動判斷啟用此技能，寫得越精準，誤判率越低。</span></li>
+          </ul>
+        </div>
+        <div class="layer-col">
+          <div class="col-label">容量</div>
+          <div class="cap-number">3–5</div>
+          <div class="cap-bar"><i></i></div>
+          <div class="cap-desc">份範例文件即可，挑「最像自己語氣」的文件，而非最新的——範例決定語氣天花板。</div>
+        </div>
+        <div class="layer-col pro-move">
+          <div class="col-label">實務要訣</div>
+          <p><b>一技能對應一任務：</b>公文、預算書、簡報、採購各自獨立成技能，Claude 會依需要自動疊加組合使用。</p>
+          <span class="ex">例：nfa-gongwen ＋ nfa-budget-doc 可同時處理一份「預算追加簽案」。</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="rollout">
+    <div class="section-head">
+      <div class="eyebrow">執行流程 · 四步驟訓練循環</div>
+      <h2>建置滾動流程</h2>
+    </div>
+    <div class="rollout-grid">
+      <div class="roll-card">
+        <div class="rn">01 · COLLECT</div>
+        <h4>收集</h4>
+        <p>找出近期<b>最常被原文核定、退回修改次數最少</b>的 5 份文件（公文、簡報、報告皆可），作為三層共用的訓練基礎。</p>
+        <div class="roll-arrow">›</div>
+      </div>
+      <div class="roll-card">
+        <div class="rn">02 · FEED</div>
+        <h4>餵入</h4>
+        <p>範例文件放進<b>技能</b>資料夾；法規與歷年檔案放進<b>專案知識庫</b>；身分與不變規則寫進<b>個人資料</b>。</p>
+        <div class="roll-arrow">›</div>
+      </div>
+      <div class="roll-card">
+        <div class="rn">03 · RULE</div>
+        <h4>訂規則</h4>
+        <p>指示至少 200 字起跳，太短效果有限。<b>先列「不可做」清單，再列「必須做」清單。</b></p>
+        <div class="roll-arrow">›</div>
+      </div>
+      <div class="roll-card">
+        <div class="rn">04 · REFINE</div>
+        <h4>精煉</h4>
+        <p>每使用 3–5 次後，找出<b>Claude 重複出現的錯誤</b>，回頭修正對應那一層的規則，效果會隨時間快速疊加。</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; width:100%;">
+    <p>三層架構：基礎層（Profile）／專案層（Project）／技能層（Skills）－每次對話依序疊加生效</p>
+    <p>內政部消防署 救災救護組緊急救護科 · AI 工作流建置參考</p>
+  </div>
+</footer>
+
+</body>
+</html>

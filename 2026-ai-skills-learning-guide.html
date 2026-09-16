@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 十二項 AI 關鍵技能學習指南</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0e1420;
+    --surface:#161f2e;
+    --surface-2:#1c2738;
+    --line:#2a3a52;
+    --text:#e8edf4;
+    --muted:#9aa8bb;
+    --cyan:#4fd1e0;
+    --amber:#f0b45a;
+    --cyan-dim:rgba(79,209,224,.12);
+    --amber-dim:rgba(240,180,90,.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink);
+    color:var(--text);
+    font-family:"Noto Sans TC",-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;
+    line-height:1.75;
+    font-size:16px;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:0 22px}
+
+  /* ---------- Hero ---------- */
+  header{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+  .kicker{color:var(--cyan);font-weight:700;letter-spacing:.08em;font-size:.95rem;margin-bottom:14px}
+  h1{font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:900;line-height:1.25;letter-spacing:.01em}
+  .lede{color:var(--muted);margin-top:18px;max-width:44em}
+  .lede strong{color:var(--text)}
+  .src-note{
+    margin-top:22px;padding:12px 16px;border-left:3px solid var(--amber);
+    background:var(--amber-dim);border-radius:0 8px 8px 0;
+    font-size:.92rem;color:var(--muted);
+  }
+
+  /* ---------- Section ---------- */
+  section{padding:44px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:1.5rem;font-weight:900;margin-bottom:6px}
+  .h2-sub{color:var(--muted);margin-bottom:26px;font-size:.95rem}
+  h2 .num{color:var(--cyan);margin-right:.4em;font-weight:900}
+
+  /* ---------- Overview table ---------- */
+  table{width:100%;border-collapse:collapse;font-size:.92rem}
+  th{
+    text-align:left;color:var(--cyan);font-weight:700;
+    border-bottom:2px solid var(--line);padding:10px 12px;white-space:nowrap;
+  }
+  td{border-bottom:1px solid var(--line);padding:10px 12px;vertical-align:top}
+  td:first-child{white-space:nowrap;font-weight:700}
+  td .tools{color:var(--muted);font-size:.85rem}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+  /* ---------- Tier bands ---------- */
+  .tier{
+    margin-bottom:34px;border:1px solid var(--line);border-radius:14px;
+    overflow:hidden;background:var(--surface);
+  }
+  .tier-head{
+    padding:18px 22px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+    border-bottom:1px solid var(--line);
+  }
+  .tier-a .tier-head{background:linear-gradient(90deg,var(--cyan-dim),transparent)}
+  .tier-b .tier-head{background:linear-gradient(90deg,var(--amber-dim),transparent)}
+  .tier-c .tier-head{background:var(--surface-2)}
+  .tier-tag{
+    font-size:.8rem;font-weight:700;padding:3px 12px;border-radius:99px;
+    border:1px solid currentColor;white-space:nowrap;
+  }
+  .tier-a .tier-tag{color:var(--cyan)}
+  .tier-b .tier-tag{color:var(--amber)}
+  .tier-c .tier-tag{color:var(--muted)}
+  .tier-title{font-size:1.15rem;font-weight:900}
+  .tier-why{padding:14px 22px 4px;color:var(--muted);font-size:.93rem}
+
+  /* ---------- Skill accordion ---------- */
+  details{border-top:1px solid var(--line)}
+  details:first-of-type{border-top:none}
+  summary{
+    list-style:none;cursor:pointer;padding:16px 22px;
+    display:flex;align-items:baseline;gap:12px;
+    transition:background .15s;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary:hover{background:var(--surface-2)}
+  summary:focus-visible{outline:2px solid var(--cyan);outline-offset:-2px}
+  .sk-no{color:var(--cyan);font-weight:900;min-width:1.6em}
+  .tier-b .sk-no{color:var(--amber)}
+  .tier-c .sk-no{color:var(--muted)}
+  .sk-name{font-weight:700;flex:1}
+  .sk-name small{display:block;color:var(--muted);font-weight:400;font-size:.85rem;margin-top:2px}
+  .chev{color:var(--muted);transition:transform .2s;flex-shrink:0;align-self:center}
+  details[open] .chev{transform:rotate(90deg)}
+  .sk-body{padding:2px 22px 22px 22px}
+  @media(min-width:640px){.sk-body{padding-left:calc(22px + 1.6em + 12px)}}
+  .sk-body h4{
+    font-size:.85rem;font-weight:700;color:var(--cyan);
+    margin:16px 0 6px;
+  }
+  .tier-b .sk-body h4{color:var(--amber)}
+  .tier-c .sk-body h4{color:var(--muted)}
+  .sk-body p{font-size:.94rem;color:#cfd8e4}
+  .tool-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  .chip{
+    font-size:.82rem;padding:3px 12px;border-radius:99px;
+    background:var(--surface-2);border:1px solid var(--line);color:var(--muted);
+  }
+  .apply{
+    margin-top:6px;padding:12px 16px;border-radius:10px;
+    background:var(--surface-2);border:1px solid var(--line);
+    font-size:.93rem;color:#cfd8e4;
+  }
+  .apply li{margin-left:1.3em;margin-top:4px}
+
+  /* ---------- Learning method ---------- */
+  .method-grid{display:grid;gap:16px;margin-top:8px}
+  @media(min-width:700px){.method-grid{grid-template-columns:1fr 1fr}}
+  .method-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:20px 22px;
+  }
+  .method-card h3{font-size:1.05rem;font-weight:900;margin-bottom:10px}
+  .method-card h3 span{color:var(--cyan);margin-right:.4em}
+  .method-card p,.method-card li{font-size:.93rem;color:#cfd8e4}
+  .method-card ul{margin:6px 0 0 1.3em}
+  .method-card li{margin-top:6px}
+  .method-card li b{color:var(--text)}
+
+  /* ---------- Weekly plan ---------- */
+  .week-list{counter-reset:wk;margin-top:8px}
+  .week{
+    display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);
+    align-items:flex-start;
+  }
+  .week:last-child{border-bottom:none}
+  .wk-label{
+    flex-shrink:0;width:84px;font-weight:900;color:var(--cyan);
+    font-size:.95rem;padding-top:2px;
+  }
+  .week p{font-size:.94rem;color:#cfd8e4}
+  .week p b{color:var(--text)}
+
+  footer{padding:36px 0 56px;color:var(--muted);font-size:.85rem}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none!important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">學習指南｜依 AI Mastery 資訊圖整理</div>
+    <h1>2026 年十二項 AI 關鍵技能<br>與公務應用學習路徑</h1>
+    <p class="lede">本頁完整整理附件資訊圖「12 AI Skills to Learn in 2026」的十二項技能與代表工具，並依<strong>到院前緊急救護（Emergency Medical Services, EMS）政策業務</strong>的實際工作情境，將原本並列的十二項技能重組為<strong>三個學習層級</strong>，附上可直接執行的十二週學習方法。點開各技能即可由「快速理解」進入「深入內容」。</p>
+    <div class="src-note">內容來源說明：技能名稱、定義與工具清單均出自附件資訊圖（原圖工具名稱部分拼寫失真，本頁已還原為正確名稱，如 LlamaIndex、ElevenLabs、Synthesia 等）；「業務應用」與「學習方式」為依據您的職掌另行規劃之建議，非原圖內容。</div>
+  </div>
+</header>
+
+<!-- ================= 總覽 ================= -->
+<section>
+  <div class="wrap">
+    <h2><span class="num">壹</span>十二項技能快速總覽</h2>
+    <p class="h2-sub">先用一張表掌握全貌，再往下深入各項內容。</p>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>技能</th><th>核心內容</th><th>原圖代表工具</th></tr></thead>
+      <tbody>
+        <tr><td>1. 提示工程</td><td>撰寫清晰、任務明確的提示，讓 AI 模型產出準確可用的結果</td><td class="tools">ChatGPT、Claude、Gemini、DeepSeek</td></tr>
+        <tr><td>2. AI 工作流自動化</td><td>以免寫程式方式串接應用程式，建立省時的自動化流程</td><td class="tools">Zapier、Gumloop、n8n、Lindy AI</td></tr>
+        <tr><td>3. AI 代理</td><td>建置多代理系統，完成需要推理、協調與記憶的任務</td><td class="tools">CrewAI、Cotera、LangGraph、LangChain</td></tr>
+        <tr><td>4. 檢索增強生成（RAG）</td><td>將 AI 模型連接自有資料，產出更準確、有來源依據的回答</td><td class="tools">LangChain、LlamaIndex、Milvus、Haystack</td></tr>
+        <tr><td>5. 多模態 AI</td><td>在單一對話中同時理解文字、影像、程式碼與音訊</td><td class="tools">ChatGPT、Claude、Gemini、Grok</td></tr>
+        <tr><td>6. 微調與 AI 助理</td><td>建立領域專屬 AI 助理，或以平台微調模型</td><td class="tools">Cohere、OpenAI、Hugging Face、NVIDIA NeMo</td></tr>
+        <tr><td>7. 語音 AI 與虛擬人像</td><td>為影片或訓練內容生成擬真配音與虛擬講者</td><td class="tools">Retell AI、ElevenLabs、Synthesia、HeyGen</td></tr>
+        <tr><td>8. AI 工具堆疊</td><td>組合多個平台，建立跨任務的客製化 AI 工作流</td><td class="tools">Softr、ClickUp、HighLevel、Notion</td></tr>
+        <tr><td>9. AI 影片內容生成</td><td>將文字或腳本轉為影片，加入配音、剪輯場景、加速產製</td><td class="tools">Higgsfield AI、Runway、OpusClip、Descript</td></tr>
+        <tr><td>10. SaaS 開發</td><td>以無程式碼工具開發具 AI 功能與真實使用者流程的應用</td><td class="tools">Lovable、Replit、Claude Code、Google Antigravity</td></tr>
+        <tr><td>11. LLM 管理</td><td>追蹤準確度、延遲與成本，持續改善 AI 表現</td><td class="tools">PromptLayer、Helicone、Phoenix、TruLens</td></tr>
+        <tr><td>12. 持續更新</td><td>追蹤頂尖科技媒體，掌握新聞、產品更新與技術突破</td><td class="tools">The Verge、TechCrunch、Hacker News、MIT Tech Review</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 三層級深入解析 ================= -->
+<section>
+  <div class="wrap">
+    <h2><span class="num">貳</span>依業務重組：三個學習層級</h2>
+    <p class="h2-sub">原圖十二項並列，對公務情境而言優先順序並不相同。以下依「投入產出比」重組：核心層直接對應日常文書與政策工作；整合層放大既有工作流；觀察層瞭解即可，不必投入操作。點開每項技能可看完整說明。</p>
+
+    <!-- ===== Tier A ===== -->
+    <div class="tier tier-a">
+      <div class="tier-head">
+        <span class="tier-tag">核心層｜每日使用</span>
+        <span class="tier-title">直接產出公務成果的四項技能</span>
+      </div>
+      <p class="tier-why">這四項與公文、法規研修、預算、簡報產製直接相關，投入即見效，建議最先學、學最深。</p>
+
+      <details open>
+        <summary><span class="sk-no">1</span><span class="sk-name">提示工程（Prompt Engineering）<small>所有 AI 應用的地基</small></span><span class="chev">›</span></summary>
+        <div class="sk-body">
+          <h4>原圖定義</h4>
+          <p>學習撰寫清晰、任務明確的提示（prompt），讓 ChatGPT、Claude、Gemini 等 AI 模型產出準確且有用的結果。</p>
+          <h4>代表工具</h4>
+          <div class="tool-row"><span class="chip">ChatGPT</span><span class="chip">Claude</span><span class="chip">Gemini</span><span class="chip">DeepSeek</span></div>
+          <h4>業務應用</h4>
+          <div class="apply"><ul>
+            <li>公文起草：以「角色＋任務＋格式＋範例」四要素撰寫提示，穩定產出主旨、說明、辦法三段式架構。</li>
+            <li>法規研修：提示中明確給定《緊急醫療救護法》條文原文，要求逐條比對而非憑印象作答，降低幻覺風險。</li>
+            <li>建立「提示範本庫」：將簽、函、預算說明書、規格書等常用提示存為固定範本，全科共用。</li>
+          </ul></div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="sk-no">4</span><span class="sk-name">檢索增強生成（Retrieval-Augmented Generation, RAG）<small>讓 AI 依據您的法規與檔案作答</small></span><span class="chev">›</span></summary>
+        <div class="sk-body">
+          <h4>原圖定義</h4>
+          <p>透過框架將 AI 模型連接到自有資料，產出更準確、有來源依據（source-backed）的回答。</p>
+          <h4>代表工具</h4>
+          <div class="tool-row"><span class="chip">LangChain</span><span class="chip">LlamaIndex</span><span class="chip">Milvus</span><span class="chip">Haystack</span></div>
+          <h4>業務應用</h4>
+          <div class="apply"><ul>
+            <li>公務情境不需自建 RAG 系統：NotebookLM、Claude Projects 即為現成 RAG 產品，上傳法規、解釋函令、歷年簽稿即可。</li>
+            <li>建置「EMS 法規知識庫」：《緊急醫療救護法》、《救護技術員管理辦法》、歷次修法說明集中一處，查詢附來源段落。</li>
+            <li>採購案適用：將歷年招標文件、規格書、評選基準建庫，新案起草時直接檢索前例。</li>
+          </ul></div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="sk-no">5</span><span class="sk-name">多模態 AI（Multimodal AI）<small>文字、影像、表格一次處理</small></span><span class="chev">›</span></summary>
+        <div class="sk-body">
+          <h4>原圖定義</h4>
+          <p>使用 ChatGPT、Claude、Gemini、Grok 等先進模型，在單一對話中理解文字、影像、程式碼與音訊。</p>
+          <h4>代表工具</h4>
+          <div class="tool-row"><span class="chip">ChatGPT</span><span class="chip">Claude</span><span class="chip">Gemini</span><span class="chip">Grok</span></div>
+          <h4>業務應用</h4>
+          <div class="apply"><ul>
+            <li>紙本轉數位：來文掃描檔、會議白板照片、統計圖表，直接上傳辨識並轉為可編輯文字或表格。</li>
+            <li>國際交流：外賓簡報截圖、英文原文文件，一次完成翻譯、摘要與重點比對。</li>
+            <li>訓練教材審修：TECC、PCC、CIT 教材圖文並陳時，可整頁上傳請 AI 檢核圖說與內文一致性。</li>
+          </ul></div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="sk-no">2</span><span class="sk-name">AI 工作流自動化（AI Workflow Automation）<small>把重複的行政流程交給機器</small></span><span class="chev">›</span></summary>
+        <div class="sk-body">
+          <h4>原圖定義</h4>
+          <p>使用 Zapier、Lindy AI、n8n 等工具串接應用程式並建立省時自動化，無需撰寫程式。</p>
+          <h4>代表工具</h4>
+          <div class="tool-row"><span class="chip">Zapier</span><span class="chip">Gumloop</span><span class="chip">n8n</span><span class="chip">Lindy AI</span></div>
+          <h4>業務應用</h4>
+          <div class="apply"><ul>
+            <li>先盤點再自動化：列出每週重複三次以上的作業（會議通知、進度催辦、資料彙整），這些才是自動化標的。</li>
+            <li>公務機關資安限制較嚴，建議優先使用已核可的雲端服務連接器（如行事曆、郵件、雲端硬碟），敏感公文內容不進入第三方自動化平台。</li>
+            <li>入門標的：外賓接待與研討會籌辦的行程確認、報名彙整、提醒通知。</li>
+          </ul></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== Tier B ===== -->
+    <div class="tier tier-b">
+      <div class="tier-head">
+        <span class="tier-tag">整合層｜每週使用</span>
+        <span class="tier-title">放大工作流效益的四項技能</span>
+      </div>
+      <p class="tier-why">在核心層穩定後導入，用於簡報產製、跨工具整合與教材製作，屬於「加乘型」技能。</p>
+
+      <details>
+        <summary><span class="sk-no">8</span><span class="sk-name">AI 工具堆疊（AI Tool Stacking）<small>讓多個工具各司其職、彼此銜接</small></span><span class="chev">›</span></summary>
+        <div class="sk-body">
+          <h4>原圖定義</h4>
+          <p>組合 Softr、ClickUp、HighLevel、Notion 等平台，建立跨任務的客製化 AI 工作流與自動化。</p>
+          <h4>代表工具</h4>
+          <div class="tool-row"><span class="chip">Softr</span><span class="chip">ClickUp</span><span class="chip">HighLevel</span><span class="chip">Notion</span></div>
+          <h4>業務應用</h4>
+          <div class="apply"><ul>
+            <li>核心觀念是「分工」而非「工具數量」：知識庫（NotebookLM／Obsidian）→ 起草（Claude）→ 簡報（Gamma）→ 定稿（Office），一條鏈路各司其職。</li>
+            <li>為每個環節定義「交接格式」（如 Markdown 大綱、表格結構），工具間轉換才不會反覆重排。</li>
+            <li>目標是一份資料只輸入一次，後續簽稿、簡報、報告皆由同一來源衍生。</li>
+          </ul></div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="sk-no">3</span><span class="sk-name">AI 代理（AI Agents）<small>能自主拆解任務的 AI</small></span><span class="chev">›</span></summary>
+        <div class="sk-body">
+          <h4>原圖定義</h4>
+          <p>使用 CrewAI、LangChain 等平台建置多代理（multi-agent）系統，完成需要推理、協調與記憶的任務。</p>
+          <h4>代表工具</h4>
+          <div class="tool-row"><span class="chip">CrewAI</span><span class="chip">Cotera</span><span class="chip">LangGraph</span><span class="chip">LangChain</span></div>
+          <h4>業務應用</h4>
+          <div class="apply"><ul>
+            <li>公務情境的代理應用是「委派整段任務」而非單次問答：例如「整理某國 EMT 分級制度並輸出比較表」，由 AI 自行搜尋、彙整、成表。</li>
+            <li>國際 EMS 制度比較、文獻整理是最適合的入門任務——步驟多、可驗證、錯了容易發現。</li>
+            <li>重要原則：代理產出一律人工覆核來源，尤其涉及法規條文與統計數據時。</li>
+          </ul></div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="sk-no">9</span><span class="sk-name">AI 影片內容生成（AI Video Content Generation）<small>訓練教材影音化</small></span><span class="chev">›</span></summary>
+        <div class="sk-body">
+          <h4>原圖定義</h4>
+          <p>使用 Higgsfield AI、Descript、OpusClip 等工具將文字或腳本轉為影片，加入配音、剪輯場景，加速產製。</p>
+          <h4>代表工具</h4>
+          <div class="tool-row"><span class="chip">Higgsfield AI</span><span class="chip">Runway</span><span class="chip">OpusClip</span><span class="chip">Descript</span></div>
+          <h4>業務應用</h4>
+          <div class="apply"><ul>
+            <li>訓練體系的規模化利器：TECC、PCC、CIT 課程的觀念講解段落，可由講義腳本直接生成教學短片。</li>
+            <li>政策宣導：修法重點、新制上路說明，以短影片形式發布給各消防局，比公文附件更易吸收。</li>
+            <li>實作技能示範仍以真人拍攝為準，AI 影片限於觀念與制度說明。</li>
+          </ul></div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="sk-no">7</span><span class="sk-name">語音 AI 與虛擬人像（Voice AI and Avatars）<small>配音與虛擬講者</small></span><span class="chev">›</span></summary>
+        <div class="sk-body">
+          <h4>原圖定義</h4>
+          <p>使用 Retell AI、ElevenLabs、HeyGen、Synthesia 等工具，為影片或訓練內容生成擬真配音與虛擬講者。</p>
+          <h4>代表工具</h4>
+          <div class="tool-row"><span class="chip">Retell AI</span><span class="chip">ElevenLabs</span><span class="chip">Synthesia</span><span class="chip">HeyGen</span></div>
+          <h4>業務應用</h4>
+          <div class="apply"><ul>
+            <li>與第 9 項搭配：線上課程旁白、雙語版教材（中英文版本國際交流用）可由同一腳本生成。</li>
+            <li>使用真人聲音或肖像生成前，務必取得書面同意並標註 AI 生成，符合政府機關使用生成式 AI 的相關指引。</li>
+          </ul></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ===== Tier C ===== -->
+    <div class="tier tier-c">
+      <div class="tier-head">
+        <span class="tier-tag">觀察層｜瞭解即可</span>
+        <span class="tier-title">建立判斷力的四項技能</span>
+      </div>
+      <p class="tier-why">這四項偏向技術端或持續性習慣，公務情境不必親自操作，但需要「看得懂、能評估」，在採購 AI 服務或審查廠商提案時派上用場。</p>
+
+      <details>
+        <summary><span class="sk-no">6</span><span class="sk-name">微調與 AI 助理（Fine-Tuning and AI Assistants）<small>領域專屬模型</small></span><span class="chev">›</span></summary>
+        <div class="sk-body">
+          <h4>原圖定義</h4>
+          <p>使用 OpenAI、Hugging Face、NVIDIA NeMo 等平台，建立領域專屬 AI 助理或微調（fine-tune）模型。</p>
+          <h4>代表工具</h4>
+          <div class="tool-row"><span class="chip">Cohere</span><span class="chip">OpenAI</span><span class="chip">Hugging Face</span><span class="chip">NVIDIA NeMo</span></div>
+          <h4>業務應用</h4>
+          <div class="apply"><ul>
+            <li>關鍵判斷：多數公務需求用「RAG＋提示範本」即可滿足，微調成本高且維護不易——這個判斷本身就是採購審查的重要依據。</li>
+            <li>若未來辦理 AI 相關勞務採購，需能分辨廠商提案中「微調」與「檢索」的差異與合理性。</li>
+          </ul></div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="sk-no">10</span><span class="sk-name">SaaS 開發（SaaS Development）<small>無程式碼開發應用</small></span><span class="chev">›</span></summary>
+        <div class="sk-body">
+          <h4>原圖定義</h4>
+          <p>使用 Lovable、Replit、Claude Code、Google Antigravity 等無程式碼／低程式碼工具，開發具 AI 功能與真實使用者流程的應用程式。</p>
+          <h4>代表工具</h4>
+          <div class="tool-row"><span class="chip">Lovable</span><span class="chip">Replit</span><span class="chip">Claude Code</span><span class="chip">Google Antigravity</span></div>
+          <h4>業務應用</h4>
+          <div class="apply"><ul>
+            <li>可用於快速製作內部小工具原型：訓練報名統計頁、案件追蹤表、模擬訓練工具，先做原型驗證需求再決定是否正式開發。</li>
+            <li>原型階段的產出也能作為採購規格書的「需求示意」，讓廠商精準理解需求。</li>
+          </ul></div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="sk-no">11</span><span class="sk-name">LLM 管理（LLM Management）<small>追蹤 AI 的品質與成本</small></span><span class="chev">›</span></summary>
+        <div class="sk-body">
+          <h4>原圖定義</h4>
+          <p>使用 PromptLayer、Helicone、Phoenix、TruLens 等平台追蹤準確度、延遲與成本，持續改善 AI 表現。</p>
+          <h4>代表工具</h4>
+          <div class="tool-row"><span class="chip">PromptLayer</span><span class="chip">Helicone</span><span class="chip">Phoenix</span><span class="chip">TruLens</span></div>
+          <h4>業務應用</h4>
+          <div class="apply"><ul>
+            <li>觀念可直接移植為「行政版」：為常用提示範本建立版本紀錄，記錄哪一版產出品質最穩定，即為最簡化的 LLM 管理。</li>
+            <li>未來機關導入 AI 系統時，驗收指標（準確度、回應時間、成本）的設計即源自此領域。</li>
+          </ul></div>
+        </div>
+      </details>
+
+      <details>
+        <summary><span class="sk-no">12</span><span class="sk-name">持續更新（Staying Updated）<small>建立資訊雷達</small></span><span class="chev">›</span></summary>
+        <div class="sk-body">
+          <h4>原圖定義</h4>
+          <p>追蹤 The Verge、TechCrunch、Hacker News 等頂尖科技媒體，掌握新聞、產品更新與技術突破。</p>
+          <h4>代表工具</h4>
+          <div class="tool-row"><span class="chip">The Verge</span><span class="chip">TechCrunch</span><span class="chip">Hacker News</span><span class="chip">MIT Tech Review</span></div>
+          <h4>業務應用</h4>
+          <div class="apply"><ul>
+            <li>不必每日刷新聞：每週固定三十分鐘，用 AI 摘要工具彙整當週重點即可。</li>
+            <li>建議加入 EMS 專業源：NAEMT（National Association of Emergency Medical Technicians）等國際組織的公告，與科技媒體並列追蹤，兼顧技術與本業。</li>
+          </ul></div>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 學習方法 ================= -->
+<section>
+  <div class="wrap">
+    <h2><span class="num">參</span>更完善的學習方式：以工作為教材</h2>
+    <p class="h2-sub">資訊圖只告訴您「學什麼」，以下補上「怎麼學」。核心原則：不另闢學習時間，直接以手上的公務案件為練習題。</p>
+
+    <div class="method-grid">
+      <div class="method-card">
+        <h3><span>一</span>案件驅動學習法</h3>
+        <p>每項技能都綁定一件真實業務練習，做完業務即完成學習：</p>
+        <ul>
+          <li><b>提示工程</b> → 用下一份簽稿練習，比較三種提示寫法的產出差異。</li>
+          <li><b>RAG</b> → 把本季會用到的法規先建成知識庫，之後每次查詢都是複習。</li>
+          <li><b>多模態</b> → 下次收到掃描來文，先丟 AI 辨識再人工校對。</li>
+          <li><b>自動化</b> → 從下一場研討會的報名彙整開始。</li>
+        </ul>
+      </div>
+      <div class="method-card">
+        <h3><span>二</span>三比一驗證原則</h3>
+        <p>每使用 AI 產出三次，做一次刻意驗證：</p>
+        <ul>
+          <li>抽查引用的法規條號、統計數據是否正確。</li>
+          <li>記下錯誤類型（幻覺、格式、語氣），回頭修改提示範本。</li>
+          <li>驗證紀錄累積起來，就是全科導入 AI 時的風險控管依據。</li>
+        </ul>
+      </div>
+      <div class="method-card">
+        <h3><span>三</span>範本資產化</h3>
+        <p>學習成果一律沉澱為可重複使用的資產，避免「學過就忘」：</p>
+        <ul>
+          <li>好用的提示 → 存入提示範本庫，標註適用文書類型。</li>
+          <li>建好的知識庫 → 持續增補，成為科內共用資源。</li>
+          <li>自動化流程 → 寫成一頁式操作說明，同仁可接手。</li>
+        </ul>
+      </div>
+      <div class="method-card">
+        <h3><span>四</span>教學檢驗法</h3>
+        <p>學會的標準是「能教別人」：</p>
+        <ul>
+          <li>每完成一個層級，向科內同仁做十五分鐘分享。</li>
+          <li>教學材料本身就是政策簡報的練習（順帶練第 8、9 項技能）。</li>
+          <li>同仁提問即是您理解不足之處的診斷。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 12 週計畫 ================= -->
+<section>
+  <div class="wrap">
+    <h2><span class="num">肆</span>十二週執行計畫</h2>
+    <p class="h2-sub">每週聚焦一個主題，每週投入約二至三小時，全部以真實業務為練習場。</p>
+
+    <div class="week-list">
+      <div class="week"><div class="wk-label">第 1–2 週</div><p><b>提示工程。</b>建立公文、預算、簡報三類提示範本，各以一件真實案件測試並修正。</p></div>
+      <div class="week"><div class="wk-label">第 3–4 週</div><p><b>RAG 知識庫。</b>將《緊急醫療救護法》、《救護技術員管理辦法》及常用解釋函令建為知識庫，日常查詢改由知識庫優先。</p></div>
+      <div class="week"><div class="wk-label">第 5 週</div><p><b>多模態應用。</b>本週所有掃描檔、圖表、外文資料一律先經 AI 處理，記錄節省時數。</p></div>
+      <div class="week"><div class="wk-label">第 6–7 週</div><p><b>工作流自動化。</b>盤點重複性作業清單，挑一項完成自動化（建議：活動報名彙整或行程提醒）。</p></div>
+      <div class="week"><div class="wk-label">第 8 週</div><p><b>期中整合＋分享。</b>向科內同仁分享前七週成果，整理提示範本庫第一版。</p></div>
+      <div class="week"><div class="wk-label">第 9 週</div><p><b>工具堆疊。</b>畫出自己的工具鏈路圖（知識庫→起草→簡報→定稿），定義各環節交接格式。</p></div>
+      <div class="week"><div class="wk-label">第 10 週</div><p><b>AI 代理。</b>委派一件國際 EMS 制度比較任務給 AI 完整執行，全程覆核來源。</p></div>
+      <div class="week"><div class="wk-label">第 11 週</div><p><b>影音生成。</b>取一段既有訓練講義，實作一支三分鐘觀念說明短片（含 AI 配音）。</p></div>
+      <div class="week"><div class="wk-label">第 12 週</div><p><b>總結與制度化。</b>瀏覽微調、SaaS 開發、LLM 管理三項的評估要點；建立每週三十分鐘的資訊更新習慣；將全部範本與流程文件化，形成科內可推廣的作業模式。</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    技能定義與工具清單依據附件資訊圖（AI Mastery, 12 AI Skills to Learn in 2026）整理；層級規劃、業務應用與學習方法為依 EMS 政策業務情境另行編製之建議。
+  </div>
+</footer>
+
+</body>
+</html>

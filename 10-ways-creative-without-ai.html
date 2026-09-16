@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>不靠 AI 保持創造力的 10 個方法</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1B2A4A;        /* 墨藍：主文字 */
+  --paper:#F7F5EF;      /* 紙白：背景 */
+  --marker:#FFE873;     /* 螢光筆黃：標記 */
+  --line:#C9C3B4;       /* 鉛筆灰：分隔線 */
+  --blue:#2743B8;       /* 鋼筆藍：強調 */
+  --c1:#D6DCF2; --c2:#E3EFC9; --c3:#F2E3EC; --c4:#FBEFD8; --c5:#F8DFD2;
+  --c6:#DDEBDD; --c7:#EAF2C9; --c8:#E6DFF2; --c9:#FDF3D0; --c10:#FBE4DA;
+  --a1:#3D5AB8; --a2:#6C8F2E; --a3:#A64D79; --a4:#B07C2A; --a5:#C05A38;
+  --a6:#3E7A4E; --a7:#7A8B2C; --a8:#6A4DA6; --a9:#B08E22; --a10:#B85A3D;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans TC',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.75;
+  background-image:radial-gradient(var(--line) 0.8px, transparent 0.8px);
+  background-size:26px 26px;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+/* ---------- Hero ---------- */
+header{padding:72px 0 40px;text-align:center}
+.eyebrow{
+  display:inline-block;font-size:.85rem;letter-spacing:.35em;font-weight:700;
+  color:var(--blue);border:1.5px solid var(--blue);border-radius:999px;
+  padding:4px 18px 4px 22px;margin-bottom:28px;background:#fff;
+}
+h1{
+  font-family:'Noto Serif TC',serif;font-weight:900;
+  font-size:clamp(2rem,5.5vw,3.6rem);line-height:1.3;
+}
+h1 .hl{
+  color:var(--blue);
+  background:linear-gradient(transparent 58%, var(--marker) 58%, var(--marker) 92%, transparent 92%);
+  padding:0 .12em;
+}
+.lede{max-width:640px;margin:24px auto 0;font-size:1.05rem;color:#3c496a}
+.lede strong{background:linear-gradient(transparent 62%, var(--marker) 62%, var(--marker) 94%, transparent 94%)}
+
+/* ---------- Wheel ---------- */
+.wheel-zone{display:flex;flex-wrap:wrap;gap:40px;align-items:center;justify-content:center;padding:36px 0 56px}
+.wheel{
+  position:relative;width:min(420px,86vw);aspect-ratio:1;
+  border-radius:50%;
+  background:conic-gradient(
+    var(--c1) 0 36deg, var(--c2) 36deg 72deg, var(--c3) 72deg 108deg,
+    var(--c4) 108deg 144deg, var(--c5) 144deg 180deg, var(--c6) 180deg 216deg,
+    var(--c7) 216deg 252deg, var(--c8) 252deg 288deg, var(--c9) 288deg 324deg,
+    var(--c10) 324deg 360deg);
+  box-shadow:0 18px 44px rgba(27,42,74,.16), inset 0 0 0 6px #fff;
+}
+.wheel::after{
+  content:"類比\A創作力";white-space:pre;
+  position:absolute;inset:0;margin:auto;width:34%;height:34%;
+  background:#fff;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  font-family:'Noto Serif TC',serif;font-weight:700;font-size:clamp(1rem,2.6vw,1.3rem);
+  line-height:1.4;color:var(--ink);
+  box-shadow:0 4px 16px rgba(27,42,74,.18);
+}
+.wheel a{
+  position:absolute;transform:translate(-50%,-50%);
+  width:2.2em;height:2.2em;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Noto Serif TC',serif;font-weight:700;font-size:1rem;
+  color:#fff;text-decoration:none;
+  box-shadow:0 2px 6px rgba(27,42,74,.25);
+  transition:transform .15s ease;
+}
+.wheel a:hover,.wheel a:focus-visible{transform:translate(-50%,-50%) scale(1.22)}
+.wheel a:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.n1{left:61.7%;top:13.9%;background:var(--a1)} .n2{left:80.7%;top:27.7%;background:var(--a2)}
+.n3{left:88%;top:50%;background:var(--a3)}    .n4{left:80.7%;top:72.3%;background:var(--a4)}
+.n5{left:61.7%;top:86.1%;background:var(--a5)}.n6{left:38.3%;top:86.1%;background:var(--a6)}
+.n7{left:19.3%;top:72.3%;background:var(--a7)}.n8{left:12%;top:50%;background:var(--a8)}
+.n9{left:19.3%;top:27.7%;background:var(--a9)}.n10{left:38.3%;top:13.9%;background:var(--a10);font-size:.85rem}
+.legend{max-width:340px}
+.legend h2{font-family:'Noto Serif TC',serif;font-size:1.2rem;margin-bottom:14px}
+.legend ol{list-style:none;counter-reset:li}
+.legend li{counter-increment:li;padding:5px 0;border-bottom:1px dashed var(--line);font-size:.94rem}
+.legend li::before{
+  content:counter(li);display:inline-flex;width:1.6em;height:1.6em;margin-right:.6em;
+  align-items:center;justify-content:center;border-radius:50%;
+  font-family:'Noto Serif TC',serif;font-weight:700;font-size:.8rem;color:#fff;
+}
+.legend li:nth-child(1)::before{background:var(--a1)} .legend li:nth-child(2)::before{background:var(--a2)}
+.legend li:nth-child(3)::before{background:var(--a3)} .legend li:nth-child(4)::before{background:var(--a4)}
+.legend li:nth-child(5)::before{background:var(--a5)} .legend li:nth-child(6)::before{background:var(--a6)}
+.legend li:nth-child(7)::before{background:var(--a7)} .legend li:nth-child(8)::before{background:var(--a8)}
+.legend li:nth-child(9)::before{background:var(--a9)} .legend li:nth-child(10)::before{background:var(--a10)}
+.legend a{color:inherit;text-decoration:none}
+.legend a:hover{color:var(--blue)}
+
+/* ---------- Cards ---------- */
+main{padding-bottom:24px}
+.card{
+  background:#fff;border-radius:18px;margin:0 0 34px;
+  border:1.5px solid var(--line);
+  box-shadow:0 8px 26px rgba(27,42,74,.07);
+  overflow:hidden;scroll-margin-top:24px;
+}
+.card-head{display:flex;align-items:flex-start;gap:18px;padding:26px 30px 18px}
+.num{
+  flex:none;width:56px;height:56px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Noto Serif TC',serif;font-weight:900;font-size:1.5rem;color:#fff;
+}
+.card h3{font-family:'Noto Serif TC',serif;font-size:1.4rem;line-height:1.35}
+.card h3 small{display:block;font-family:'Noto Sans TC',sans-serif;font-weight:500;font-size:.85rem;color:#66708c;letter-spacing:.02em}
+.card-body{padding:0 30px 26px;display:grid;grid-template-columns:1.2fr .9fr;gap:26px}
+.why p{margin-bottom:12px;font-size:.97rem}
+.why p strong{background:linear-gradient(transparent 62%, var(--marker) 62%, var(--marker) 94%, transparent 94%)}
+.steps{background:var(--paper);border-radius:12px;padding:16px 18px}
+.steps h4,.why h4{
+  font-size:.78rem;letter-spacing:.25em;font-weight:700;color:var(--blue);
+  margin-bottom:10px;text-transform:uppercase;
+}
+.steps ol{padding-left:1.3em;font-size:.92rem}
+.steps li{margin-bottom:6px}
+.card-foot{
+  display:flex;flex-wrap:wrap;gap:14px;align-items:stretch;
+  padding:0 30px 28px;
+}
+.action{
+  flex:1 1 300px;border-radius:12px;padding:14px 18px;
+  font-size:.95rem;font-weight:500;color:#fff;
+}
+.action span{
+  display:inline-block;font-size:.7rem;letter-spacing:.3em;font-weight:700;
+  background:rgba(255,255,255,.22);border-radius:6px;padding:2px 10px 2px 12px;margin-bottom:6px;
+}
+.quote{
+  flex:1 1 300px;border-left:4px solid var(--marker);
+  padding:10px 18px;font-family:'Noto Serif TC',serif;font-size:.98rem;
+  font-style:italic;color:#3c496a;display:flex;align-items:center;
+  background:linear-gradient(90deg, #fffdf3, transparent);
+}
+
+/* ---------- 每週節奏 & 原則 ---------- */
+section.block{background:#fff;border:1.5px solid var(--line);border-radius:18px;padding:34px;margin-bottom:34px;box-shadow:0 8px 26px rgba(27,42,74,.07)}
+section.block h2{font-family:'Noto Serif TC',serif;font-size:1.5rem;margin-bottom:6px}
+section.block .sub{color:#66708c;font-size:.95rem;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:.94rem}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+th{font-size:.8rem;letter-spacing:.15em;color:var(--blue);border-bottom:2px solid var(--ink)}
+td:first-child{font-family:'Noto Serif TC',serif;font-weight:700;white-space:nowrap}
+.principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:8px}
+.principles div{background:var(--paper);border-radius:12px;padding:18px}
+.principles h3{font-family:'Noto Serif TC',serif;font-size:1.05rem;margin-bottom:6px}
+.principles p{font-size:.9rem;color:#3c496a}
+
+footer{text-align:center;padding:20px 0 56px;font-size:.85rem;color:#66708c}
+
+@media (max-width:760px){
+  .card-body{grid-template-columns:1fr}
+  .card-head,.card-body,.card-foot{padding-left:20px;padding-right:20px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .wheel a{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <span class="eyebrow">CREATIVE PRACTICE</span>
+  <h1>不靠 AI，<br>保持<span class="hl">創造力</span>的 10 個方法</h1>
+  <p class="lede">AI 能加速產出，卻無法替你觀察、憤怒、對話與品味。<strong>創造力的原料永遠來自真實生活</strong>——以下 10 個練習，讓你的想法先於工具，而不是被工具餵養。</p>
+</header>
+
+<div class="wrap wheel-zone">
+  <div class="wheel" role="navigation" aria-label="10 個方法索引">
+    <a class="n1" href="#m1" aria-label="方法一">1</a><a class="n2" href="#m2" aria-label="方法二">2</a>
+    <a class="n3" href="#m3" aria-label="方法三">3</a><a class="n4" href="#m4" aria-label="方法四">4</a>
+    <a class="n5" href="#m5" aria-label="方法五">5</a><a class="n6" href="#m6" aria-label="方法六">6</a>
+    <a class="n7" href="#m7" aria-label="方法七">7</a><a class="n8" href="#m8" aria-label="方法八">8</a>
+    <a class="n9" href="#m9" aria-label="方法九">9</a><a class="n10" href="#m10" aria-label="方法十">10</a>
+  </div>
+  <nav class="legend" aria-label="方法清單">
+    <h2>方法索引</h2>
+    <ol>
+      <li><a href="#m1">與走在前面的人交流</a></li>
+      <li><a href="#m2">把兩篇舊作合併成一篇</a></li>
+      <li><a href="#m3">15 分鐘意識流寫作</a></li>
+      <li><a href="#m4">截圖你最好的私訊回覆</a></li>
+      <li><a href="#m5">每週與 3 位客戶對話</a></li>
+      <li><a href="#m6">寫下本週惹惱你的事</a></li>
+      <li><a href="#m7">逆向拆解你欣賞的創作者</a></li>
+      <li><a href="#m8">建立鉤子靈感庫</a></li>
+      <li><a href="#m9">閱讀自己的數據</a></li>
+      <li><a href="#m10">寫你當初希望存在的那篇文</a></li>
+    </ol>
+  </nav>
+</div>
+
+<main class="wrap">
+
+  <!-- 1 -->
+  <article class="card" id="m1">
+    <div class="card-head">
+      <div class="num" style="background:var(--a1)">1</div>
+      <h3>與走在前面的人交流<small>Talk To People Ahead Of You</small></h3>
+    </div>
+    <div class="card-body">
+      <div class="why">
+        <h4>為什麼有效</h4>
+        <p>與正在做你想做之事的人相處一小時，勝過滑十小時的社群動態。<strong>對話會逼出你自己都沒發現的問題</strong>，而演算法只會餵你已經同意的東西。</p>
+        <p>前行者不只給答案，更給你「地圖」：哪些坑不必踩、哪些階段是正常的低潮、哪些捷徑其實是彎路。</p>
+      </div>
+      <div class="steps">
+        <h4>怎麼做</h4>
+        <ol>
+          <li>列出 3 位領先你 2 至 5 年的人（太遙遠的偶像反而問不出可執行的建議）。</li>
+          <li>研究一位你欣賞的人，找出「他向誰學習」，順藤摸瓜建立學習譜系。</li>
+          <li>約 30 分鐘通話或咖啡，只問具體問題：「你當時卡在哪？怎麼解的？」</li>
+        </ol>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="action" style="background:var(--a1)"><span>ACTION</span><br>找出一位你欣賞的人，研究他向誰學習，本週寄出一封邀約訊息。</div>
+      <div class="quote">「你不需要先想清楚一切才開始——每個人都是邊做邊摸索的。」</div>
+    </div>
+  </article>
+
+  <!-- 2 -->
+  <article class="card" id="m2">
+    <div class="card-head">
+      <div class="num" style="background:var(--a2)">2</div>
+      <h3>把兩篇舊作合併成一篇<small>Merge 2 Old Posts Into 1</small></h3>
+    </div>
+    <div class="card-body">
+      <div class="why">
+        <h4>為什麼有效</h4>
+        <p>大多數失敗的作品不是想法錯，而是<strong>「對的想法配上錯的鉤子」</strong>。合併重寫等於用已驗證的素材做二次實驗，成本最低、命中率最高。</p>
+        <p>這也是專業寫作者的日常：先寫遠超過需要的量，再從中裁出最好的部分。淘汰不是浪費，是原料庫。</p>
+      </div>
+      <div class="steps">
+        <h4>怎麼做</h4>
+        <ol>
+          <li>挑出兩篇「概念不錯但反應普通」的舊貼文或舊文章。</li>
+          <li>各自畫出最強的一到三句話，其餘全部捨棄。</li>
+          <li>用新的鉤子開場，把留下的句子重組成一篇更緊的新作品。</li>
+        </ol>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="action" style="background:var(--a2)"><span>ACTION</span><br>找兩篇「想法對、鉤子錯」的失敗作，合併最強句子後重寫發布。</div>
+      <div class="quote">「寫得遠比你需要的多，然後只留下最好的部分。」</div>
+    </div>
+  </article>
+
+  <!-- 3 -->
+  <article class="card" id="m3">
+    <div class="card-head">
+      <div class="num" style="background:var(--a3)">3</div>
+      <h3>15 分鐘意識流寫作<small>15 Minutes of Stream-of-Consciousness Writing</small></h3>
+    </div>
+    <div class="card-body">
+      <div class="why">
+        <h4>為什麼有效</h4>
+        <p>編輯與創作用的是兩套腦內迴路。邊寫邊改，等於<strong>一腳踩油門、一腳踩煞車</strong>。強制不編輯，才能讓真正的想法流出來。</p>
+        <p>前 5 分鐘通常是垃圾，第 8 到 12 分鐘常會冒出你意想不到的句子——那才是你真正想說的話。</p>
+      </div>
+      <div class="steps">
+        <h4>怎麼做</h4>
+        <ol>
+          <li>設定 15 分鐘計時器，選一個主題或乾脆不設主題。</li>
+          <li>規則只有一條：不編輯、不退格、不停筆，寫錯就繼續。</li>
+          <li>時間到才回頭讀，畫出可用的句子存進靈感庫。</li>
+        </ol>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="action" style="background:var(--a3)"><span>ACTION</span><br>今天做一次：不編輯、不退格，計時器響之前手不能停。</div>
+      <div class="quote">「先全部倒出來，之後再判斷夠不夠好。」</div>
+    </div>
+  </article>
+
+  <!-- 4 -->
+  <article class="card" id="m4">
+    <div class="card-head">
+      <div class="num" style="background:var(--a4)">4</div>
+      <h3>截圖你最好的私訊回覆<small>Screenshot Your Best DMs</small></h3>
+    </div>
+    <div class="card-body">
+      <div class="why">
+        <h4>為什麼有效</h4>
+        <p>你在私訊裡給人的建議，是<strong>已經通過真人驗證的內容</strong>：有真實的問題、真實的語氣、真實的解法。你只需要重新排版，就是一篇貼文。</p>
+        <p>私訊寫作沒有「發表焦慮」，所以往往比正式創作更自然、更有人味——這正是讀者最買單的質地。</p>
+      </div>
+      <div class="steps">
+        <h4>怎麼做</h4>
+        <ol>
+          <li>建一個「DM 素材」相簿或資料夾，看到自己寫得好的回覆就截圖。</li>
+          <li>去識別化後，把「問題＋你的回答」改寫成公開版本。</li>
+          <li>一則深度回覆可以拆成：短文、串文、圖卡三種格式。</li>
+        </ol>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="action" style="background:var(--a4)"><span>ACTION</span><br>每一則含建議的回覆都是貼文素材——排版後直接發布。</div>
+      <div class="quote">「隨身帶著能記錄靈感的東西，想法出現的那一秒就抓住它。」</div>
+    </div>
+  </article>
+
+  <!-- 5 -->
+  <article class="card" id="m5">
+    <div class="card-head">
+      <div class="num" style="background:var(--a5)">5</div>
+      <h3>每週與 3 位潛在客戶對話<small>Talk To 3 Prospects Or Customers A Week</small></h3>
+    </div>
+    <div class="card-body">
+      <div class="why">
+        <h4>為什麼有效</h4>
+        <p>找切入角度最快的方法，就是<strong>直接聽你服務的人怎麼描述他們的問題</strong>。他們的原話，就是你最好的標題與鉤子。</p>
+        <p>長期只跟自己對話，大腦會過度舒適；外部視角是打破同溫層最便宜的方式。</p>
+      </div>
+      <div class="steps">
+        <h4>怎麼做</h4>
+        <ol>
+          <li>每週安排 3 場 15 至 20 分鐘的簡短通話或訊息訪談。</li>
+          <li>只問開放式問題：「你最近在這件事上最卡的是什麼？」</li>
+          <li>逐字記下他們的用語，那是內容金礦，不要改寫成你的行話。</li>
+        </ol>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="action" style="background:var(--a5)"><span>ACTION</span><br>本週約 3 場對話，逐字蒐集受眾描述問題的原話。</div>
+      <div class="quote">「你的大腦在自己的世界裡待太舒服了——去找不同的視角。」</div>
+    </div>
+  </article>
+
+  <!-- 6 -->
+  <article class="card" id="m6">
+    <div class="card-head">
+      <div class="num" style="background:var(--a6)">6</div>
+      <h3>寫下本週惹惱你的事<small>Write About What Annoyed You This Week</small></h3>
+    </div>
+    <div class="card-body">
+      <div class="why">
+        <h4>為什麼有效</h4>
+        <p>憤怒是最誠實的創作輸入。<strong>會讓你不爽的事，通常也讓一大群人不爽</strong>——差別只在於你願意把它寫出來。</p>
+        <p>強烈的情緒反應是一個訊號：這裡有你真正在乎的價值觀被踩到了。順著情緒挖，就能挖到觀點。</p>
+      </div>
+      <div class="steps">
+        <h4>怎麼做</h4>
+        <ol>
+          <li>每週五花 10 分鐘列出本週 3 件讓你翻白眼的事。</li>
+          <li>對每一件問：「我氣的到底是什麼原則被違反了？」</li>
+          <li>把「事件＋原則＋更好的做法」寫成一篇有立場的短文。</li>
+        </ol>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="action" style="background:var(--a6)"><span>ACTION</span><br>把這週最惱人的一件事，轉寫成一篇有明確立場的貼文。</div>
+      <div class="quote">「你最強烈的反應，通常指向最值得寫的題目。」</div>
+    </div>
+  </article>
+
+  <!-- 7 -->
+  <article class="card" id="m7">
+    <div class="card-head">
+      <div class="num" style="background:var(--a7)">7</div>
+      <h3>逆向拆解你欣賞的創作者<small>Reverse-Engineer A Creator You Admire</small></h3>
+    </div>
+    <div class="card-body">
+      <div class="why">
+        <h4>為什麼有效</h4>
+        <p>模仿風格會變成劣質複製品；<strong>偷「思考方式」而不是偷「文字風格」</strong>，才能長出自己的聲音。</p>
+        <p>拆解的重點是結構：他怎麼開場？怎麼安排轉折？怎麼收尾讓人想分享？結構是可遷移的，腔調不是。</p>
+      </div>
+      <div class="steps">
+        <h4>怎麼做</h4>
+        <ol>
+          <li>挑一位創作者，選他表現最好的 5 篇作品。</li>
+          <li>逐篇標注：鉤子類型、段落節奏、論證順序、收尾手法。</li>
+          <li>用同樣的「骨架」寫你自己的主題，填入你的語氣與案例。</li>
+        </ol>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="action" style="background:var(--a7)"><span>ACTION</span><br>拆解一篇你佩服的作品，取其結構、換上你的聲音重寫一篇。</div>
+      <div class="quote">「偷的是思考，不是風格。」</div>
+    </div>
+  </article>
+
+  <!-- 8 -->
+  <article class="card" id="m8">
+    <div class="card-head">
+      <div class="num" style="background:var(--a8)">8</div>
+      <h3>建立鉤子靈感庫<small>Keep A Swipe File Of Hooks</small></h3>
+    </div>
+    <div class="card-body">
+      <div class="why">
+        <h4>為什麼有效</h4>
+        <p>能讓你停下滑動的那一句話，背後都有可分析的模式：反直覺、具體數字、未完成的懸念、直指痛點。<strong>先蒐集，模式自己會浮現</strong>。</p>
+        <p>靈感庫的價值在「低谷時刻」：當你毫無想法，翻開 50 個經過驗證的鉤子，永遠有東西可以改寫套用。</p>
+      </div>
+      <div class="steps">
+        <h4>怎麼做</h4>
+        <ol>
+          <li>每週存下 5 個真的讓你停下滑動的開頭句。</li>
+          <li>每月回顧一次，替每個鉤子標注它「為什麼有效」。</li>
+          <li>把常見模式整理成範本，寫作卡關時直接套用。</li>
+        </ol>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="action" style="background:var(--a8)"><span>ACTION</span><br>本週存 5 個讓你停下滑動的鉤子，並研究它們背後的模式。</div>
+      <div class="quote">「先蒐集吸引你注意的東西，之後再慢慢消化。」</div>
+    </div>
+  </article>
+
+  <!-- 9 -->
+  <article class="card" id="m9">
+    <div class="card-head">
+      <div class="num" style="background:var(--a9)">9</div>
+      <h3>閱讀自己的數據<small>Read Your Own Analytics</small></h3>
+    </div>
+    <div class="card-body">
+      <div class="why">
+        <h4>為什麼有效</h4>
+        <p>你的前 30 篇貼文已經告訴你下一篇該寫什麼——<strong>受眾用互動投了票，你只是還沒去讀開票結果</strong>。</p>
+        <p>創作者常犯的錯是不斷加新招；正確順序是先回到「已經有效的東西」，把它做深做滿，再談創新。</p>
+      </div>
+      <div class="steps">
+        <h4>怎麼做</h4>
+        <ol>
+          <li>花一小時整理近 30 篇作品的互動數據，找出前 20% 的贏家。</li>
+          <li>對贏家問三個問題：什麼主題？什麼格式？什麼情緒？</li>
+          <li>下個月的內容，七成延續贏家路線，三成留給實驗。</li>
+        </ol>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="action" style="background:var(--a9)"><span>ACTION</span><br>花一小時找出你表現最好的主題脈絡，據此排下月選題。</div>
+      <div class="quote">「先回到已經有效的做法，再考慮加入任何新東西。」</div>
+    </div>
+  </article>
+
+  <!-- 10 -->
+  <article class="card" id="m10">
+    <div class="card-head">
+      <div class="num" style="background:var(--a10)">10</div>
+      <h3>寫你當初希望存在的那篇文<small>Write The Post You Wish Existed When You Started</small></h3>
+    </div>
+    <div class="card-body">
+      <div class="why">
+        <h4>為什麼有效</h4>
+        <p>過去的你，曾經有一堆沒人回答的問題。<strong>現在的你就是最適合回答的人</strong>：你記得困惑的樣子，也知道走出來的路。</p>
+        <p>這類內容自帶精準受眾——所有正站在你當年位置的人。你不必猜他們需要什麼，因為你曾經就是他們。</p>
+      </div>
+      <div class="steps">
+        <h4>怎麼做</h4>
+        <ol>
+          <li>回想起步時期，列出 5 個當時查不到好答案的問題。</li>
+          <li>挑一題，寫給「三年前的自己」：直白、具體、不端架子。</li>
+          <li>加上你希望當年有人告訴你的一句話作結。</li>
+        </ol>
+      </div>
+    </div>
+    <div class="card-foot">
+      <div class="action" style="background:var(--a10)"><span>ACTION</span><br>過去的你有沒人回答的問題——現在就把那些答案寫出來。</div>
+      <div class="quote">「你不需要先想清楚一切才開始，每個人都是邊走邊學。」</div>
+    </div>
+  </article>
+
+  <!-- 每週節奏 -->
+  <section class="block">
+    <h2>一週練習節奏建議</h2>
+    <p class="sub">10 個方法不必同時做。以下是可持續的最低劑量安排，總計每週約 3 小時。</p>
+    <table>
+      <thead><tr><th>時段</th><th>練習</th><th>時間</th></tr></thead>
+      <tbody>
+        <tr><td>每天早上</td><td>方法 3｜15 分鐘意識流寫作</td><td>15 分鐘</td></tr>
+        <tr><td>每天隨手</td><td>方法 4、8｜截圖好回覆、存下好鉤子</td><td>零碎時間</td></tr>
+        <tr><td>週二、週四</td><td>方法 5｜與潛在客戶或讀者對話</td><td>各 20 分鐘</td></tr>
+        <tr><td>週三</td><td>方法 7｜拆解一篇你欣賞的作品</td><td>30 分鐘</td></tr>
+        <tr><td>週五</td><td>方法 6｜寫下本週惹惱你的事</td><td>10 分鐘</td></tr>
+        <tr><td>週末擇一</td><td>方法 2 或 10｜合併舊作，或寫給過去的自己</td><td>45 分鐘</td></tr>
+        <tr><td>每月一次</td><td>方法 1、9｜約前行者對談＋回顧數據</td><td>90 分鐘</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 核心原則 -->
+  <section class="block">
+    <h2>三個底層原則</h2>
+    <p class="sub">10 個方法背後，其實只有三件事。</p>
+    <div class="principles">
+      <div>
+        <h3>輸入決定輸出</h3>
+        <p>對話、憤怒、數據、他人的作品——創造力不是無中生有，而是把高品質輸入重新組合。AI 只能重組網路平均值，你能重組親身經歷。</p>
+      </div>
+      <div>
+        <h3>把生活變成素材管線</h3>
+        <p>截圖、靈感庫、隨手記錄：讓「蒐集」成為反射動作，坐下來創作時就永遠不是從零開始。</p>
+      </div>
+      <div>
+        <h3>先驗證，再放大</h3>
+        <p>私訊、舊貼文、自己的數據，都是已通過驗證的素材。從有效的東西出發做深做滿，比每次押注全新想法勝率高得多。</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>類比創作練習 · 改編自「10 Ways To Stay Creative Without AI」資訊圖表 · 內容擴充版</footer>
+
+</body>
+</html>

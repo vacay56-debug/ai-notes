@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>攀向 Claude 精通之路｜The Climb to Claude Mastery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E1B2C;          /* 深墨藍底 */
+  --panel:#14243A;        /* 卡片面板 */
+  --panel-2:#1B3050;      /* 面板高光 */
+  --line:#28405F;         /* 分隔線 */
+  --amber:#E8A33D;        /* 琥珀主色 */
+  --amber-soft:#F2C67E;
+  --paper:#F2EDE4;        /* 米白標題 */
+  --mist:#9FB3C8;         /* 霧藍內文 */
+  --mist-dim:#6E84A0;
+  /* 六階段色票（承襲原圖表色系，降飽和以配深底） */
+  --c1:#E58A6B; --c2:#DDB35B; --c3:#8FBF7A;
+  --c4:#5FB8A8; --c5:#6E96D6; --c6:#A98BD9;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  color:var(--mist);
+  font-family:'Noto Sans TC',sans-serif;
+  font-size:16px;line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px}
+
+/* ---------- Hero ---------- */
+header{
+  padding:88px 0 56px;
+  background:
+    radial-gradient(ellipse 90% 60% at 70% -10%, rgba(232,163,61,.10), transparent 60%),
+    linear-gradient(180deg, #0A1422 0%, var(--ink) 100%);
+  border-bottom:1px solid var(--line);
+}
+.eyebrow{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:.78rem;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:20px;
+}
+h1{
+  font-family:'Noto Serif TC',serif;font-weight:900;
+  font-size:clamp(2.1rem,5.5vw,3.4rem);
+  color:var(--paper);line-height:1.25;margin-bottom:8px;
+}
+h1 .en{
+  display:block;font-family:'Space Grotesk',sans-serif;font-weight:700;
+  font-size:clamp(1rem,2.4vw,1.35rem);color:var(--amber);
+  letter-spacing:.04em;margin-top:10px;
+}
+.lede{
+  max-width:640px;margin-top:26px;font-size:1.06rem;color:var(--mist);
+}
+.lede strong{color:var(--paper);font-weight:700}
+.thesis{
+  margin-top:30px;padding:20px 24px;
+  border-left:3px solid var(--amber);
+  background:linear-gradient(90deg, rgba(232,163,61,.08), transparent 70%);
+  color:var(--amber-soft);font-size:1rem;
+}
+.thesis em{font-style:normal;color:var(--paper);font-weight:700}
+
+/* ---------- 路線總覽 ---------- */
+.route{
+  padding:56px 0 40px;
+  border-bottom:1px solid var(--line);
+}
+.route h2, .levels-intro h2, .contrast h2{
+  font-family:'Noto Serif TC',serif;font-weight:700;
+  font-size:1.5rem;color:var(--paper);margin-bottom:6px;
+}
+.route .sub{font-size:.92rem;color:var(--mist-dim);margin-bottom:34px}
+.profile{
+  display:grid;grid-template-columns:repeat(6,1fr);
+  gap:10px;align-items:end;height:220px;margin-bottom:8px;
+}
+.peak{
+  position:relative;border-radius:6px 6px 0 0;
+  background:linear-gradient(180deg, var(--pc) 0%, transparent 140%);
+  opacity:.92;transition:opacity .2s;
+  display:flex;flex-direction:column;justify-content:flex-start;
+  padding:10px 8px;text-decoration:none;
+}
+.peak:hover{opacity:1}
+.peak .n{
+  font-family:'Space Grotesk',sans-serif;font-weight:700;
+  font-size:.95rem;color:#0B1524;
+  background:rgba(242,237,228,.9);border-radius:50%;
+  width:26px;height:26px;display:flex;align-items:center;justify-content:center;
+  margin-bottom:6px;
+}
+.peak .pk{font-size:.74rem;color:#0B1524;font-weight:700;line-height:1.4}
+.peak .alt{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:rgba(11,21,36,.75)}
+.legend{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:10px;
+  font-size:.78rem;color:var(--mist-dim);text-align:left;
+}
+.legend span{display:block;line-height:1.5}
+.summit-flag{position:absolute;top:-26px;right:8px;font-size:1.1rem}
+
+/* ---------- 各階段 ---------- */
+.levels-intro{padding:56px 0 8px}
+.levels-intro p{max-width:680px}
+section.level{
+  padding:48px 0;
+  border-bottom:1px solid var(--line);
+  position:relative;
+}
+.lv-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:6px}
+.lv-num{
+  font-family:'Space Grotesk',sans-serif;font-weight:700;
+  font-size:2.6rem;line-height:1;color:var(--lc);
+}
+.lv-title{
+  font-family:'Noto Serif TC',serif;font-weight:700;
+  font-size:clamp(1.35rem,3vw,1.8rem);color:var(--paper);
+}
+.lv-title .en{
+  font-family:'Space Grotesk',sans-serif;font-weight:500;
+  font-size:.85rem;color:var(--mist-dim);letter-spacing:.06em;
+  display:block;margin-top:2px;
+}
+.lv-alt{
+  font-family:'JetBrains Mono',monospace;font-size:.74rem;
+  color:var(--mist-dim);margin-bottom:20px;
+}
+.lv-alt b{color:var(--lc);font-weight:500}
+.lv-desc{max-width:700px;margin-bottom:26px}
+.lv-desc strong{color:var(--paper)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:22px 24px;
+}
+.card h3{
+  font-size:.82rem;letter-spacing:.14em;font-weight:700;
+  color:var(--lc);margin-bottom:14px;text-transform:uppercase;
+  font-family:'Space Grotesk','Noto Sans TC',sans-serif;
+}
+.card ul{list-style:none}
+.card li{
+  position:relative;padding-left:24px;margin-bottom:9px;
+  font-size:.94rem;
+}
+.card li::before{
+  content:"✓";position:absolute;left:0;top:0;
+  color:var(--lc);font-weight:700;font-size:.85rem;
+}
+.card.drill{background:var(--panel-2)}
+.card.drill li::before{content:"▸"}
+.card p{font-size:.94rem}
+.tmpl{
+  margin-top:22px;background:#0A1524;border:1px solid var(--line);
+  border-left:3px solid var(--lc);border-radius:8px;
+  padding:18px 22px;
+}
+.tmpl .lab{
+  font-family:'Space Grotesk',sans-serif;font-size:.72rem;
+  letter-spacing:.2em;color:var(--mist-dim);margin-bottom:10px;
+}
+.tmpl code{
+  font-family:'JetBrains Mono',monospace;font-size:.86rem;
+  color:var(--amber-soft);display:block;line-height:1.9;
+}
+.flow{
+  margin-top:22px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:24px 26px;
+}
+.flow h3{
+  font-size:.82rem;letter-spacing:.14em;font-weight:700;
+  color:var(--lc);margin-bottom:16px;
+  font-family:'Space Grotesk','Noto Sans TC',sans-serif;text-transform:uppercase;
+}
+.flow ol{list-style:none;counter-reset:step}
+.flow li{
+  counter-increment:step;position:relative;
+  padding:0 0 14px 44px;font-size:.94rem;
+}
+.flow li::before{
+  content:counter(step);position:absolute;left:0;top:0;
+  width:28px;height:28px;border-radius:50%;
+  background:var(--lc);color:#0B1524;font-weight:700;
+  font-family:'Space Grotesk',sans-serif;font-size:.85rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.flow li:not(:last-child)::after{
+  content:"";position:absolute;left:13.5px;top:30px;bottom:0;
+  width:1px;background:var(--line);
+}
+.flow li b{color:var(--paper)}
+.knows{
+  margin-top:22px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+}
+.knows div{
+  background:var(--panel);border:1px solid var(--line);border-radius:8px;
+  padding:14px 16px;font-size:.88rem;text-align:center;
+}
+.knows div b{display:block;color:var(--paper);font-size:.92rem;margin-bottom:2px}
+.punch{
+  margin-top:24px;font-family:'Noto Serif TC',serif;font-weight:700;
+  color:var(--paper);font-size:1.02rem;
+}
+.punch span{color:var(--lc)}
+
+/* 階段配色 */
+#lv1{--lc:var(--c1)} #lv2{--lc:var(--c2)} #lv3{--lc:var(--c3)}
+#lv4{--lc:var(--c4)} #lv5{--lc:var(--c5)} #lv6{--lc:var(--c6)}
+
+/* ---------- 對照與結語 ---------- */
+.contrast{padding:64px 0}
+.vs{
+  display:grid;grid-template-columns:1fr auto 1fr;gap:20px;
+  align-items:stretch;margin:34px 0;
+}
+.vs .side{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:28px;
+}
+.vs .side.hi{background:var(--panel-2);border-color:var(--amber)}
+.vs .side .tag{
+  font-family:'Space Grotesk',sans-serif;font-size:.75rem;
+  letter-spacing:.2em;color:var(--mist-dim);margin-bottom:10px;
+}
+.vs .side.hi .tag{color:var(--amber)}
+.vs .side p{font-family:'Noto Serif TC',serif;font-weight:700;font-size:1.15rem;color:var(--paper)}
+.vs .arrow{
+  align-self:center;font-size:1.5rem;color:var(--amber);
+  font-family:'Space Grotesk',sans-serif;
+}
+.closing{max-width:700px}
+.closing strong{color:var(--amber-soft)}
+footer{
+  border-top:1px solid var(--line);padding:32px 0 48px;
+  font-size:.8rem;color:var(--mist-dim);
+}
+footer .mono{font-family:'JetBrains Mono',monospace;font-size:.72rem;margin-top:6px}
+
+/* ---------- RWD ---------- */
+@media(max-width:760px){
+  .profile{height:170px}
+  .peak .pk{display:none}
+  .legend{font-size:.68rem}
+  .grid2{grid-template-columns:1fr}
+  .knows{grid-template-columns:1fr 1fr}
+  .vs{grid-template-columns:1fr}
+  .vs .arrow{transform:rotate(90deg);justify-self:center}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Claude Mastery Guide · 進階學習路徑圖</div>
+    <h1>攀向 Claude 精通之路
+      <span class="en">The Climb to Claude Mastery — 從提問到系統的六個階段</span>
+    </h1>
+    <p class="lede">
+      多數人打開 Claude，輸入一個問題，得到一個答案，然後就停在原地——這只是<strong>第一階段</strong>。
+      當您不再把 Claude 當成聊天機器人，而是圍繞它建立<strong>脈絡（Context）、工作流（Workflow）與可重複使用的系統（Reusable System）</strong>，
+      它的價值才會真正展開。
+    </p>
+    <div class="thesis">
+      本指南以「登山」為喻，將六個階段對應臺灣六座山岳的攀升路線：
+      從<em>基地營</em>出發，最終登上<em>玉山主峰</em>——建立一套即使您不在場，也能持續運轉的工作系統。
+    </div>
+  </div>
+</header>
+
+<!-- 路線總覽 -->
+<div class="route">
+  <div class="wrap">
+    <h2>攀登路線總覽</h2>
+    <p class="sub">六個階段、六座山岳。海拔愈高，Claude 承擔的工作愈完整，您投入的重複性勞動愈少。</p>
+    <div class="profile">
+      <a class="peak" href="#lv1" style="--pc:var(--c1);height:22%"><span class="n">1</span><span class="pk">象山步道</span><span class="alt">183 m</span></a>
+      <a class="peak" href="#lv2" style="--pc:var(--c2);height:38%"><span class="n">2</span><span class="pk">七星山</span><span class="alt">1,120 m</span></a>
+      <a class="peak" href="#lv3" style="--pc:var(--c3);height:55%"><span class="n">3</span><span class="pk">加里山</span><span class="alt">2,220 m</span></a>
+      <a class="peak" href="#lv4" style="--pc:var(--c4);height:74%"><span class="n">4</span><span class="pk">奇萊南峰</span><span class="alt">3,358 m</span></a>
+      <a class="peak" href="#lv5" style="--pc:var(--c5);height:88%"><span class="n">5</span><span class="pk">雪山主峰</span><span class="alt">3,886 m</span></a>
+      <a class="peak" href="#lv6" style="--pc:var(--c6);height:100%;position:relative"><span class="summit-flag">🚩</span><span class="n">6</span><span class="pk">玉山主峰</span><span class="alt">3,952 m</span></a>
+    </div>
+    <div class="legend">
+      <span>基礎理解</span><span>有效提示</span><span>脈絡智慧</span>
+      <span>個人化</span><span>進階工作流</span><span>生態系精通</span>
+    </div>
+  </div>
+</div>
+
+<div class="levels-intro">
+  <div class="wrap">
+    <h2>六個階段逐站解析</h2>
+    <p>每一站包含三部分：核心觀念、可嘗試事項，以及本週就能動手做的「實作練習」。學習的關鍵不在讀完，而在每一站都親手做過一次。</p>
+  </div>
+</div>
+
+<!-- Level 1 -->
+<section class="level" id="lv1">
+  <div class="wrap">
+    <div class="lv-head">
+      <span class="lv-num">01</span>
+      <h2 class="lv-title">基地營：基礎理解<span class="en">Base Camp — Basic Understanding · 象山親山步道 183 m</span></h2>
+    </div>
+    <p class="lv-alt">攀登狀態｜<b>您輸入，Claude 回答。</b>有用，但只是起點。</p>
+    <p class="lv-desc">
+      這是所有人的起點：把 Claude 當作一個「更聰明的搜尋引擎」——問一個問題、得到一個答案、關掉視窗。
+      在此階段，Claude 對您一無所知，每一次對話都從零開始。它能幫上忙，但產出的是<strong>「給任何人的平均答案」</strong>，而非為您量身打造的成果。
+      本階段的學習重點是<strong>建立使用習慣</strong>：先熟悉 Claude 擅長與不擅長什麼，把它自然融入日常工作。
+    </p>
+    <div class="grid2">
+      <div class="card">
+        <h3>可嘗試事項</h3>
+        <ul>
+          <li>提出問題、快速釐清觀念</li>
+          <li>摘要文件與長篇資料</li>
+          <li>腦力激盪、發想點子</li>
+          <li>改寫電子郵件與文章貼文</li>
+        </ul>
+      </div>
+      <div class="card drill">
+        <h3>實作練習</h3>
+        <ul>
+          <li>連續一週，每天至少用 Claude 完成一件真實的小任務</li>
+          <li>把一篇長文丟給 Claude，要求「三句話摘要＋三個關鍵字」</li>
+          <li>拿一封自己寫過的郵件，請 Claude 提供三種不同語氣的改寫版本</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Level 2 -->
+<section class="level" id="lv2">
+  <div class="wrap">
+    <div class="lv-head">
+      <span class="lv-num">02</span>
+      <h2 class="lv-title">站穩腳步：有效提示<span class="en">Find Your Footing — Effective Prompting · 七星山 1,120 m</span></h2>
+    </div>
+    <p class="lv-alt">攀登狀態｜<b>您不再「希望」Claude 理解，而是開始「指揮」它。</b></p>
+    <p class="lv-desc">
+      提示（Prompt）的品質決定產出的品質。本階段的關鍵，是在每一次請求中明確交代四件事：
+      <strong>任務是什麼、對象是誰、有哪些限制條件、成功長什麼樣子</strong>。
+      當您把「幫我寫一份簡報」升級為「為部門月會製作一份 10 頁簡報，聽眾是不熟悉技術的主管，重點放在三個決策選項」，產出品質會立即翻倍。
+    </p>
+    <div class="grid2">
+      <div class="card">
+        <h3>可嘗試事項</h3>
+        <ul>
+          <li>明確定義任務（Define the Task）</li>
+          <li>指名目標受眾（Name the Audience）</li>
+          <li>加入限制條件（Add Constraints）</li>
+          <li>說明成功標準（Explain Success Criteria）</li>
+        </ul>
+      </div>
+      <div class="card drill">
+        <h3>實作練習</h3>
+        <ul>
+          <li>選一個以前問過的模糊問題，補上任務、受眾、限制、成功標準四要素後重問一次，比較差異</li>
+          <li>在請求結尾加上「開始前請先向我提出釐清問題」，體驗雙向對話的效果</li>
+          <li>指定輸出格式（表格、條列、字數上限），觀察格式指令如何改變成品</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tmpl">
+      <div class="lab">通用提示範本 · PROMPT TEMPLATE</div>
+      <code>「我想要【任務】，以達成【成功標準】。<br>開始之前，請先向我提出釐清問題。」</code>
+    </div>
+    <p class="punch">關鍵轉變：<span>從被動期待，轉為主動指揮。</span></p>
+  </div>
+</section>
+
+<!-- Level 3 -->
+<section class="level" id="lv3">
+  <div class="wrap">
+    <div class="lv-head">
+      <span class="lv-num">03</span>
+      <h2 class="lv-title">整備裝備：脈絡智慧<span class="en">Pack the Right Context — Contextual Intelligence · 加里山 2,220 m</span></h2>
+    </div>
+    <p class="lv-alt">攀登狀態｜<b>提示變短了，因為脈絡開始承擔重量。</b></p>
+    <p class="lv-desc">
+      登山不能空手上山，使用 Claude 也不該空手提問。給 Claude 它需要的<strong>檔案、優良範例與背景資訊</strong>，
+      您就不必在每次對話重複交代同樣的事。這是效率的分水嶺：脈絡建置一次，之後每一次對話都在複利。
+      善用「專案（Projects）」功能，把相關檔案與常用指示集中在一處，即是本階段的核心操作。
+    </p>
+    <div class="grid2">
+      <div class="card">
+        <h3>可嘗試事項</h3>
+        <ul>
+          <li>上傳相關檔案供 Claude 參照</li>
+          <li>提供「優良成品」作為範例</li>
+          <li>給予背景與受眾脈絡</li>
+          <li>以專案（Projects）組織工作，停止重複輸入</li>
+          <li>儲存可重複使用的指示（Instructions）</li>
+        </ul>
+      </div>
+      <div class="card drill">
+        <h3>實作練習</h3>
+        <ul>
+          <li>為一項進行中的工作建立第一個專案，放入三到五份相關檔案</li>
+          <li>找一份您認為「寫得很好」的成品上傳，請 Claude 依同樣水準產出新內容</li>
+          <li>把過去每次都要重複說明的背景，寫成一段專案指示，之後不再重打</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Level 4 -->
+<section class="level" id="lv4">
+  <div class="wrap">
+    <div class="lv-head">
+      <span class="lv-num">04</span>
+      <h2 class="lv-title">繪製路線：個人化<span class="en">Map Your Route — Personalization · 奇萊南峰 3,358 m</span></h2>
+    </div>
+    <p class="lv-alt">攀登狀態｜<b>Claude 不再產出平均答案，而是依「您的標準」工作。</b></p>
+    <p class="lv-desc">
+      到了本階段，重點從「這次任務」轉向「您這個人」。透過建立個人檔案、記錄文風規則、明列拒用的詞彙與偏好格式，
+      Claude 開始理解<strong>您的標準是什麼</strong>——而不是網路上的平均標準。同時，把一次成功的對話轉化為
+      <strong>可重複使用的做法</strong>：建立提示範本、把大任務拆解為步驟、在關鍵節點加入審查機制。
+    </p>
+    <div class="grid2">
+      <div class="card">
+        <h3>可嘗試事項</h3>
+        <ul>
+          <li>建立「關於我」檔案（About-Me File）</li>
+          <li>文件化語氣與寫作規則</li>
+          <li>明列拒用的詞彙與句型</li>
+          <li>建立提示範本（Prompt Templates）</li>
+          <li>將任務拆解為步驟並設審查點（Review Checkpoints）</li>
+        </ul>
+      </div>
+      <div class="card drill">
+        <h3>實作練習</h3>
+        <ul>
+          <li>寫一頁「關於我」：角色、常見任務、偏好語言與格式、絕不接受的寫法，存入偏好設定或專案指示</li>
+          <li>回顧近期三次滿意的產出，歸納共同點，寫成三條「我的寫作規則」</li>
+          <li>把最常做的一種任務，整理成可直接套用的提示範本</li>
+        </ul>
+      </div>
+    </div>
+    <p class="punch">關鍵轉變：<span>Claude 從通用工具，變成熟悉您標準的專屬助手。</span></p>
+  </div>
+</section>
+
+<!-- Level 5 -->
+<section class="level" id="lv5">
+  <div class="wrap">
+    <div class="lv-head">
+      <span class="lv-num">05</span>
+      <h2 class="lv-title">越過稜線：進階工作流<span class="en">Climb Beyond the Chatbox — Advanced Workflows · 雪山主峰 3,886 m</span></h2>
+    </div>
+    <p class="lv-alt">攀登狀態｜<b>Claude 不再只是寫作工具，而是您工作流程的一部分。</b></p>
+    <p class="lv-desc">
+      本階段的核心是<strong>把「一次好的對話」變成「可重複執行的流程」</strong>：建立可重用範本、設置標準化專案資料夾、
+      將週期性任務轉為明確程序，並把研究、起草、編修到交付串接為一條完整鏈路。
+      Claude 開始承擔更複雜的工作——產製文件與簡報、分析資訊與數據、原型化頁面與工具——而您的角色轉為<strong>審核與決策</strong>。
+    </p>
+    <div class="flow">
+      <h3>標準工作流六步驟</h3>
+      <ol>
+        <li><b>Claude 讀取脈絡</b>——載入專案檔案、範本與背景資訊。</li>
+        <li><b>Claude 提出釐清問題</b>——確認任務範圍與成功標準。</li>
+        <li><b>Claude 提出執行計畫</b>——說明架構、步驟與預期產出。</li>
+        <li><b>您核可計畫</b>——確認方向正確，再放行執行。</li>
+        <li><b>Claude 產製交付成果</b>——完成初稿或完整文件。</li>
+        <li><b>您審修最後 20%</b>——聚焦專業判斷與品質把關。</li>
+      </ol>
+    </div>
+    <div class="grid2" style="margin-top:18px">
+      <div class="card">
+        <h3>可嘗試事項</h3>
+        <ul>
+          <li>建立可重複使用的文件範本</li>
+          <li>設置標準化專案資料夾結構</li>
+          <li>將週期性任務轉為明確流程</li>
+          <li>串接研究 → 起草 → 編修 → 交付</li>
+        </ul>
+      </div>
+      <div class="card drill">
+        <h3>實作練習</h3>
+        <ul>
+          <li>選一項每週或每月都會重複的任務，依上方六步驟完整走一遍</li>
+          <li>把走過的流程寫成一頁「操作程序」，下次直接依程序執行</li>
+          <li>刻意練習「先核可計畫、再產出成果」，不再一次要求完成品</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Level 6 -->
+<section class="level" id="lv6">
+  <div class="wrap">
+    <div class="lv-head">
+      <span class="lv-num">06</span>
+      <h2 class="lv-title">登上主峰：生態系精通<span class="en">Reach the Summit — Ecosystem Mastery · 玉山主峰 3,952 m</span></h2>
+    </div>
+    <p class="lv-alt">攀登狀態｜<b>建立即使您不在場，也能持續運轉的系統。</b></p>
+    <p class="lv-desc">
+      山頂的風景不是「更長的提示」，而是一套完整生態系：Claude 連接您的工具（雲端硬碟、行事曆、郵件）、
+      具備可重用的技能（Skills）、遵循團隊可共用的標準程序，並在適當之處將週期性工作自動化。
+      目標是建立一個系統，讓 Claude <strong>事先就知道</strong>以下六件事：
+    </p>
+    <div class="knows">
+      <div><b>您是誰</b>角色、任務與背景脈絡</div>
+      <div><b>好的成果長什麼樣</b>範例與品質標準</div>
+      <div><b>該遵循哪套流程</b>標準作業程序</div>
+      <div><b>資訊存放於何處</b>知識庫與檔案位置</div>
+      <div><b>絕不能做什麼</b>禁用範圍與界線</div>
+      <div><b>何時需要您核可</b>審查點與決策機制</div>
+    </div>
+    <div class="grid2" style="margin-top:18px">
+      <div class="card">
+        <h3>可嘗試事項</h3>
+        <ul>
+          <li>透過連接器（Connectors／MCP）串接常用工具</li>
+          <li>建置可重用的技能（Skills）</li>
+          <li>建立團隊可共同遵循的系統</li>
+          <li>在適當範圍內自動化週期性工作</li>
+          <li>自建應用（Build Your Own App）</li>
+        </ul>
+      </div>
+      <div class="card drill">
+        <h3>實作練習</h3>
+        <ul>
+          <li>串接一個您每天都用的工具（如雲端硬碟或行事曆），體驗跨工具工作</li>
+          <li>把 Level 5 寫好的操作程序，封裝成一個可重複觸發的技能（Skill）</li>
+          <li>把您的系統分享給一位同事使用，依對方回饋修正——能被他人使用的系統，才是真正的系統</li>
+        </ul>
+      </div>
+    </div>
+    <p class="punch">關鍵轉變：<span>目標不是寫出更長的提示，而是建立 Claude 早已知道一切的系統。</span></p>
+  </div>
+</section>
+
+<!-- 對照與結語 -->
+<div class="contrast">
+  <div class="wrap">
+    <h2>核心轉變：從回答問題，到支撐工作</h2>
+    <div class="vs">
+      <div class="side">
+        <div class="tag">LEVEL 1 · 基地營</div>
+        <p>Claude 回答您的問題。</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="side hi">
+        <div class="tag">LEVEL 6 · 玉山主峰</div>
+        <p>Claude 支撐您的工作方式。</p>
+      </div>
+    </div>
+    <p class="closing">
+      多數人停留在山腳，是因為一直在尋找「更好的提示詞」。然而真正的優勢從來不在單一句提示，
+      而在<strong>更完整的脈絡、更清晰的流程、以及可重複使用的系統</strong>。
+      提示是一次性的；脈絡、流程與系統，則會隨著每一次使用持續複利。
+      從今天起，選定一項週期性任務——一份報告、一封信件、一個研究主題——把它從「每次重新開始」，改造成「系統已經就緒」。
+      這就是從基地營走向玉山主峰的第一步。
+    </p>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    攀向 Claude 精通之路｜The Climb to Claude Mastery
+    <div class="mono">六階段進階學習路徑 · 每一站附可立即動手的實作練習 · 適合任何想把 AI 融入日常工作的人</div>
+  </div>
+</footer>
+
+</body>
+</html>

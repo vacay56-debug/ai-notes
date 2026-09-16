@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>赴澳洲「推動到院前輸血與勤務專業化」研修交流｜完整攻略</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&family=Archivo:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E1A2B;
+  --official:#0F4C6E;
+  --official-bg:#E7F0F6;
+  --blue:#14548F;
+  --blue-bg:#E4EDF5;
+  --red:#B32B22;
+  --red-bg:#FBE9E7;
+  --gold:#B07A0C;
+  --gold-bg:#FCF3DC;
+  --green:#3E6B4F;
+  --green-bg:#EEF4EF;
+  --amber:#8A5A18;
+  --amber-bg:#FBF3E2;
+  --muted:#5C6B7C;
+  --line:#D5DCE4;
+  --paper:#FFFFFF;
+  --bg:#EDF0F4;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{font-family:"Noto Sans TC",sans-serif;color:var(--ink);background:var(--bg);line-height:1.65}
+.wrap{max-width:920px;margin:0 auto;background:var(--paper);box-shadow:0 0 24px rgba(14,26,43,.09)}
+
+/* 封面 */
+header{padding:32px 24px 24px;background:linear-gradient(160deg,#0E1A2B 0%,#12395A 100%);color:#fff}
+.kicker{font-size:12px;letter-spacing:.24em;color:#8FB6D9;font-weight:700}
+h1{font-family:"Noto Serif TC",serif;font-size:27px;font-weight:900;line-height:1.3;margin:8px 0 6px}
+.sub{font-size:13px;color:#B9C9D8;letter-spacing:.02em}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:rgba(255,255,255,.16);margin-top:20px;border:1px solid rgba(255,255,255,.16)}
+.facts div{background:#12283E;padding:10px 12px}
+.facts dt{font-size:11px;color:#8FB6D9;letter-spacing:.1em}
+.facts dd{font-size:14px;font-weight:700;margin-top:2px}
+
+/* 導覽 */
+nav{position:sticky;top:0;z-index:50;background:#0E1A2B;border-bottom:1px solid #2A4055;overflow-x:auto;-webkit-overflow-scrolling:touch}
+nav ul{display:flex;list-style:none;padding:0 8px;white-space:nowrap}
+nav a{display:block;padding:12px 13px;color:#C3CEDA;text-decoration:none;font-size:13px;font-weight:500;border-bottom:3px solid transparent}
+nav a:hover{color:#fff;border-bottom-color:var(--gold)}
+
+/* SOS 條 */
+.sos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 16px;background:#132437}
+.sos a{display:block;text-align:center;padding:11px 4px;border-radius:8px;text-decoration:none;background:#20364E;color:#fff}
+.sos a b{display:block;font-family:Archivo,sans-serif;font-size:19px;line-height:1.2}
+.sos a span{font-size:11px;color:#AFC2D4}
+.sos a.em{background:var(--red)}
+.sos a.em span{color:#F6CFCB}
+
+/* 區段 */
+section{padding:30px 24px;border-bottom:10px solid var(--bg)}
+.stage{display:flex;align-items:baseline;gap:10px;margin-bottom:5px;flex-wrap:wrap}
+.num{font-family:Archivo,sans-serif;font-size:12px;font-weight:800;color:#fff;background:var(--ink);padding:2px 9px;border-radius:4px;letter-spacing:.06em}
+h2{font-family:"Noto Serif TC",serif;font-size:20px;font-weight:900}
+.when{font-size:12.5px;color:var(--muted);margin-bottom:18px}
+h3{font-size:15px;font-weight:700;margin:22px 0 9px;padding-left:9px;border-left:4px solid var(--official)}
+p{font-size:14.5px;margin-bottom:10px}
+ul,ol{padding-left:20px;margin-bottom:12px}
+li{font-size:14.5px;margin-bottom:6px}
+b.k{color:var(--blue)}
+
+/* 通用表格 */
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0 14px;border:1px solid var(--line)}
+th{background:#EDF1F5;text-align:left;padding:8px 10px;font-size:12.5px;border-bottom:1px solid var(--line);font-weight:700}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even) td{background:#FAFBFC}
+
+/* 行程表 */
+.itin thead th{background:var(--official);color:#fff;font-size:12.5px;letter-spacing:.05em}
+.itin .daycell{width:108px;border-right:1px solid var(--line)}
+.itin .date{font-family:"Noto Serif TC",serif;font-weight:900;font-size:18px;line-height:1.1}
+.itin .dow{font-size:11.5px;color:var(--muted)}
+.itin .city{display:inline-block;margin-top:5px;font-size:11px;font-weight:700;color:var(--official);border:1px solid var(--official);padding:0 5px;border-radius:3px}
+.itin .city.mel{color:var(--green);border-color:var(--green)}
+.itin .stay{font-size:12px;color:var(--muted)}
+.itin .stay b{color:var(--ink)}
+.item{padding:5px 8px 5px 11px;margin-bottom:5px;border-radius:3px;border-left:3px solid;font-size:12.5px}
+.item:last-child{margin-bottom:0}
+.item small{display:block;color:var(--muted);font-size:11px;line-height:1.45}
+.i-o{background:var(--official-bg);border-color:var(--official)}
+.i-o b{color:var(--official)}
+.i-t{background:var(--amber-bg);border-color:var(--amber)}
+.i-t b{color:var(--amber)}
+.i-l{background:var(--green-bg);border-color:var(--green)}
+.empty{color:#B9C2CA;font-size:12px}
+.legend{display:flex;gap:14px;margin-bottom:12px;font-size:12.5px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px}
+.dot{width:10px;height:10px;border-radius:2px}
+.dot.o{background:var(--official)}.dot.t{background:var(--amber)}.dot.l{background:var(--green)}
+
+/* 步驟 */
+.steps{counter-reset:s;list-style:none;padding:0}
+.steps li{counter-increment:s;position:relative;padding:12px 12px 12px 46px;background:#F6F8FA;border-left:3px solid var(--blue);margin-bottom:8px;border-radius:0 6px 6px 0}
+.steps li::before{content:counter(s);position:absolute;left:12px;top:12px;width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-family:Archivo,sans-serif;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.steps li b{display:block;margin-bottom:2px}
+.steps li small{color:var(--muted);font-size:12.5px;line-height:1.5;display:block}
+
+/* 提示框 */
+.warn{background:var(--red-bg);border-left:5px solid var(--red);padding:13px 15px;margin:14px 0;border-radius:0 6px 6px 0}
+.warn b{color:var(--red)}
+.warn p{font-size:13.5px;margin-bottom:6px}.warn p:last-child{margin-bottom:0}
+.tip{background:var(--blue-bg);border-left:5px solid var(--blue);padding:13px 15px;margin:14px 0;border-radius:0 6px 6px 0}
+.tip p{font-size:13.5px;margin-bottom:0}
+.alert{background:var(--amber-bg);border-left:5px solid var(--amber);padding:13px 15px;margin:14px 0;border-radius:0 6px 6px 0;font-size:13.5px}
+.alert b{color:var(--amber)}
+
+/* 地址索引 */
+.addr .en{color:var(--muted);font-size:11.5px;display:block}
+.addr a{color:var(--official);text-decoration:none;border-bottom:1px dotted var(--official);white-space:nowrap;font-size:12px}
+.tag{display:inline-block;font-size:10.5px;padding:0 5px;border-radius:2px;margin-left:4px;vertical-align:1px;color:#fff}
+.tag.o{background:var(--official)}.tag.t{background:var(--amber)}.tag.h{background:#5C6B7C}
+
+/* 出示卡 */
+.cards{background:#3A3018;padding:28px 20px}
+.cards .num{background:var(--gold)}
+.cards h2{color:#fff}
+.cards .when{color:#D8C89B}
+.card{background:var(--gold-bg);border-radius:10px;padding:16px 18px;margin-bottom:12px;border:1px solid #E3D4A8}
+.card .zh{font-size:13px;color:#6B5A26;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.card .zh i{font-style:normal;background:var(--gold);color:#fff;font-family:Archivo,sans-serif;font-size:11px;padding:1px 7px;border-radius:3px}
+.card .en{font-family:Archivo,sans-serif;font-size:20px;font-weight:800;line-height:1.35;color:#2B2308}
+.card .note{font-size:12.5px;color:#7A6830;margin-top:8px;border-top:1px dashed #D7C489;padding-top:7px}
+.blank{display:inline-block;min-width:110px;border-bottom:2.5px solid #8A7526;height:1em}
+
+.qa td:first-child{font-weight:700;width:24%}
+.qa td:nth-child(2){color:var(--red);width:30%}
+
+.pocket{border:2px dashed var(--ink);border-radius:8px;padding:16px;margin-top:12px}
+.pocket h4{font-size:14px;margin-bottom:8px}
+.pocket dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13px}
+.pocket dt{font-weight:700;color:var(--muted)}
+
+.check{list-style:none;padding:0}
+.check li{padding-left:26px;position:relative;font-size:14px;margin-bottom:7px}
+.check li::before{content:"";position:absolute;left:0;top:4px;width:15px;height:15px;border:2px solid var(--official);border-radius:3px}
+
+footer{padding:22px 24px;font-size:12px;color:var(--muted);text-align:center;background:#F6F8FA}
+a{color:var(--blue)}
+a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+@media (max-width:780px){
+  .itin thead{display:none}
+  .itin tbody tr{display:block;border-bottom:3px solid var(--official);padding:6px 0}
+  .itin tbody td{display:block;border-bottom:none;padding:5px 12px;width:100%!important}
+  .itin .slot::before{content:attr(data-label);font-weight:700;font-size:11.5px;color:var(--muted);display:block}
+  .itin .stay::before{content:"住宿";font-weight:700;font-size:11.5px;color:var(--muted);display:block}
+  .card .en{font-size:17px}
+  h1{font-size:22px}
+}
+@media print{
+  body{background:#fff}
+  nav,.sos{display:none}
+  .wrap{box-shadow:none;max-width:100%}
+  section{page-break-inside:avoid;border-bottom:1px solid #ccc}
+  .cards{background:#fff}.cards h2,.cards .when{color:#000}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  @page{size:A4;margin:11mm}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">內政部消防署　救災救護組緊急救護科</div>
+  <h1>赴澳洲「推動到院前輸血與勤務專業化」<br>研修交流　完整攻略</h1>
+  <div class="sub">Australia Study Visit on Prehospital Blood Transfusion &amp; EMS Professionalization｜115 年 8 月 26 日至 9 月 5 日</div>
+  <dl class="facts">
+    <div><dt>期程</dt><dd>11 日</dd></div>
+    <div><dt>地點</dt><dd>雪梨・墨爾本</dd></div>
+    <div><dt>去程</dt><dd>CI51　8/26 23:30</dd></div>
+    <div><dt>內陸</dt><dd>QF1261　8/29 10:05</dd></div>
+    <div><dt>回程</dt><dd>CI58　9/4 21:50</dd></div>
+    <div><dt>時差</dt><dd>澳洲快 2 小時</dd></div>
+  </dl>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#s1">① 行程總表</a></li>
+    <li><a href="#s2">② 公務行程</a></li>
+    <li><a href="#s3">③ 地址索引</a></li>
+    <li><a href="#s4">④ 行前準備</a></li>
+    <li><a href="#s5">⑤ 入境流程</a></li>
+    <li><a href="#s6">⑥ 交通住宿</a></li>
+    <li><a href="#s7">⑦ 緊急處置</a></li>
+    <li><a href="#s8">⑧ 出示卡</a></li>
+    <li><a href="#s9">⑨ 隨身小卡</a></li>
+  </ul>
+</nav>
+
+<div class="sos">
+  <a class="em" href="tel:000"><b>000</b><span>警消救護（澳洲境內）</span></a>
+  <a href="tel:131450"><b>131 450</b><span>免費中文口譯 24H</span></a>
+  <a href="tel:+61418415572"><b>雪梨處</b><span>急難救助專線</span></a>
+</div>
+
+<!-- ① 行程總表 -->
+<section id="s1">
+  <div class="stage"><span class="num">PART 1</span><h2>行程總覽表</h2></div>
+  <div class="when">已依電子機票核對修正（抵臺時間、住宿晚數、單位名稱），修正紀錄詳見文末</div>
+  <div class="legend">
+    <span class="chip"><span class="dot o"></span>公務行程</span>
+    <span class="chip"><span class="dot t"></span>航段交通</span>
+    <span class="chip"><span class="dot l"></span>文化參訪・餐敘</span>
+  </div>
+
+  <table class="itin">
+    <thead><tr><th>日期</th><th>上午</th><th>中午</th><th>下午</th><th>晚上</th><th>住宿</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="daycell"><div class="date">8/26</div><div class="dow">星期三</div><span class="city">臺北</span></td>
+        <td class="slot" data-label="上午"><span class="empty">—</span></td>
+        <td class="slot" data-label="中午"><span class="empty">—</span></td>
+        <td class="slot" data-label="下午"><span class="empty">—</span></td>
+        <td class="slot" data-label="晚上"><div class="item i-t"><b>23:30</b>　桃園機場第二航廈<br>中華航空 CI51 赴雪梨</div></td>
+        <td class="stay">航程中</td>
+      </tr>
+      <tr>
+        <td class="daycell"><div class="date">8/27</div><div class="dow">星期四</div><span class="city">雪梨</span></td>
+        <td class="slot" data-label="上午"><div class="item i-t"><b>10:45</b>　抵達雪梨機場第一航廈</div></td>
+        <td class="slot" data-label="中午"><div class="item i-l">環形碼頭午餐</div></td>
+        <td class="slot" data-label="下午"><div class="item i-l">雪梨歌劇院導覽</div><div class="item i-l">皇家植物園至麥奎里夫人石椅</div></td>
+        <td class="slot" data-label="晚上"><div class="item i-l">伍魯穆魯指狀碼頭水岸餐敘</div></td>
+        <td class="stay"><b>雪梨 第1晚</b><br>翡翠飯店／Meriton Suites Pitt Street／YEHS 海港套房（共2晚）</td>
+      </tr>
+      <tr>
+        <td class="daycell"><div class="date">8/28</div><div class="dow">星期五</div><span class="city">雪梨</span></td>
+        <td class="slot" data-label="上午"><div class="item i-o"><b>公務</b>　Lifeblood 捐血中心<br><small>血品供應鏈與到院前輸血交流</small></div></td>
+        <td class="slot" data-label="中午"><span class="empty">—</span></td>
+        <td class="slot" data-label="下午"><div class="item i-l">伊麗莎白海灣洋房<br><small>週五閉館，須調整</small></div></td>
+        <td class="slot" data-label="晚上"><div class="item i-l">達令港／岩石區</div></td>
+        <td class="stay"><b>雪梨 第2晚</b></td>
+      </tr>
+      <tr>
+        <td class="daycell"><div class="date">8/29</div><div class="dow">星期六</div><span class="city">雪梨→墨爾本</span></td>
+        <td class="slot" data-label="上午"><div class="item i-t"><b>10:05–11:40</b>　雪梨機場第三航廈<br>澳洲航空 QF1261<br><small>託運行李限 1 件</small></div></td>
+        <td class="slot" data-label="中午"><div class="item i-l">維多利亞女王市場</div></td>
+        <td class="slot" data-label="下午"><div class="item i-l">維多利亞州立圖書館</div></td>
+        <td class="slot" data-label="晚上"><div class="item i-l">萊貢街（義大利街）</div></td>
+        <td class="stay"><b>墨爾本 第1晚</b><br>IHG 伯克街購物中心假日酒店（共6晚）</td>
+      </tr>
+      <tr>
+        <td class="daycell"><div class="date">8/30</div><div class="dow">星期日</div><span class="city mel">墨爾本近郊</span></td>
+        <td class="slot" data-label="上午"><div class="item i-l">丹頓農山脈普芬比利蒸汽火車</div></td>
+        <td class="slot" data-label="中午"><div class="item i-l">亞拉河谷酒莊生態與莊園</div></td>
+        <td class="slot" data-label="下午"><span class="empty">續亞拉河谷行程</span></td>
+        <td class="slot" data-label="晚上"><div class="item i-l">市區雅拉河畔漫步</div></td>
+        <td class="stay"><b>墨爾本 第2晚</b></td>
+      </tr>
+      <tr>
+        <td class="daycell"><div class="date">8/31</div><div class="dow">星期一</div><span class="city mel">墨爾本</span></td>
+        <td class="slot" data-label="上午"><div class="item i-o"><b>公務</b>　EFOC／Essendon Airbase<br><small>勤務指揮中心與航空醫療基地</small></div></td>
+        <td class="slot" data-label="中午"><span class="empty">—</span></td>
+        <td class="slot" data-label="下午"><span class="empty">續上午公務</span></td>
+        <td class="slot" data-label="晚上"><div class="item i-l">市區商務餐敘</div></td>
+        <td class="stay"><b>墨爾本 第3晚</b></td>
+      </tr>
+      <tr>
+        <td class="daycell"><div class="date">9/1</div><div class="dow">星期二</div><span class="city mel">墨爾本</span></td>
+        <td class="slot" data-label="上午"><div class="item i-o"><b>公務</b>　Blood Program 討論</div></td>
+        <td class="slot" data-label="中午"><span class="empty">—</span></td>
+        <td class="slot" data-label="下午"><div class="item i-o"><b>公務</b>　Emergency Management Unit</div></td>
+        <td class="slot" data-label="晚上"><div class="item i-l">南岸商圈餐敘</div></td>
+        <td class="stay"><b>墨爾本 第4晚</b></td>
+      </tr>
+      <tr>
+        <td class="daycell"><div class="date">9/2</div><div class="dow">星期三</div><span class="city mel">墨爾本</span></td>
+        <td class="slot" data-label="上午"><div class="item i-o"><b>公務</b>　CBRNE／HAZMAT 討論</div></td>
+        <td class="slot" data-label="中午"><span class="empty">—</span></td>
+        <td class="slot" data-label="下午"><div class="item i-o"><b>公務</b>　Royal Melbourne Hospital</div></td>
+        <td class="slot" data-label="晚上"><div class="item i-l">市區商務餐敘</div></td>
+        <td class="stay"><b>墨爾本 第5晚</b></td>
+      </tr>
+      <tr>
+        <td class="daycell"><div class="date">9/3</div><div class="dow">星期四</div><span class="city mel">墨爾本</span></td>
+        <td class="slot" data-label="上午"><div class="item i-o"><b>公務</b>　Critical Care Response Car 跟車實習</div></td>
+        <td class="slot" data-label="中午"><span class="empty">—</span></td>
+        <td class="slot" data-label="下午"><div class="item i-l">聖科達海灘</div></td>
+        <td class="slot" data-label="晚上"><div class="item i-l">聖科達夕陽觀景與餐敘</div></td>
+        <td class="stay"><b>墨爾本 第6晚</b></td>
+      </tr>
+      <tr>
+        <td class="daycell"><div class="date">9/4</div><div class="dow">星期五</div><span class="city">墨爾本→臺北</span></td>
+        <td class="slot" data-label="上午"><div class="item i-l">墨爾本皇家植物園</div></td>
+        <td class="slot" data-label="中午"><div class="item i-l">DFO South Wharf 採購伴手禮</div></td>
+        <td class="slot" data-label="下午"><div class="item i-l">布萊頓彩虹小屋</div></td>
+        <td class="slot" data-label="晚上"><div class="item i-t"><b>21:50</b>　墨爾本機場第二航廈<br>中華航空 CI58 返臺<br><small>座位未劃定，請儘早線上報到</small></div></td>
+        <td class="stay">航程中</td>
+      </tr>
+      <tr>
+        <td class="daycell"><div class="date">9/5</div><div class="dow">星期六</div><span class="city">臺北</span></td>
+        <td class="slot" data-label="上午"><div class="item i-t"><b>05:15</b>　抵達桃園機場第二航廈</div></td>
+        <td class="slot" data-label="中午"><span class="empty">—</span></td>
+        <td class="slot" data-label="下午"><span class="empty">—</span></td>
+        <td class="slot" data-label="晚上"><span class="empty">—</span></td>
+        <td class="stay">—</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="alert"><b>行李額度差異</b>：中華航空 CI51／CI58 各 2 件；澳洲航空 QF1261 雪梨→墨爾本段<b>僅 1 件</b>。伴手禮採購已排於回程前一日（9/4），不受內陸段限制影響。</div>
+</section>
+
+<!-- ② 公務行程 -->
+<section id="s2">
+  <div class="stage"><span class="num">PART 2</span><h2>公務行程專章</h2></div>
+  <div class="when">五項公務行程之地點、性質與交通關聯</div>
+
+  <table>
+    <thead><tr><th style="width:14%">日期</th><th style="width:30%">單位</th><th style="width:30%">交流重點</th><th style="width:26%">位置</th></tr></thead>
+    <tbody>
+      <tr><td>8/28（五）</td><td><b>Lifeblood 捐血中心</b><br><span style="font-size:11.5px;color:#5C6B7C">Australian Red Cross Lifeblood</span></td><td>血品採集、儲備與供應鏈；到院前輸血血品之冷鏈與效期管理</td><td>雪梨市中心<br>483 George St</td></tr>
+      <tr><td>8/31（一）</td><td><b>EFOC／Essendon Airbase</b><br><span style="font-size:11.5px;color:#5C6B7C">Ambulance Victoria Operations Centre</span></td><td>勤務派遣指揮體系、航空醫療後送（HEMS）基地運作</td><td>Essendon Fields<br>距市區約 20 分鐘車程</td></tr>
+      <tr><td>9/1（二）</td><td><b>Blood Program</b><br><span style="font-size:11.5px;color:#5C6B7C">Prehospital Blood Program</span></td><td>到院前輸血制度設計、適應症、授權層級與品質指標</td><td>同上區域</td></tr>
+      <tr><td>9/1（二）</td><td><b>Emergency Management Unit</b></td><td>大量傷病患應變、跨機關指揮協調機制</td><td>同上區域</td></tr>
+      <tr><td>9/2（三）</td><td><b>CBRNE／HAZMAT</b></td><td>化生放核爆與危害物質事故之救護勤務與人員防護</td><td>同上區域</td></tr>
+      <tr><td>9/2（三）</td><td><b>皇家墨爾本醫院</b><br><span style="font-size:11.5px;color:#5C6B7C">The Royal Melbourne Hospital</span></td><td>創傷中心與到院前銜接、大量輸血流程</td><td>Parkville<br>300 Grattan St</td></tr>
+      <tr><td>9/3（四）</td><td><b>Critical Care Response Car</b></td><td>重症照護反應車跟車實習：出勤模式、人力配置與作業程序</td><td>依主辦單位指定集合點</td></tr>
+    </tbody>
+  </table>
+
+  <div class="tip"><p><b>地理集中性</b>：Essendon Fields 一區同時涵蓋勤務中心（72 Hargrave Ave）、空中救護（12 Global Ave）與成人後送中心 ARV（72 Hargrave Ave），8/31 至 9/3 之四項公務行程可共用同一車次安排，交通成本與時間可壓縮。</p></div>
+
+  <div class="alert"><b>待確認事項</b>：原規劃表版面中公務項目與日期欄位有錯位，上表係依地點與勤務性質推定排序，<b>請依主辦單位確認函文核對後定案</b>。</div>
+
+  <h3>公務行程隨身準備</h3>
+  <ul class="check">
+    <li>名片（中英文雙面）足量</li>
+    <li>機關簡報 USB 與雲端備份各一</li>
+    <li>贈禮與伴手禮（依接待單位數量備妥）</li>
+    <li>出國核准公文影本、邀請函</li>
+    <li>參訪醫療機構或救護車輛時之個人防護與著裝規定確認</li>
+  </ul>
+</section>
+
+<!-- ③ 地址索引 -->
+<section id="s3" class="addr">
+  <div class="stage"><span class="num">PART 3</span><h2>地址索引（Google Maps）</h2></div>
+  <div class="when">點選「地圖」可直接開啟定位　<span class="tag o">公務</span><span class="tag t">交通</span><span class="tag h">住宿</span></div>
+
+  <h3>雪梨 Sydney, NSW</h3>
+  <table>
+    <thead><tr><th style="width:30%">地點</th><th style="width:42%">地址</th><th style="width:18%">備註</th><th style="width:10%">連結</th></tr></thead>
+    <tbody>
+      <tr><td>雪梨機場第一航廈<span class="tag t">交通</span><span class="en">SYD Terminal 1 International</span></td><td>Departure Plaza, Mascot NSW 2020</td><td>8/27 抵達</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-33.9375158,151.1654096" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>雪梨機場第三航廈<span class="tag t">交通</span><span class="en">Sydney Airport Domestic T3</span></td><td>Arrivals Rd, Mascot NSW 2020</td><td>8/29 QF1261</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-33.9329196,151.1799809" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>Lifeblood 市政廳捐血中心<span class="tag o">公務</span><span class="en">Lifeblood Sydney Town Hall</span></td><td>483 George St, Sydney NSW 2000</td><td>週一至五 07:00–20:00<br>+61 13 14 95</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-33.8734426,151.205647" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>Lifeblood York Street 中心<span class="tag o">公務</span></td><td>Level 1/1 York St, Sydney NSW 2000</td><td>備選點</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-33.863638,151.2049168" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>翡翠飯店<span class="tag h">住宿</span><span class="en">Hotel Emerald Potts Point</span></td><td>31 Challis Ave, Potts Point NSW 2011</td><td>+61 2 9876 1689</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-33.869073,151.225162" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>Meriton Suites Pitt Street<span class="tag h">住宿</span></td><td>329 Pitt St, Sydney NSW 2000</td><td>+61 2 8263 7400</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-33.8742375,151.2077907" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>雪梨海港套房酒店<span class="tag h">住宿</span><span class="en">YEHS Hotel Sydney Harbour Suites</span></td><td>252-258 Sussex St, Sydney NSW 2000</td><td>+61 2 8349 8888</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-33.872659,151.2042601" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>環形碼頭<span class="en">Circular Quay</span></td><td>Circular Quay, Sydney NSW 2000</td><td>8/27 午餐</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-33.8611374,151.2126457" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>雪梨歌劇院<span class="en">Sydney Opera House</span></td><td>Bennelong Point, Sydney NSW 2000</td><td>導覽須預約</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-33.8567844,151.2152967" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>麥奎里夫人石椅<span class="en">Mrs Macquarie's Chair</span></td><td>Mrs Macquaries Rd, Sydney NSW 2000</td><td>全日開放</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-33.8596639,151.2225706" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>伍魯穆魯指狀碼頭<span class="en">Woolloomooloo Finger Wharf</span></td><td>6 Cowper Wharf Roadway, Woolloomooloo NSW 2011</td><td>8/27 餐敘</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-33.869059,151.2200319" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>伊麗莎白海灣洋房<span class="en">Elizabeth Bay House</span></td><td>7 Onslow Ave, Elizabeth Bay NSW 2011</td><td><b style="color:#8A5A18">僅週日、週一開放</b></td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-33.8700537,151.2264207" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>達令港<span class="en">Darling Harbour</span></td><td>Darling Harbour, Sydney NSW 2000</td><td>8/28 晚間</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-33.87488,151.2009" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>岩石區<span class="en">The Rocks</span></td><td>The Rocks NSW 2000</td><td>8/28 晚間</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-33.859062,151.2080421" target="_blank" rel="noopener">地圖</a></td></tr>
+    </tbody>
+  </table>
+
+  <h3>墨爾本 Melbourne, VIC</h3>
+  <table>
+    <thead><tr><th style="width:30%">地點</th><th style="width:42%">地址</th><th style="width:18%">備註</th><th style="width:10%">連結</th></tr></thead>
+    <tbody>
+      <tr><td>墨爾本機場第一航廈<span class="tag t">交通</span><span class="en">Melbourne Airport T1 Domestic</span></td><td>Melbourne Airport VIC 3045</td><td>8/29 抵達</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=Melbourne+Airport+Terminal+1" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>墨爾本機場第二航廈<span class="tag t">交通</span><span class="en">Melbourne Airport T2 International</span></td><td>Arrival Dr, Melbourne Airport VIC 3045</td><td>9/4 CI58</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.668997,144.8483656" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>IHG 伯克街假日酒店<span class="tag h">住宿</span><span class="en">Holiday Inn Melbourne Bourke Street Mall</span></td><td>296 Little Collins St, Melbourne VIC 3000</td><td>+61 3 9968 8688</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.8148036,144.9648171" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>EFOC 勤務中心<span class="tag o">公務</span><span class="en">Ambulance Victoria – Essendon Fields Operations Centre</span></td><td>Terminal, 72 Hargrave Ave, Essendon Fields VIC 3041</td><td>8/31</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.7280657,144.8974293" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>維多利亞州空中救護<span class="tag o">公務</span><span class="en">Air Ambulance Victoria</span></td><td>Unit 3/12 Global Ave, Essendon Fields VIC 3041</td><td>+61 3 9840 3500</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.7205078,144.8978405" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>成人後送中心<span class="tag o">公務</span><span class="en">Adult Retrieval Victoria, ARV</span></td><td>72 Hargrave Ave, Essendon Fields VIC 3041</td><td>+61 1300 368 661</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.7281654,144.8972108" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>艾森頓機場航站<span class="tag o">公務</span><span class="en">Essendon Fields Airport Terminal</span></td><td>72 Hargrave Ave, Essendon Fields VIC 3041</td><td>+61 3 9948 9400</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.7257898,144.9016264" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>皇家墨爾本醫院<span class="tag o">公務</span><span class="en">The Royal Melbourne Hospital</span></td><td>300 Grattan St, Parkville VIC 3050</td><td>+61 3 9342 7000</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.7986657,144.955973" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>維多利亞女王市場<span class="en">Queen Victoria Market</span></td><td>Queen St, Melbourne VIC 3000</td><td>週六 06:00–16:00<br>週一、三休市</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.8075798,144.956785" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>維多利亞州立圖書館<span class="en">State Library Victoria</span></td><td>328 Swanston St, Melbourne VIC 3000</td><td>每日 10:00–18:00</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.8097255,144.9654504" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>萊貢街<span class="en">Lygon Street, Carlton</span></td><td>Lygon St, Carlton VIC 3053</td><td>8/29 晚間</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.8000755,144.9670959" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>普芬比利蒸汽火車<span class="en">Puffing Billy Railway</span></td><td>1 Old Monbulk Rd, Belgrave VIC 3160</td><td>09:00–16:30<br>須線上預訂</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.9077353,145.3566269" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>亞拉河谷酒莊（建議一）<span class="en">TarraWarra Estate</span></td><td>311 Healesville-Yarra Glen Rd, Yarra Glen VIC 3775</td><td>週一休</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.6595109,145.469204" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>亞拉河谷酒莊（建議二）<span class="en">Yarrawood Estate</span></td><td>1275 Melba Hwy, Yarra Glen VIC 3775</td><td>每日 10:00–17:00</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.634575,145.396547" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>雅拉河南岸步道<span class="en">Southbank Promenade</span></td><td>Southbank Promenade, Southbank VIC 3006</td><td>8/30、9/1</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.8202247,144.9650244" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>聖科達海灘<span class="en">St Kilda Beach</span></td><td>Jacka Blvd, St Kilda VIC 3182</td><td>9/3</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.8678765,144.9740049" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>墨爾本皇家植物園<span class="en">Royal Botanic Gardens Victoria</span></td><td>Birdwood Ave, Melbourne VIC 3004</td><td>每日 07:30–17:30</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.8302443,144.9801496" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>DFO South Wharf</td><td>20 Convention Centre Pl, South Wharf VIC 3006</td><td>週五 10:00–21:00</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.8246173,144.9499309" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>布萊頓彩虹小屋<span class="en">Brighton Bathing Boxes</span></td><td>Esplanade, Brighton VIC 3186</td><td>全日開放</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=-37.9179914,144.9867946" target="_blank" rel="noopener">地圖</a></td></tr>
+      <tr><td>桃園國際機場第二航廈<span class="tag t">交通</span></td><td>桃園市大園區航站南路 9 號</td><td>8/26 出發／9/5 抵達</td><td><a href="https://www.google.com/maps/search/?api=1&amp;query=25.0767884,121.2315742" target="_blank" rel="noopener">地圖</a></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ④ 行前準備 -->
+<section id="s4">
+  <div class="stage"><span class="num">PART 4</span><h2>行前準備：把「不會英文」變成不需要英文</h2></div>
+  <div class="when">出發前 72 小時完成。落地後能否自理，九成取決於此</div>
+
+  <h3>手機三件事（缺一不可）</h3>
+  <ol class="steps">
+    <li><b>Google 翻譯：下載英文離線語言包</b><small>App → 右下角個人圖示 → 已下載的語言 → 英文（下載）。務必在臺灣 Wi-Fi 下完成，之後無網路亦可翻譯。</small></li>
+    <li><b>熟練兩個功能：相機翻譯、對話模式</b><small>相機：對準看板、菜單、表單即時轉中文。對話：對方講英文自動轉中文語音。出發前先在家練習 3 次。</small></li>
+    <li><b>Google 地圖：下載雪梨、墨爾本離線地圖</b><small>個人圖示 → 離線地圖 → 選取自己的地圖，分別框選兩市中心下載。無網路亦可定位導航回飯店。</small></li>
+  </ol>
+
+  <h3>證件、網路與金流</h3>
+  <table>
+    <tr><th style="width:22%">項目</th><th>做法</th></tr>
+    <tr><td>簽證</td><td>持中華民國護照須先取得<b class="k">澳洲電子旅行許可（Electronic Travel Authority, ETA，簽證代碼 601）</b>，僅能透過官方 Australian ETA 手機 App 申請，費用約澳幣 20 元，多數數分鐘內核發。<b>出發前務必確認核准通知。</b></td></tr>
+    <tr><td>護照</td><td>須為晶片護照（封面下方有生物辨識圖示）且效期六個月以上，方可使用自助通關。</td></tr>
+    <tr><td>行動網路</td><td>出發前開通<b class="k">澳洲漫遊上網</b>或購買 eSIM。落地即有網路是所有翻譯工具的前提，<b>不要指望到當地才買 SIM 卡</b>——買卡本身就需要英文。</td></tr>
+    <tr><td>信用卡</td><td>至少 2 張並先致電銀行開通海外交易。澳洲全面感應支付，商店、計程車、車站皆可直接感應。</td></tr>
+    <tr><td>現金</td><td>澳幣 300–500 元小鈔應急即可。</td></tr>
+    <tr><td>保險</td><td>投保旅平險與海外醫療，記下 24 小時服務專線。</td></tr>
+  </table>
+
+  <h3>文件備份（紙本 + 手機截圖各一份）</h3>
+  <ul class="check">
+    <li>護照資料頁、ETA 核准信</li>
+    <li>電子機票（CI51／QF1261／CI58）</li>
+    <li>兩間飯店英文地址與訂房確認信</li>
+    <li>出國核准公文、邀請函</li>
+    <li>保單與 24 小時服務電話</li>
+    <li>本攻略「出示卡」與「隨身小卡」列印本</li>
+  </ul>
+
+  <div class="tip"><p><b>把飯店地址設成手機桌布或鎖定畫面。</b>迷路時不必解鎖、不必找檔案，直接把螢幕轉給計程車司機看即可。這一招解決全程八成的移動問題。</p></div>
+</section>
+
+<!-- ⑤ 入境流程 -->
+<section id="s5">
+  <div class="stage"><span class="num">PART 5</span><h2>入境澳洲全流程</h2></div>
+  <div class="when">8/27（四）10:45 抵達雪梨機場第一航廈</div>
+
+  <h3>第一關：證照查驗</h3>
+  <ol class="steps">
+    <li><b>下機後沿走道前行</b><small>找綠底白字 ARRIVALS 或 IMMIGRATION 指示牌。全澳機場動線單一，不會走錯。</small></li>
+    <li><b>優先走自助通關閘門 SmartGate</b><small>臺灣晶片護照持有人年滿 16 歲即可使用，<b>全程不必說任何一句英文</b>。</small></li>
+    <li><b>SmartGate 第一步：機台</b><small>護照資料頁朝下放入掃描槽 → 螢幕可切換中文 → 依畫面回答數題是非題 → 取出票卡。</small></li>
+    <li><b>SmartGate 第二步：閘門</b><small>票卡插入閘門 → 摘下帽子、口罩、墨鏡 → 直視鏡頭拍照 → 閘門開啟即完成。</small></li>
+    <li><b>若閘門紅燈或讀取失敗</b><small>不必緊張、不必解釋。改走人工櫃檯，遞出護照並出示<b>出示卡 ①</b>。官員會自行處理或請翻譯。</small></li>
+  </ol>
+
+  <h3>入境卡（Incoming Passenger Card）填寫對照</h3>
+  <p>機上發放之黃色入境卡全部為英文且須手寫。建議在機上以 Google 翻譯相機模式逐欄確認，用<b class="k">正楷大寫英文</b>填寫。</p>
+  <table>
+    <thead><tr><th style="width:52%">英文欄位</th><th>填什麼</th></tr></thead>
+    <tbody>
+      <tr><td>Family name / Given names</td><td>護照上的姓／名（大寫）</td></tr>
+      <tr><td>Passport number</td><td>護照號碼</td></tr>
+      <tr><td>Flight number</td><td>CI51</td></tr>
+      <tr><td>Intended address in Australia</td><td>雪梨飯店英文地址（照抄訂房確認信）</td></tr>
+      <tr><td>Your occupation</td><td>CIVIL SERVANT</td></tr>
+      <tr><td>Do you intend to live in Australia for the next 12 months?</td><td>NO</td></tr>
+      <tr><td>Are you bringing food, plant material or animal products?</td><td><b class="k">YES</b>（凡帶任何食品一律勾 YES）</td></tr>
+      <tr><td>Have you visited a farm or been in contact with animals?</td><td>依實際情況據實勾選</td></tr>
+      <tr><td>Currency AUD 10,000 or more?</td><td>NO（除非確實攜帶等值以上）</td></tr>
+      <tr><td>Signature / Date</td><td>親筆簽名、日期（日／月／年）</td></tr>
+    </tbody>
+  </table>
+
+  <h3>第二關：行李提領與生物安全檢查</h3>
+  <div class="warn">
+    <p><b>核心原則：不要帶任何食品入境。已經帶了，就全部申報。</b></p>
+    <p>澳洲生物安全查驗極嚴，肉乾、香腸、蛋黃酥、月餅、中藥材、堅果、水果、種子、木製品、蜂蜜、乳製品均在管制之列。未申報而被查獲可當場開罰數千澳幣，情節重大者取消簽證、遣返並留下紀錄——<b>對公務出國身分是重大風險</b>。</p>
+    <p><b>申報不會被罰</b>，只會被檢查後放行或沒收；<b>不申報才會被罰</b>。行李轉盤旁設有黃色 Amnesty Bin 自願丟棄桶，不確定的食品全部丟入即無任何責任。</p>
+  </div>
+  <ol class="steps">
+    <li><b>看螢幕找行李轉盤</b><small>螢幕上找 CI51 或 TAIPEI，後方數字即轉盤編號。</small></li>
+    <li><b>行李未出現</b><small>持行李條走向 Baggage Services 櫃檯，出示<b>出示卡 ⑧</b>。</small></li>
+    <li><b>推車過 X 光檢查</b><small>入境卡交給檢查人員，行李放上輸送帶；被要求開箱即配合打開。</small></li>
+    <li><b>被詢問時</b><small>出示<b>出示卡 ①</b>與<b>出示卡 ④</b>。<b>不要為了省事回答 No</b>——聽不懂而誤答否定，是最危險的情況。</small></li>
+  </ol>
+</section>
+
+<!-- ⑥ 交通住宿 -->
+<section id="s6">
+  <div class="stage"><span class="num">PART 6</span><h2>當地交通、住宿與生活</h2></div>
+
+  <h3>機場至市區</h3>
+  <table>
+    <thead><tr><th style="width:20%">城市</th><th style="width:22%">方式</th><th>做法與費用</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="2"><b>雪梨</b><br>8/27 抵達</td><td><b>計程車（最省事）</b></td><td>沿 TAXI 指示牌至排班站，上車後<b>直接把飯店地址螢幕給司機看</b>（出示卡 ③）。至市中心約 25–35 分鐘、澳幣 50–70 元，可感應刷卡。</td></tr>
+      <tr><td>機場快線火車</td><td>航廈內找 TRAINS，搭 T8 線至 Central 或 Circular Quay，約 15 分鐘。閘門<b class="k">直接感應信用卡</b>進出站，不需買票。含機場附加費約澳幣 22 元。</td></tr>
+      <tr><td rowspan="2"><b>墨爾本</b><br>8/29 抵達</td><td><b>計程車</b></td><td>至市中心約 30 分鐘、澳幣 60–80 元。同樣出示飯店地址。</td></tr>
+      <tr><td>SkyBus 機場巴士</td><td>航廈外紅色巴士站，直達 Southern Cross 車站，約 30 分鐘、單程約澳幣 24 元，可感應刷卡上車。下車後轉計程車或步行至飯店。</td></tr>
+    </tbody>
+  </table>
+  <div class="tip"><p><b>墨爾本市中心設有免費電車區（Free Tram Zone）</b>，涵蓋伯克街購物中心、州立圖書館、女王市場一帶。區內上下車完全免費、不必買票刷卡，是本次住宿位置最大的便利；超出該區則需 myki 卡。</p></div>
+
+  <h3>飯店入住與退房</h3>
+  <ol class="steps">
+    <li><b>報到</b><small>櫃檯遞出護照與訂房確認信（紙本或截圖），什麼都不必說。</small></li>
+    <li><b>信用卡預授權</b><small>櫃檯要求刷卡作押金（澳幣 50–200 元，退房後退回），看到刷卡機遞出信用卡即可。</small></li>
+    <li><b>務必索取飯店名片</b><small>上有英文地址與電話，放進錢包。這是迷路時最有效的工具。</small></li>
+    <li><b>需要協助</b><small>下樓找櫃檯，用 Google 翻譯對話模式說中文即可：加毛巾、叫車、寄放行李、找醫生皆可處理。</small></li>
+    <li><b>退房</b><small>房卡交還櫃檯即可。</small></li>
+  </ol>
+
+  <h3>用餐與日常</h3>
+  <table>
+    <tr><td style="width:22%">看不懂菜單</td><td>用 Google 翻譯<b class="k">相機模式</b>掃描，或直接指圖片、指鄰桌餐點並出示<b>出示卡 ⑤</b>。唐人街與亞洲餐廳普遍有中文服務人員，是最省力選項。</td></tr>
+    <tr><td>小費</td><td>澳洲<b class="k">不需給小費</b>，帳單金額即為全部。</td></tr>
+    <tr><td>飲水</td><td>自來水可直接生飲，餐廳的免費冷水（tap water）安全無虞。</td></tr>
+    <tr><td>電壓插座</td><td>230V、Type I 三扁腳。臺灣手機與筆電變壓器多支援 100–240V，<b class="k">只需帶轉接頭</b>。</td></tr>
+    <tr><td>時差</td><td>澳洲東部時間比臺灣<b class="k">快 2 小時</b>（8、9 月非日光節約時間期間）。</td></tr>
+    <tr><td>藥品</td><td>連鎖藥妝 Chemist Warehouse 最普及。<b>處方藥務必自臺灣備足帶去</b>，並攜帶英文診斷證明。</td></tr>
+    <tr><td>治安</td><td>整體良好。夜間避免單獨行動，貴重物品不離身，公共場所勿放手機於桌面。</td></tr>
+  </table>
+</section>
+
+<!-- ⑦ 緊急處置 -->
+<section id="s7">
+  <div class="stage"><span class="num">PART 7</span><h2>緊急狀況處置</h2></div>
+
+  <div class="warn">
+    <p><b>撥 000 時只要說三個英文字之一：</b></p>
+    <p><b>AMBULANCE</b>（救護車）／<b>POLICE</b>（警察）／<b>FIRE</b>（消防）</p>
+    <p>接著說 <b>“CHINESE, CHINESE”</b>，接線中心會立即接入中文口譯。之後把手機交給現場任何人，或直接讓口譯與對方通話。</p>
+  </div>
+
+  <h3>131 450：全澳免費口譯專線（最重要的一支電話）</h3>
+  <p>澳洲政府提供之 24 小時電話口譯服務，任何人皆可撥打，可進行<b class="k">三方通話</b>。</p>
+  <ol class="steps">
+    <li><b>撥 131 450</b><small>接通後對話筒說「<b>Mandarin</b>」或「<b>Chinese</b>」。</small></li>
+    <li><b>等候接入中文口譯員</b><small>之後全程以中文說明需求。</small></li>
+    <li><b>請口譯員代為聯繫</b><small>例如「請幫我打給飯店」「請幫我跟這位警察說明」。可把手機交給對方直接對談。</small></li>
+  </ol>
+
+  <h3>各類狀況對應</h3>
+  <table class="qa">
+    <thead><tr><th>狀況</th><th>風險</th><th>處置</th></tr></thead>
+    <tbody>
+      <tr><td>與團體走散</td><td>語言不通無法問路</td><td><b>原地不動</b>，先打團員手機；無網路則走進任何店家出示<b>出示卡 ⑥</b>。最後手段：搭計程車出示飯店名片回飯店會合。</td></tr>
+      <tr><td>身體不適</td><td>無法描述症狀</td><td>輕症請飯店櫃檯協助預約診所；重症撥 <b>000</b> 說 AMBULANCE。就醫時出示<b>出示卡 ⑦</b>，並請醫師撥 1300 131 450 醫療口譯專線。</td></tr>
+      <tr><td>護照遺失</td><td>無法登機返臺</td><td>先向警方報案（非緊急報案 <b>131 444</b>）取得報案證明，再聯繫辦事處補發入國證明書。<b>事先備妥護照影本與 2 張照片。</b></td></tr>
+      <tr><td>信用卡失效或盜刷</td><td>身無分文</td><td>立即以網路電話撥回發卡銀行客服（出發前存好號碼）。備用現金與第二張卡務必分開存放。</td></tr>
+      <tr><td>班機異動</td><td>看不懂改班公告</td><td>不要自行處理。立即聯繫領隊；或至航空公司櫃檯出示機票，並撥 131 450 請口譯協助。</td></tr>
+      <tr><td>被警方或官員攔查</td><td>誤解、答錯</td><td>保持冷靜，出示護照與<b>出示卡 ①</b>，主動要求口譯。<b>聽不懂時絕不點頭或回答 Yes／No。</b></td></tr>
+    </tbody>
+  </table>
+
+  <h3>駐外館處聯繫方式</h3>
+  <table>
+    <tbody>
+      <tr><td style="width:34%">駐雪梨臺北經濟文化辦事處</td><td>Suite 1902, Level 19, 25 Martin Place, Sydney NSW 2000<br>辦公室 +61-2-8650-4200／<b class="k">急難救助 +61-418-415-572</b></td></tr>
+      <tr><td>駐墨爾本臺北經濟文化辦事處</td><td>Level 46, 80 Collins St, Melbourne VIC 3000<br>辦公室 +61-3-9650-8611</td></tr>
+      <tr><td>外交部旅外國人急難救助全球專線</td><td>澳洲境內撥打 <b class="k">0011-800-0885-0885</b>（免付費）</td></tr>
+    </tbody>
+  </table>
+  <div class="tip"><p>出發前請至外交部領事事務局網站完成「出國登錄」，並再次核對上述急難救助專線是否異動。急難專線僅供車禍、傷病、遭搶等重大事件使用。</p></div>
+</section>
+
+<!-- ⑧ 出示卡 -->
+<div class="cards" id="s8">
+  <div class="stage"><span class="num">PART 8</span><h2>出示卡</h2></div>
+  <div class="when">遇到說不出口的情境，直接把螢幕轉給對方看。建議另行列印一份放口袋</div>
+
+  <div class="card">
+    <div class="zh"><i>1</i>萬用開場（最常用）</div>
+    <div class="en">I do not speak English. I speak Mandarin Chinese. Please call the free interpreter service on 131 450, or use a translation app. Thank you for your patience.</div>
+    <div class="note">遇到任何官員、警察、櫃檯人員時的第一張卡。主動說明語言需求，比勉強應答安全得多。</div>
+  </div>
+  <div class="card">
+    <div class="zh"><i>2</i>說明來意（入境查驗）</div>
+    <div class="en">I am a government official from the National Fire Agency of Taiwan. I am here for an official study visit on emergency medical services. I will stay for 9 days and then return to Taiwan.</div>
+    <div class="note">入境官詢問來澳目的時使用，可搭配出國核准文件或邀請函一併出示。</div>
+  </div>
+  <div class="card">
+    <div class="zh"><i>3</i>搭車（計程車司機）</div>
+    <div class="en">Please take me to this address: <span class="blank"></span></div>
+    <div class="note">出發前<b>手寫填入飯店英文地址</b>，或改用飯店名片、手機截圖。<br>雪梨：依實際入住飯店填寫　墨爾本：296 Little Collins St, Melbourne VIC 3000</div>
+  </div>
+  <div class="card">
+    <div class="zh"><i>4</i>生物安全申報</div>
+    <div class="en">I want to declare all the food items in my luggage. Please inspect them. If they are not allowed, please dispose of them.</div>
+    <div class="note">主動申報一律不罰。絕不可為省事回答沒有攜帶。</div>
+  </div>
+  <div class="card">
+    <div class="zh"><i>5</i>點餐</div>
+    <div class="en">I would like this one, please. (pointing at the menu) No pork, please. Water is fine, thank you.</div>
+    <div class="note">飲食禁忌請自行調整（No beef／No seafood／No nuts）。</div>
+  </div>
+  <div class="card">
+    <div class="zh"><i>6</i>與同行人員走散</div>
+    <div class="en">I am lost and I cannot speak English. Could you please call this number for me? <span class="blank"></span></div>
+    <div class="note">空白處填入<b>領隊或同行同仁在澳洲可撥打之手機號碼</b>。出發前務必填好。</div>
+  </div>
+  <div class="card">
+    <div class="zh"><i>7</i>就醫</div>
+    <div class="en">I need to see a doctor. I feel unwell. I am allergic to: <span class="blank"></span>. I am taking these medicines: <span class="blank"></span>. Please call an interpreter on 1300 131 450.</div>
+    <div class="note">出發前填入<b>過敏藥物</b>與<b>長期用藥英文名稱</b>，可請醫師協助寫明。此卡建議另外列印紙本隨身攜帶。</div>
+  </div>
+  <div class="card">
+    <div class="zh"><i>8</i>行李遺失</div>
+    <div class="en">My checked baggage did not arrive. Here is my baggage tag and boarding pass. Please help me find it and deliver it to my hotel.</div>
+    <div class="note">同時出示行李條與飯店訂房確認信。</div>
+  </div>
+  <div class="card">
+    <div class="zh"><i>9</i>證件遺失報案</div>
+    <div class="en">I have lost my passport. I am a Taiwanese citizen. I need a police report, and please help me contact the Taipei Economic and Cultural Office.</div>
+    <div class="note">雪梨處 +61-2-8650-4200／墨爾本處 +61-3-9650-8611。</div>
+  </div>
+  <div class="card">
+    <div class="zh"><i>10</i>問路與洗手間</div>
+    <div class="en">Excuse me, where is the toilet? / Could you show me the way to this place on the map?</div>
+    <div class="note">澳洲稱洗手間為 toilet，非 restroom。</div>
+  </div>
+</div>
+
+<!-- ⑨ 隨身小卡與修正紀錄 -->
+<section id="s9">
+  <div class="stage"><span class="num">PART 9</span><h2>隨身小卡（請列印剪下，放皮夾）</h2></div>
+  <div class="pocket">
+    <h4>EMERGENCY ／ 緊急聯絡</h4>
+    <dl>
+      <dt>Emergency</dt><dd>000（Ambulance／Police／Fire）</dd>
+      <dt>Interpreter</dt><dd>131 450（免費中文口譯，24 小時）</dd>
+      <dt>Police (non-urgent)</dt><dd>131 444</dd>
+      <dt>TECO Sydney</dt><dd>+61-2-8650-4200／急難 +61-418-415-572</dd>
+      <dt>TECO Melbourne</dt><dd>+61-3-9650-8611</dd>
+      <dt>MOFA Hotline</dt><dd>0011-800-0885-0885</dd>
+      <dt>領隊手機</dt><dd>________________________</dd>
+      <dt>飯店（雪梨）</dt><dd>________________________</dd>
+      <dt>飯店（墨爾本）</dt><dd>296 Little Collins St　+61-3-9968-8688</dd>
+      <dt>保險 24H</dt><dd>________________________</dd>
+    </dl>
+  </div>
+  <div class="tip"><p>正面寫「I do not speak English. Please call 131 450 for a Mandarin interpreter.」，背面填上述資訊。手機沒電時這是唯一的救援途徑——<b>務必準備紙本。</b></p></div>
+
+  <h3>行程修正紀錄</h3>
+  <table>
+    <thead><tr><th style="width:6%">#</th><th style="width:24%">項目</th><th style="width:24%">原載</th><th style="width:22%">修正後</th><th>依據</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>返臺抵達時間</td><td>06:40</td><td><b style="color:#8A5A18">05:15</b></td><td>CI58 電子機票 ARR 0515</td></tr>
+      <tr><td>2</td><td>墨爾本住宿晚數</td><td>5 晚</td><td><b style="color:#8A5A18">6 晚</b></td><td>8/29 入住至 9/4 退房共 6 夜</td></tr>
+      <tr><td>3</td><td>公務單位名稱</td><td>mergency Management Unit</td><td><b style="color:#8A5A18">Emergency Management Unit</b></td><td>拼字補正</td></tr>
+    </tbody>
+  </table>
+
+  <h3>待處理事項</h3>
+  <ul class="check">
+    <li><b>8/28 伊麗莎白海灣洋房週五閉館</b>——建議提前達令港／岩石區行程，或替換為週五開放景點</li>
+    <li><b>CI58 座位未劃定</b>——線上報到開放後儘早劃位</li>
+    <li><b>公務行程日期對應</b>——依主辦單位確認函文核對後定案</li>
+    <li><b>雪梨住宿</b>——三家候選飯店尚待確定，確定後回填出示卡 ③</li>
+    <li>出示卡 ⑥ 領隊手機、出示卡 ⑦ 過敏與長期用藥英文名稱，出發前填妥</li>
+  </ul>
+</section>
+
+<footer>
+  內政部消防署救災救護組緊急救護科　編製　115 年 8 月<br>
+  簽證規定、急難救助專線、票價班次與各場館開放時間可能異動，出發前請再次確認。
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude 生態系統・對照手冊</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root{
+    --paper:#F1F0EA;
+    --paper-line:#DEDCd2;
+    --ink:#1A1917;
+    --ink-soft:#57544c;
+    --seal:#9E2B25;
+    --jade:#2F5D50;
+    --card:#FBFAF6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 27px, var(--paper-line) 27px, var(--paper-line) 28px),
+      var(--paper);
+    color:var(--ink);
+    font-family:"Noto Sans TC", sans-serif;
+    line-height:1.6;
+  }
+  .sheet{
+    max-width:920px;
+    margin:0 auto;
+    padding:56px 32px 80px;
+    position:relative;
+  }
+
+  /* --- 印章 signature element --- */
+  .seal-stamp{
+    position:absolute;
+    top:54px; right:32px;
+    width:92px; height:92px;
+    border:3px solid var(--seal);
+    border-radius:6px;
+    color:var(--seal);
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    font-family:"Noto Serif TC", serif;
+    font-weight:900;
+    font-size:15px;
+    line-height:1.3;
+    transform:rotate(-6deg);
+    opacity:0.85;
+    letter-spacing:2px;
+    writing-mode:vertical-rl;
+  }
+
+  /* --- header --- */
+  .doc-meta{
+    font-family:"JetBrains Mono", monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+    letter-spacing:0.5px;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:10px;
+    margin-bottom:28px;
+    display:flex;
+    justify-content:space-between;
+  }
+  h1{
+    font-family:"Noto Serif TC", serif;
+    font-weight:900;
+    font-size:34px;
+    margin:0 0 6px;
+    letter-spacing:1px;
+  }
+  .subtitle{
+    color:var(--ink-soft);
+    font-size:14.5px;
+    margin:0 0 36px;
+    max-width:620px;
+  }
+  .subtitle b{color:var(--ink);font-weight:700;}
+
+  /* --- master table --- */
+  table.master{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:52px;
+    font-size:14px;
+    background:var(--card);
+  }
+  table.master caption{
+    text-align:left;
+    font-family:"Noto Serif TC", serif;
+    font-weight:700;
+    font-size:16px;
+    margin-bottom:10px;
+    color:var(--ink);
+  }
+  table.master th{
+    background:var(--ink);
+    color:var(--paper);
+    font-weight:500;
+    text-align:left;
+    padding:10px 12px;
+    font-size:12.5px;
+    letter-spacing:1px;
+  }
+  table.master td{
+    padding:11px 12px;
+    border-bottom:1px solid var(--paper-line);
+    vertical-align:top;
+  }
+  table.master tr:last-child td{border-bottom:2px solid var(--ink);}
+  table.master td.name{
+    font-weight:700;
+    white-space:nowrap;
+  }
+  table.master td.name .en{
+    display:block;
+    font-family:"JetBrains Mono", monospace;
+    font-weight:400;
+    font-size:11px;
+    color:var(--ink-soft);
+  }
+
+  /* --- section index (壹貳參...) --- */
+  .section-divider{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin:44px 0 16px;
+  }
+  .idx{
+    font-family:"Noto Serif TC", serif;
+    font-weight:900;
+    font-size:26px;
+    color:var(--seal);
+    min-width:34px;
+  }
+  .section-divider h2{
+    font-family:"Noto Serif TC", serif;
+    font-size:20px;
+    margin:0;
+    font-weight:700;
+  }
+  .section-divider .en-tag{
+    font-family:"JetBrains Mono", monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+    border:1px solid var(--paper-line);
+    padding:2px 8px;
+    border-radius:3px;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    border-left:4px solid var(--seal);
+    padding:18px 20px;
+    margin-bottom:8px;
+  }
+  .spec-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+  }
+  .spec-table td{
+    padding:6px 10px 6px 0;
+    vertical-align:top;
+    border-bottom:1px dashed var(--paper-line);
+  }
+  .spec-table tr:last-child td{border-bottom:none;}
+  .spec-table td.label{
+    width:92px;
+    font-family:"JetBrains Mono", monospace;
+    font-size:11.5px;
+    color:var(--jade);
+    font-weight:700;
+    padding-top:8px;
+    white-space:nowrap;
+  }
+  .spec-table td.value{padding-top:8px;}
+  .tag-row span{
+    display:inline-block;
+    background:#EFEEE6;
+    border:1px solid var(--paper-line);
+    font-size:12px;
+    padding:2px 8px;
+    border-radius:3px;
+    margin:2px 6px 2px 0;
+  }
+
+  /* --- models footer --- */
+  .models{
+    margin-top:52px;
+    padding-top:20px;
+    border-top:1px solid var(--ink);
+  }
+  .models h2{
+    font-family:"Noto Serif TC", serif;
+    font-size:18px;
+    margin:0 0 14px;
+  }
+  table.model-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+  }
+  table.model-table th{
+    text-align:left;
+    font-size:12px;
+    color:var(--ink-soft);
+    font-weight:500;
+    padding:6px 10px 6px 0;
+    border-bottom:1px solid var(--ink);
+  }
+  table.model-table td{
+    padding:8px 10px 8px 0;
+    border-bottom:1px solid var(--paper-line);
+  }
+  table.model-table td.mono{font-family:"JetBrains Mono", monospace; font-size:12px; color:var(--ink-soft);}
+
+  footer{
+    margin-top:40px;
+    font-size:12px;
+    color:var(--ink-soft);
+    border-top:1px dashed var(--paper-line);
+    padding-top:16px;
+  }
+  footer a{color:var(--seal);}
+
+  @media (max-width:600px){
+    .sheet{padding:40px 18px 60px;}
+    h1{font-size:26px;}
+    .seal-stamp{width:70px;height:70px;font-size:12px;top:40px;right:18px;}
+    table.master{font-size:12.5px;}
+    table.master th, table.master td{padding:8px;}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="seal-stamp">獨立編纂<br>僅供參考</div>
+
+  <div class="doc-meta">
+    <span>REF. NO. CLD-ECO-2026-07</span>
+    <span>更新基準日：2026.07</span>
+  </div>
+
+  <h1>Claude 生態系統對照手冊</h1>
+  <p class="subtitle">
+    本表依<b>用途分類</b>整理 Claude 目前主要工具與功能模組，供工作流程選型參考。內容為獨立整理而非 Anthropic 官方文件，功能持續迭代中，正式規格請以
+    <a href="https://docs.claude.com" style="color:var(--seal)">docs.claude.com</a> 為準。
+  </p>
+
+  <table class="master">
+    <caption>總覽表</caption>
+    <thead>
+      <tr>
+        <th>工具</th>
+        <th>定位</th>
+        <th>最適合情境</th>
+        <th>進入方式</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="name">對話<span class="en">Chat</span></td><td>日常主入口，一問一答、思考輔助</td><td>提問、腦力激盪、研究、寫作、摘要</td><td>網頁／桌面／行動版</td></tr>
+      <tr><td class="name">專案<span class="en">Projects</span></td><td>固定工作區，保留檔案與指令設定</td><td>需跨多次對話延續脈絡的長期案件</td><td>網頁／桌面版</td></tr>
+      <tr><td class="name">成果物<span class="en">Artifacts</span></td><td>對話中產出的可獨立檢視內容</td><td>文件、程式碼、圖表等需留存編輯的產出</td><td>全平台</td></tr>
+      <tr><td class="name">技能<span class="en">Skills</span></td><td>可重複套用的專業知識包</td><td>制式化、重複性高的專業作業</td><td>網頁／桌面／Cowork</td></tr>
+      <tr><td class="name">連接器<span class="en">Connectors</span></td><td>串接外部服務與資料來源</td><td>需整合 Drive、Gmail、日曆等外部系統</td><td>網頁／桌面／行動版</td></tr>
+      <tr><td class="name">記憶<span class="en">Memory</span></td><td>跨對話記住偏好與脈絡</td><td>長期合作、不想重複交代背景</td><td>全平台（可關閉）</td></tr>
+      <tr><td class="name">Cowork</td><td>桌面代理人，具本機資料夾存取</td><td>需要交辦、非對話式的多步驟工作</td><td>桌面版（Mac／Windows）</td></tr>
+      <tr><td class="name">Claude Code</td><td>終端機／IDE 內的程式開發助手</td><td>撰寫、除錯、版本控制</td><td>CLI／IDE／桌面版</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 壹 -->
+  <div class="section-divider"><span class="idx">壹</span><h2>對話</h2><span class="en-tag">Chat</span></div>
+  <div class="card">
+    <table class="spec-table">
+      <tr><td class="label">定位</td><td class="value">Claude 的預設入口，處理提問、討論、寫作、研究與摘要。</td></tr>
+      <tr><td class="label">關鍵能力</td><td class="value">網頁搜尋、圖像辨識、長文脈絡、逐步推理、可生成成果物。</td></tr>
+      <tr><td class="label">使用時機</td><td class="value">單次或多輪對話即可完成的任務，不需要跨對話持久狀態。</td></tr>
+    </table>
+  </div>
+
+  <!-- 貳 -->
+  <div class="section-divider"><span class="idx">貳</span><h2>專案</h2><span class="en-tag">Projects</span></div>
+  <div class="card">
+    <table class="spec-table">
+      <tr><td class="label">定位</td><td class="value">將特定案件的指令、參考檔案與對話紀錄集中保存的工作區。</td></tr>
+      <tr><td class="label">關鍵能力</td><td class="value">自訂指令、檔案庫、對話串共用同一組脈絡。</td></tr>
+      <tr><td class="label">使用時機</td><td class="value">長期追蹤的政策案、需反覆引用同批資料的工作。</td></tr>
+    </table>
+  </div>
+
+  <!-- 參 -->
+  <div class="section-divider"><span class="idx">參</span><h2>成果物</h2><span class="en-tag">Artifacts</span></div>
+  <div class="card">
+    <table class="spec-table">
+      <tr><td class="label">定位</td><td class="value">獨立顯示、可反覆編輯的產出物件（文件、程式、圖表、網頁）。</td></tr>
+      <tr><td class="label">關鍵能力</td><td class="value">與對話脫鉤呈現、支援版本修改、可下載或分享。</td></tr>
+      <tr><td class="label">使用時機</td><td class="value">產出需離開對話框單獨檢視、留存或交付的內容。</td></tr>
+    </table>
+  </div>
+
+  <!-- 肆 -->
+  <div class="section-divider"><span class="idx">肆</span><h2>技能</h2><span class="en-tag">Skills</span></div>
+  <div class="card">
+    <table class="spec-table">
+      <tr><td class="label">定位</td><td class="value">封裝特定作業最佳實務的可重複套用模組（含範本、腳本）。</td></tr>
+      <tr><td class="label">關鍵能力</td><td class="value">依任務類型自動觸發、確保產出格式與品質一致。</td></tr>
+      <tr><td class="label">使用時機</td><td class="value">機關內部制式文件（如公文、預算書、招標文件）的固定產製流程。</td></tr>
+    </table>
+  </div>
+
+  <!-- 伍 -->
+  <div class="section-divider"><span class="idx">伍</span><h2>連接器</h2><span class="en-tag">Connectors</span></div>
+  <div class="card">
+    <table class="spec-table">
+      <tr><td class="label">定位</td><td class="value">將 Claude 接上外部服務（雲端硬碟、信箱、日曆等）的介接層。</td></tr>
+      <tr><td class="label">關鍵能力</td><td class="value">即時讀取外部資料、減少人工搬移資訊的步驟。</td></tr>
+      <tr><td class="label">使用時機</td><td class="value">需跨系統整合，例如彙整信件、行事曆或雲端文件內容。</td></tr>
+    </table>
+  </div>
+
+  <!-- 陸 -->
+  <div class="section-divider"><span class="idx">陸</span><h2>記憶</h2><span class="en-tag">Memory</span></div>
+  <div class="card">
+    <table class="spec-table">
+      <tr><td class="label">定位</td><td class="value">跨對話累積使用者偏好與脈絡，減少重複說明。</td></tr>
+      <tr><td class="label">關鍵能力</td><td class="value">背景延續性、逐步提升回應精準度。</td></tr>
+      <tr><td class="label">使用時機</td><td class="value">長期、高頻互動場景；可於設定中關閉或調整。</td></tr>
+    </table>
+  </div>
+
+  <!-- 柒 -->
+  <div class="section-divider"><span class="idx">柒</span><h2>Cowork</h2><span class="en-tag">Desktop Agent</span></div>
+  <div class="card">
+    <table class="spec-table">
+      <tr><td class="label">定位</td><td class="value">具備本機資料夾存取權限的桌面代理人，可自主執行多步驟任務。</td></tr>
+      <tr><td class="label">關鍵能力</td><td class="value">讀寫本機檔案、排程任務、跨應用程式協作。</td></tr>
+      <tr><td class="label">使用時機</td><td class="value">交辦式、非對話式的整批作業，如批次文件整理。</td></tr>
+    </table>
+  </div>
+
+  <!-- 捌 -->
+  <div class="section-divider"><span class="idx">捌</span><h2>Claude Code</h2><span class="en-tag">Developer Tool</span></div>
+  <div class="card">
+    <table class="spec-table">
+      <tr><td class="label">定位</td><td class="value">於終端機／IDE 內運作的程式開發代理人。</td></tr>
+      <tr><td class="label">關鍵能力</td><td class="value">讀取專案結構、撰寫並執行程式、版本控制整合。</td></tr>
+      <tr><td class="label">使用時機</td><td class="value">程式開發、除錯、自動化腳本建置。</td></tr>
+    </table>
+  </div>
+
+  <div class="models">
+    <h2>模型層級對照</h2>
+    <table class="model-table">
+      <tr><th>層級</th><th>特性</th><th>適用情境</th></tr>
+      <tr><td class="mono">Haiku 4.5</td><td>速度優先、成本最低</td><td>大量、簡單、重複性任務</td></tr>
+      <tr><td class="mono">Sonnet 5</td><td>速度與能力平衡</td><td>多數日常公務文書與分析工作</td></tr>
+      <tr><td class="mono">Opus 4.8</td><td>高複雜度推理</td><td>政策研究、複雜法規比對、長篇整合</td></tr>
+      <tr><td class="mono">Fable 5</td><td>Mythos 等級，具額外安全防護</td><td>長篇、高複雜度之企業級任務</td></tr>
+    </table>
+  </div>
+
+  <footer>
+    本表為獨立整理之參考資料，非 Anthropic 官方發布內容，亦非重製自任何第三方資訊圖表。功能名稱、可用性與適用方案可能因地區、方案及時間而異，請以
+    <a href="https://docs.claude.com" target="_blank">docs.claude.com</a> 與
+    <a href="https://support.claude.com" target="_blank">support.claude.com</a> 之最新公告為準。
+  </footer>
+
+</div>
+</body>
+</html>

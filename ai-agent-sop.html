@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code AI 代理建置標準作業程序（SOP）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBFAF7;
+  --ink:#1B2431;
+  --steel:#3D5A80;
+  --red:#C0392B;
+  --red-dark:#96271B;
+  --line:#D8D5CC;
+  --muted:#6E7480;
+  --code-bg:#20293A;
+  --code-ink:#E8ECF4;
+  --tint:#F1EFE8;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{
+  font-family:'Noto Sans TC',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.75;
+  font-size:16px;
+}
+.wrap{max-width:980px;margin:0 auto;padding:0 28px 96px}
+
+/* ── 文件管制表頭 ── */
+.doc-head{
+  border:2px solid var(--ink);
+  margin-top:48px;
+}
+.doc-head .title-row{
+  display:flex;align-items:stretch;border-bottom:2px solid var(--ink);
+}
+.doc-head .agency{
+  writing-mode:vertical-rl;
+  background:var(--ink);color:var(--paper);
+  padding:16px 10px;font-size:13px;letter-spacing:.35em;
+  display:flex;align-items:center;
+}
+.doc-head .title-main{padding:26px 28px;flex:1}
+.doc-head h1{
+  font-family:'Noto Serif TC',serif;font-weight:900;
+  font-size:clamp(24px,4vw,34px);line-height:1.35;letter-spacing:.02em;
+}
+.doc-head .subtitle{color:var(--muted);margin-top:8px;font-size:14.5px}
+.doc-head .subtitle em{font-style:normal;color:var(--red);font-weight:700}
+.meta{display:grid;grid-template-columns:repeat(4,1fr);font-size:13px}
+.meta div{padding:10px 14px;border-right:1px solid var(--line)}
+.meta div:last-child{border-right:none}
+.meta .k{display:block;color:var(--muted);font-size:11.5px;letter-spacing:.12em;margin-bottom:2px}
+.meta .v{font-weight:700}
+
+/* ── 章節 ── */
+section{margin-top:64px}
+.sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:26px}
+.sec-head .no{
+  font-family:'JetBrains Mono',monospace;font-weight:600;
+  color:var(--red);font-size:15px;letter-spacing:.05em;
+}
+.sec-head h2{font-family:'Noto Serif TC',serif;font-weight:700;font-size:clamp(20px,2.8vw,25px)}
+p.lead{margin-bottom:14px}
+p+p{margin-top:12px}
+
+/* ── 流程總覽 ── */
+.flow{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:0;
+  border:1.5px solid var(--ink);margin:8px 0 20px;
+}
+.flow .node{
+  padding:16px 10px 14px;text-align:center;border-right:1px solid var(--line);
+  position:relative;
+}
+.flow .node:last-child{border-right:none}
+.flow .n{
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--paper);
+  background:var(--red);display:inline-block;width:24px;height:24px;line-height:24px;
+  border-radius:50%;margin-bottom:6px;font-weight:600;
+}
+.flow .t{font-weight:700;font-size:14.5px;display:block}
+.flow .e{font-size:11.5px;color:var(--muted);display:block;font-family:'JetBrains Mono',monospace;margin-top:2px}
+@media(max-width:720px){
+  .flow{grid-template-columns:repeat(3,1fr)}
+  .flow .node:nth-child(3){border-right:none}
+  .flow .node:nth-child(-n+3){border-bottom:1px solid var(--line)}
+  .meta{grid-template-columns:repeat(2,1fr)}
+  .meta div:nth-child(2){border-right:none}
+  .meta div:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .doc-head .agency{display:none}
+}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin:14px 0}
+th{background:var(--ink);color:var(--paper);font-weight:500;text-align:left;padding:9px 14px;font-size:13.5px;letter-spacing:.04em}
+td{border:1px solid var(--line);padding:9px 14px;vertical-align:top;background:#fff}
+tr:nth-child(even) td{background:var(--tint)}
+td.c,th.c{text-align:center}
+code{font-family:'JetBrains Mono',monospace;font-size:.88em;background:var(--tint);border:1px solid var(--line);border-radius:3px;padding:1px 6px}
+
+/* ── 步驟卡 ── */
+.step{border:1.5px solid var(--ink);margin-bottom:44px;background:#fff}
+.step-head{
+  display:flex;align-items:center;gap:16px;
+  border-bottom:1.5px solid var(--ink);padding:16px 22px;background:var(--tint);
+}
+.step-head .big{
+  font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:600;
+  color:var(--red);line-height:1;
+}
+.step-head h3{font-family:'Noto Serif TC',serif;font-size:20px;font-weight:700}
+.step-head .en{font-size:12.5px;color:var(--muted);font-family:'JetBrains Mono',monospace;display:block;margin-top:2px}
+.step-body{padding:20px 22px 24px}
+.step-body h4{
+  font-size:14px;letter-spacing:.14em;color:var(--steel);
+  margin:22px 0 8px;display:flex;align-items:center;gap:8px;
+}
+.step-body h4::before{content:"";width:14px;height:3px;background:var(--red);display:inline-block}
+.step-body h4:first-child{margin-top:0}
+ol.ops{padding-left:22px;margin:6px 0}
+ol.ops li{margin-bottom:7px}
+ul.pts{padding-left:20px;margin:6px 0}
+ul.pts li{margin-bottom:7px}
+
+/* ── 提示詞區塊 ── */
+.prompt{position:relative;margin:10px 0 4px}
+.prompt pre{
+  background:var(--code-bg);color:var(--code-ink);
+  font-family:'JetBrains Mono','Noto Sans TC',monospace;font-size:13.5px;
+  padding:18px 20px;line-height:1.8;white-space:pre-wrap;word-break:break-word;
+  border-left:4px solid var(--red);
+}
+.prompt .tag{
+  position:absolute;top:0;left:0;transform:translateY(-50%);
+  background:var(--red);color:#fff;font-size:11px;letter-spacing:.18em;
+  padding:2px 10px;font-weight:700;
+}
+.copy{
+  position:absolute;top:10px;right:10px;
+  background:transparent;border:1px solid #5A6478;color:#AEB6C6;
+  font-family:'Noto Sans TC',sans-serif;font-size:12px;
+  padding:4px 12px;cursor:pointer;border-radius:3px;
+  transition:all .15s ease;
+}
+.copy:hover{border-color:var(--code-ink);color:var(--code-ink)}
+.copy:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.copy.done{background:var(--red);border-color:var(--red);color:#fff}
+
+/* ── 驗證/注意 ── */
+.check{
+  border:1px dashed var(--steel);background:#F4F7FB;
+  padding:12px 16px;font-size:14.5px;margin-top:14px;
+}
+.check b{color:var(--steel)}
+.warn{
+  border-left:4px solid var(--red);background:#FBF1EF;
+  padding:12px 16px;font-size:14.5px;margin-top:14px;
+}
+.warn b{color:var(--red-dark)}
+
+/* ── 附錄 ── */
+.footer{
+  margin-top:80px;border-top:3px solid var(--ink);padding-top:16px;
+  font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ═══ 文件管制表頭 ═══ -->
+<div class="doc-head">
+  <div class="title-row">
+    <div class="agency">標準作業程序</div>
+    <div class="title-main">
+      <h1>Claude Code AI 代理建置<br>標準作業程序</h1>
+      <div class="subtitle">六步驟完成個人 AI 代理系統建置｜免撰寫程式碼｜提示詞可<em>直接複製使用</em></div>
+    </div>
+  </div>
+  <div class="meta">
+    <div><span class="k">文件編號</span><span class="v">SOP-AI-001</span></div>
+    <div><span class="k">版　　次</span><span class="v">1.0</span></div>
+    <div><span class="k">生效日期</span><span class="v">2026-07-19</span></div>
+    <div><span class="k">審核週期</span><span class="v">每季檢視</span></div>
+  </div>
+</div>
+
+<!-- ═══ 一、目的 ═══ -->
+<section id="s1">
+  <div class="sec-head"><span class="no">01</span><h2>目的</h2></div>
+  <p class="lead">建立以 Claude Code 為核心之個人 AI 代理（AI Agent）系統建置程序，透過「安裝 → 情境 → 記憶 → 技能 → 代理 → 排程」六階段，將重複性行政作業（文件產製、資料彙整、定期報表）轉為可自動執行之工作流，降低人工重工並確保產出品質一致。</p>
+  <p>本程序不需撰寫程式碼，所有設定均以自然語言提示詞（Prompt）完成，適合行政、政策幕僚及一般知識工作者採用。</p>
+</section>
+
+<!-- ═══ 二、適用範圍與名詞定義 ═══ -->
+<section id="s2">
+  <div class="sec-head"><span class="no">02</span><h2>適用範圍與名詞定義</h2></div>
+  <p class="lead">適用於已具備 Claude Pro／Max 訂閱帳號之使用者，於 macOS、Windows 或 Linux 環境建置個人代理系統。</p>
+  <table>
+    <thead><tr><th style="width:32%">名詞</th><th>定義</th></tr></thead>
+    <tbody>
+      <tr><td>Claude Code</td><td>Anthropic 推出之代理式（Agentic）工作工具，可於終端機、桌面應用程式或 VS Code 中操作，具檔案讀寫、工具呼叫與多步驟任務執行能力。</td></tr>
+      <tr><td><code>CLAUDE.md</code></td><td>情境設定檔（Onboarding Document）。Claude 於每次對話啟動時自動載入，內含角色定位、語氣、禁用詞、輸出預設等指示，等同「工作交接手冊」。</td></tr>
+      <tr><td>記憶檔（Memory）</td><td>以 <code>.md</code> 檔案形式保存之修正紀錄。每次糾正 Claude 後將回饋存檔，避免同一錯誤重複發生。</td></tr>
+      <tr><td>技能（Skill）</td><td>可用單一指令（如 <code>/skill-name</code>）觸發之完整工作流，可串接多項外部工具，免除每次重新輸入冗長提示詞。</td></tr>
+      <tr><td>代理（Agent）</td><td>各司其職之子任務執行單元，一個代理對應一個檔案、一項職責，可組成分工團隊並設置品質關卡。</td></tr>
+      <tr><td>例行任務（Routine）</td><td>雲端排程任務。設定後於 Anthropic 雲端定時自動執行，毋須開啟本機電腦。</td></tr>
+      <tr><td>MCP（Model Context Protocol）</td><td>模型情境協定，為 Claude 連接外部服務（Gmail、Google Drive、Notion 等）之標準介面。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══ 三、前置準備 ═══ -->
+<section id="s3">
+  <div class="sec-head"><span class="no">03</span><h2>前置準備</h2></div>
+  <table>
+    <thead><tr><th style="width:26%">項目</th><th>要求</th><th style="width:22%" class="c">確認</th></tr></thead>
+    <tbody>
+      <tr><td>帳號</td><td>Claude Pro 或 Max 訂閱（Claude Code 需付費方案）</td><td class="c">☐</td></tr>
+      <tr><td>作業系統</td><td>macOS 10.15+／Windows 10+／Linux（或 WSL）</td><td class="c">☐</td></tr>
+      <tr><td>Node.js</td><td>如採終端機安裝，需 Node.js 18 以上版本</td><td class="c">☐</td></tr>
+      <tr><td>外部服務</td><td>依需求備妥 Gmail、Google Drive、Notion 等帳號授權</td><td class="c">☐</td></tr>
+      <tr><td>資料盤點</td><td>先行盤點欲自動化之工作流（輸入來源、處理步驟、輸出格式）</td><td class="c">☐</td></tr>
+    </tbody>
+  </table>
+  <div class="warn"><b>資訊安全提醒：</b>公務機關使用者於連接外部服務或上傳文件前，應確認資料屬性符合機關資通安全規範；涉及機密、敏感或個資之文件，不得置入雲端代理工作流處理。</div>
+</section>
+
+<!-- ═══ 四、作業流程總覽 ═══ -->
+<section id="s4">
+  <div class="sec-head"><span class="no">04</span><h2>作業流程總覽</h2></div>
+  <div class="flow">
+    <div class="node"><span class="n">1</span><span class="t">安裝</span><span class="e">Install</span></div>
+    <div class="node"><span class="n">2</span><span class="t">情境</span><span class="e">Context</span></div>
+    <div class="node"><span class="n">3</span><span class="t">記憶</span><span class="e">Memory</span></div>
+    <div class="node"><span class="n">4</span><span class="t">技能</span><span class="e">Skills</span></div>
+    <div class="node"><span class="n">5</span><span class="t">代理</span><span class="e">Agents</span></div>
+    <div class="node"><span class="n">6</span><span class="t">排程</span><span class="e">Routines</span></div>
+  </div>
+  <p>六階段採循序建置：前三階段（安裝、情境、記憶）建立「工作基礎」，後三階段（技能、代理、排程）疊加「自動化能力」。首次建置約需 15–30 分鐘，後續依實際使用持續擴充。</p>
+</section>
+
+<!-- ═══ 五、作業程序 ═══ -->
+<section id="s5">
+  <div class="sec-head"><span class="no">05</span><h2>作業程序</h2></div>
+
+  <!-- STEP 1 -->
+  <div class="step">
+    <div class="step-head"><span class="big">S1</span><div><h3>安裝 Claude Code<span class="en">Install — 建立基礎環境</span></h3></div></div>
+    <div class="step-body">
+      <h4>目標</h4>
+      <p>完成 Claude Code 安裝並成功登入，此為後續所有步驟之基礎。三種安裝介面擇一即可。</p>
+      <h4>操作步驟</h4>
+      <table>
+        <thead><tr><th style="width:22%">介面</th><th style="width:30%">適用情境</th><th>安裝方式</th></tr></thead>
+        <tbody>
+          <tr><td>終端機</td><td>macOS／Linux／WSL，習慣指令列操作者</td><td>執行 <code>npm install -g @anthropic-ai/claude-code</code>，安裝後輸入 <code>claude</code> 啟動</td></tr>
+          <tr><td>桌面應用程式</td><td>一般使用者，偏好圖形介面</td><td>至 Anthropic 官網下載 Mac／Windows 原生應用程式</td></tr>
+          <tr><td>VS Code 擴充</td><td>已使用 VS Code 編輯文件或程式者</td><td>於擴充功能市集搜尋「Claude Code」安裝，以側邊面板操作</td></tr>
+        </tbody>
+      </table>
+      <div class="check"><b>驗證點：</b>啟動後可正常對話，且能讀取指定資料夾內之檔案，即完成本步驟。</div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step">
+    <div class="step-head"><span class="big">S2</span><div><h3>建立情境設定檔<span class="en">Context — 撰寫 CLAUDE.md</span></h3></div></div>
+    <div class="step-body">
+      <h4>目標</h4>
+      <p><code>~/.CLAUDE.md</code> 為 Claude 每次啟動前必讀之「交接手冊」。撰寫一次，每個工作階段自動載入，免除每次重新交代背景。</p>
+      <h4>設定檔應涵蓋之四要素</h4>
+      <table>
+        <thead><tr><th style="width:22%">要素</th><th>說明與範例</th></tr></thead>
+        <tbody>
+          <tr><td>角色（Role）</td><td>你的職務、業務範圍與 Claude 應扮演之角色。例：「我是中央機關政策幕僚，你是我的文書與研析助理。」</td></tr>
+          <tr><td>語氣（Voice）</td><td>輸出風格要求。例：「一律繁體中文（臺灣用語）、結論先行、極簡直接、表格優先。」</td></tr>
+          <tr><td>禁用詞（Banned words）</td><td>禁止出現之詞彙或句式。例：AI 腔填充語（「值得注意的是」「總而言之」）、簡體用語。</td></tr>
+          <tr><td>預設值（Defaults）</td><td>未特別指定時之預設行為。例：公文採三段式（主旨／說明／辦法）、英文術語首次出現採「中文（英文全稱，縮寫）」格式。</td></tr>
+        </tbody>
+      </table>
+      <h4>提示詞（貼上即用）</h4>
+      <div class="prompt">
+        <span class="tag">PROMPT</span>
+        <button class="copy" data-t="幫我從零建立我的 CLAUDE.md 情境設定檔。請逐項詢問我：（1）我的職務角色與業務範圍；（2）輸出語氣與文風要求；（3）禁用詞與禁止句式；（4）輸出格式預設值（語言、結構、術語格式）；（5）我希望你如何與我協作。彙整後將最終檔案存至 ~/.CLAUDE.md。">複製</button>
+        <pre>幫我從零建立我的 CLAUDE.md 情境設定檔。請逐項詢問我：
+（1）我的職務角色與業務範圍
+（2）輸出語氣與文風要求
+（3）禁用詞與禁止句式
+（4）輸出格式預設值（語言、結構、術語格式）
+（5）我希望你如何與我協作
+彙整後將最終檔案存至 ~/.CLAUDE.md。</pre>
+      </div>
+      <div class="check"><b>驗證點：</b>開啟新對話後直接指派任務，若 Claude 未經提醒即符合設定之語言、文風與格式，即代表設定檔生效。</div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step">
+    <div class="step-head"><span class="big">S3</span><div><h3>建立記憶機制<span class="en">Memory — 讓同一錯誤不再發生</span></h3></div></div>
+    <div class="step-body">
+      <h4>目標</h4>
+      <p>將每一次對 Claude 的糾正轉為獨立 <code>.md</code> 記憶檔，下次工作階段自動載入。累積愈久，代理愈貼合個人工作習慣。</p>
+      <h4>運作邏輯</h4>
+      <ol class="ops">
+        <li>使用者於對話中糾正 Claude（例：「公文說明段落每項以句號結尾，不用分號」）。</li>
+        <li>Claude 將該回饋存為記憶檔，置於 <code>~/.claude/projects/[專案名]/memory/</code>。</li>
+        <li>檔名依性質加上前綴：<code>feedback_</code>（修正回饋）、<code>user_</code>（個人偏好）、<code>project_</code>（專案脈絡）、<code>reference_</code>（參考規範）。</li>
+        <li>所有記憶檔統一登錄於 <code>MEMORY.md</code> 索引，下次啟動時載入。</li>
+      </ol>
+      <h4>提示詞（貼上即用）</h4>
+      <div class="prompt">
+        <span class="tag">PROMPT</span>
+        <button class="copy" data-t="從現在起，每當我糾正你，就將該回饋存成獨立的 .md 檔，路徑為 ~/.claude/projects/[專案名]/memory/。檔名依性質加上前綴：feedback_、user_、project_ 或 reference_。所有記憶檔統一登錄於 MEMORY.md 索引，供下次工作階段載入。">複製</button>
+        <pre>從現在起，每當我糾正你，就將該回饋存成獨立的 .md 檔，
+路徑為 ~/.claude/projects/[專案名]/memory/。
+檔名依性質加上前綴：feedback_、user_、project_ 或 reference_。
+所有記憶檔統一登錄於 MEMORY.md 索引，供下次工作階段載入。</pre>
+      </div>
+      <div class="check"><b>驗證點：</b>糾正一項格式錯誤後開啟新對話，指派同類任務，確認 Claude 已自動套用修正。</div>
+      <div class="warn"><b>維護要點：</b>記憶檔建議每月盤點一次，合併重複項目、刪除過時規則，避免記憶膨脹造成指示互相衝突。</div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step">
+    <div class="step-head"><span class="big">S4</span><div><h3>建立技能<span class="en">Skills — 一鍵觸發完整工作流</span></h3></div></div>
+    <div class="step-body">
+      <h4>目標</h4>
+      <p>將重複執行之多步驟工作流封裝為技能，之後於任何對話輸入 <code>/技能名稱</code> 即可觸發，免除每次重打兩百字提示詞。技能可串接 MCP 連接器（Gmail、Google Drive、Notion 等）跨工具執行。</p>
+      <h4>操作步驟</h4>
+      <ol class="ops">
+        <li>選定一項每週重複兩次以上之工作流（例：會議紀錄整理、週報彙整、輿情摘要）。</li>
+        <li>明確定義三件事：<b>觸發條件</b>（何時執行）、<b>輸入</b>（來源檔案或資料）、<b>輸出</b>（格式與交付位置）。</li>
+        <li>以下列提示詞請 Claude 建立 <code>SKILL.md</code> 並接上所需連接器。</li>
+        <li>實測執行一次，依結果修正 SKILL.md 內容。</li>
+      </ol>
+      <h4>提示詞（貼上即用）</h4>
+      <div class="prompt">
+        <span class="tag">PROMPT</span>
+        <button class="copy" data-t="把以下工作流封裝成一個 /（名稱）技能：【描述觸發條件、輸入、輸出】。請建立 ~/.claude/skills/（名稱）/SKILL.md，接上我需要的 MCP 連接器（Notion、Gmail、Drive 等），並讓我能在任何對話中以斜線指令觸發。">複製</button>
+        <pre>把以下工作流封裝成一個 /（名稱）技能：
+【描述觸發條件、輸入、輸出】。
+請建立 ~/.claude/skills/（名稱）/SKILL.md，
+接上我需要的 MCP 連接器（Notion、Gmail、Drive 等），
+並讓我能在任何對話中以斜線指令觸發。</pre>
+      </div>
+      <h4>行政應用範例</h4>
+      <table>
+        <thead><tr><th style="width:24%">技能名稱</th><th>觸發 → 輸入 → 輸出</th></tr></thead>
+        <tbody>
+          <tr><td><code>/meeting-minutes</code></td><td>會後執行 → 錄音逐字稿 → 三段式會議紀錄（結論、決議、待辦分工）</td></tr>
+          <tr><td><code>/weekly-report</code></td><td>每週五 → 本週工作紀錄資料夾 → 週報表格＋下週預定事項</td></tr>
+          <tr><td><code>/doc-review</code></td><td>收到文件 → Word／PDF 草案 → 多角色審查意見表（法制、預算、業務視角）</td></tr>
+        </tbody>
+      </table>
+      <div class="check"><b>驗證點：</b>於全新對話輸入 <code>/技能名稱</code>，確認工作流完整執行且輸出符合定義格式。</div>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step">
+    <div class="step-head"><span class="big">S5</span><div><h3>建立代理團隊<span class="en">Agents — 分工協作與品質關卡</span></h3></div></div>
+    <div class="step-body">
+      <h4>目標</h4>
+      <p>將複雜流程拆解為多個專責代理：一個代理、一個檔案、一項職責。並依任務性質配置模型——分析規劃類交由高階模型（如 Opus）、執行產出類交由中階模型（如 Sonnet），兼顧品質與成本。</p>
+      <h4>建議團隊結構</h4>
+      <table>
+        <thead><tr><th style="width:22%">角色</th><th style="width:22%" class="c">建議模型</th><th>職責</th></tr></thead>
+        <tbody>
+          <tr><td>策略分析代理</td><td class="c">Opus</td><td>需求解析、架構規劃、關鍵決策建議</td></tr>
+          <tr><td>執行產出代理</td><td class="c">Sonnet</td><td>依規劃產出文件、表格、簡報等交付物</td></tr>
+          <tr><td>品質關卡（QA Gate）</td><td class="c">—</td><td>設定 95／100 品質門檻，低於門檻之產出自動退回重做</td></tr>
+        </tbody>
+      </table>
+      <h4>提示詞（貼上即用）</h4>
+      <div class="prompt">
+        <span class="tag">PROMPT</span>
+        <button class="copy" data-t="幫我為【流程名稱】建立一個代理團隊。每位專責代理建立一個 .md 檔，路徑為 ~/.claude/agents/。分析規劃類角色使用 Opus，執行產出類角色使用 Sonnet。加入一道 95/100 的品質關卡（QA Gate），任何低於門檻的產出一律退回重做。">複製</button>
+        <pre>幫我為【流程名稱】建立一個代理團隊。
+每位專責代理建立一個 .md 檔，路徑為 ~/.claude/agents/。
+分析規劃類角色使用 Opus，執行產出類角色使用 Sonnet。
+加入一道 95/100 的品質關卡（QA Gate），
+任何低於門檻的產出一律退回重做。</pre>
+      </div>
+      <div class="check"><b>驗證點：</b>指派一項完整任務，確認各代理依職責分工執行，且品質關卡確實攔截未達標之產出。</div>
+      <div class="warn"><b>設計原則：</b>代理數量寧少勿多。先以「分析＋執行＋品管」三角結構起步，確認穩定後再逐步擴充，避免流程過度複雜難以除錯。</div>
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="step">
+    <div class="step-head"><span class="big">S6</span><div><h3>設定例行任務<span class="en">Routines — 雲端排程自動執行</span></h3></div></div>
+    <div class="step-body">
+      <h4>目標</h4>
+      <p>將已驗證穩定之代理或技能設為雲端例行任務（Routine），如同雲端排程器（Cron Job）：設定一次即定時自動執行，毋須開啟本機電腦，產出自動投遞至指定位置。</p>
+      <h4>操作步驟</h4>
+      <ol class="ops">
+        <li>確認欲排程之代理或技能已在手動模式下穩定執行至少三次。</li>
+        <li>決定排程頻率（每日、每週特定日、每月）與執行時間。</li>
+        <li>指定輸出投遞位置：資料夾、Notion 頁面、電子郵件或其他工具。</li>
+        <li>以下列提示詞建立例行任務，並於首次自動執行後檢核產出。</li>
+      </ol>
+      <h4>提示詞（貼上即用）</h4>
+      <div class="prompt">
+        <span class="tag">PROMPT</span>
+        <button class="copy" data-t="建立一個 Claude 例行任務（Routine），依【排程頻率】自動執行我的【代理或技能名稱】。請在 Anthropic 雲端執行，不依賴我的本機電腦。產出自動投遞至【資料夾／Notion 頁面／指定工具】。">複製</button>
+        <pre>建立一個 Claude 例行任務（Routine），
+依【排程頻率】自動執行我的【代理或技能名稱】。
+請在 Anthropic 雲端執行，不依賴我的本機電腦。
+產出自動投遞至【資料夾／Notion 頁面／指定工具】。</pre>
+      </div>
+      <h4>排程範例</h4>
+      <table>
+        <thead><tr><th style="width:28%">排程</th><th>任務內容</th></tr></thead>
+        <tbody>
+          <tr><td>每日 08:00</td><td>彙整前一日重點信件與行事曆，產出當日晨報</td></tr>
+          <tr><td>每週一 09:00</td><td>彙整上週工作紀錄，產出週報投遞至 Notion</td></tr>
+          <tr><td>每月 1 日</td><td>彙整當月預算執行數，產出經費控管摘要表</td></tr>
+        </tbody>
+      </table>
+      <div class="check"><b>驗證點：</b>首次排程執行後，於預定時間確認產出已出現在指定位置且內容正確。前兩週建議每次執行後人工抽核。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 六、注意事項 ═══ -->
+<section id="s6">
+  <div class="sec-head"><span class="no">06</span><h2>注意事項</h2></div>
+  <ul class="pts">
+    <li><b>循序建置：</b>六步驟具相依性，勿跳過情境（S2）與記憶（S3）直接建立代理，否則產出品質不穩定且難以除錯。</li>
+    <li><b>小步快跑：</b>每項技能與代理先手動驗證穩定，再納入自動排程；未經驗證之流程不得直接上線自動執行。</li>
+    <li><b>人工把關：</b>自動化產出屬「草稿」性質，正式對外文件仍應經人工審閱定稿，責任歸屬不因自動化而移轉。</li>
+    <li><b>資料分級：</b>涉及機密、敏感公務資訊或個人資料者，禁止置入雲端代理工作流；連接外部服務前應確認符合機關資安規範。</li>
+    <li><b>成本管理：</b>高階模型（Opus）保留予分析決策類任務，例行產出使用中階模型（Sonnet），定期檢視用量。</li>
+  </ul>
+</section>
+
+<!-- ═══ 七、維運與版本管理 ═══ -->
+<section id="s7">
+  <div class="sec-head"><span class="no">07</span><h2>維運與版本管理</h2></div>
+  <table>
+    <thead><tr><th style="width:22%">週期</th><th>維運項目</th></tr></thead>
+    <tbody>
+      <tr><td>每週</td><td>抽核例行任務產出品質；記錄異常案例供修正。</td></tr>
+      <tr><td>每月</td><td>盤點記憶檔：合併重複、刪除過時規則；檢視技能使用頻率，停用閒置技能。</td></tr>
+      <tr><td>每季</td><td>全面檢視 <code>CLAUDE.md</code> 是否仍符合現行業務；更新本 SOP 版次並留存修訂紀錄。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="footer">
+  <span>SOP-AI-001｜Claude Code AI 代理建置標準作業程序 v1.0</span>
+  <span>依原始資訊圖表（Harish Kumar）架構擴充編製</span>
+</div>
+
+</div>
+<script>
+document.querySelectorAll('.copy').forEach(btn=>{
+  btn.addEventListener('click',async()=>{
+    try{
+      await navigator.clipboard.writeText(btn.dataset.t);
+      btn.textContent='已複製';btn.classList.add('done');
+      setTimeout(()=>{btn.textContent='複製';btn.classList.remove('done')},1800);
+    }catch(e){
+      const r=document.createRange();r.selectNodeContents(btn.closest('.prompt').querySelector('pre'));
+      const s=getSelection();s.removeAllRanges();s.addRange(r);
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黑板上的十堂課・世界十大定律</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --wood: #7a5230;
+    --wood-dark: #4f331c;
+    --wood-light: #96683f;
+    --board: #1f3229;
+    --board-2: #26392f;
+    --chalk: #f2efe4;
+    --chalk-dim: rgba(242,239,228,0.72);
+    --chalk-faint: rgba(242,239,228,0.32);
+    --amber: #e8b84b;
+    --rose: #e2879a;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html,body{
+    margin:0;
+    padding:0;
+    background:#100b07;
+    color:var(--chalk);
+    font-family:'Noto Sans TC', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .frame{
+    max-width: 1040px;
+    margin: 28px auto;
+    padding: 18px;
+    background: linear-gradient(155deg, var(--wood-light), var(--wood) 45%, var(--wood-dark));
+    border-radius: 10px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.55), inset 0 0 0 2px rgba(0,0,0,0.25);
+  }
+
+  .board{
+    position: relative;
+    background:
+      radial-gradient(ellipse at 12% 8%, rgba(255,255,255,0.05), transparent 40%),
+      radial-gradient(ellipse at 85% 90%, rgba(255,255,255,0.045), transparent 45%),
+      radial-gradient(ellipse at 60% 30%, rgba(255,255,255,0.03), transparent 55%),
+      linear-gradient(160deg, var(--board-2), var(--board) 60%);
+    border-radius: 4px;
+    padding: 48px clamp(20px, 5vw, 56px) 30px;
+    box-shadow: inset 0 0 60px rgba(0,0,0,0.5), inset 0 0 2px rgba(255,255,255,0.06);
+    overflow:hidden;
+  }
+
+  .board::before{
+    /* chalk dust speckle texture */
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+      radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 90px 90px, 130px 130px;
+    background-position: 0 0, 40px 60px;
+    pointer-events:none;
+    mix-blend-mode: screen;
+    opacity:0.5;
+  }
+
+  header{
+    position:relative;
+    text-align:center;
+    margin-bottom: 42px;
+  }
+
+  .eyebrow{
+    display:inline-block;
+    font-size: 0.78rem;
+    letter-spacing: 0.45em;
+    color: var(--amber);
+    opacity:0.9;
+    margin-bottom: 14px;
+    padding-left: 0.45em; /* optical align for tracking */
+  }
+
+  h1{
+    font-family:'Ma Shan Zheng', cursive;
+    font-weight: 400;
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    margin: 0 0 6px;
+    color: var(--chalk);
+    text-shadow: 0 0 18px rgba(242,239,228,0.18);
+    letter-spacing: 0.05em;
+  }
+
+  .underline{
+    display:block;
+    width: 220px;
+    height: 18px;
+    margin: 6px auto 18px;
+  }
+  .underline path{
+    fill:none;
+    stroke: var(--amber);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 260;
+    stroke-dashoffset: 260;
+    animation: draw 1.1s 0.3s ease-out forwards;
+  }
+
+  .subtitle{
+    font-size: 0.98rem;
+    color: var(--chalk-dim);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px 26px;
+    position:relative;
+  }
+  @media (max-width: 720px){
+    .grid{ grid-template-columns: 1fr; }
+  }
+
+  .card{
+    position:relative;
+    border: 2px dashed var(--chalk-faint);
+    padding: 20px 22px 22px;
+    transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+  }
+  /* hand-drawn asymmetric corners, alternating tilt */
+  .card:nth-child(odd){  border-radius: 5px 14px 6px 16px; transform: rotate(-0.35deg); }
+  .card:nth-child(even){ border-radius: 14px 5px 16px 6px; transform: rotate(0.35deg); }
+
+  .card:hover{
+    border-color: rgba(232,184,75,0.55);
+    box-shadow: 0 0 26px rgba(232,184,75,0.12);
+    transform: translateY(-4px) rotate(0deg);
+  }
+
+  .card-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .num{
+    font-family:'Ma Shan Zheng', cursive;
+    font-size: 2.1rem;
+    color: var(--amber);
+    line-height: 1;
+    opacity: 0.9;
+  }
+
+  .icon{
+    width: 40px;
+    height: 40px;
+    color: var(--chalk-dim);
+    flex-shrink:0;
+    transition: color .35s ease;
+  }
+  .card:hover .icon{ color: var(--amber); }
+
+  .icon path, .icon line, .icon circle, .icon rect{
+    fill:none;
+    stroke: currentColor;
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .icon .filled{ fill: currentColor; stroke:none; }
+
+  .icon path, .icon line{
+    stroke-dasharray: 260;
+    stroke-dashoffset: 260;
+    animation: draw 1.3s ease-out forwards;
+  }
+
+  .law-title{
+    font-family:'Noto Serif TC', serif;
+    font-weight: 700;
+    font-size: 1.14rem;
+    color: var(--chalk);
+    margin: 4px 0 10px;
+    letter-spacing: 0.02em;
+  }
+
+  .squiggle{
+    display:block;
+    width: 56px;
+    height: 10px;
+    margin-bottom: 10px;
+    opacity: 0.8;
+  }
+  .squiggle path{
+    fill:none;
+    stroke: var(--rose);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+  }
+
+  .desc{
+    font-size: 0.94rem;
+    color: var(--chalk-dim);
+    line-height: 1.75;
+  }
+
+  footer{
+    position:relative;
+    margin-top: 40px;
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .tray{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    opacity: 0.85;
+  }
+  .chalkstick{
+    width: 30px; height: 8px;
+    border-radius: 3px;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+  }
+  .chalkstick.c1{ background: var(--chalk); }
+  .chalkstick.c2{ background: var(--amber); }
+  .chalkstick.c3{ background: var(--rose); }
+
+  .stamp{
+    font-family:'Noto Sans TC', sans-serif;
+    font-size: 0.78rem;
+    color: var(--chalk-faint);
+    letter-spacing: 0.08em;
+  }
+
+  @keyframes draw{
+    to{ stroke-dashoffset: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .icon path, .icon line, .underline path{
+      animation: none !important;
+      stroke-dashoffset: 0 !important;
+    }
+  }
+
+  .card:nth-child(1) .icon path,  .card:nth-child(1) .icon line  { animation-delay: .05s; }
+  .card:nth-child(2) .icon path,  .card:nth-child(2) .icon line  { animation-delay: .12s; }
+  .card:nth-child(3) .icon path,  .card:nth-child(3) .icon line  { animation-delay: .19s; }
+  .card:nth-child(4) .icon path,  .card:nth-child(4) .icon line  { animation-delay: .26s; }
+  .card:nth-child(5) .icon path,  .card:nth-child(5) .icon line  { animation-delay: .33s; }
+  .card:nth-child(6) .icon path,  .card:nth-child(6) .icon line  { animation-delay: .40s; }
+  .card:nth-child(7) .icon path,  .card:nth-child(7) .icon line  { animation-delay: .47s; }
+  .card:nth-child(8) .icon path,  .card:nth-child(8) .icon line  { animation-delay: .54s; }
+  .card:nth-child(9) .icon path,  .card:nth-child(9) .icon line  { animation-delay: .61s; }
+  .card:nth-child(10) .icon path, .card:nth-child(10) .icon line { animation-delay: .68s; }
+
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <div class="board">
+
+    <header>
+      <span class="eyebrow">LIFE · PRINCIPLES · 十大定律</span>
+      <h1>黑板上的十堂課</h1>
+      <svg class="underline" viewBox="0 0 220 18"><path d="M4 10 Q40 2 76 10 T148 9 T216 8"/></svg>
+      <p class="subtitle">世界上著名的十大定律，一頁看懂人性、選擇與時間的規則。</p>
+    </header>
+
+    <div class="grid">
+
+      <!-- 1 墨菲定律 -->
+      <div class="card">
+        <div class="card-top">
+          <span class="num">01</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="18" y="8" width="22" height="18" rx="4" transform="rotate(18 29 17)"/>
+            <circle class="filled" cx="34" cy="12" r="2.4"/>
+            <path d="M26 30 C 20 36, 15 44, 12 52" stroke-dasharray="2 5"/>
+            <path d="M10 54 Q32 46 54 54"/>
+          </svg>
+        </div>
+        <h2 class="law-title">墨菲定律</h2>
+        <svg class="squiggle" viewBox="0 0 56 10"><path d="M2 6 Q14 2 28 6 T54 5"/></svg>
+        <p class="desc">越怕什麼，越來什麼。</p>
+      </div>
+
+      <!-- 2 蝴蝶效應 -->
+      <div class="card">
+        <div class="card-top">
+          <span class="num">02</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M32 16 C20 6,6 10,10 24 C14 34,26 30,32 22"/>
+            <path d="M32 16 C44 6,58 10,54 24 C50 34,38 30,32 22"/>
+            <line x1="32" y1="14" x2="32" y2="50"/>
+            <path d="M32 30 C22 34,14 44,18 52 C24 58,32 48,32 40"/>
+            <path d="M32 30 C42 34,50 44,46 52 C40 58,32 48,32 40"/>
+          </svg>
+        </div>
+        <h2 class="law-title">蝴蝶效應</h2>
+        <svg class="squiggle" viewBox="0 0 56 10"><path d="M2 6 Q14 2 28 6 T54 5"/></svg>
+        <p class="desc">小習慣累積，會引起大變化。</p>
+      </div>
+
+      <!-- 3 二八定律 -->
+      <div class="card">
+        <div class="card-top">
+          <span class="num">03</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="32" cy="32" r="21"/>
+            <path class="filled" d="M32 32 L32 11 A21 21 0 0 1 50.7 42.5 Z" opacity="0.9"/>
+            <line x1="32" y1="32" x2="32" y2="11"/>
+            <line x1="32" y1="32" x2="50.7" y2="42.5"/>
+          </svg>
+        </div>
+        <h2 class="law-title">二八定律</h2>
+        <svg class="squiggle" viewBox="0 0 56 10"><path d="M2 6 Q14 2 28 6 T54 5"/></svg>
+        <p class="desc">20%的關鍵，決定80%的結果。</p>
+      </div>
+
+      <!-- 4 鯰魚法則 -->
+      <div class="card">
+        <div class="card-top">
+          <span class="num">04</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M10 32 C10 20,24 14,36 18 C46 21,54 27,58 32 C54 37,46 43,36 46 C24 50,10 44,10 32 Z"/>
+            <line x1="10" y1="27" x2="2" y2="22"/>
+            <line x1="10" y1="37" x2="2" y2="42"/>
+            <path d="M58 32 L64 24 M58 32 L64 40"/>
+          </svg>
+        </div>
+        <h2 class="law-title">鯰魚法則</h2>
+        <svg class="squiggle" viewBox="0 0 56 10"><path d="M2 6 Q14 2 28 6 T54 5"/></svg>
+        <p class="desc">及時止損，才是最高級的自律。</p>
+      </div>
+
+      <!-- 5 羊群效應 -->
+      <div class="card">
+        <div class="card-top">
+          <span class="num">05</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="18" cy="38" r="9"/>
+            <circle cx="34" cy="30" r="11"/>
+            <circle cx="49" cy="38" r="8"/>
+            <circle class="filled" cx="29" cy="20" r="2.6"/>
+            <circle class="filled" cx="40" cy="20" r="2.6"/>
+          </svg>
+        </div>
+        <h2 class="law-title">羊群效應</h2>
+        <svg class="squiggle" viewBox="0 0 56 10"><path d="M2 6 Q14 2 28 6 T54 5"/></svg>
+        <p class="desc">別盲目跟風，保持獨立判斷。</p>
+      </div>
+
+      <!-- 6 木桶定律 -->
+      <div class="card">
+        <div class="card-top">
+          <span class="num">06</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M14 20 L18 50 Q32 56 46 50 L50 20"/>
+            <line x1="22" y1="18" x2="24" y2="49"/>
+            <line x1="32" y1="16" x2="32" y2="50"/>
+            <line x1="42" y1="28" x2="41" y2="49"/>
+            <path d="M16 30 L48 30" stroke-dasharray="3 4"/>
+          </svg>
+        </div>
+        <h2 class="law-title">木桶定律</h2>
+        <svg class="squiggle" viewBox="0 0 56 10"><path d="M2 6 Q14 2 28 6 T54 5"/></svg>
+        <p class="desc">短板，是決定上限的關鍵。</p>
+      </div>
+
+      <!-- 7 帕金森定律 -->
+      <div class="card">
+        <div class="card-top">
+          <span class="num">07</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="32" cy="32" r="21"/>
+            <path d="M32 32 C32 24,26 18,32 12 C40 12,44 20,38 26 C34 30,32 32,32 32"/>
+            <line x1="32" y1="32" x2="32" y2="17"/>
+            <line x1="32" y1="32" x2="42" y2="39"/>
+          </svg>
+        </div>
+        <h2 class="law-title">帕金森定律</h2>
+        <svg class="squiggle" viewBox="0 0 56 10"><path d="M2 6 Q14 2 28 6 T54 5"/></svg>
+        <p class="desc">越忙越亂，反而效率越低。</p>
+      </div>
+
+      <!-- 8 破窗效應 -->
+      <div class="card">
+        <div class="card-top">
+          <span class="num">08</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="14" y="10" width="36" height="44" rx="2"/>
+            <line x1="32" y1="10" x2="32" y2="54"/>
+            <line x1="14" y1="32" x2="50" y2="32"/>
+            <path d="M32 32 L27 21 L35 19 L29 9"/>
+          </svg>
+        </div>
+        <h2 class="law-title">破窗效應</h2>
+        <svg class="squiggle" viewBox="0 0 56 10"><path d="M2 6 Q14 2 28 6 T54 5"/></svg>
+        <p class="desc">小問題不解決，會成為大麻煩。</p>
+      </div>
+
+      <!-- 9 刺蝟法則 -->
+      <div class="card">
+        <div class="card-top">
+          <span class="num">09</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="34" cy="36" r="14"/>
+            <path d="M22 26 L16 14 M26 22 L22 8 M32 20 L30 4 M38 20 L40 4 M44 22 L48 8 M48 26 L54 14"/>
+            <circle class="filled" cx="26" cy="34" r="2"/>
+            <path d="M14 40 Q10 42 8 46"/>
+          </svg>
+        </div>
+        <h2 class="law-title">刺蝟法則</h2>
+        <svg class="squiggle" viewBox="0 0 56 10"><path d="M2 6 Q14 2 28 6 T54 5"/></svg>
+        <p class="desc">距離，才是人際關係的保鮮劑。</p>
+      </div>
+
+      <!-- 10 馬太效應 -->
+      <div class="card">
+        <div class="card-top">
+          <span class="num">10</span>
+          <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M10 50 Q20 50 24 40 Q30 26 46 20"/>
+            <circle cx="13" cy="47" r="3.4"/>
+            <circle cx="27" cy="34" r="6.5"/>
+            <circle cx="46" cy="18" r="10"/>
+          </svg>
+        </div>
+        <h2 class="law-title">馬太效應</h2>
+        <svg class="squiggle" viewBox="0 0 56 10"><path d="M2 6 Q14 2 28 6 T54 5"/></svg>
+        <p class="desc">強者越強，弱者越弱。</p>
+      </div>
+
+    </div>
+
+    <footer>
+      <div class="tray">
+        <div class="chalkstick c1"></div>
+        <div class="chalkstick c2"></div>
+        <div class="chalkstick c3"></div>
+      </div>
+      <span class="stamp">世界上著名的十大定律・一頁看懂</span>
+    </footer>
+
+  </div>
+</div>
+
+</body>
+</html>

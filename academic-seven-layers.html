@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>學術表達的七層結構</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --vellum:#E6E9EE;
+  --vellum-deep:#D8DDE6;
+  --card:#F3F5F8;
+  --ink:#16203A;
+  --ink-soft:#4B5875;
+  --ink-faint:#7C87A0;
+  --rule:#A3AEC2;
+  --brass:#9E7010;
+  --brass-lit:#C08E1C;
+  --blueprint:#2C4A9B;
+  --hair:rgba(22,32,58,.16);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--vellum);
+  background-image:
+    linear-gradient(to right, rgba(44,74,155,.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(44,74,155,.05) 1px, transparent 1px);
+  background-size:26px 26px;
+  color:var(--ink);
+  font-family:"Noto Sans TC",system-ui,sans-serif;
+  font-weight:400;
+  line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+/* ── 標高尺（signature） ── */
+.rail{
+  position:fixed;left:26px;top:0;height:100vh;width:76px;
+  display:flex;flex-direction:column;justify-content:center;gap:0;
+  z-index:20;pointer-events:none;
+}
+.rail::before{
+  content:"";position:absolute;left:20px;top:12%;bottom:12%;
+  width:1px;background:var(--rule);
+}
+.rail a{
+  pointer-events:auto;position:relative;display:flex;align-items:center;gap:10px;
+  padding:7px 0 7px 0;text-decoration:none;
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;
+  color:var(--ink-faint);transition:color .25s ease;
+}
+.rail a .tick{width:20px;height:1px;background:var(--rule);flex:0 0 20px;transition:all .25s ease}
+.rail a.on{color:var(--brass)}
+.rail a.on .tick{background:var(--brass);height:2px;width:34px;flex-basis:34px}
+.rail a:focus-visible{outline:2px solid var(--blueprint);outline-offset:3px}
+@media(max-width:1180px){.rail{display:none}}
+
+/* ── 標頭 ── */
+header{padding:96px 0 12px;position:relative}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.22em;
+  color:var(--blueprint);text-transform:uppercase;margin:0 0 20px;
+}
+h1{
+  font-family:"Noto Serif TC",serif;font-weight:900;
+  font-size:clamp(2.5rem,7.2vw,4.6rem);line-height:1.08;letter-spacing:-.02em;
+  margin:0 0 20px;
+}
+h1 em{font-style:normal;color:var(--brass);}
+.lede{
+  max-width:62ch;font-size:clamp(1rem,1.6vw,1.12rem);color:var(--ink-soft);
+  font-weight:300;margin:0 0 8px;
+}
+.meta{
+  display:flex;flex-wrap:wrap;gap:26px;margin-top:34px;padding-top:22px;
+  border-top:1px solid var(--hair);
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.05em;color:var(--ink-faint);
+}
+
+/* ── 剖面圖 ── */
+.section-view{margin:54px 0 96px}
+.sv-label{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.18em;
+  color:var(--ink-faint);margin-bottom:16px;
+}
+.stack{display:flex;flex-direction:column-reverse;align-items:center;gap:4px}
+.slab{
+  display:flex;align-items:center;gap:14px;
+  border:1px solid var(--rule);border-bottom-width:2px;
+  background:var(--card);color:var(--ink);
+  text-decoration:none;padding:11px 20px;width:100%;
+  transition:background .2s ease,transform .2s ease,border-color .2s ease;
+}
+.slab:hover,.slab:focus-visible{background:#fff;border-color:var(--brass);transform:translateY(-1px)}
+.slab:focus-visible{outline:2px solid var(--blueprint);outline-offset:2px}
+.slab .n{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;
+  color:var(--brass);flex:0 0 auto;
+}
+.slab .t{font-family:"Noto Serif TC",serif;font-weight:700;font-size:clamp(.95rem,2.2vw,1.15rem)}
+.slab .q{
+  margin-left:auto;font-size:12.5px;color:var(--ink-faint);font-weight:300;
+  text-align:right;
+}
+@media(max-width:620px){.slab .q{display:none}}
+.stack .slab:nth-child(1){width:100%}
+.stack .slab:nth-child(2){width:96%}
+.stack .slab:nth-child(3){width:92%}
+.stack .slab:nth-child(4){width:88%}
+.stack .slab:nth-child(5){width:83%}
+.stack .slab:nth-child(6){width:78%}
+.stack .slab:nth-child(7){width:72%}
+@media(max-width:620px){.stack .slab{width:100% !important}}
+.ground{
+  width:100%;height:16px;margin-top:2px;
+  background-image:repeating-linear-gradient(45deg,var(--rule) 0 1px,transparent 1px 7px);
+  opacity:.75;
+}
+.ground-note{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.14em;
+  color:var(--ink-faint);text-align:center;margin-top:8px;
+}
+
+/* ── 各層 ── */
+.layer{padding:56px 0;border-top:1px solid var(--hair);scroll-margin-top:40px}
+.lv{
+  display:flex;align-items:baseline;gap:14px;margin-bottom:6px;
+  font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.16em;color:var(--blueprint);
+}
+.lv .bar{flex:1;height:1px;background:var(--hair)}
+h2{
+  font-family:"Noto Serif TC",serif;font-weight:700;
+  font-size:clamp(1.5rem,3.6vw,2.1rem);line-height:1.3;margin:0 0 18px;letter-spacing:-.01em;
+}
+.core-q{
+  font-family:"Noto Serif TC",serif;font-size:clamp(1.02rem,2vw,1.2rem);
+  font-weight:600;color:var(--brass);
+  border-left:2px solid var(--brass);padding:2px 0 2px 16px;margin:0 0 22px;
+}
+.pos{max-width:66ch;color:var(--ink-soft);margin:0 0 30px;font-weight:300}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--hair);border:1px solid var(--hair);margin-bottom:28px}
+@media(max-width:760px){.grid3{grid-template-columns:1fr}}
+.cell{background:var(--card);padding:18px 18px 20px}
+.cell h3{
+  margin:0 0 7px;font-size:.95rem;font-weight:700;font-family:"Noto Serif TC",serif;
+}
+.cell h3 span{
+  display:block;font-family:"IBM Plex Mono",monospace;font-size:10px;
+  letter-spacing:.14em;color:var(--ink-faint);font-weight:400;margin-bottom:4px;
+}
+.cell p{margin:0;font-size:.88rem;color:var(--ink-soft);font-weight:300;line-height:1.75}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+@media(max-width:760px){.two{grid-template-columns:1fr;gap:24px}}
+.blk h4{
+  margin:0 0 10px;font-family:"IBM Plex Mono",monospace;font-size:11px;
+  letter-spacing:.16em;color:var(--ink-faint);font-weight:500;
+}
+.blk ul{margin:0;padding:0;list-style:none}
+.blk li{
+  position:relative;padding-left:18px;font-size:.9rem;color:var(--ink-soft);
+  font-weight:300;margin-bottom:7px;
+}
+.blk li::before{
+  content:"";position:absolute;left:0;top:.72em;width:8px;height:1px;background:var(--rule);
+}
+.blk.check li::before{background:var(--brass);height:2px}
+.ex{
+  margin-top:26px;padding:14px 18px;border:1px dashed var(--rule);background:rgba(44,74,155,.04);
+  font-size:.87rem;color:var(--ink-soft);font-weight:300;
+}
+.ex b{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.16em;
+  color:var(--blueprint);display:block;margin-bottom:5px;font-weight:600;
+}
+
+/* ── 結尾 ── */
+.closing{padding:64px 0 110px;border-top:2px solid var(--ink)}
+.closing .two{gap:44px}
+.closing h2{font-size:clamp(1.25rem,2.6vw,1.6rem)}
+.goal{
+  font-family:"Noto Serif TC",serif;font-size:1.02rem;line-height:2;color:var(--ink);font-weight:600;
+}
+footer{
+  padding:26px 0 60px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+  letter-spacing:.12em;color:var(--ink-faint);border-top:1px solid var(--hair);
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none !important}
+}
+</style>
+</head>
+<body>
+
+<nav class="rail" aria-label="層級導覽">
+  <a href="#L7"><span class="tick"></span>L7</a>
+  <a href="#L6"><span class="tick"></span>L6</a>
+  <a href="#L5"><span class="tick"></span>L5</a>
+  <a href="#L4"><span class="tick"></span>L4</a>
+  <a href="#L3"><span class="tick"></span>L3</a>
+  <a href="#L2"><span class="tick"></span>L2</a>
+  <a href="#L1"><span class="tick"></span>L1</a>
+</nav>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Structure of Academic Argument　/　剖面圖</p>
+  <h1>學術表達的<br>七層結構</h1>
+  <p class="lede">一篇有力的學術論述不是段落的排列，而是承重結構。從真實世界的現象出發，每一層都由下一層支撐；任何一層失去承載力，上方的結論都會失去依據。</p>
+  <div class="meta">
+    <span>七個層級</span>
+    <span>由下而上承載</span>
+    <span>每層回答一個核心問題</span>
+  </div>
+</header>
+
+<section class="section-view" aria-label="七層剖面">
+  <p class="sv-label">剖面示意　—　點選層級可直接跳至說明</p>
+  <div class="stack">
+    <a class="slab" href="#L1"><span class="n">L1</span><span class="t">觀察與現象描述</span><span class="q">我們觀察到什麼？</span></a>
+    <a class="slab" href="#L2"><span class="n">L2</span><span class="t">研究動機與文獻脈絡</span><span class="q">為何這個問題重要？</span></a>
+    <a class="slab" href="#L3"><span class="n">L3</span><span class="t">理論基礎與假說發展</span><span class="q">為何預期是這樣？</span></a>
+    <a class="slab" href="#L4"><span class="n">L4</span><span class="t">研究方法與識別策略</span><span class="q">如何得到這些結果？</span></a>
+    <a class="slab" href="#L5"><span class="n">L5</span><span class="t">研究結果</span><span class="q">我們發現了什麼？</span></a>
+    <a class="slab" href="#L6"><span class="n">L6</span><span class="t">討論與詮釋</span><span class="q">結果代表什麼？</span></a>
+    <a class="slab" href="#L7"><span class="n">L7</span><span class="t">學術貢獻與影響</span><span class="q">為何這項研究重要？</span></a>
+  </div>
+  <div class="ground" aria-hidden="true"></div>
+  <p class="ground-note">真實世界　／　現象發生之處</p>
+</section>
+
+<!-- L1 -->
+<section class="layer" id="L1">
+  <p class="lv"><span>LEVEL 01</span><span class="bar"></span><span>基礎層</span></p>
+  <h2>觀察與現象描述</h2>
+  <p class="core-q">我們觀察到什麼？有什麼值得探究的現象？</p>
+  <p class="pos">全篇的起點。研究從真實世界的異常、落差或變化出發，先把「發生了什麼」講清楚，再談為什麼要研究它。此層不做任何因果宣稱，只負責兩件事：證明現象確實存在，並讓讀者相信它值得被理解。基礎不實，上方所有層級都是懸空的。</p>
+  <div class="grid3">
+    <div class="cell"><h3><span>ELEMENT 1.1</span>現象觀察</h3><p>指出可被辨識、可被量測的具體現象，而非以抽象概念代替事實。描述對象、範圍與時間，讓現象具有邊界。</p></div>
+    <div class="cell"><h3><span>ELEMENT 1.2</span>初步證據</h3><p>以描述性統計、趨勢圖、實地觀察或代表性個案，說明現象確實存在且非偶發雜訊。此處只求「看得見」，不求解釋。</p></div>
+    <div class="cell"><h3><span>ELEMENT 1.3</span>研究背景</h3><p>交代制度、政策、時空與產業脈絡，使讀者理解現象發生的條件，也界定後續結論可適用的範圍。</p></div>
+  </div>
+  <div class="two">
+    <div class="blk">
+      <h4>常見缺陷</h4>
+      <ul>
+        <li>現象描述過於籠統，讀完仍不知道「什麼變了」。</li>
+        <li>以文獻回顧代替現象觀察，研究失去現實錨點。</li>
+        <li>一開場即提出因果結論，越過後續所有論證。</li>
+      </ul>
+    </div>
+    <div class="blk check">
+      <h4>檢核點</h4>
+      <ul>
+        <li>能否用一句話說明「什麼變了、對誰有影響」？</li>
+        <li>初步證據是否足以排除偶然波動與資料誤差？</li>
+      </ul>
+    </div>
+  </div>
+  <p class="ex"><b>示例</b>近五年某轄區到院前心臟停止（Out-of-Hospital Cardiac Arrest, OHCA）通報案件數持續上升，但恢復自主循環（Return of Spontaneous Circulation, ROSC）比率停滯不前。</p>
+</section>
+
+<!-- L2 -->
+<section class="layer" id="L2">
+  <p class="lv"><span>LEVEL 02</span><span class="bar"></span><span>定位層</span></p>
+  <h2>研究動機與文獻脈絡</h2>
+  <p class="core-q">為何這個問題重要？現有研究缺少什麼？</p>
+  <p class="pos">把現象轉譯為學術問題。透過既有文獻標定知識的邊界，指出尚未被回答、或被回答得不夠好的部分，並將其收斂為一個可被研究的問題。文獻回顧的功能是論證缺口，不是展示閱讀量。</p>
+  <div class="grid3">
+    <div class="cell"><h3><span>ELEMENT 2.1</span>問題背景</h3><p>說明現象為何值得投入——涉及的成本、風險、權益分配或政策決策，讓重要性有具體承載對象。</p></div>
+    <div class="cell"><h3><span>ELEMENT 2.2</span>文獻缺口</h3><p>以既有研究的分歧、方法限制或未涵蓋情境界定缺口，而非以「相關研究很少」草率帶過。</p></div>
+    <div class="cell"><h3><span>ELEMENT 2.3</span>研究問題</h3><p>以有對象、有範圍、可回答的句式陳述，並與缺口一對一對應。問題的大小決定研究可行性。</p></div>
+  </div>
+  <div class="two">
+    <div class="blk">
+      <h4>常見缺陷</h4>
+      <ul>
+        <li>文獻回顧寫成流水帳，只有羅列而無對話。</li>
+        <li>缺口與研究問題不對應，缺口是 A、卻去研究 B。</li>
+        <li>研究問題過大，無法以單一研究設計回答。</li>
+      </ul>
+    </div>
+    <div class="blk check">
+      <h4>檢核點</h4>
+      <ul>
+        <li>刪掉缺口敘述後，研究問題是否仍站得住？</li>
+        <li>每一篇被引用的文獻，是否都承擔論證功能？</li>
+      </ul>
+    </div>
+  </div>
+  <p class="ex"><b>示例</b>既有文獻多聚焦醫院端處置成效，對到院前救護分級人力配置與存活結果之間的關聯，實證證據仍相當有限。</p>
+</section>
+
+<!-- L3 -->
+<section class="layer" id="L3">
+  <p class="lv"><span>LEVEL 03</span><span class="bar"></span><span>推論層</span></p>
+  <h2>理論基礎與假說發展</h2>
+  <p class="core-q">為何提出這些假說？理論依據是什麼？</p>
+  <p class="pos">說明「為何預期會出現這樣的關係」。理論負責提供機制，使實證結果不只是一組相關數字，而是可解釋、可遷移、可被後續研究延伸的知識。沒有機制的假說，只是猜測的包裝。</p>
+  <div class="grid3">
+    <div class="cell"><h3><span>ELEMENT 3.1</span>理論依據</h3><p>指出所採用的理論或分析觀點，並說明它為何適用於本研究情境，而不是僅作為引用裝飾。</p></div>
+    <div class="cell"><h3><span>ELEMENT 3.2</span>分析架構</h3><p>將變數關係、作用路徑與邊界條件具象化，讓讀者一眼看出「誰影響誰、透過什麼機制」。</p></div>
+    <div class="cell"><h3><span>ELEMENT 3.3</span>研究假說／命題</h3><p>由機制推導出可被檢驗的方向性陳述；質性研究則以命題或待答問題形式呈現。</p></div>
+  </div>
+  <div class="two">
+    <div class="blk">
+      <h4>常見缺陷</h4>
+      <ul>
+        <li>先看到結果、再回頭補寫假說。</li>
+        <li>理論被引用但未實際承擔推論功能。</li>
+        <li>分析架構圖與假說內容不一致。</li>
+      </ul>
+    </div>
+    <div class="blk check">
+      <h4>檢核點</h4>
+      <ul>
+        <li>每一條假說能否追溯到一段明確的機制敘述？</li>
+        <li>是否存在同樣合理、但方向相反的競爭解釋？</li>
+      </ul>
+    </div>
+  </div>
+  <p class="ex"><b>示例</b>依據處置時效與救護能力層級之作用機制，推論高級救護技術員（EMT-Paramedic, EMT-P）到達時間縮短將提升 ROSC 機率。</p>
+</section>
+
+<!-- L4 -->
+<section class="layer" id="L4">
+  <p class="lv"><span>LEVEL 04</span><span class="bar"></span><span>樞紐層</span></p>
+  <h2>研究方法與識別策略</h2>
+  <p class="core-q">我們如何得到這些結果？為何方法是合理的？</p>
+  <p class="pos">交代取得結果的完整程序，並論證為何此一設計足以支撐因果或關聯宣稱。這是全篇可信度的樞紐：方法寫得清楚，結果才有重量；識別策略（identification strategy）不明說，再漂亮的係數也只是相關。</p>
+  <div class="grid3">
+    <div class="cell"><h3><span>ELEMENT 4.1</span>研究設計</h3><p>說明採取實驗、準實驗、觀察性或質性設計的理由，以及該設計如何對應研究問題的性質。</p></div>
+    <div class="cell"><h3><span>ELEMENT 4.2</span>資料來源</h3><p>界定母體、抽樣方式、期間、變數操作型定義與資料品質限制，使研究具備可重現性。</p></div>
+    <div class="cell"><h3><span>ELEMENT 4.3</span>識別假設</h3><p>明確寫出因果推論所依賴的前提，並提供支持該前提成立的檢驗或佐證。</p></div>
+  </div>
+  <div class="two">
+    <div class="blk">
+      <h4>常見缺陷</h4>
+      <ul>
+        <li>只描述操作步驟，未論證方法的正當性。</li>
+        <li>識別假設隱而不談，讓讀者自行推測。</li>
+        <li>樣本範圍與研究問題所指母體不一致。</li>
+      </ul>
+    </div>
+    <div class="blk check">
+      <h4>檢核點</h4>
+      <ul>
+        <li>他人能否僅依本節重現整個研究流程？</li>
+        <li>最可能的內生性來源是什麼？如何被處理？</li>
+      </ul>
+    </div>
+  </div>
+  <p class="ex"><b>示例</b>以各縣市分階段導入時點作為差異中之差異（Difference-in-Differences, DID）設計基礎，並檢驗導入前的平行趨勢假設。</p>
+</section>
+
+<!-- L5 -->
+<section class="layer" id="L5">
+  <p class="lv"><span>LEVEL 05</span><span class="bar"></span><span>證據層</span></p>
+  <h2>研究結果</h2>
+  <p class="core-q">我們發現了什麼？結果是否穩健？</p>
+  <p class="pos">呈現發現本身，並證明它不會因為設定、樣本或衡量方式的合理調整而崩解。此層負責事實，不負責意義；意義留給下一層。報表不會自己說話，必須由文字引導讀者看見重點。</p>
+  <div class="grid3">
+    <div class="cell"><h3><span>ELEMENT 5.1</span>實證發現</h3><p>報告主要結果的方向、效果量與精確度，並以實務意義說明其大小，而非僅停留在統計顯著。</p></div>
+    <div class="cell"><h3><span>ELEMENT 5.2</span>穩健性檢驗</h3><p>更換設定、樣本、衡量方式或估計方法，檢視結論是否維持一致，主動測試自己的結果。</p></div>
+    <div class="cell"><h3><span>ELEMENT 5.3</span>附加分析</h3><p>異質性、次群體與機制檢驗，回答「在誰身上、透過什麼路徑」效果較強或消失。</p></div>
+  </div>
+  <div class="two">
+    <div class="blk">
+      <h4>常見缺陷</h4>
+      <ul>
+        <li>表格直接貼上，未指出讀者該看哪一格。</li>
+        <li>只報告顯著結果，隱去不利發現。</li>
+        <li>把穩健性檢驗視為附屬，草草交代。</li>
+      </ul>
+    </div>
+    <div class="blk check">
+      <h4>檢核點</h4>
+      <ul>
+        <li>主要結果是否以效果量與實務意義陳述？</li>
+        <li>結論是否僅依賴單一設定才成立？</li>
+      </ul>
+    </div>
+  </div>
+  <p class="ex"><b>示例</b>估計結果顯示反應時間每縮短一分鐘，ROSC 機率上升若干百分點；於不同時間窗與縣市子樣本下維持一致。</p>
+</section>
+
+<!-- L6 -->
+<section class="layer" id="L6">
+  <p class="lv"><span>LEVEL 06</span><span class="bar"></span><span>詮釋層</span></p>
+  <h2>討論與詮釋</h2>
+  <p class="core-q">結果代表什麼？與過去研究有何異同？有何限制與可延伸處？</p>
+  <p class="pos">把數字轉回知識。回答結果的意義、與既有文獻一致或衝突之處、以及在什麼條件下成立。討論不是結果的重述，而是研究者在證據之上所做的判斷，並誠實標示這些判斷的邊界。</p>
+  <div class="grid3">
+    <div class="cell"><h3><span>ELEMENT 6.1</span>結果詮釋</h3><p>將發現扣回第三層的機制，說明證據支持了哪一條推論路徑、又推翻了哪一條。</p></div>
+    <div class="cell"><h3><span>ELEMENT 6.2</span>與文獻對話</h3><p>指出與既有研究一致與不一致之處，並解釋差異來源：情境、樣本、期間或方法。</p></div>
+    <div class="cell"><h3><span>ELEMENT 6.3</span>限制與延伸</h3><p>說明結論的適用邊界，並將限制轉化為後續研究可著手的具體設計，而非免責聲明。</p></div>
+  </div>
+  <div class="two">
+    <div class="blk">
+      <h4>常見缺陷</h4>
+      <ul>
+        <li>整段重複結果，未提出任何新的判斷。</li>
+        <li>只挑選對自己有利的文獻進行對照。</li>
+        <li>限制寫成套語，與研究設計無實質關聯。</li>
+      </ul>
+    </div>
+    <div class="blk check">
+      <h4>檢核點</h4>
+      <ul>
+        <li>與預期不符的結果是否被誠實處理？</li>
+        <li>每一項限制是否連結到可行的後續設計？</li>
+      </ul>
+    </div>
+  </div>
+  <p class="ex"><b>示例</b>結果與都會區研究一致，但在偏遠地區效果減弱，顯示運送距離可能構成機制的邊界條件。</p>
+</section>
+
+<!-- L7 -->
+<section class="layer" id="L7">
+  <p class="lv"><span>LEVEL 07</span><span class="bar"></span><span>影響層</span></p>
+  <h2>學術貢獻與影響</h2>
+  <p class="core-q">為何這項研究重要？對學術或實務有何影響？</p>
+  <p class="pos">說明這項研究改變了什麼。貢獻不等於「填補了文獻缺口」，而是明確指出：因為這篇研究，哪些理解被修正、哪些決策有了新依據、哪些問題現在才問得出來。</p>
+  <div class="grid3">
+    <div class="cell"><h3><span>ELEMENT 7.1</span>理論貢獻</h3><p>指出對既有理論的修正、擴充或邊界界定，說明知識版圖具體移動了多少。</p></div>
+    <div class="cell"><h3><span>ELEMENT 7.2</span>實務影響</h3><p>將發現轉為可執行的決策建議，並標明適用對象、前提條件與預期效果。</p></div>
+    <div class="cell"><h3><span>ELEMENT 7.3</span>未來研究</h3><p>提出由本研究直接衍生、且已具備可行路徑的下一步題目，而非泛泛的期許。</p></div>
+  </div>
+  <div class="two">
+    <div class="blk">
+      <h4>常見缺陷</h4>
+      <ul>
+        <li>以「填補研究缺口」代替具體貢獻陳述。</li>
+        <li>實務建議超出結果所能支持的範圍。</li>
+        <li>未來研究流於客套，缺乏可執行性。</li>
+      </ul>
+    </div>
+    <div class="blk check">
+      <h4>檢核點</h4>
+      <ul>
+        <li>若抽掉這篇研究，哪些判斷會失去依據？</li>
+        <li>建議是否明確標示適用條件與限制？</li>
+      </ul>
+    </div>
+  </div>
+  <p class="ex"><b>示例</b>研究結果可作為救護人力配置與分級派遣政策調整之實證依據，並界定其適用之地理與時間條件。</p>
+</section>
+
+<section class="closing">
+  <div class="two">
+    <div>
+      <h2>承重原則</h2>
+      <div class="blk check">
+        <ul>
+          <li><b>層層相扣</b>：前一層是後一層的基礎，順序即是論證。</li>
+          <li><b>單一焦點</b>：每一層只回答一個核心問題，不代管其他層的工作。</li>
+          <li><b>避免跳層</b>：夯實基礎才能支撐結論；跳過的層級最終都會回頭追討。</li>
+          <li><b>清楚表達</b>：研究先被理解，才可能被信任、被引用、被採用。</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <h2>整體目標</h2>
+      <p class="goal">從真實世界的現象出發，透過系統性的研究與嚴謹的論述，提出有價值、可驗證、能推廣的知識，進而推動學術與實務的進步。</p>
+    </div>
+  </div>
+</section>
+
+<footer>學術表達的七層結構　／　觀察現象　→　影響知識</footer>
+
+</div>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {};
+  links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(a){ a.classList.remove('on'); });
+        var t = map[e.target.id];
+        if(t) t.classList.add('on');
+      }
+    });
+  },{rootMargin:'-45% 0px -45% 0px'});
+  document.querySelectorAll('.layer').forEach(function(s){ obs.observe(s); });
+})();
+</script>
+</body>
+</html>

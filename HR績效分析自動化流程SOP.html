@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HR 績效分析自動化流程 標準作業程序（SOP）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F1F3EF;
+  --paper-2:#FAFBF8;
+  --ink:#101A16;
+  --ink-2:#3D4A44;
+  --ink-3:#6E7A73;
+  --rule:#CBD3CB;
+  --rule-2:#E1E6DF;
+  --accent:#14664A;
+  --accent-soft:#DCE9E1;
+  --signal:#9A5B08;
+  --signal-soft:#F5E7D2;
+  --code-bg:#0D1A16;
+  --code-fg:#DCE7E0;
+  --code-key:#7FD1AC;
+  --code-str:#E4B96B;
+  --code-com:#6C8078;
+  --serif:"Noto Serif TC","Source Han Serif TC",Songti TC,PMingLiU,serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"JetBrains Mono","SFMono-Regular",Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-weight:400;font-size:15.5px;line-height:1.85;
+  letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased;
+}
+/* ---------- 文件控制列 ---------- */
+.docbar{
+  border-bottom:1px solid var(--rule);background:var(--paper-2);
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--ink-2);
+}
+.docbar .wrap{max-width:1180px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(4,1fr)}
+.docbar .cell{padding:10px 14px;border-left:1px solid var(--rule-2)}
+.docbar .cell:first-child{border-left:0;padding-left:0}
+.docbar b{display:block;color:var(--ink-3);font-weight:400;font-size:10px;letter-spacing:.16em}
+.docbar span{color:var(--ink);font-weight:500}
+
+/* ---------- 標題區 ---------- */
+.hero{max-width:1180px;margin:0 auto;padding:56px 24px 0}
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--accent);
+  text-transform:uppercase;margin-bottom:18px;
+}
+.hero h1{
+  font-family:var(--serif);font-weight:900;font-size:clamp(30px,5.4vw,58px);
+  line-height:1.18;margin:0 0 14px;letter-spacing:-.01em;
+}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .lede{
+  font-size:16.5px;color:var(--ink-2);max-width:60ch;margin:0 0 34px;font-weight:300;
+}
+/* ---------- 管線圖（簽名元素） ---------- */
+.pipe{
+  border-top:1px solid var(--ink);border-bottom:1px solid var(--rule);
+  display:grid;grid-template-columns:repeat(5,1fr);margin-bottom:6px;
+}
+.pipe .stage{
+  padding:20px 18px 22px;border-left:1px solid var(--rule-2);position:relative;
+  text-decoration:none;color:inherit;display:block;transition:background .25s;
+}
+.pipe .stage:first-child{border-left:0}
+.pipe .stage:hover{background:var(--paper-2)}
+.pipe .n{
+  font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent);
+  letter-spacing:.14em;margin-bottom:10px;display:block;
+}
+.pipe .t{font-family:var(--serif);font-weight:700;font-size:17px;line-height:1.4;display:block;margin-bottom:4px}
+.pipe .tool{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.03em;display:block;margin-bottom:12px}
+.io{font-family:var(--mono);font-size:10.5px;line-height:1.9;color:var(--ink-2)}
+.io i{font-style:normal;color:var(--ink-3);display:inline-block;width:2.4em}
+.pipe .stage::after{
+  content:"→";position:absolute;right:-8px;top:24px;color:var(--rule);
+  font-size:14px;background:var(--paper);padding:0 2px;z-index:2;
+}
+.pipe .stage:last-child::after{content:""}
+
+/* ---------- 版面 ---------- */
+.layout{max-width:1180px;margin:0 auto;padding:0 24px 90px;display:grid;grid-template-columns:212px 1fr;gap:52px;align-items:start}
+nav.toc{position:sticky;top:26px;padding-top:44px}
+nav.toc .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.24em;color:var(--ink-3);margin-bottom:14px}
+nav.toc a{
+  display:block;padding:6px 0 6px 14px;border-left:2px solid var(--rule-2);
+  color:var(--ink-2);text-decoration:none;font-size:13.5px;transition:.2s;
+}
+nav.toc a:hover{color:var(--ink)}
+nav.toc a.on{border-left-color:var(--accent);color:var(--accent);font-weight:500}
+nav.toc a .k{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);margin-right:7px}
+nav.toc a.on .k{color:var(--accent)}
+
+main{padding-top:44px;min-width:0}
+
+/* ---------- 章節 ---------- */
+section{margin-bottom:64px;scroll-margin-top:24px}
+.sechead{border-top:2px solid var(--ink);padding-top:16px;margin-bottom:26px}
+.sechead .k{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--accent);display:block;margin-bottom:8px}
+.sechead h2{font-family:var(--serif);font-weight:700;font-size:26px;margin:0;line-height:1.35}
+.sechead p{margin:10px 0 0;color:var(--ink-2);font-size:14.5px;font-weight:300;max-width:66ch}
+
+h3{font-family:var(--serif);font-weight:700;font-size:17.5px;margin:34px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--rule-2)}
+h4{font-size:14px;font-weight:700;margin:22px 0 8px;color:var(--ink);letter-spacing:.02em}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 16px;padding-left:1.35em}
+li{margin-bottom:7px}
+li::marker{color:var(--accent)}
+code:not(pre code){
+  font-family:var(--mono);font-size:.86em;background:var(--accent-soft);
+  padding:1px 5px;border-radius:2px;color:#0B4632;
+}
+strong{font-weight:700}
+
+/* ---------- 步驟卡 ---------- */
+.steps{counter-reset:s;margin:18px 0 8px}
+.step{position:relative;padding:0 0 22px 40px;border-left:1px solid var(--rule);margin-left:11px}
+.step:last-child{border-left-color:transparent;padding-bottom:0}
+.step::before{
+  counter-increment:s;content:counter(s,decimal-leading-zero);
+  position:absolute;left:-11px;top:0;width:22px;height:22px;border-radius:50%;
+  background:var(--paper);border:1px solid var(--accent);color:var(--accent);
+  font-family:var(--mono);font-size:9.5px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.step h4{margin:0 0 6px}
+.step p:last-child{margin-bottom:0}
+
+/* ---------- 表格 ---------- */
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:14px 0 18px;background:var(--paper-2)}
+th{
+  text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
+  color:var(--ink-3);font-weight:500;border-bottom:1px solid var(--ink);padding:9px 12px;
+  white-space:nowrap;
+}
+td{padding:10px 12px;border-bottom:1px solid var(--rule-2);vertical-align:top;line-height:1.7}
+tr:last-child td{border-bottom:0}
+td code{white-space:nowrap}
+
+/* ---------- 程式碼 ---------- */
+.code{position:relative;margin:16px 0 20px;background:var(--code-bg);border-radius:3px;overflow:hidden}
+.code .bar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 12px;border-bottom:1px solid #1E312B;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:#7E9188;
+}
+.code button{
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;background:transparent;
+  border:1px solid #2C443C;color:#9FBBAF;padding:3px 9px;border-radius:2px;cursor:pointer;transition:.2s;
+}
+.code button:hover{background:#1A2C26;color:#CFE3D8}
+.code pre{
+  margin:0;padding:16px 14px;overflow-x:auto;
+  font-family:var(--mono);font-size:12.4px;line-height:1.75;color:var(--code-fg);
+}
+.c-key{color:var(--code-key)}
+.c-str{color:var(--code-str)}
+.c-com{color:var(--code-com);font-style:italic}
+
+/* ---------- 提示框 ---------- */
+.note{
+  border-left:3px solid var(--accent);background:var(--accent-soft);
+  padding:13px 16px;margin:16px 0;font-size:13.8px;line-height:1.8;
+}
+.warn{border-left-color:var(--signal);background:var(--signal-soft)}
+.note .h{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--accent);display:block;margin-bottom:5px}
+.warn .h{color:var(--signal)}
+.note p:last-child{margin-bottom:0}
+
+/* ---------- 檢核點 ---------- */
+.check{border:1px solid var(--rule);background:var(--paper-2);padding:14px 18px;margin:20px 0 0}
+.check .h{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--ink-3);margin-bottom:9px}
+.check ul{margin:0;padding-left:1.2em;font-size:13.6px}
+.check li{margin-bottom:5px}
+
+/* 上線檢核表 */
+.cl{list-style:none;padding:0;margin:14px 0}
+.cl li{
+  display:flex;gap:11px;align-items:flex-start;padding:9px 0;
+  border-bottom:1px solid var(--rule-2);font-size:14px;margin:0;
+}
+.cl input{margin-top:5px;accent-color:var(--accent);width:14px;height:14px;flex:none}
+.cl .tag{font-family:var(--mono);font-size:10px;color:var(--ink-3);flex:none;width:4.6em;padding-top:3px}
+
+footer{
+  border-top:1px solid var(--rule);max-width:1180px;margin:0 auto;padding:22px 24px 60px;
+  font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.05em;
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+}
+
+/* ---------- 響應式 ---------- */
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr;gap:0}
+  nav.toc{display:none}
+  .pipe{grid-template-columns:1fr;border-bottom:0}
+  .pipe .stage{border-left:0;border-bottom:1px solid var(--rule-2)}
+  .pipe .stage::after{content:"";}
+  .docbar .wrap{grid-template-columns:repeat(2,1fr)}
+  .docbar .cell{border-left:0;padding-left:0}
+  .hero{padding-top:36px}
+  main{padding-top:28px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- 列印 ---------- */
+@media print{
+  body{background:#fff;font-size:10.5pt}
+  nav.toc,.code button{display:none}
+  .layout{grid-template-columns:1fr;padding:0}
+  section{page-break-inside:auto;margin-bottom:28px}
+  .sechead{page-break-after:avoid}
+  .code{border:1px solid #999;background:#fff}
+  .code pre{color:#111;font-size:9pt}
+  .c-key,.c-str,.c-com{color:#111}
+  .code .bar{color:#555;border-bottom:1px solid #ccc}
+  .pipe{grid-template-columns:repeat(5,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="docbar">
+  <div class="wrap">
+    <div class="cell"><b>文件編號</b><span>SOP-HR-AUTO-001</span></div>
+    <div class="cell"><b>版本 / 生效日</b><span>v1.0　2026-08-24</span></div>
+    <div class="cell"><b>適用系統</b><span>Google Workspace + Gemini API</span></div>
+    <div class="cell"><b>複核週期</b><span>每 12 個月</span></div>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="eyebrow">Standard Operating Procedure</div>
+  <h1>當 HR 碰上 Google Apps Script：<br><em>績效分析自動化</em>標準作業程序</h1>
+  <p class="lede">本程序規範以 Google 生態系串接人工智慧（Artificial Intelligence, AI），建立自資料搜集、彙整、運算、論述生成至結果寄送之一站式績效分析流程。全程共五個階段，各階段之輸入與輸出均明確定義，可由承辦人依序建置並定期排程執行。</p>
+
+  <div class="pipe">
+    <a class="stage" href="#s1">
+      <span class="n">STAGE 01</span><span class="t">績效資料搜集</span><span class="tool">Google 表單</span>
+      <div class="io"><i>輸入</i>評核指標設計<br><i>輸出</i>表單回覆（每列一筆）</div>
+    </a>
+    <a class="stage" href="#s2">
+      <span class="n">STAGE 02</span><span class="t">資料彙整</span><span class="tool">Google 試算表</span>
+      <div class="io"><i>輸入</i>表單回覆<br><i>輸出</i>標準化資料表</div>
+    </a>
+    <a class="stage" href="#s3">
+      <span class="n">STAGE 03</span><span class="t">自動化分析</span><span class="tool">Google Apps Script</span>
+      <div class="io"><i>輸入</i>標準化資料表<br><i>輸出</i>指標彙整結果</div>
+    </a>
+    <a class="stage" href="#s4">
+      <span class="n">STAGE 04</span><span class="t">分析論述</span><span class="tool">Gemini API</span>
+      <div class="io"><i>輸入</i>指標彙整（JSON）<br><i>輸出</i>分析論述（JSON）</div>
+    </a>
+    <a class="stage" href="#s5">
+      <span class="n">STAGE 05</span><span class="t">寄送結果</span><span class="tool">Gmail</span>
+      <div class="io"><i>輸入</i>分析論述<br><i>輸出</i>HTML 報告郵件</div>
+    </a>
+  </div>
+</header>
+
+<div class="layout">
+
+<nav class="toc" aria-label="章節導覽">
+  <div class="lbl">目次</div>
+  <a href="#s0"><span class="k">00</span>總則</a>
+  <a href="#s1"><span class="k">01</span>績效資料搜集</a>
+  <a href="#s2"><span class="k">02</span>資料彙整</a>
+  <a href="#s3"><span class="k">03</span>自動化分析</a>
+  <a href="#s4"><span class="k">04</span>分析論述</a>
+  <a href="#s5"><span class="k">05</span>寄送結果</a>
+  <a href="#s6"><span class="k">06</span>排程與監控</a>
+  <a href="#a1"><span class="k">A</span>資安與個資</a>
+  <a href="#a2"><span class="k">B</span>異常排除</a>
+  <a href="#a3"><span class="k">C</span>上線檢核表</a>
+  <a href="#a4"><span class="k">D</span>名詞對照</a>
+</nav>
+
+<main>
+
+<!-- ============ 00 總則 ============ -->
+<section id="s0">
+  <div class="sechead">
+    <span class="k">SECTION 00</span>
+    <h2>總則</h2>
+    <p>建置前應先確認目的、適用範圍、權責分工及環境前置作業，避免流程上線後產生資料權責不清或授權不足之情形。</p>
+  </div>
+
+  <h3>一、目的</h3>
+  <ul>
+    <li><strong>提升效率</strong>：以自動化流程取代人工彙整與繕打，縮短報告產製工時。</li>
+    <li><strong>資料正確</strong>：統一資料來源與計算公式，降低人為轉錄錯誤。</li>
+    <li><strong>即時掌握</strong>：報告可於評核期間結束後即時產出，支援管理決策。</li>
+    <li><strong>溝通順暢</strong>：分析結果自動寄送權責主管與同仁，資訊傳遞零時差。</li>
+  </ul>
+
+  <h3>二、適用範圍</h3>
+  <p>適用於單位內定期（月／季／年）辦理之員工績效評核作業，包含資料搜集、指標運算、質性論述生成及結果通知等作業環節。不適用於涉及敘薪、獎懲或人事處分之最終決定；AI 生成內容僅供管理參考，最終判斷仍應由權責主管為之。</p>
+
+  <h3>三、權責分工</h3>
+  <table>
+    <thead><tr><th>角色</th><th>權責事項</th><th>權限層級</th></tr></thead>
+    <tbody>
+      <tr><td>流程主辦人</td><td>表單設計、指標權重維護、流程執行結果複核</td><td>試算表／指令碼專案「編輯者」</td></tr>
+      <tr><td>系統管理員</td><td>API 金鑰保管、觸發器設定、異常排除、版本控管</td><td>指令碼專案「擁有者」</td></tr>
+      <tr><td>評核者（主管）</td><td>填寫評核表單、確認分析報告內容</td><td>表單填寫權限</td></tr>
+      <tr><td>資訊安全窗口</td><td>個資盤點、存取權限稽核</td><td>唯讀稽核權限</td></tr>
+    </tbody>
+  </table>
+
+  <h3>四、前置作業</h3>
+  <div class="steps">
+    <div class="step">
+      <h4>確認 Google Workspace 帳號權限</h4>
+      <p>確認帳號可建立表單、試算表與 Apps Script 專案，且組織政策未封鎖外部 API 呼叫（<code>UrlFetchApp</code>）。</p>
+    </div>
+    <div class="step">
+      <h4>申請 Gemini API 金鑰</h4>
+      <p>至 Google AI Studio 建立 API 金鑰，並確認所選模型之免費或計費額度足敷單位使用量。</p>
+    </div>
+    <div class="step">
+      <h4>建立專屬雲端硬碟資料夾</h4>
+      <p>建立「績效分析自動化」資料夾，將表單、試算表、輸出報告集中管理，並限縮共用對象為權責人員。</p>
+    </div>
+    <div class="step">
+      <h4>完成個資盤點</h4>
+      <p>依《個人資料保護法》盤點欄位，確認蒐集之特定目的與告知事項（詳附錄 A）。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 ============ -->
+<section id="s1">
+  <div class="sechead">
+    <span class="k">STAGE 01 ／ GOOGLE FORM</span>
+    <h2>績效資料搜集</h2>
+    <p>透過 Google 表單蒐集績效資料，達到快速、標準化之目的。表單欄位即為後續運算之資料結構，設計錯誤將導致全流程返工，應於此階段一次定案。</p>
+  </div>
+
+  <h3>作業步驟</h3>
+  <div class="steps">
+    <div class="step">
+      <h4>建立表單並設定基本資訊</h4>
+      <p>表單標題採「{年度}{期別}績效評核表」格式；於說明欄載明蒐集目的、使用範圍及保存期限。</p>
+    </div>
+    <div class="step">
+      <h4>設定必填識別欄位</h4>
+      <p>包含「受評人姓名」「員工編號」「所屬部門」「評核期間」「評核者」。員工編號為後續比對鍵（Key），務必設為必填並以「簡答＋規則驗證」限制格式。</p>
+    </div>
+    <div class="step">
+      <h4>設定量化指標欄位</h4>
+      <p>採線性刻度（1–5 分）建立五項指標，避免使用開放式數字輸入，以確保分數區間一致。</p>
+    </div>
+    <div class="step">
+      <h4>設定質性描述欄位</h4>
+      <p>建立「具體事蹟」與「待改善建議」兩個長答題欄位，作為 Gemini 生成論述之語料來源。</p>
+    </div>
+    <div class="step">
+      <h4>限制填寫身分與次數</h4>
+      <p>勾選「僅限組織內使用者」及「限填一次」，並開啟「蒐集電子郵件地址」以利追溯。</p>
+    </div>
+    <div class="step">
+      <h4>試填驗證</h4>
+      <p>由主辦人試填 2–3 筆測試資料，確認欄位順序與必填規則無誤後始正式發布。</p>
+    </div>
+  </div>
+
+  <h3>標準欄位規格</h3>
+  <table>
+    <thead><tr><th>欄位名稱</th><th>型態</th><th>值域／規則</th><th>必填</th></tr></thead>
+    <tbody>
+      <tr><td>受評人姓名</td><td>簡答</td><td>中文姓名</td><td>是</td></tr>
+      <tr><td>員工編號</td><td>簡答</td><td>正規表達式 <code>^[A-Z]\d{5}$</code></td><td>是</td></tr>
+      <tr><td>所屬部門</td><td>下拉選單</td><td>依單位組織編制固定選項</td><td>是</td></tr>
+      <tr><td>評核期間</td><td>下拉選單</td><td>2026Q1／Q2／Q3／Q4</td><td>是</td></tr>
+      <tr><td>工作品質</td><td>線性刻度</td><td>1–5（權重 30%）</td><td>是</td></tr>
+      <tr><td>時效達成</td><td>線性刻度</td><td>1–5（權重 25%）</td><td>是</td></tr>
+      <tr><td>團隊協作</td><td>線性刻度</td><td>1–5（權重 20%）</td><td>是</td></tr>
+      <tr><td>創新改善</td><td>線性刻度</td><td>1–5（權重 15%）</td><td>是</td></tr>
+      <tr><td>出勤紀律</td><td>線性刻度</td><td>1–5（權重 10%）</td><td>是</td></tr>
+      <tr><td>具體事蹟</td><td>長答</td><td>200 字以內</td><td>否</td></tr>
+      <tr><td>待改善建議</td><td>長答</td><td>200 字以內</td><td>否</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note warn">
+    <span class="h">注意</span>
+    <p>表單發布後<strong>不得任意增刪或調整欄位順序</strong>。任一變更均會於試算表新增欄位並打亂欄位索引，導致 Apps Script 讀取錯誤。確需變更時，應改版為新表單並同步更新指令碼之欄位對照設定。</p>
+  </div>
+
+  <div class="check">
+    <div class="h">檢核點</div>
+    <ul>
+      <li>必填欄位是否全數設定完成？</li>
+      <li>員工編號格式驗證是否生效？</li>
+      <li>是否限制組織內填寫並蒐集電子郵件地址？</li>
+      <li>表單說明是否已載明個資蒐集告知事項？</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 02 ============ -->
+<section id="s2">
+  <div class="sechead">
+    <span class="k">STAGE 02 ／ GOOGLE SHEET</span>
+    <h2>資料彙整</h2>
+    <p>將表單回覆自動匯入 Google 試算表集中管理，並建立設定表、彙整表與執行紀錄表，形成單一資料來源（Single Source of Truth）。</p>
+  </div>
+
+  <h3>作業步驟</h3>
+  <div class="steps">
+    <div class="step">
+      <h4>連結回覆試算表</h4>
+      <p>於表單「回覆」頁籤點選連結至試算表，選擇「建立新試算表」，命名為「績效分析_資料庫」。</p>
+    </div>
+    <div class="step">
+      <h4>建立四張工作表</h4>
+      <p>除系統自動產生之「表單回應 1」外，另建 <code>設定</code>、<code>彙整</code>、<code>執行紀錄</code> 三張工作表。</p>
+    </div>
+    <div class="step">
+      <h4>維護設定表</h4>
+      <p>於「設定」表以 A 欄放參數名稱、B 欄放參數值，供指令碼讀取，避免將可變參數寫死於程式碼中。</p>
+    </div>
+    <div class="step">
+      <h4>保護原始回覆表</h4>
+      <p>對「表單回應 1」設定工作表保護，僅允許系統管理員編輯，確保原始資料不被人工修改。</p>
+    </div>
+    <div class="step">
+      <h4>凍結標題列</h4>
+      <p>各工作表第 1 列設為凍結列，並統一日期格式為 <code>yyyy-mm-dd</code>。</p>
+    </div>
+  </div>
+
+  <h3>「設定」工作表內容</h3>
+  <table>
+    <thead><tr><th>A 欄（參數）</th><th>B 欄（值）</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>評核期間</td><td>2026Q3</td><td>本次執行之期別，須與表單選項一致</td></tr>
+      <tr><td>收件者</td><td>hr@example.gov.tw, dir@example.gov.tw</td><td>以半形逗號分隔</td></tr>
+      <tr><td>通知模式</td><td>彙總</td><td>彙總／個別（個別模式逐一寄送受評人主管）</td></tr>
+      <tr><td>模型名稱</td><td>gemini-2.0-flash</td><td>可依額度調整</td></tr>
+      <tr><td>低分警示門檻</td><td>3.0</td><td>加權總分低於此值列為關注名單</td></tr>
+    </tbody>
+  </table>
+
+  <h3>「彙整」工作表結構</h3>
+  <p>由指令碼於每次執行時清空並重寫，欄位依序為：員工編號、姓名、部門、各項指標得分、加權總分、部門平均、部門內排名、達成等第、關注標記。</p>
+
+  <div class="check">
+    <div class="h">檢核點</div>
+    <ul>
+      <li>四張工作表名稱是否與指令碼設定完全一致（含全形／半形空格）？</li>
+      <li>「設定」表之收件者是否為有效之組織內信箱？</li>
+      <li>原始回覆表是否已設定保護？</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 03 ============ -->
+<section id="s3">
+  <div class="sechead">
+    <span class="k">STAGE 03 ／ GOOGLE APPS SCRIPT</span>
+    <h2>自動化分析</h2>
+    <p>以 Google Apps Script 自動處理資料、計算指標並產出分析結果。本階段程式碼分為設定、彙整、分析、寄送、主控五個檔案，便於維護與版本控管。</p>
+  </div>
+
+  <h3>作業步驟</h3>
+  <div class="steps">
+    <div class="step">
+      <h4>開啟指令碼編輯器</h4>
+      <p>於試算表選單點選「擴充功能 → Apps Script」，將專案命名為「績效分析自動化」。</p>
+    </div>
+    <div class="step">
+      <h4>設定指令碼屬性</h4>
+      <p>於「專案設定 → 指令碼屬性」新增 <code>GEMINI_API_KEY</code>，值為 Gemini API 金鑰。<strong>嚴禁將金鑰直接寫入程式碼</strong>。</p>
+    </div>
+    <div class="step">
+      <h4>依序建立程式檔案</h4>
+      <p>新增 <code>01_設定.gs</code>、<code>02_彙整.gs</code>、<code>03_分析.gs</code>、<code>04_寄送.gs</code>、<code>05_主控.gs</code>，並貼入下列程式碼。</p>
+    </div>
+    <div class="step">
+      <h4>執行授權</h4>
+      <p>首次手動執行 <code>buildSummary</code> 時，依提示完成 OAuth 授權，授予試算表、外部服務與 Gmail 存取權限。</p>
+    </div>
+    <div class="step">
+      <h4>單元驗證</h4>
+      <p>以測試資料執行 <code>buildSummary</code>，核對「彙整」表加權總分與人工試算結果是否一致。</p>
+    </div>
+  </div>
+
+  <h3>01_設定.gs</h3>
+  <div class="code">
+    <div class="bar"><span>01_設定.gs　／　全域參數與共用函式</span><button type="button" onclick="cp(this)">複製</button></div>
+<pre><code><span class="c-com">/** 全域設定：工作表名稱、指標權重、郵件主旨樣板 */</span>
+<span class="c-key">const</span> CFG = {
+  RESP_SHEET: <span class="c-str">'表單回應 1'</span>,
+  CONF_SHEET: <span class="c-str">'設定'</span>,
+  SUM_SHEET : <span class="c-str">'彙整'</span>,
+  LOG_SHEET : <span class="c-str">'執行紀錄'</span>,
+  WEIGHTS   : { <span class="c-str">'工作品質'</span>:0.30, <span class="c-str">'時效達成'</span>:0.25, <span class="c-str">'團隊協作'</span>:0.20,
+                <span class="c-str">'創新改善'</span>:0.15, <span class="c-str">'出勤紀律'</span>:0.10 },
+  GRADE     : [[4.5,<span class="c-str">'優等'</span>],[4.0,<span class="c-str">'甲等'</span>],[3.0,<span class="c-str">'乙等'</span>],[0,<span class="c-str">'待加強'</span>]]
+};
+
+<span class="c-com">/** 取得試算表物件 */</span>
+<span class="c-key">function</span> ss_() { <span class="c-key">return</span> SpreadsheetApp.getActiveSpreadsheet(); }
+
+<span class="c-com">/** 讀取「設定」工作表，回傳鍵值物件 */</span>
+<span class="c-key">function</span> conf_() {
+  <span class="c-key">const</span> rows = ss_().getSheetByName(CFG.CONF_SHEET).getDataRange().getValues();
+  <span class="c-key">const</span> o = {};
+  rows.forEach(r =&gt; { <span class="c-key">if</span> (r[0]) o[String(r[0]).trim()] = String(r[1]).trim(); });
+  <span class="c-key">return</span> o;
+}
+
+<span class="c-com">/** 自指令碼屬性取得 API 金鑰（不得寫死於程式碼） */</span>
+<span class="c-key">function</span> apiKey_() {
+  <span class="c-key">const</span> k = PropertiesService.getScriptProperties().getProperty(<span class="c-str">'GEMINI_API_KEY'</span>);
+  <span class="c-key">if</span> (!k) <span class="c-key">throw</span> <span class="c-key">new</span> Error(<span class="c-str">'尚未設定 GEMINI_API_KEY，請至專案設定新增指令碼屬性。'</span>);
+  <span class="c-key">return</span> k;
+}
+
+<span class="c-com">/** 寫入執行紀錄 */</span>
+<span class="c-key">function</span> log_(level, msg) {
+  <span class="c-key">const</span> sh = ss_().getSheetByName(CFG.LOG_SHEET);
+  sh.appendRow([<span class="c-key">new</span> Date(), level, String(msg).slice(0, 500), Session.getActiveUser().getEmail()]);
+}
+
+<span class="c-com">/** 依加權總分判定等第 */</span>
+<span class="c-key">function</span> grade_(score) {
+  <span class="c-key">for</span> (<span class="c-key">const</span> [min, name] <span class="c-key">of</span> CFG.GRADE) <span class="c-key">if</span> (score &gt;= min) <span class="c-key">return</span> name;
+  <span class="c-key">return</span> <span class="c-str">'待加強'</span>;
+}</code></pre>
+  </div>
+
+  <h3>02_彙整.gs</h3>
+  <div class="code">
+    <div class="bar"><span>02_彙整.gs　／　讀取回覆、計算指標、寫入彙整表</span><button type="button" onclick="cp(this)">複製</button></div>
+<pre><code><span class="c-com">/**
+ * 讀取表單回覆，計算加權總分、部門平均與排名，寫入「彙整」工作表。
+ * @return {Array&lt;Object&gt;} 彙整後之資料陣列，供後續分析使用。
+ */</span>
+<span class="c-key">function</span> buildSummary() {
+  <span class="c-key">const</span> c = conf_();
+  <span class="c-key">const</span> period = c[<span class="c-str">'評核期間'</span>];
+  <span class="c-key">const</span> alert = Number(c[<span class="c-str">'低分警示門檻'</span>] || 3);
+
+  <span class="c-key">const</span> data = ss_().getSheetByName(CFG.RESP_SHEET).getDataRange().getValues();
+  <span class="c-key">const</span> head = data.shift();
+  <span class="c-key">const</span> idx  = n =&gt; head.indexOf(n);
+
+  <span class="c-com">// 過濾本期資料並計算加權總分</span>
+  <span class="c-key">const</span> rows = data
+    .filter(r =&gt; String(r[idx(<span class="c-str">'評核期間'</span>)]).trim() === period)
+    .map(r =&gt; {
+      <span class="c-key">const</span> scores = {};
+      <span class="c-key">let</span> total = 0;
+      <span class="c-key">for</span> (<span class="c-key">const</span> [k, w] <span class="c-key">of</span> Object.entries(CFG.WEIGHTS)) {
+        <span class="c-key">const</span> v = Number(r[idx(k)]) || 0;
+        scores[k] = v;
+        total += v * w;
+      }
+      <span class="c-key">return</span> {
+        id    : r[idx(<span class="c-str">'員工編號'</span>)],
+        name  : r[idx(<span class="c-str">'受評人姓名'</span>)],
+        dept  : r[idx(<span class="c-str">'所屬部門'</span>)],
+        scores: scores,
+        total : Math.round(total * 100) / 100,
+        merit : r[idx(<span class="c-str">'具體事蹟'</span>)] || <span class="c-str">''</span>,
+        improve: r[idx(<span class="c-str">'待改善建議'</span>)] || <span class="c-str">''</span>
+      };
+    });
+
+  <span class="c-key">if</span> (!rows.length) <span class="c-key">throw</span> <span class="c-key">new</span> Error(<span class="c-str">'查無「'</span> + period + <span class="c-str">'」之表單回覆資料。'</span>);
+
+  <span class="c-com">// 計算部門平均</span>
+  <span class="c-key">const</span> deptAvg = {};
+  rows.forEach(x =&gt; (deptAvg[x.dept] = deptAvg[x.dept] || []).push(x.total));
+  Object.keys(deptAvg).forEach(d =&gt; {
+    <span class="c-key">const</span> a = deptAvg[d];
+    deptAvg[d] = Math.round(a.reduce((s, v) =&gt; s + v, 0) / a.length * 100) / 100;
+  });
+
+  <span class="c-com">// 部門內排名（同分同名次）</span>
+  Object.keys(deptAvg).forEach(d =&gt; {
+    rows.filter(x =&gt; x.dept === d)
+        .sort((a, b) =&gt; b.total - a.total)
+        .forEach((x, i, arr) =&gt; {
+          x.rank = (i &gt; 0 &amp;&amp; arr[i-1].total === x.total) ? arr[i-1].rank : i + 1;
+        });
+  });
+
+  <span class="c-com">// 寫回「彙整」工作表</span>
+  <span class="c-key">const</span> sh = ss_().getSheetByName(CFG.SUM_SHEET);
+  sh.clear();
+  <span class="c-key">const</span> keys = Object.keys(CFG.WEIGHTS);
+  sh.appendRow([<span class="c-str">'員工編號'</span>,<span class="c-str">'姓名'</span>,<span class="c-str">'部門'</span>, ...keys,
+                <span class="c-str">'加權總分'</span>,<span class="c-str">'部門平均'</span>,<span class="c-str">'部門排名'</span>,<span class="c-str">'等第'</span>,<span class="c-str">'關注標記'</span>]);
+  sh.getRange(2, 1, rows.length, keys.length + 8).setValues(
+    rows.map(x =&gt; [x.id, x.name, x.dept, ...keys.map(k =&gt; x.scores[k]),
+                   x.total, deptAvg[x.dept], x.rank, grade_(x.total),
+                   x.total &lt; alert ? <span class="c-str">'★'</span> : <span class="c-str">''</span>])
+  );
+  sh.setFrozenRows(1);
+
+  rows.forEach(x =&gt; { x.deptAvg = deptAvg[x.dept]; x.grade = grade_(x.total); });
+  log_(<span class="c-str">'INFO'</span>, <span class="c-str">'彙整完成，計 '</span> + rows.length + <span class="c-str">' 筆。'</span>);
+  <span class="c-key">return</span> rows;
+}</code></pre>
+  </div>
+
+  <div class="note">
+    <span class="h">設計說明</span>
+    <p>本階段刻意將「讀取—運算—寫入」與「AI 生成」分離。彙整結果先落地於工作表，即使後續 Gemini 呼叫失敗，量化數據仍完整保留，承辦人可據以人工出具報告，符合業務不中斷之要求。</p>
+  </div>
+
+  <div class="check">
+    <div class="h">檢核點</div>
+    <ul>
+      <li>加權總分是否與人工試算一致（抽驗至少 3 筆）？</li>
+      <li>部門平均與排名計算是否正確處理同分情形？</li>
+      <li>查無資料時是否正確拋出例外並記錄於「執行紀錄」？</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 04 ============ -->
+<section id="s4">
+  <div class="sechead">
+    <span class="k">STAGE 04 ／ GEMINI API</span>
+    <h2>分析論述</h2>
+    <p>串接 Gemini API 就量化結果生成質性分析論述與管理洞察，提升報告品質與深度。輸出採結構化 JSON，確保後續套版穩定。</p>
+  </div>
+
+  <h3>作業步驟</h3>
+  <div class="steps">
+    <div class="step">
+      <h4>確認金鑰與模型</h4>
+      <p>確認指令碼屬性已設定 <code>GEMINI_API_KEY</code>，且「設定」表之模型名稱為有效模型代碼。</p>
+    </div>
+    <div class="step">
+      <h4>建立提示詞（Prompt）樣板</h4>
+      <p>提示詞須包含角色設定、資料脈絡、分析框架及輸出格式四要素，並明確要求僅回傳 JSON。</p>
+    </div>
+    <div class="step">
+      <h4>實作 API 呼叫與重試機制</h4>
+      <p>使用 <code>UrlFetchApp.fetch</code> 並啟用 <code>muteHttpExceptions</code>，針對 429／5xx 狀態碼採指數退避（Exponential Backoff）重試 3 次。</p>
+    </div>
+    <div class="step">
+      <h4>去識別化處理</h4>
+      <p>送出前將姓名替換為代碼，僅回傳後於本地還原，避免個人識別資料外送（詳附錄 A）。</p>
+    </div>
+    <div class="step">
+      <h4>人工複核</h4>
+      <p>首次上線及每次調整提示詞後，須由主辦人逐段複核生成內容之正確性與用語妥適性。</p>
+    </div>
+  </div>
+
+  <h3>03_分析.gs</h3>
+  <div class="code">
+    <div class="bar"><span>03_分析.gs　／　提示詞組裝、API 呼叫與重試</span><button type="button" onclick="cp(this)">複製</button></div>
+<pre><code><span class="c-com">/** 組裝提示詞：角色、脈絡、框架、輸出格式四要素 */</span>
+<span class="c-key">function</span> buildPrompt_(rows, period) {
+  <span class="c-com">// 去識別化：以代碼取代姓名與員工編號</span>
+  <span class="c-key">const</span> masked = rows.map((x, i) =&gt; ({
+    代碼: <span class="c-str">'E'</span> + String(i + 1).padStart(3, <span class="c-str">'0'</span>),
+    部門: x.dept, 各項得分: x.scores, 加權總分: x.total,
+    部門平均: x.deptAvg, 部門排名: x.rank, 等第: x.grade,
+    具體事蹟: x.merit, 待改善: x.improve
+  }));
+
+  <span class="c-key">return</span> [
+    <span class="c-str">'你是人力資源管理分析師，負責撰寫組織績效分析報告。'</span>,
+    <span class="c-str">'以下為 '</span> + period + <span class="c-str">' 績效評核彙整資料（已去識別化）：'</span>,
+    JSON.stringify(masked, <span class="c-key">null</span>, 0),
+    <span class="c-str">''</span>,
+    <span class="c-str">'請依下列框架分析：(1) 整體績效分布與集中趨勢；(2) 部門間差異；'</span>,
+    <span class="c-str">'(3) 五項指標之相對強弱；(4) 需管理關注之樣態（不指名個人）；'</span>,
+    <span class="c-str">'(5) 可執行之管理建議。'</span>,
+    <span class="c-str">''</span>,
+    <span class="c-str">'撰寫要求：使用繁體中文（臺灣用語）；文風精簡客觀；以資料佐證，'</span>,
+    <span class="c-str">'不得臆測未提供之資訊；避免對個人作出人格性評價。'</span>,
+    <span class="c-str">''</span>,
+    <span class="c-str">'僅輸出 JSON，不得包含說明文字或程式碼標記，格式如下：'</span>,
+    <span class="c-str">'{"overview":"整體概述 150 字內","distribution":"分布分析",'</span> +
+    <span class="c-str">'"strengths":["優勢1","優勢2"],"risks":["風險1","風險2"],'</span> +
+    <span class="c-str">'"actions":[{"item":"建議事項","owner":"權責單位","priority":"高/中/低"}]}'</span>
+  ].join(<span class="c-str">'\n'</span>);
+}
+
+<span class="c-com">/**
+ * 呼叫 Gemini API，含指數退避重試。
+ * @return {Object} 解析後之分析結果物件
+ */</span>
+<span class="c-key">function</span> analyze(rows) {
+  <span class="c-key">const</span> c = conf_();
+  <span class="c-key">const</span> model = c[<span class="c-str">'模型名稱'</span>] || <span class="c-str">'gemini-2.0-flash'</span>;
+  <span class="c-key">const</span> url = <span class="c-str">'https://generativelanguage.googleapis.com/v1beta/models/'</span> +
+              model + <span class="c-str">':generateContent?key='</span> + apiKey_();
+
+  <span class="c-key">const</span> payload = {
+    contents: [{ role: <span class="c-str">'user'</span>, parts: [{ text: buildPrompt_(rows, c[<span class="c-str">'評核期間'</span>]) }] }],
+    generationConfig: { temperature: 0.3, maxOutputTokens: 2048,
+                        responseMimeType: <span class="c-str">'application/json'</span> }
+  };
+
+  <span class="c-key">let</span> lastErr = <span class="c-str">''</span>;
+  <span class="c-key">for</span> (<span class="c-key">let</span> i = 0; i &lt; 3; i++) {
+    <span class="c-key">const</span> res = UrlFetchApp.fetch(url, {
+      method: <span class="c-str">'post'</span>, contentType: <span class="c-str">'application/json'</span>,
+      payload: JSON.stringify(payload), muteHttpExceptions: <span class="c-key">true</span>
+    });
+    <span class="c-key">const</span> code = res.getResponseCode();
+
+    <span class="c-key">if</span> (code === 200) {
+      <span class="c-key">const</span> body = JSON.parse(res.getContentText());
+      <span class="c-key">const</span> text = body.candidates[0].content.parts[0].text
+                     .replace(/```json|```/g, <span class="c-str">''</span>).trim();
+      <span class="c-key">return</span> JSON.parse(text);
+    }
+    <span class="c-key">if</span> (code !== 429 &amp;&amp; code &lt; 500) <span class="c-key">throw</span> <span class="c-key">new</span> Error(<span class="c-str">'API 錯誤 '</span> + code + <span class="c-str">'：'</span> + res.getContentText());
+
+    lastErr = code;
+    Utilities.sleep(Math.pow(2, i) * 2000);   <span class="c-com">// 2s → 4s → 8s</span>
+  }
+  <span class="c-key">throw</span> <span class="c-key">new</span> Error(<span class="c-str">'Gemini API 重試 3 次仍失敗，最後狀態碼：'</span> + lastErr);
+}</code></pre>
+  </div>
+
+  <div class="note warn">
+    <span class="h">品質管控</span>
+    <p>AI 生成內容<strong>僅供管理參考，不得作為考績評定或人事處分之直接依據</strong>。報告寄送前應由主辦人複核，如發現與量化數據不符或用語不當者，應修正後始得發送，並將修正情形回饋至提示詞版本紀錄。</p>
+  </div>
+
+  <div class="check">
+    <div class="h">檢核點</div>
+    <ul>
+      <li>回傳內容是否可成功解析為 JSON（無 Markdown 標記殘留）？</li>
+      <li>論述內容是否與彙整表數據一致，未出現虛構數字？</li>
+      <li>送出資料是否已完成去識別化？</li>
+      <li>重試機制於模擬 429 時是否正常運作？</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 05 ============ -->
+<section id="s5">
+  <div class="sechead">
+    <span class="k">STAGE 05 ／ GMAIL</span>
+    <h2>寄送結果</h2>
+    <p>自動寄送分析結果予權責主管與同仁，即時掌握績效狀況。郵件採 HTML 格式，內含摘要、統計表與管理建議三段。</p>
+  </div>
+
+  <h3>作業步驟</h3>
+  <div class="steps">
+    <div class="step">
+      <h4>確認收件者清單</h4>
+      <p>自「設定」表讀取收件者，並確認均為組織內信箱；外部信箱須經權責主管書面同意始得列入。</p>
+    </div>
+    <div class="step">
+      <h4>組裝 HTML 郵件</h4>
+      <p>以行內樣式（Inline CSS）撰寫，避免部分郵件用戶端不支援 <code>&lt;style&gt;</code> 區塊。</p>
+    </div>
+    <div class="step">
+      <h4>先寄送測試信</h4>
+      <p>正式發送前，先寄送至主辦人本人信箱檢視版面與中文編碼。</p>
+    </div>
+    <div class="step">
+      <h4>正式發送並留存副本</h4>
+      <p>以密件副本（BCC）方式副知業務檔案信箱，作為留存紀錄。</p>
+    </div>
+  </div>
+
+  <h3>04_寄送.gs</h3>
+  <div class="code">
+    <div class="bar"><span>04_寄送.gs　／　HTML 郵件組裝與寄送</span><button type="button" onclick="cp(this)">複製</button></div>
+<pre><code><span class="c-key">function</span> sendReport(rows, ai) {
+  <span class="c-key">const</span> c = conf_();
+  <span class="c-key">const</span> period = c[<span class="c-str">'評核期間'</span>];
+  <span class="c-key">const</span> to = c[<span class="c-str">'收件者'</span>];
+  <span class="c-key">const</span> avg = Math.round(rows.reduce((s, x) =&gt; s + x.total, 0) / rows.length * 100) / 100;
+
+  <span class="c-key">const</span> tdS = <span class="c-str">'style="padding:8px 10px;border-bottom:1px solid #e0e0e0;font-size:14px"'</span>;
+  <span class="c-key">const</span> thS = <span class="c-str">'style="padding:8px 10px;background:#14664A;color:#fff;font-size:13px;text-align:left"'</span>;
+
+  <span class="c-key">const</span> tableRows = rows
+    .sort((a, b) =&gt; b.total - a.total)
+    .map(x =&gt; <span class="c-str">'&lt;tr&gt;&lt;td '</span>+tdS+<span class="c-str">'&gt;'</span>+x.name+<span class="c-str">'&lt;/td&gt;&lt;td '</span>+tdS+<span class="c-str">'&gt;'</span>+x.dept+
+              <span class="c-str">'&lt;/td&gt;&lt;td '</span>+tdS+<span class="c-str">'&gt;'</span>+x.total+<span class="c-str">'&lt;/td&gt;&lt;td '</span>+tdS+<span class="c-str">'&gt;'</span>+x.grade+
+              <span class="c-str">'&lt;/td&gt;&lt;td '</span>+tdS+<span class="c-str">'&gt;'</span>+x.rank+<span class="c-str">'&lt;/td&gt;&lt;/tr&gt;'</span>).join(<span class="c-str">''</span>);
+
+  <span class="c-key">const</span> li = a =&gt; <span class="c-str">'&lt;ul&gt;'</span> + a.map(v =&gt; <span class="c-str">'&lt;li style="margin:4px 0"&gt;'</span>+v+<span class="c-str">'&lt;/li&gt;'</span>).join(<span class="c-str">''</span>) + <span class="c-str">'&lt;/ul&gt;'</span>;
+  <span class="c-key">const</span> acts = ai.actions.map(a =&gt;
+    <span class="c-str">'&lt;li style="margin:4px 0"&gt;【'</span>+a.priority+<span class="c-str">'】'</span>+a.item+<span class="c-str">'（'</span>+a.owner+<span class="c-str">'）&lt;/li&gt;'</span>).join(<span class="c-str">''</span>);
+
+  <span class="c-key">const</span> html =
+    <span class="c-str">'&lt;div style="font-family:Noto Sans TC,Arial,sans-serif;max-width:720px;color:#222;line-height:1.8"&gt;'</span> +
+    <span class="c-str">'&lt;h2 style="border-bottom:3px solid #14664A;padding-bottom:8px"&gt;'</span>+period+<span class="c-str">' 績效分析報告&lt;/h2&gt;'</span> +
+    <span class="c-str">'&lt;p style="color:#666;font-size:13px"&gt;產製時間：'</span> +
+      Utilities.formatDate(<span class="c-key">new</span> Date(), <span class="c-str">'Asia/Taipei'</span>, <span class="c-str">'yyyy-MM-dd HH:mm'</span>) +
+    <span class="c-str">'　受評人數：'</span>+rows.length+<span class="c-str">' 人　整體平均：'</span>+avg+<span class="c-str">'&lt;/p&gt;'</span> +
+    <span class="c-str">'&lt;h3&gt;一、整體概述&lt;/h3&gt;&lt;p&gt;'</span>+ai.overview+<span class="c-str">'&lt;/p&gt;'</span> +
+    <span class="c-str">'&lt;p&gt;'</span>+ai.distribution+<span class="c-str">'&lt;/p&gt;'</span> +
+    <span class="c-str">'&lt;h3&gt;二、優勢與風險&lt;/h3&gt;&lt;p&gt;&lt;b&gt;優勢&lt;/b&gt;&lt;/p&gt;'</span>+li(ai.strengths) +
+    <span class="c-str">'&lt;p&gt;&lt;b&gt;應關注事項&lt;/b&gt;&lt;/p&gt;'</span>+li(ai.risks) +
+    <span class="c-str">'&lt;h3&gt;三、管理建議&lt;/h3&gt;&lt;ul&gt;'</span>+acts+<span class="c-str">'&lt;/ul&gt;'</span> +
+    <span class="c-str">'&lt;h3&gt;四、評核明細&lt;/h3&gt;&lt;table style="border-collapse:collapse;width:100%"&gt;'</span> +
+    <span class="c-str">'&lt;tr&gt;&lt;th '</span>+thS+<span class="c-str">'&gt;姓名&lt;/th&gt;&lt;th '</span>+thS+<span class="c-str">'&gt;部門&lt;/th&gt;&lt;th '</span>+thS+
+    <span class="c-str">'&gt;加權總分&lt;/th&gt;&lt;th '</span>+thS+<span class="c-str">'&gt;等第&lt;/th&gt;&lt;th '</span>+thS+<span class="c-str">'&gt;部門排名&lt;/th&gt;&lt;/tr&gt;'</span> +
+    tableRows + <span class="c-str">'&lt;/table&gt;'</span> +
+    <span class="c-str">'&lt;p style="margin-top:24px;padding:12px;background:#f4f4f0;font-size:12px;color:#666"&gt;'</span> +
+    <span class="c-str">'本報告由系統自動產製，質性論述係以 AI 輔助生成，僅供管理參考，'</span> +
+    <span class="c-str">'不作為考績評定之直接依據。內容涉及個人資料，請勿轉發。&lt;/p&gt;&lt;/div&gt;'</span>;
+
+  MailApp.sendEmail({
+    to: to,
+    subject: <span class="c-str">'【績效分析】'</span> + period + <span class="c-str">' 分析報告'</span>,
+    htmlBody: html,
+    name: <span class="c-str">'績效分析自動化系統'</span>
+  });
+  log_(<span class="c-str">'INFO'</span>, <span class="c-str">'報告已寄送：'</span> + to);
+}</code></pre>
+  </div>
+
+  <div class="note warn">
+    <span class="h">配額限制</span>
+    <p>一般 Gmail 帳號每日寄送上限為 100 封，Google Workspace 帳號為 1,500 封。採「個別模式」逐一寄送時，應先估算收件筆數；超過配額將拋出例外並中斷流程。</p>
+  </div>
+
+  <div class="check">
+    <div class="h">檢核點</div>
+    <ul>
+      <li>測試信之中文是否正常顯示（無亂碼）？</li>
+      <li>表格於手機版郵件是否可正常閱讀？</li>
+      <li>免責聲明與個資提醒是否完整呈現？</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 06 ============ -->
+<section id="s6">
+  <div class="sechead">
+    <span class="k">SECTION 06</span>
+    <h2>排程、監控與版本控管</h2>
+    <p>以主控函式串接五個階段，並設定時間驅動觸發器定期執行；失敗時自動通知管理員，確保異常可被即時察覺。</p>
+  </div>
+
+  <h3>05_主控.gs</h3>
+  <div class="code">
+    <div class="bar"><span>05_主控.gs　／　流程串接、觸發器與異常通知</span><button type="button" onclick="cp(this)">複製</button></div>
+<pre><code><span class="c-com">/** 主流程：Stage 02 → 03 → 04 → 05 */</span>
+<span class="c-key">function</span> runPipeline() {
+  <span class="c-key">const</span> lock = LockService.getScriptLock();
+  <span class="c-key">if</span> (!lock.tryLock(10000)) { log_(<span class="c-str">'WARN'</span>, <span class="c-str">'另一執行程序進行中，本次略過。'</span>); <span class="c-key">return</span>; }
+  <span class="c-key">try</span> {
+    <span class="c-key">const</span> rows = buildSummary();      <span class="c-com">// Stage 02–03</span>
+    <span class="c-key">const</span> ai   = analyze(rows);        <span class="c-com">// Stage 04</span>
+    sendReport(rows, ai);              <span class="c-com">// Stage 05</span>
+    log_(<span class="c-str">'INFO'</span>, <span class="c-str">'流程執行完成。'</span>);
+  } <span class="c-key">catch</span> (e) {
+    log_(<span class="c-str">'ERROR'</span>, e.message);
+    notifyAdmin_(e);
+    <span class="c-key">throw</span> e;
+  } <span class="c-key">finally</span> {
+    lock.releaseLock();
+  }
+}
+
+<span class="c-com">/** 異常通知管理員 */</span>
+<span class="c-key">function</span> notifyAdmin_(e) {
+  MailApp.sendEmail(Session.getEffectiveUser().getEmail(),
+    <span class="c-str">'【系統異常】績效分析自動化流程執行失敗'</span>,
+    <span class="c-str">'發生時間：'</span> + <span class="c-key">new</span> Date() + <span class="c-str">'\n錯誤訊息：'</span> + e.message +
+    <span class="c-str">'\n\n請至「執行紀錄」工作表查看詳情。'</span>);
+}
+
+<span class="c-com">/** 安裝觸發器：每月 5 日 09:00 執行（執行一次即可） */</span>
+<span class="c-key">function</span> installTrigger() {
+  ScriptApp.getProjectTriggers().forEach(t =&gt; ScriptApp.deleteTrigger(t));
+  ScriptApp.newTrigger(<span class="c-str">'runPipeline'</span>)
+    .timeBased().onMonthDay(5).atHour(9).create();
+  log_(<span class="c-str">'INFO'</span>, <span class="c-str">'觸發器已建立：每月 5 日 09:00。'</span>);
+}</code></pre>
+  </div>
+
+  <h3>監控機制</h3>
+  <table>
+    <thead><tr><th>監控項目</th><th>方式</th><th>頻率</th><th>權責</th></tr></thead>
+    <tbody>
+      <tr><td>執行成功與否</td><td>檢視「執行紀錄」工作表 ERROR 列</td><td>每次執行後</td><td>系統管理員</td></tr>
+      <tr><td>觸發器狀態</td><td>Apps Script「執行項目」頁面</td><td>每月</td><td>系統管理員</td></tr>
+      <tr><td>API 用量與費用</td><td>Google AI Studio 用量頁面</td><td>每月</td><td>系統管理員</td></tr>
+      <tr><td>生成內容品質</td><td>人工抽查報告論述</td><td>每次寄送前</td><td>流程主辦人</td></tr>
+      <tr><td>存取權限</td><td>檢視試算表共用清單</td><td>每季</td><td>資訊安全窗口</td></tr>
+    </tbody>
+  </table>
+
+  <h3>版本控管</h3>
+  <p>每次修改程式碼或提示詞後，應於 Apps Script「部署 → 管理部署作業」建立新版本並填寫變更摘要；重大變更（欄位結構、權重、提示詞框架）另應更新本 SOP 之版本紀錄。</p>
+</section>
+
+<!-- ============ 附錄 A ============ -->
+<section id="a1">
+  <div class="sechead">
+    <span class="k">APPENDIX A</span>
+    <h2>資訊安全與個人資料保護</h2>
+    <p>績效資料屬《個人資料保護法》所稱之個人資料，且具高度敏感性，蒐集、處理及利用均應符合特定目的且不逾必要範圍。</p>
+  </div>
+
+  <table>
+    <thead><tr><th>管控面向</th><th>應辦事項</th></tr></thead>
+    <tbody>
+      <tr><td>告知義務</td><td>表單說明欄應載明蒐集機關、特定目的、個資類別、利用期間與地區、當事人權利行使方式。</td></tr>
+      <tr><td>最小蒐集</td><td>僅蒐集績效評核所必要之欄位，不得蒐集與評核無關之個人資訊。</td></tr>
+      <tr><td>金鑰保管</td><td>API 金鑰一律存放於指令碼屬性（Script Properties），嚴禁寫入程式碼或試算表儲存格；人員異動時應即更換。</td></tr>
+      <tr><td>去識別化</td><td>送交 Gemini API 之資料須以代碼取代姓名與員工編號，論述回傳後於本地還原。</td></tr>
+      <tr><td>存取控制</td><td>試算表與指令碼專案採最小權限原則共用；離職或職務異動人員應於 3 個工作日內移除權限。</td></tr>
+      <tr><td>傳輸安全</td><td>全程使用 HTTPS；郵件不得夾帶未加密之原始資料檔案。</td></tr>
+      <tr><td>保存與銷毀</td><td>依單位檔案保存年限辦理，屆期由系統管理員刪除試算表與雲端備份，並記錄於「執行紀錄」。</td></tr>
+      <tr><td>稽核軌跡</td><td>「執行紀錄」工作表應保留執行時間、層級、訊息與執行者，不得刪除。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note warn">
+    <span class="h">禁止事項</span>
+    <p>不得將完整績效資料（含姓名）貼入任何公開或未經核准之生成式 AI 服務；不得將分析報告轉發予非權責人員；不得以 AI 生成之個人評語作為考績或懲處之唯一依據。</p>
+  </div>
+</section>
+
+<!-- ============ 附錄 B ============ -->
+<section id="a2">
+  <div class="sechead">
+    <span class="k">APPENDIX B</span>
+    <h2>常見異常與排除</h2>
+    <p>依「執行紀錄」工作表所載錯誤訊息，對照下表辦理排除。</p>
+  </div>
+
+  <table>
+    <thead><tr><th>錯誤徵兆</th><th>可能原因</th><th>排除方式</th></tr></thead>
+    <tbody>
+      <tr><td><code>找不到指定工作表</code></td><td>工作表名稱與 <code>CFG</code> 設定不符</td><td>核對名稱，注意全形／半形空格與「表單回應 1」之數字</td></tr>
+      <tr><td><code>尚未設定 GEMINI_API_KEY</code></td><td>指令碼屬性未建立或名稱錯字</td><td>至「專案設定 → 指令碼屬性」新增，屬性名稱須完全一致</td></tr>
+      <tr><td>API 狀態碼 <code>400</code></td><td>模型名稱錯誤或請求格式不符</td><td>檢查「設定」表模型名稱；確認 <code>contents</code> 結構完整</td></tr>
+      <tr><td>API 狀態碼 <code>403</code></td><td>金鑰無效、已撤銷或未啟用服務</td><td>重新產生金鑰；確認專案已啟用 Generative Language API</td></tr>
+      <tr><td>API 狀態碼 <code>429</code></td><td>超出每分鐘請求或每日額度</td><td>已內建退避重試；仍失敗時降低執行頻率或改用較低成本模型</td></tr>
+      <tr><td><code>JSON.parse</code> 失敗</td><td>回傳含 Markdown 標記或非 JSON 文字</td><td>確認已設定 <code>responseMimeType</code>；強化提示詞之格式要求</td></tr>
+      <tr><td><code>執行時間超過上限</code></td><td>資料筆數過多，逾 6 分鐘限制</td><td>分批處理，或改以可執行 30 分鐘之 Workspace 帳號執行</td></tr>
+      <tr><td><code>Service invoked too many times</code></td><td>超出 Gmail 每日寄送配額</td><td>改用彙總模式；隔日再執行；檢查是否重複觸發</td></tr>
+      <tr><td>郵件中文亂碼</td><td>使用 <code>plainBody</code> 或編碼未指定</td><td>改以 <code>htmlBody</code> 寄送，並確認 HTML 已宣告 UTF-8</td></tr>
+      <tr><td>授權提示反覆出現</td><td>OAuth 範圍變更後未重新授權</td><td>手動執行任一函式並重新完成授權流程</td></tr>
+      <tr><td>查無本期資料</td><td>「設定」表期別與表單選項不一致</td><td>核對兩處字串是否完全相同（含大小寫與英數字全半形）</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ 附錄 C ============ -->
+<section id="a3">
+  <div class="sechead">
+    <span class="k">APPENDIX C</span>
+    <h2>上線檢核表</h2>
+    <p>正式上線前逐項確認，全數完成後由系統管理員簽章存查。</p>
+  </div>
+
+  <ul class="cl">
+    <li><input type="checkbox"><span class="tag">前置</span><span>Google Workspace 權限、API 金鑰、雲端資料夾均已備妥</span></li>
+    <li><input type="checkbox"><span class="tag">前置</span><span>個資盤點完成，表單已載明蒐集告知事項</span></li>
+    <li><input type="checkbox"><span class="tag">S01</span><span>表單欄位、必填規則、格式驗證設定完成並經試填驗證</span></li>
+    <li><input type="checkbox"><span class="tag">S01</span><span>已限制組織內填寫、限填一次並蒐集電子郵件地址</span></li>
+    <li><input type="checkbox"><span class="tag">S02</span><span>四張工作表建立完成，名稱與指令碼設定一致</span></li>
+    <li><input type="checkbox"><span class="tag">S02</span><span>「設定」表參數維護完成，原始回覆表已設保護</span></li>
+    <li><input type="checkbox"><span class="tag">S03</span><span>五個程式檔案建立完成，OAuth 授權通過</span></li>
+    <li><input type="checkbox"><span class="tag">S03</span><span>加權總分抽驗 3 筆與人工試算一致</span></li>
+    <li><input type="checkbox"><span class="tag">S04</span><span>API 金鑰存放於指令碼屬性，程式碼內無明文金鑰</span></li>
+    <li><input type="checkbox"><span class="tag">S04</span><span>去識別化機制運作正常，生成內容經人工複核</span></li>
+    <li><input type="checkbox"><span class="tag">S05</span><span>測試信版面正確、中文無亂碼、免責聲明完整</span></li>
+    <li><input type="checkbox"><span class="tag">S05</span><span>收件者清單經權責主管確認</span></li>
+    <li><input type="checkbox"><span class="tag">排程</span><span>觸發器已建立，異常通知信箱設定正確</span></li>
+    <li><input type="checkbox"><span class="tag">排程</span><span>已完成一次端到端（End-to-End）全流程演練</span></li>
+    <li><input type="checkbox"><span class="tag">交付</span><span>本 SOP 已交付主辦人與代理人，並完成操作說明</span></li>
+  </ul>
+</section>
+
+<!-- ============ 附錄 D ============ -->
+<section id="a4">
+  <div class="sechead">
+    <span class="k">APPENDIX D</span>
+    <h2>名詞對照</h2>
+  </div>
+
+  <table>
+    <thead><tr><th>中文</th><th>英文全稱（縮寫）</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>應用程式介面</td><td>Application Programming Interface（API）</td><td>系統間資料交換之標準介面</td></tr>
+      <tr><td>指令碼屬性</td><td>Script Properties</td><td>Apps Script 專案層級之鍵值儲存區，適合存放金鑰</td></tr>
+      <tr><td>時間驅動觸發器</td><td>Time-driven Trigger</td><td>依設定時間自動執行指定函式之機制</td></tr>
+      <tr><td>指數退避</td><td>Exponential Backoff</td><td>重試間隔隨次數倍增之錯誤處理策略</td></tr>
+      <tr><td>提示詞</td><td>Prompt</td><td>輸入生成式模型之指令與脈絡文字</td></tr>
+      <tr><td>結構化輸出</td><td>Structured Output</td><td>限定模型以 JSON 等固定格式回應</td></tr>
+      <tr><td>去識別化</td><td>De-identification</td><td>移除或替換可直接識別特定個人之資訊</td></tr>
+      <tr><td>單一資料來源</td><td>Single Source of Truth（SSOT）</td><td>各項應用共同引用同一份權威資料</td></tr>
+      <tr><td>端到端測試</td><td>End-to-End Test（E2E）</td><td>自輸入至最終輸出之全流程驗證</td></tr>
+    </tbody>
+  </table>
+
+  <h3>版本紀錄</h3>
+  <table>
+    <thead><tr><th>版本</th><th>日期</th><th>修訂重點</th><th>修訂人</th></tr></thead>
+    <tbody>
+      <tr><td>v1.0</td><td>2026-08-24</td><td>初版訂定，涵蓋五階段流程、程式碼、資安與檢核表</td><td>—</td></tr>
+    </tbody>
+  </table>
+</section>
+
+</main>
+</div>
+
+<footer>
+  <span>SOP-HR-AUTO-001　v1.0</span>
+  <span>本文件所列程式碼須依實際欄位名稱調整後始得使用</span>
+</footer>
+
+<script>
+function cp(btn){
+  var pre = btn.closest('.code').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(function(){
+    var t = btn.textContent; btn.textContent = '已複製';
+    setTimeout(function(){ btn.textContent = t; }, 1600);
+  }).catch(function(){ btn.textContent = '請手動選取'; });
+}
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+  var map = {};
+  links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(a){ a.classList.remove('on'); });
+        if(map[e.target.id]) map[e.target.id].classList.add('on');
+      }
+    });
+  }, { rootMargin: '-10% 0px -75% 0px' });
+  document.querySelectorAll('section').forEach(function(s){ obs.observe(s); });
+})();
+</script>
+</body>
+</html>

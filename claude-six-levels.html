@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude 必知六層架構</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FDFAF6;
+    --ink:#17140F;
+    --ink-soft:#4A443C;
+    --clay:#C1522A;
+    --clay-light:#E9BCA2;
+    --clay-pale:#F2DACB;
+    --rule:#D6C9BB;
+    --alert:#B4231C;
+    --display:"Archivo","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--body);font-size:16px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px 80px}
+
+  /* ---------- 標題 ---------- */
+  header{padding:64px 0 40px;border-bottom:3px solid var(--ink)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--clay);margin:0 0 18px}
+  h1{
+    font-family:var(--display);font-weight:900;letter-spacing:-.02em;line-height:.98;
+    font-size:clamp(40px,7.6vw,86px);margin:0;
+  }
+  h1 em{font-style:normal;color:var(--clay)}
+  .sub{margin:22px 0 0;max-width:56ch;color:var(--ink-soft);font-size:17px}
+
+  /* ---------- 輪盤 ---------- */
+  .hub{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:56px;align-items:center;padding:52px 0 8px}
+  .wheel{width:100%;max-width:380px;margin:0 auto}
+  .seg{cursor:pointer;transition:fill .2s ease,transform .2s ease;transform-origin:190px 190px}
+  .seg:hover,.seg.on{fill:var(--clay)}
+  .seg:hover + .seg-label, .seg.on + .seg-label{fill:#fff}
+  .seg-label,.seg-num{pointer-events:none;font-family:var(--display);font-weight:900;fill:var(--ink)}
+  .seg-num{font-family:var(--mono);font-weight:600;font-size:11px;fill:var(--clay)}
+  .seg.on ~ .seg-num{fill:#fff}
+  .legend{list-style:none;margin:0;padding:0;counter-reset:l}
+  .legend li{display:flex;gap:16px;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--rule)}
+  .legend li:first-child{border-top:1px solid var(--rule)}
+  .legend b{font-family:var(--mono);font-size:12px;color:var(--clay);min-width:22px}
+  .legend a{color:var(--ink);text-decoration:none;font-weight:700;font-size:18px}
+  .legend a:hover{color:var(--clay)}
+  .legend span{color:var(--ink-soft);font-size:14px;margin-left:auto;text-align:right}
+
+  /* ---------- 區塊 ---------- */
+  section{padding:56px 0 8px;border-top:1px solid var(--rule);margin-top:44px;scroll-margin-top:24px}
+  .sec-head{display:flex;align-items:flex-start;gap:20px;margin-bottom:30px;flex-wrap:wrap}
+  .sec-num{
+    font-family:var(--mono);font-size:13px;font-weight:600;color:#fff;background:var(--clay);
+    padding:6px 10px;border-radius:2px;line-height:1
+  }
+  .sec-head h2{font-family:var(--display);font-weight:900;font-size:clamp(26px,3.6vw,38px);margin:0;letter-spacing:-.01em}
+  .sec-head .en{font-family:var(--display);font-weight:500;color:var(--ink-soft);font-size:14px;letter-spacing:.06em;text-transform:uppercase;width:100%;margin-top:-6px;padding-left:54px}
+
+  .grid{display:grid;gap:2px;background:var(--rule);border:1px solid var(--rule)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .card{background:var(--paper);padding:22px 20px 24px;position:relative}
+  .card h3{font-family:var(--display);font-weight:700;font-size:18px;margin:0 0 4px;letter-spacing:-.01em}
+  .card .term{font-family:var(--mono);font-size:11px;color:var(--clay);letter-spacing:.04em;display:block;margin-bottom:10px}
+  .card p{margin:0;font-size:15px;color:var(--ink-soft)}
+  .card.hi{background:var(--clay-pale)}
+  .chip{display:inline-block;font-family:var(--mono);font-size:11px;background:var(--clay);color:#fff;padding:4px 8px;margin-top:14px;border-radius:2px}
+  .tier{position:absolute;top:0;right:0;width:0;height:0;border-style:solid;border-width:0 26px 26px 0;border-color:transparent var(--clay-light) transparent transparent}
+
+  .note{
+    margin-top:2px;border:1.5px solid var(--alert);color:var(--alert);
+    padding:16px 18px;font-size:15px;background:#fff
+  }
+  .note b{font-family:var(--display);font-weight:900;letter-spacing:.02em}
+  .aside{margin-top:2px;border:1px solid var(--ink);padding:16px 18px;font-size:15px;background:#fff}
+  .aside b{display:block;font-family:var(--display);font-weight:700;margin-bottom:4px}
+
+  footer{margin-top:64px;padding-top:24px;border-top:3px solid var(--ink);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:13px;color:var(--ink-soft)}
+  footer .mono{font-family:var(--mono)}
+
+  @media (max-width:900px){
+    .hub{grid-template-columns:1fr;gap:32px}
+    .g4,.g3{grid-template-columns:repeat(2,1fr)}
+    .wrap{padding:0 20px 56px}
+  }
+  @media (max-width:560px){
+    .g4,.g3{grid-template-columns:1fr}
+    .legend span{display:none}
+    .sec-head .en{padding-left:0}
+  }
+  @media print{
+    body{background:#fff}
+    .hub{page-break-after:always}
+    section{page-break-inside:avoid;border-top:1px solid #999}
+    .seg{cursor:default}
+    a{text-decoration:none;color:#000}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Claude 使用者指引 ／ 六層架構</p>
+    <h1>使用 Claude<br>你<em>必須知道</em>的事</h1>
+    <p class="sub">從「在哪裡開啟」到「串接了什麼」，六個層次構成完整的使用決策路徑。每一層都是一次選擇，選對了，產出品質才會穩定。</p>
+  </header>
+
+  <!-- 輪盤 -->
+  <div class="hub">
+    <svg class="wheel" viewBox="0 0 380 380" role="img" aria-label="Claude 六層架構輪盤">
+      <g id="segments"></g>
+      <circle cx="190" cy="190" r="72" fill="#fff" stroke="var(--clay)" stroke-width="2.5"/>
+      <g id="star" stroke="var(--clay)" stroke-width="4" stroke-linecap="round"></g>
+      <text x="190" y="228" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="900" font-size="19" fill="var(--ink)">CLAUDE</text>
+      <text x="190" y="243" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9" letter-spacing="1.6" fill="var(--clay)">SIX LEVELS</text>
+    </svg>
+
+    <ul class="legend">
+      <li><b>01</b><a href="#s1">從哪裡開啟</a><span>Where you open it</span></li>
+      <li><b>02</b><a href="#s2">挑哪一顆腦</a><span>Which brain you pick</span></li>
+      <li><b>03</b><a href="#s3">思考多用力</a><span>How hard it thinks</span></li>
+      <li><b>04</b><a href="#s4">怎麼工作</a><span>How you work</span></li>
+      <li><b>05</b><a href="#s5">拿到什麼</a><span>What you get back</span></li>
+      <li><b>06</b><a href="#s6">串接了什麼</a><span>What it's plugged into</span></li>
+    </ul>
+  </div>
+
+  <!-- 01 -->
+  <section id="s1">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <h2>從哪裡開啟</h2>
+      <span class="en">Where you open it</span>
+    </div>
+    <div class="grid g4">
+      <div class="card">
+        <h3>瀏覽器版</h3><span class="term">claude.ai</span>
+        <p>免安裝，權限鎖定的公務筆電也能直接使用。</p>
+      </div>
+      <div class="card">
+        <h3>Chrome 擴充</h3><span class="term">Claude in Chrome</span>
+        <p>讀取你正在瀏覽的分頁，代為點擊與填寫表單。</p>
+      </div>
+      <div class="card">
+        <h3>行動版</h3><span class="term">Claude on Mobile</span>
+        <p>iOS 與 Android。同一帳號、同一份對話紀錄，隨處接續。</p>
+      </div>
+      <div class="card hi">
+        <h3>桌面版</h3><span class="term">Claude on Desktop</span>
+        <p>與本機的真實檔案、資料夾及應用程式並行作業。</p>
+        <span class="chip">唯一能觸及本機檔案的入口</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section id="s2">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <h2>挑哪一顆腦</h2>
+      <span class="en">Which brain you pick</span>
+    </div>
+    <div class="grid g3">
+      <div class="card">
+        <h3>Claude Haiku</h3><span class="term">FAST &amp; LIGHT</span>
+        <p>快速輕量。適合高頻次、單純的任務。</p>
+      </div>
+      <div class="card">
+        <h3>Claude Sonnet</h3><span class="term">DAILY DRIVER</span>
+        <p>日常主力。速度與智慧的平衡點。</p>
+      </div>
+      <div class="card hi">
+        <h3>Claude Opus 5</h3><span class="term">HARD THINKING</span>
+        <p>硬派思考。判斷、分析，以及條件混亂的任務。</p>
+      </div>
+      <div class="card">
+        <div class="tier"></div>
+        <h3>Claude Fable 5</h3><span class="term">FRONTIER TIER</span>
+        <p>前沿層級。任務真的困難時才動用。</p>
+      </div>
+      <div class="card">
+        <div class="tier"></div>
+        <h3>Claude Mythos</h3><span class="term">RESTRICTED</span>
+        <p>限特定組織使用，尚未公開釋出。</p>
+      </div>
+      <div class="card">
+        <h3>選擇原則</h3><span class="term">RULE OF THUMB</span>
+        <p>先問任務難度，而非先問模型名稱。單純作業用小模型，才不會把等待時間花在沒有價值的地方。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section id="s3">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <h2>思考多用力</h2>
+      <span class="en">How hard it thinks</span>
+    </div>
+    <div class="grid g4">
+      <div class="card">
+        <h3>低強度</h3><span class="term">LOW EFFORT</span>
+        <p>格式整理、資料擷取、清稿。答案一樣，但更快。</p>
+      </div>
+      <div class="card">
+        <h3>中強度</h3><span class="term">MEDIUM EFFORT</span>
+        <p>日常工作。草擬、摘要、編修。</p>
+      </div>
+      <div class="card hi">
+        <h3>高強度</h3><span class="term">HIGH EFFORT ／ 預設</span>
+        <p>預設值。分析與需要真正下判斷的決策。</p>
+      </div>
+      <div class="card">
+        <h3>最高強度</h3><span class="term">MAX EFFORT</span>
+        <p>只在任務確實值得這段等待時才用。</p>
+      </div>
+    </div>
+    <div class="note"><b>陷阱｜THE TRAP</b>　想得更久不等於更正確。過長的推理，只是給了它更多空間去自信地犯錯。</div>
+  </section>
+
+  <!-- 04 -->
+  <section id="s4">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <h2>怎麼工作</h2>
+      <span class="en">How you work</span>
+    </div>
+    <div class="grid g3">
+      <div class="card">
+        <h3>對話</h3><span class="term">CHAT</span>
+        <p>一問一答。多數人一輩子停在這裡。</p>
+      </div>
+      <div class="card">
+        <h3>專案</h3><span class="term">PROJECTS</span>
+        <p>檔案與指令只載入一次，之後每次開新對話都已經進入狀況。</p>
+      </div>
+      <div class="card hi">
+        <h3>協作模式</h3><span class="term">COWORK</span>
+        <p>把整件事交出去然後離開。適合多步驟的完整任務。</p>
+      </div>
+      <div class="card">
+        <h3>Claude Code</h3><span class="term">FOR DEVELOPERS</span>
+        <p>為開發者而生，也是讓 Claude 實際動手執行最快的一條路。</p>
+      </div>
+      <div class="card">
+        <h3>Claude Design</h3><span class="term">CANVAS</span>
+        <p>簡報、原型與視覺的畫布，用對話就能改。</p>
+      </div>
+      <div class="card">
+        <h3>內建於既有工具</h3><span class="term">WORKS INSIDE YOUR TOOLS</span>
+        <p>Chrome ・ Excel ・ PowerPoint ・ Slack</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section id="s5">
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <h2>拿到什麼</h2>
+      <span class="en">What you get back</span>
+    </div>
+    <div class="grid g3">
+      <div class="card">
+        <h3>成品物件</h3><span class="term">ARTIFACTS</span>
+        <p>不是一整面文字牆，而是一份可以繼續編輯的文件、儀表板或簡報。</p>
+      </div>
+      <div class="card">
+        <h3>真實檔案</h3><span class="term">REAL FILES</span>
+        <p>Word、Excel、PowerPoint、PDF。下載後直接寄出。</p>
+      </div>
+      <div class="card">
+        <h3>即時儀表板</h3><span class="term">LIVE ARTIFACTS</span>
+        <p>每次開啟，都會以你的真實資料重新整理。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section id="s6">
+    <div class="sec-head">
+      <span class="sec-num">06</span>
+      <h2>串接了什麼</h2>
+      <span class="en">What it's plugged into</span>
+    </div>
+    <div class="grid g3">
+      <div class="card">
+        <h3>連接器</h3><span class="term">CONNECTORS</span>
+        <p>Gmail、Drive、Calendar、Notion、Slack、HubSpot 等數十種服務。</p>
+      </div>
+      <div class="card">
+        <h3>記憶</h3><span class="term">MEMORY</span>
+        <p>把重要的事帶到下一次對話，不必再從頭自我介紹。</p>
+      </div>
+      <div class="card hi">
+        <h3>技能</h3><span class="term">SKILLS</span>
+        <p>指令寫一次，之後每一次對話都照著做。</p>
+      </div>
+    </div>
+    <div class="aside">
+      <b>六層合起來看</b>
+      入口決定能碰到什麼、模型決定思考品質、強度決定成本與時間、模式決定交付範圍、產出決定能不能直接用、串接決定它認不認識你的工作。任何一層選錯，後面幾層都補不回來。
+    </div>
+  </section>
+
+  <footer>
+    <span>Claude 六層架構｜依原始資訊圖表重製之繁體中文版本</span>
+    <span class="mono">SIX LEVELS ／ 01–06</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var NS="http://www.w3.org/2000/svg";
+  var labels=[
+    {n:"01",t:["從哪裡","開啟"],id:"s1"},
+    {n:"02",t:["挑哪一","顆腦"],id:"s2"},
+    {n:"03",t:["思考多","用力"],id:"s3"},
+    {n:"04",t:["怎麼","工作"],id:"s4"},
+    {n:"05",t:["拿到","什麼"],id:"s5"},
+    {n:"06",t:["串接了","什麼"],id:"s6"}
+  ];
+  var cx=190, cy=190, rIn=80, rOut=185, gap=3.2, g=document.getElementById("segments");
+
+  function pt(r,a){var rad=(a-90)*Math.PI/180;return [cx+r*Math.cos(rad), cy+r*Math.sin(rad)];}
+
+  labels.forEach(function(L,i){
+    var a0=i*60+gap, a1=(i+1)*60-gap;
+    var p0=pt(rOut,a0),p1=pt(rOut,a1),p2=pt(rIn,a1),p3=pt(rIn,a0);
+    var d="M"+p0+"A"+rOut+","+rOut+" 0 0 1 "+p1+"L"+p2+"A"+rIn+","+rIn+" 0 0 0 "+p3+"Z";
+    var path=document.createElementNS(NS,"path");
+    path.setAttribute("d",d);
+    path.setAttribute("fill","#E9BCA2");
+    path.setAttribute("class","seg");
+    path.setAttribute("data-target",L.id);
+    path.setAttribute("tabindex","0");
+    path.setAttribute("role","link");
+    path.setAttribute("aria-label",L.n+" "+L.t.join(""));
+    g.appendChild(path);
+
+    var mid=(a0+a1)/2, c=pt((rIn+rOut)/2,mid);
+    var num=document.createElementNS(NS,"text");
+    num.setAttribute("x",c[0]);num.setAttribute("y",c[1]-19);
+    num.setAttribute("text-anchor","middle");num.setAttribute("class","seg-num");
+    num.textContent=L.n;g.appendChild(num);
+
+    L.t.forEach(function(line,j){
+      var tx=document.createElementNS(NS,"text");
+      tx.setAttribute("x",c[0]);tx.setAttribute("y",c[1]+1+j*17);
+      tx.setAttribute("text-anchor","middle");tx.setAttribute("class","seg-label");
+      tx.setAttribute("font-size","14");tx.textContent=line;g.appendChild(tx);
+    });
+
+    function go(){document.getElementById(L.id).scrollIntoView({block:"start"});}
+    path.addEventListener("click",go);
+    path.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();go();}});
+  });
+
+  // 中央星芒
+  var star=document.getElementById("star"), lens=[26,34,22,30,25,33,21,29,27,32];
+  for(var i=0;i<10;i++){
+    var a=i*36, p1=pt(6,a), p2=pt(lens[i],a);
+    var ln=document.createElementNS(NS,"line");
+    ln.setAttribute("x1",p1[0]);ln.setAttribute("y1",p1[1]-38);
+    ln.setAttribute("x2",p2[0]);ln.setAttribute("y2",p2[1]-38);
+    star.appendChild(ln);
+  }
+
+  // 捲動高亮
+  var segs=document.querySelectorAll(".seg");
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){
+        segs.forEach(function(s){s.classList.toggle("on", s.dataset.target===e.target.id);});
+      }
+    });
+  },{rootMargin:"-30% 0px -60% 0px"});
+  document.querySelectorAll("section").forEach(function(s){io.observe(s);});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPG A0810 重大創傷臨床作業指引｜繁體中文詳解（版本二）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4f6f5;
+  --card:#ffffff;
+  --ink:#17262a;
+  --ink-2:#3d5257;
+  --muted:#6b8087;
+  --rule:#dde5e4;
+  --teal:#0f6e66;      /* 主色：臨床綠松 */
+  --teal-soft:#e6f2f0;
+  --crimson:#a83244;   /* 警示 */
+  --crimson-soft:#fbecee;
+  --amber:#9a6510;     /* 判斷節點 */
+  --amber-soft:#fdf3e4;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  background:var(--paper);color:var(--ink);
+  font-size:16px;line-height:1.8;font-weight:400;
+}
+img,table{max-width:100%}
+
+/* ── 頂部細條 ────────────────────── */
+.topbar{
+  position:sticky;top:0;z-index:20;background:rgba(244,246,245,.94);
+  backdrop-filter:saturate(1.4) blur(8px);
+  border-bottom:1px solid var(--rule);
+  font-family:var(--mono);font-size:12px;color:var(--muted);
+  letter-spacing:.06em;
+}
+.topbar .inner{max-width:1120px;margin:0 auto;padding:9px 24px;display:flex;justify-content:space-between;gap:12px}
+.topbar b{color:var(--teal);font-weight:600}
+@media(max-width:620px){.topbar .inner span.hide-s{display:none}}
+
+/* ── 版面骨架 ────────────────────── */
+.shell{max-width:1120px;margin:0 auto;padding:0 24px}
+.layout{display:grid;grid-template-columns:190px 1fr;gap:48px;align-items:start;padding:44px 0 72px}
+@media(max-width:900px){.layout{grid-template-columns:1fr;gap:0;padding-top:28px}}
+@media(max-width:520px){.shell{padding:0 16px}}
+
+/* ── 側邊索引 ────────────────────── */
+aside.rail{position:sticky;top:60px}
+aside.rail .rail-title{
+  font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--muted);
+  padding-bottom:10px;border-bottom:1px solid var(--rule);margin-bottom:12px;
+}
+aside.rail ol{list-style:none;font-size:13.5px;line-height:1.5}
+aside.rail li{margin-bottom:9px;display:flex;gap:8px}
+aside.rail .n{font-family:var(--mono);font-size:11px;color:var(--muted);padding-top:2px;flex:none}
+aside.rail a{color:var(--ink-2);text-decoration:none}
+aside.rail a:hover{color:var(--teal)}
+@media(max-width:900px){
+  aside.rail{position:static;margin-bottom:34px;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:18px 20px}
+  aside.rail ol{columns:2;column-gap:24px}
+  aside.rail li{break-inside:avoid}
+}
+@media(max-width:560px){aside.rail ol{columns:1}}
+
+/* ── 首屏 ────────────────────────── */
+.hero{padding:52px 0 8px;border-bottom:1px solid var(--rule)}
+.hero .kicker{
+  font-family:var(--mono);font-size:12px;letter-spacing:.18em;color:var(--teal);
+  margin-bottom:18px;
+}
+.hero h1{
+  font-size:clamp(30px,5.4vw,52px);font-weight:900;line-height:1.18;letter-spacing:-.01em;
+}
+.hero .h1-en{
+  display:block;font-family:var(--mono);font-weight:400;
+  font-size:clamp(12px,2vw,15px);color:var(--muted);letter-spacing:.04em;margin-top:14px;
+}
+.hero .lede{max-width:56ch;margin-top:22px;color:var(--ink-2);font-size:16.5px;font-weight:300}
+.facts{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);
+  border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin:34px 0 0;
+}
+.facts div{background:var(--card);padding:16px 18px}
+.facts .v{font-family:var(--mono);font-size:22px;font-weight:600;color:var(--teal);line-height:1.2}
+.facts .k{font-size:12.5px;color:var(--muted);margin-top:5px;letter-spacing:.02em}
+@media(max-width:700px){.facts{grid-template-columns:repeat(2,1fr)}}
+
+/* ── 區段 ────────────────────────── */
+section{padding-top:56px}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+.sec-head .idx{font-family:var(--mono);font-size:12px;color:var(--teal);letter-spacing:.1em;flex:none}
+.sec-head h2{font-size:clamp(21px,3vw,26px);font-weight:700;letter-spacing:-.005em}
+.sec-en{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.06em;margin-bottom:24px;padding-left:0}
+h3{font-size:17px;font-weight:700;margin:32px 0 10px;color:var(--ink)}
+h3::before{content:"";display:inline-block;width:14px;height:2px;background:var(--teal);vertical-align:middle;margin-right:10px;transform:translateY(-3px)}
+h4{font-size:15px;font-weight:700;color:var(--teal);margin:18px 0 6px}
+p{margin-bottom:13px;color:var(--ink-2)}
+p.lead{color:var(--ink)}
+ul.list{list-style:none;margin:0 0 16px}
+ul.list li{position:relative;padding-left:18px;margin-bottom:8px;color:var(--ink-2)}
+ul.list li::before{content:"";position:absolute;left:0;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--teal);opacity:.55}
+ul.list ul.list{margin:8px 0 0}
+ul.list ul.list li::before{border-radius:0;width:6px;height:1px;top:.95em;opacity:.8}
+b{font-weight:700;color:var(--ink)}
+
+/* ── 卡片與說明框 ────────────────── */
+.panel{
+  background:var(--card);border:1px solid var(--rule);border-radius:10px;
+  padding:20px 24px;margin:18px 0;
+}
+.panel .chip{
+  display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+  color:var(--teal);background:var(--teal-soft);border-radius:3px;padding:3px 9px;margin-bottom:12px;
+}
+.panel.warn{border-color:#eccdd2;background:var(--crimson-soft)}
+.panel.warn .chip{color:var(--crimson);background:#f6dbe0}
+.panel.note{border-color:#ecdcbe;background:var(--amber-soft)}
+.panel.note .chip{color:var(--amber);background:#f7e6c8}
+.panel p:last-child,.panel ul:last-child{margin-bottom:0}
+
+/* ── 授權層級標籤 ────────────────── */
+.lv{
+  display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  padding:2px 8px;border-radius:3px;vertical-align:2px;margin-right:8px;font-weight:500;white-space:nowrap;
+}
+.lv.p{background:var(--teal-soft);color:var(--teal);border:1px solid #bcdcd7}
+.lv.m{background:#e8eef8;color:#2c4d86;border:1px solid #c3d3ea}
+.lv.d{background:#f0f0ee;color:#5d5d59;border:1px solid #dcdcd8}
+
+/* ── 流程主軸（signature） ────────── */
+.spine{position:relative;margin:26px 0 8px;padding-left:34px}
+.spine::before{content:"";position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--crimson),var(--teal) 22%,var(--rule))}
+.step{position:relative;margin-bottom:22px}
+.step::before{
+  content:"";position:absolute;left:-30px;top:9px;width:12px;height:12px;border-radius:50%;
+  background:var(--card);border:2px solid var(--teal);
+}
+.step.alert::before{border-color:var(--crimson);background:var(--crimson)}
+.step .st{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.step .st .num{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.step .st h4{margin:0;font-size:16px;color:var(--ink);font-weight:700}
+.step .st .en{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.step .body{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:16px 20px;font-size:15px}
+.step.alert .body{border-color:#eccdd2}
+.step .body ul{list-style:none}
+.step .body>ul>li{position:relative;padding-left:16px;margin-bottom:9px;color:var(--ink-2)}
+.step .body>ul>li::before{content:"";position:absolute;left:0;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--teal);opacity:.5}
+.step .body .sub{margin:6px 0 0 4px;padding-left:12px;border-left:2px solid var(--rule);color:var(--ink-2);font-size:14px}
+.step .body .xref{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:8px}
+.tier{
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted);
+  margin:20px 0 8px;padding-top:14px;border-top:1px dashed var(--rule);
+}
+.tier b{color:var(--ink);font-family:"Noto Sans TC",sans-serif;letter-spacing:0;font-size:14px;margin-right:8px}
+@media(max-width:520px){.spine{padding-left:24px}.spine::before{left:4px}.step::before{left:-25px;width:10px;height:10px}.step .body{padding:14px 15px}}
+
+/* ── 劑量／數值條（signature） ────── */
+.strip{margin:12px 0;border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:var(--card)}
+.strip .row{display:grid;grid-template-columns:minmax(110px,34%) 1fr;border-top:1px solid var(--rule)}
+.strip .row:first-child{border-top:none}
+.strip .row .k{
+  background:#f7faf9;padding:9px 14px;font-size:13.5px;font-weight:500;color:var(--ink-2);
+  border-right:1px solid var(--rule);
+}
+.strip .row .v{padding:9px 14px;font-family:var(--mono);font-size:13.5px;color:var(--ink);word-break:break-word}
+.strip .row .v.zh{font-family:"Noto Sans TC",sans-serif}
+.drugcard{
+  background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--teal);
+  border-radius:8px;padding:14px 18px;margin:14px 0;
+}
+.drugcard .nm{font-weight:700;font-size:15.5px;color:var(--ink)}
+.drugcard .ds{font-family:var(--mono);font-size:14px;color:var(--teal);margin-top:4px}
+
+/* ── 表格 ────────────────────────── */
+.tblwrap{background:var(--card);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin:18px 0}
+.tblwrap .cap{padding:12px 18px;border-bottom:1px solid var(--rule);font-weight:700;font-size:15px}
+.tblwrap .cap span{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);font-weight:400;letter-spacing:.05em;margin-top:2px}
+table{width:100%;border-collapse:collapse;font-size:14.5px;table-layout:fixed}
+th{background:#f7faf9;text-align:left;padding:10px 16px;font-size:13px;color:var(--muted);font-weight:600;letter-spacing:.03em;border-bottom:1px solid var(--rule)}
+td{padding:9px 16px;border-bottom:1px solid #eef2f1;vertical-align:top;color:var(--ink-2);word-break:break-word;overflow-wrap:anywhere}
+tr:last-child td{border-bottom:none}
+td.a{border-right:1px solid #eef2f1}
+@media(max-width:520px){th,td{padding:8px 11px;font-size:13.5px}}
+
+/* ── 圖例 ────────────────────────── */
+.legend{display:flex;flex-wrap:wrap;gap:10px 20px;margin:16px 0 0;font-size:13.5px;color:var(--ink-2)}
+
+/* ── 參考文獻 ────────────────────── */
+ol.refs{list-style:none;counter-reset:r;font-size:14.5px}
+ol.refs li{counter-increment:r;position:relative;padding-left:34px;margin-bottom:11px;color:var(--ink-2)}
+ol.refs li::before{
+  content:counter(r,decimal-leading-zero);position:absolute;left:0;top:.15em;
+  font-family:var(--mono);font-size:11.5px;color:var(--teal);
+}
+
+footer{border-top:1px solid var(--rule);background:var(--card)}
+footer .inner{max-width:1120px;margin:0 auto;padding:30px 24px 44px;font-size:13px;color:var(--muted);line-height:1.85}
+footer b{color:var(--ink-2)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="inner">
+    <span><b>CPG A0810</b> · MAJOR TRAUMA</span>
+    <span class="hide-s">AMBULANCE VICTORIA</span>
+    <span>v1.3.0 / 2025-12-02</span>
+  </div>
+</div>
+
+<div class="shell">
+  <div class="hero">
+    <div class="kicker">澳洲維多利亞州救護局 臨床作業指引 · 繁體中文詳解</div>
+    <h1>重大創傷處置指引
+      <span class="h1-en">Major Trauma — Clinical Practice Guideline A0810</span>
+    </h1>
+    <p class="lede">本指引不是一份逐項照做的清單，而是一套<b>優先順序階層</b>：當患者同時存在多重需求時，決定先做什麼、什麼可以並行、什麼應該讓位給後送。</p>
+    <div class="facts">
+      <div><div class="v">≥ 16</div><div class="k">適用年齡（歲）</div></div>
+      <div><div class="v">70–90</div><div class="k">未合併 TBI 目標收縮壓（mmHg）</div></div>
+      <div><div class="v">&lt; 2 hr</div><div class="k">TXA 給藥時間窗</div></div>
+      <div><div class="v">4</div><div class="k">循環處置線（輸液→升壓劑）</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+<div class="layout">
+
+  <aside class="rail">
+    <div class="rail-title">CONTENTS</div>
+    <ol>
+      <li><span class="n">01</span><a href="#s1">指引定位與使用原則</a></li>
+      <li><span class="n">02</span><a href="#s2">處置主軸流程</a></li>
+      <li><span class="n">03</span><a href="#s3">照護目標</a></li>
+      <li><span class="n">04</span><a href="#s4">後送優先原則</a></li>
+      <li><span class="n">05</span><a href="#s5">大出血控制</a></li>
+      <li><span class="n">06</span><a href="#s6">呼吸道處置</a></li>
+      <li><span class="n">07</span><a href="#s7">呼吸與通氣</a></li>
+      <li><span class="n">08</span><a href="#s8">循環與輸液復甦</a></li>
+      <li><span class="n">09</span><a href="#s9">血品與升壓劑</a></li>
+      <li><span class="n">10</span><a href="#s10">支持性照護</a></li>
+      <li><span class="n">11</span><a href="#s11">傳明酸與低血鈣</a></li>
+      <li><span class="n">12</span><a href="#s12">特殊情境</a></li>
+      <li><span class="n">13</span><a href="#s13">實證依據</a></li>
+    </ol>
+  </aside>
+
+  <div class="content">
+
+  <!-- 01 -->
+  <section id="s1">
+    <div class="sec-head"><span class="idx">01</span><h2>指引定位與使用原則</h2></div>
+    <div class="sec-en">SCOPE &amp; HOW TO USE</div>
+
+    <p class="lead">本文件為澳洲維多利亞州救護局（Ambulance Victoria, AV）之到院前重大創傷臨床作業指引（Clinical Practice Guideline, CPG），編號 A0810，規範救護人員於現場及後送途中對重大創傷患者之處置優先順序與臨床決策架構。</p>
+
+    <div class="strip">
+      <div class="row"><div class="k">適用對象</div><div class="v zh">年齡 ≥ 16 歲之創傷患者</div></div>
+      <div class="row"><div class="k">版本</div><div class="v">1.3.0 · 2025-12-02（匯出 2026-04-20）</div></div>
+      <div class="row"><div class="k">文件性質</div><div class="v zh">非管制文件；讀者須自行確認現行有效性</div></div>
+      <div class="row"><div class="k">關聯指引</div><div class="v">A0105 · A0302 · A0307 · A0501-1 · A0702 · A0703 · A0708 · A0802 · A0804 · M0201 · M0401</div></div>
+    </div>
+
+    <h3>使用方式</h3>
+    <div class="panel">
+      <span class="chip">原文說明</span>
+      <p>本指引呈現的是一套<b>優先順序階層</b>，目的在協助救護人員於患者有多重需求時排定處置先後，<b>並非要求嚴格線性執行</b>；多數情況下，指引中多項處置可同時並行。</p>
+      <p>本指引主要適用於重大創傷患者，但不以符合 CPG A0105 創傷檢傷（Trauma Triage）條件者為限。其優先順序原則同樣適用於輕傷患者，惟多數處置內容對輕傷患者並不相關。</p>
+    </div>
+
+    <h3>授權層級標示</h3>
+    <p>本文件以標籤標示各處置之執行層級，此為理解流程之關鍵：</p>
+    <div class="legend">
+      <span><span class="lv p">PARAMEDIC</span>一般救護人員可執行</span>
+      <span><span class="lv m">MICA</span>行動加護救護（Mobile Intensive Care Ambulance）層級</span>
+      <span><span class="lv d">DECISION</span>評估條件或決策節點</span>
+    </div>
+
+    <div class="panel note" style="margin-top:22px">
+      <span class="chip">制度參考</span>
+      <p>以授權層級對應處置項目之編排方式，與我國 EMT-1／EMT-2／EMT-P 救護分級制度之授權概念相通，可作為《救護技術員管理辦法》授權項目視覺化，以及救護作業指引編修之參考範式。</p>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section id="s2">
+    <div class="sec-head"><span class="idx">02</span><h2>處置主軸流程</h2></div>
+    <div class="sec-en">FLOWCHART — FULL TRANSLATION</div>
+    <p>下列為原文流程圖之完整中譯。主軸由上而下代表優先順序，但如前述，多數步驟可並行執行。</p>
+
+    <div class="spine">
+
+      <div class="step alert">
+        <div class="st"><span class="num">00</span><h4>大出血控制</h4><span class="en">Major Haemorrhage Control</span></div>
+        <div class="body">
+          <p style="margin:0">整段照護期間之<b>絕對優先事項</b>，並須持續重新評估。</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="st"><span class="num">01</span><h4>呼吸道</h4><span class="en">Airway</span></div>
+        <div class="body">
+          <ul>
+            <li><span class="lv p">P</span><b>呼吸道手法與擺位</b>
+              <div class="sub">僅於呼吸道不通暢時使用鼻咽呼吸道（Nasopharyngeal Airway, NPA）；NPA 無效時方使用口咽呼吸道（Oropharyngeal Airway, OPA）。</div></li>
+            <li><span class="lv p">P</span><b>聲門上呼吸道裝置（Supraglottic Airway, SGA）</b>：無嘔吐反射且需長時間通氣時使用。</li>
+            <li><span class="lv m">MICA</span><b>快速誘導插管（Rapid Sequence Induction, RSI）</b>：依 CPG A0302 氣管內插管指引，符合適應症時執行。</li>
+            <li><span class="lv m">MICA</span><b>環甲膜切開術（Cricothyroidotomy）</b>：呼吸道／顏面創傷致無法氧合或通氣時執行。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="st"><span class="num">02</span><h4>呼吸</h4><span class="en">Breathing</span></div>
+        <div class="body">
+          <ul>
+            <li><span class="lv p">P</span><b>氧氣治療</b>依 CPG A0001；<b>或</b>視需要給予通氣：</li>
+          </ul>
+          <div class="strip">
+            <div class="row"><div class="k">潮氣容積 V<sub>T</sub></div><div class="v">6 – 8 mL/kg</div></div>
+            <div class="row"><div class="k">呼吸頻率</div><div class="v">12 – 16 /min（依 ETCO₂ 調整）</div></div>
+            <div class="row"><div class="k">SpO₂</div><div class="v">&gt; 94 %</div></div>
+            <div class="row"><div class="k">ETCO₂</div><div class="v">30 – 35 mmHg</div></div>
+          </div>
+          <div class="xref">機械通氣詳見 CPG A0307</div>
+          <ul style="margin-top:10px"><li><span class="lv p">P</span><b>考慮胸腔減壓</b>：依 CPG A0802 胸部損傷指引。</li></ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="st"><span class="num">03</span><h4>循環</h4><span class="en">Circulation</span></div>
+        <div class="body">
+          <div class="tier" style="border-top:none;padding-top:0;margin-top:0"><b>第一線</b>FIRST LINE</div>
+          <ul>
+            <li><span class="lv d">目標</span><b>輸液復甦之血壓目標</b></li>
+          </ul>
+          <div class="strip">
+            <div class="row"><div class="k">收縮壓 70 – 90</div><div class="v zh">休克<b>未</b>合併創傷性腦損傷（Traumatic Brain Injury, TBI）</div></div>
+            <div class="row"><div class="k">收縮壓 &gt; 120</div><div class="v zh">休克<b>合併</b> TBI</div></div>
+          </div>
+          <ul style="margin-top:10px">
+            <li><span class="lv p">P</span><b>生理食鹽水 250 mL IV</b>，視需要重複（上限 2 L）；反應不佳時經 AV Clinician 諮詢 AV 醫療顧問。</li>
+            <li><span class="lv m">MICA</span>如有血品，<b>優先於生理食鹽水給予濃縮紅血球（Packed Red Blood Cells, PRBC）1 單位 IV</b>；每單位輸畢後重評，可重複給予（無劑量上限）。</li>
+            <li><span class="lv p">P</span><b>骨盆固定帶</b>：骨盆鈍挫傷，或所有意識不清之多重創傷患者。</li>
+            <li><span class="lv p">P</span><b>考慮其他休克原因</b>：出血控制、胸腔減壓、骨盆固定、通氣策略、藥物過敏反應。</li>
+          </ul>
+
+          <div class="tier"><b>第二線</b>SECOND LINE</div>
+          <div class="strip">
+            <div class="row"><div class="k">合併 TBI</div><div class="v zh">輸注約 500 – 1000 mL 輸液／PRBC 1 – 2 單位後反應仍不佳</div></div>
+            <div class="row"><div class="k">未合併 TBI</div><div class="v zh">輸注約 1000 – 2000 mL 輸液／PRBC 2 – 4 單位後反應仍不佳</div></div>
+          </div>
+          <ul style="margin-top:10px">
+            <li><span class="lv m">MICA</span><b>Metaraminol（間羥胺）0.5 – 1 mg IV</b>，每 2 分鐘間隔給予。</li>
+            <li><span class="lv m">MICA</span>持續輸液復甦。</li>
+          </ul>
+
+          <div class="tier"><b>第三線</b>THIRD LINE · 對 1 – 2 劑 Metaraminol 反應不佳</div>
+          <div class="drugcard">
+            <div class="nm">正腎上腺素（Noradrenaline）輸注 <span class="lv m" style="margin-left:6px">MICA</span></div>
+            <div class="ds">起始 5 mcg/min（5 mL/hr）｜每 2 分鐘 +5 mcg/min｜上限 25 mcg/min</div>
+          </div>
+          <ul>
+            <li>進入第四線前應確認：靜脈通路與幫浦功能、重新評估其他休克原因、經 AV Clinician 諮詢 AV 醫療顧問。</li>
+          </ul>
+
+          <div class="tier"><b>第四線</b>FOURTH LINE · 對最大劑量正腎上腺素反應不佳</div>
+          <div class="drugcard">
+            <div class="nm">腎上腺素（Adrenaline）輸注 <span class="lv m" style="margin-left:6px">MICA</span></div>
+            <div class="ds">起始 5 mcg/min（5 mL/hr）｜每 2 分鐘 +5 mcg/min｜上限 25 mcg/min</div>
+          </div>
+          <ul>
+            <li>如無第二台注射幫浦，改以 <b>Metaraminol 0.5 – 1 mg IV</b>，每 2 分鐘間隔給予。</li>
+            <li>經 AV Clinician 諮詢 AV 醫療顧問決定後續處置。</li>
+            <li>達目標血壓後考慮調降升壓劑；<b>應先減升壓劑，再停輸液</b>。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="st"><span class="num">04</span><h4>支持性照護</h4><span class="en">Supportive Care</span></div>
+        <div class="body">
+          <ul>
+            <li><span class="lv p">P</span>患者保溫</li>
+            <li><span class="lv p">P</span><b>疼痛控制</b>（視需要）</li>
+            <li><span class="lv p">P</span><b>脊椎固定</b>（如有適應症）</li>
+            <li><span class="lv p">P</span><b>傷口／骨折處置</b></li>
+            <li><span class="lv p">P</span><b>癲癇</b>依 CPG A0703；<b>低血糖</b>依 CPG A0702</li>
+            <li><span class="lv p">P</span>壓力性損傷照護</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="st"><span class="num">05</span><h4>傳明酸</h4><span class="en">Tranexamic Acid, TXA</span></div>
+        <div class="body">
+          <ul>
+            <li><span class="lv d">條件</span>重度損傷合併收縮壓 &lt; 90 mmHg，<b>或</b> COAST 評分 ≥ 3；<b>且</b>受傷後 &lt; 2 小時。</li>
+          </ul>
+          <div class="drugcard">
+            <div class="nm">傳明酸（TXA） <span class="lv p" style="margin-left:6px">PARAMEDIC</span></div>
+            <div class="ds">1 g IV over 10 min，或 IM</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="st"><span class="num">06</span><h4>低血鈣</h4><span class="en">Hypocalcaemia</span></div>
+        <div class="body">
+          <div class="drugcard">
+            <div class="nm">葡萄糖酸鈣（Calcium Gluconate） <span class="lv m" style="margin-left:6px">MICA</span></div>
+            <div class="ds">4.4 mmol（2 g）IV｜重複 2.2 – 4.4 mmol（1 – 2 g）</div>
+          </div>
+          <ul>
+            <li>適應症：輸注 4 單位 PRBC 後，或任何階段離子鈣（iCa）&lt; 1.12 mmol/L。</li>
+            <li>首劑後 iCa 仍 &lt; 1.12 時重複給予一劑。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="st"><span class="num">07</span><h4>滲透壓治療</h4><span class="en">Osmotherapy</span></div>
+        <div class="body">
+          <ul>
+            <li><span class="lv d">條件</span>已插管之神經創傷患者；<b>且</b>出現惡化徵象合併單側或雙側瞳孔放大；<b>且</b>直升機緊急醫療服務（Helicopter Emergency Medical Services, HEMS）後送飛行時間 &gt; 20 分鐘。</li>
+          </ul>
+          <div class="drugcard">
+            <div class="nm">3% 高張生理食鹽水 <span class="lv m" style="margin-left:6px">MICA 飛航救護人員（MFP）限定</span></div>
+            <div class="ds">250 mL IV</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section id="s3">
+    <div class="sec-head"><span class="idx">03</span><h2>照護目標</h2></div>
+    <div class="sec-en">CARE OBJECTIVES</div>
+    <ul class="list">
+      <li><b>立即控制大出血。</b></li>
+      <li>確保呼吸道通暢（Airway）、呼吸（適當氧合與通氣，Breathing）、循環（符合患者狀況之足夠灌流，Circulation）。</li>
+      <li><b>優先後送。</b></li>
+      <li>視需要提供支持性照護。</li>
+    </ul>
+  </section>
+
+  <!-- 04 -->
+  <section id="s4">
+    <div class="sec-head"><span class="idx">04</span><h2>後送優先原則</h2></div>
+    <div class="sec-en">PRIORITISING TRANSPORT</div>
+    <ul class="list">
+      <li><b>所有重大創傷：</b>凡符合 CPG A0105 創傷檢傷條件者，一律縮短現場時間。</li>
+      <li><b>休克或穿刺性軀幹創傷：</b>
+        <ul class="list">
+          <li>後送前僅處置立即危及生命之狀況。</li>
+          <li>疼痛控制可於後送過程中同步進行。</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="panel warn">
+      <span class="chip">關鍵共識</span>
+      <p><b>為建立靜脈通路而延遲後送，對休克創傷患者有害。</b>靜脈輸液之重要性不及外科介入對休克原因（如出血）之確定性處置；輸液後血壓改善<b>不降低</b>後送之急迫性。</p>
+    </div>
+    <div class="panel">
+      <span class="chip">實證背景</span>
+      <p>到院前時間對創傷預後之影響尚有爭議，且與損傷型態及嚴重度相關；惟對所有危急或可能惡化之創傷患者，縮短到院前時間仍屬必要。本指引不強制規定後送於流程中之確切時點，應依現場情境與患者表現作臨床判斷。</p>
+      <p>實證顯示，穿刺性軀幹創傷及休克患者因多需緊急手術，縮短到院前時間尤為關鍵。</p>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section id="s5">
+    <div class="sec-head"><span class="idx">05</span><h2>大出血控制</h2></div>
+    <div class="sec-en">MAJOR HAEMORRHAGE</div>
+    <p class="lead"><b>大出血控制應列為最優先</b>，並定期重新評估以確保出血持續受控。</p>
+    <div class="panel">
+      <span class="chip">為何必須重評</span>
+      <p>大出血控制是整段照護期間的絕對優先事項；若未主動確認與重評，相關措施容易被忽略。出血控制之有效性可能隨時間改變：</p>
+      <ul class="list">
+        <li>敷料與止血帶（tourniquet）可能鬆脫移位；</li>
+        <li>骨盆固定帶可能被遺漏或位置不當；</li>
+        <li>患者復甦、血壓回升後，可能再度出血。</li>
+      </ul>
+      <p>上述情形若被遮蔽（如覆蓋毛毯下）不易即時察覺，故<b>重新評估是辨識持續出血的關鍵</b>。</p>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section id="s6">
+    <div class="sec-head"><span class="idx">06</span><h2>呼吸道處置</h2></div>
+    <div class="sec-en">AIRWAY</div>
+    <ul class="list">
+      <li>呼吸道手法與擺位依作業指引 CWI/OPS/190 辦理。</li>
+      <li>NPA 僅於<b>維持呼吸道通暢確有必要</b>時置入。</li>
+      <li>OPA 可能誘發嘔吐反射，非其他方法無法維持通暢時不應使用。</li>
+      <li>RSI：及早辨識適合對象並啟動準備程序（如規劃脫困、任務分工），以縮短現場時間。</li>
+    </ul>
+    <div class="panel">
+      <span class="chip">風險權衡</span>
+      <p>曾有顱底骨折患者置入 NPA 誤入顱內之個案報告。若以手法與擺位即可維持呼吸道，宜避免置入輔助器；惟若無法維持通暢，NPA 顱內置入之相對低風險，仍優於呼吸道阻塞之災難性後果。</p>
+      <p>OPA 誘發之嘔吐反射會升高顱內壓，於 TBI 患者可能加重次發性腦損傷。本指引認定「OPA 誘發嘔吐反射之風險」大於「NPA 顱內置入之風險」，故<b>如需輔助器，以 NPA 為首選</b>；僅於使用 NPA 後呼吸道仍持續解剖性阻塞時，方以 OPA 為最後手段。</p>
+    </div>
+    <div class="panel warn">
+      <span class="chip">RSI 之定位</span>
+      <p>流程中將 RSI 置於呼吸道區塊，反映其於初步評估（primary survey）之概念位置；用意在於<b>與其他處置並行地</b>及早辨識與準備，以縮短現場時間。<b>休克創傷患者執行 RSI 風險甚高——若呼吸道尚通暢，應考慮以後送為優先。</b></p>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section id="s7">
+    <div class="sec-head"><span class="idx">07</span><h2>呼吸與通氣</h2></div>
+    <div class="sec-en">BREATHING</div>
+    <ul class="list">
+      <li>氧氣治療依 CPG A0001（危重症）辦理，或視需要給予通氣。</li>
+      <li>不需積極呼吸道處置之重大創傷患者，<b>考慮使用鼻導管 ETCO₂ 監測</b>。</li>
+      <li>胸腔減壓適應症參照 CPG A0802 胸部損傷指引。</li>
+    </ul>
+    <div class="panel">
+      <span class="chip">氧氣</span>
+      <p>對任何危重或不穩定患者之初期照護給予氧氣已有廣泛共識——可能改善氧輸送（專家意見），且於脈搏血氧監測不可靠或人員忙碌時，可避免低血氧未被察覺。惟對<b>無低血氧</b>之創傷患者，尚無強力證據顯示氧氣可改善預後，其非照護之必要元素；患者穩定、血氧可穩定量測且其他照護重點已處理後，氧氣可調降或移除。</p>
+    </div>
+    <div class="panel">
+      <span class="chip">二氧化碳監測</span>
+      <p>鼻導管 ETCO₂ 可精確即時監測呼吸速率與通氣趨勢。<b>呼吸速率上升</b>代表惡化——休克或呼吸衰竭正在浮現或加重；<b>CO₂ 上升</b>則多提示頭部或胸部損傷（如肋骨骨折疼痛影響通氣）導致之通氣不足。</p>
+    </div>
+  </section>
+
+  <!-- 08 -->
+  <section id="s8">
+    <div class="sec-head"><span class="idx">08</span><h2>循環與輸液復甦</h2></div>
+    <div class="sec-en">CIRCULATION &amp; FLUID RESUSCITATION</div>
+
+    <h3>休克未合併 TBI｜目標收縮壓 70 – 90 mmHg</h3>
+    <ul class="list">
+      <li>於 70 – 90 mmHg 範圍內選定適當血壓須綜合多項因素，<b>無單一組合可強制對應特定血壓值，需臨床判斷</b>。</li>
+      <li>橈動脈脈搏存在與意識正常，有助研判該患者當下血壓已足夠。</li>
+      <li>升壓劑保留予輸液復甦仍無法達標，或血壓急遽下降之極重度休克。</li>
+    </ul>
+
+    <div class="tblwrap">
+      <div class="cap">影響血壓目標之因素<span>FACTORS INFLUENCING BLOOD PRESSURE TARGET</span></div>
+      <table>
+        <tr><th style="width:50%">容許較低血壓</th><th>宜採較高血壓</th></tr>
+        <tr><td class="a">橈動脈脈搏存在</td><td>橈動脈脈搏消失</td></tr>
+        <tr><td class="a">意識狀態正常</td><td>意識狀態異常</td></tr>
+        <tr><td class="a">穿刺性軀幹創傷</td><td>鈍性軀幹創傷</td></tr>
+        <tr><td class="a">年輕、健康</td><td>年長、多重共病（尤其高血壓、缺血性心臟病病史）</td></tr>
+        <tr><td class="a">活動性大量出血</td><td>出血已受控制</td></tr>
+        <tr><td class="a">後送時間較短</td><td>後送時間較長（1 – 2 小時）</td></tr>
+        <tr><td class="a">僅有生理食鹽水可用</td><td>有血品可用</td></tr>
+      </table>
+    </div>
+
+    <h3>休克合併 TBI｜目標收縮壓 120 mmHg</h3>
+    <ul class="list">
+      <li>TBI 併出血性休克時，優先目標為<b>預防低血壓造成之次發性腦損傷</b>，而非容許低血壓。</li>
+      <li>多重創傷患者出現意識改變、躁動，或受傷機轉（Mechanism of Injury, MOI）顯示可能有頭部損傷者，應對 TBI 保持高度警覺；<b>有任何疑慮時，一律採較高血壓目標</b>。</li>
+      <li>初始輸液復甦（如生理食鹽水 500 – 1000 mL 或 PRBC 1 – 2 單位）後低血壓仍頑固者，可進階至升壓劑；惟<b>充足輸液復甦仍為優先</b>。血壓達標或超標時，應優先調降或停用升壓劑，而非減慢輸液速率。</li>
+    </ul>
+
+    <h3>允許性低血壓之原理</h3>
+    <div class="panel">
+      <span class="chip">為何限制輸液</span>
+      <p>休克未治療將導致器官衰竭與死亡；然而以大量輸液（尤其晶質液）治療休克，可能造成<b>稀釋性凝血功能障礙</b>、<b>出血增加</b>（血管內靜水壓上升破壞血栓）、<b>低體溫</b>（輸注室溫輸液時），以及急性肺損傷／急性呼吸窘迫症候群（ALI/ARDS）、腹腔腔室症候群等復甦相關併發症。</p>
+      <p>允許性低血壓即在權衡上述風險：於出血獲確定性控制前，暫緩輸液並容許中度低血壓，僅於休克嚴重至無法耐受時方予輸液。此策略適用於<b>活動性、控制不佳或大量出血</b>之患者；對出血已控制、緩慢／慢性或輕微出血者並無益處。</p>
+    </div>
+    <div class="strip">
+      <div class="row"><div class="k">時間上限</div><div class="v zh">概略 1 – 2 小時；預期到院前時間延長或患者危重時，應諮詢值班 AV 醫療顧問</div></div>
+      <div class="row"><div class="k">年齡因素</div><div class="v zh">年長／共病者耐受度差（尤其高血壓、缺血性心臟病），宜採較高血壓；年輕健康者可耐受較久</div></div>
+      <div class="row"><div class="k">穿刺性創傷</div><div class="v zh">實證較強（一項 RCT 證實可降低死亡率）；可採範圍低端，約 70 mmHg</div></div>
+      <div class="row"><div class="k">鈍性創傷</div><div class="v zh">無 RCT 支持，僅觀察性證據與專家共識；宜採高端 80 – 90 mmHg</div></div>
+    </div>
+    <div class="panel note">
+      <span class="chip">血壓指標之限制</span>
+      <p>血壓並非灌流是否足夠之良好指標，量測亦常有困難，惟因其客觀且門檻明確，仍為本指引輸液之主要適應症。橈動脈脈搏與意識清醒度一般被視為更佳之灌流指標，惟較主觀、易受干擾（如藥物、酒精）；情況允許時宜合併綜合研判，尤其血壓疑似不準或無法量測時。</p>
+    </div>
+
+    <h3>其他考量</h3>
+    <ul class="list">
+      <li><b>極度心搏過速：</b>後送時間長或插管前，不論血壓為何均應考慮輸液復甦。此類患者短期或可耐受，惟到院前時間延長或接受大量鎮靜藥（如 RSI 誘導）時極易急遽惡化。</li>
+      <li>單純脊髓損傷（Spinal Cord Injury, SCI）所致低血壓，依 CPG A0804 脊椎損傷指引處置。</li>
+    </ul>
+  </section>
+
+  <!-- 09 -->
+  <section id="s9">
+    <div class="sec-head"><span class="idx">09</span><h2>血品與升壓劑</h2></div>
+    <div class="sec-en">BLOOD COMPONENTS &amp; VASOPRESSORS</div>
+
+    <h3>血液成分</h3>
+    <ul class="list">
+      <li>經血品給予認證之 <b>MICA 救護人員</b>方可輸注 PRBC。</li>
+      <li>血液成分為<b>首選復甦輸液</b>，可行時應優先於生理食鹽水考慮（如院際轉診、HEMS 任務）。</li>
+      <li>血品輸液之適應症與生理食鹽水不同（潛在效益較大），且無單一適應症組合。</li>
+      <li><b>未成年人：</b>18 歲以下兒童須「可聯繫家長／法定代理人並取得輸血同意」<b>或</b>「經醫師核准（以 AV 醫療顧問或皇家兒童醫院 RCH 為佳）」方可輸注 PRBC。</li>
+      <li><b>宗教因素：</b>已知因宗教信仰反對輸血（如耶和華見證人）且拒絕同意者，<b>不得</b>輸注 PRBC。</li>
+    </ul>
+
+    <h3>血品送達現場</h3>
+    <ul class="list">
+      <li>HEMS 明顯延遲或無法出勤時考慮血品調度：墨爾本都會區聯繫 Metro Clinician；維州偏鄉聯繫成人後送中心（Adult Retrieval Victoria, ARV）臨床協調官，10 分鐘內無法聯繫則改聯繫 AV Clinician。</li>
+      <li>首發 MICA 單位<b>不得</b>為取得 PRBC 而延遲抵達現場。</li>
+      <li><b>不得</b>為等候 PRBC 而延長現場時間。</li>
+      <li>需輸注 PRBC 但未送往重大創傷中心（Major Trauma Centre）之患者應通報 ARV，以利區域創傷中心早期支援與必要之二次轉送安排。</li>
+    </ul>
+
+    <h3>升壓劑使用原則</h3>
+    <div class="panel warn">
+      <span class="chip">四項鐵則</span>
+      <ul class="list">
+        <li>升壓劑<b>不得</b>先於輸液復甦給予。</li>
+        <li>輸液復甦應與升壓劑<b>並行持續</b>。</li>
+        <li>目標血壓達標或超標時，<b>先調降升壓劑</b>，輸液繼續給予。</li>
+        <li>進階至升壓劑前，須先排除其他頑固性低血壓原因。</li>
+      </ul>
+    </div>
+    <ul class="list">
+      <li><b>排除其他原因：</b>
+        <ul class="list">
+          <li>出血控制：確認敷料／止血裝置仍在位且有效；考慮遺漏之出血源；未上骨盆固定帶者強烈考慮施作。</li>
+          <li>通氣策略：考慮降低吐氣末正壓（Positive End-Expiratory Pressure, PEEP）、降低平均呼吸道壓力（減少潮氣容積、增加呼吸頻率）。</li>
+          <li>強烈考慮胸腔減壓。</li>
+        </ul>
+      </li>
+      <li><b>確認輸液反應確實不佳：</b>低血壓持續存在；量測值可信度高（如手動量測、車輛靜止）；並與其他休克徵象一致（意識改變、橈動脈脈搏消失、末梢冰冷、心搏過速惡化）。</li>
+    </ul>
+  </section>
+
+  <!-- 10 -->
+  <section id="s10">
+    <div class="sec-head"><span class="idx">10</span><h2>支持性照護</h2></div>
+    <div class="sec-en">SUPPORTIVE CARE</div>
+    <p>支持性照護應盡可能與初步評估之其他處置<b>並行</b>實施。</p>
+
+    <h3>患者保溫</h3>
+    <ul class="list">
+      <li>防止體熱散失並盡可能主動保溫：救護車暖氣、移除濕衣物／擦乾患者、毛毯、化學加溫毯（限休克、插管或低體溫者）、血液／輸液加溫器（如有配置）。</li>
+    </ul>
+    <div class="panel">
+      <span class="chip">低體溫防治</span>
+      <p>低體溫為重大創傷死亡之<b>獨立預測因子</b>，並被認為會加重凝血功能障礙；縱使低體溫可能僅為休克之標記而非死因，防止低體溫仍有廣泛共識。</p>
+      <p>不論損傷、生命徵象、體溫或環境條件，<b>所有創傷患者均應考慮基本保溫措施</b>；受困患者脫困期間之保溫尤為重要。化學加溫毯尚無強力證據支持全面使用，應限於凝血障礙與死亡風險特高者：<b>休克、插管、低體溫</b>。</p>
+    </div>
+
+    <h3>脊椎固定</h3>
+    <ul class="list">
+      <li>依 CPG A0804 考慮脊椎固定；需插管者，<b>於插管後</b>再上頸圈，並盡量避免壓迫頸靜脈。</li>
+      <li>TBI 或胸部損傷患者，考慮將上半身抬高 10 – 15 度。</li>
+    </ul>
+
+    <h3>躁動處置</h3>
+    <div class="strip">
+      <div class="row"><div class="k">輕／中度</div><div class="v zh">依 CPG A0501-1 給予疼痛控制；躁動可能源自或因疼痛性損傷而加重</div></div>
+      <div class="row"><div class="k">重度躁動</div><div class="v zh">Ketamine 依 CPG A0708 急性行為障礙指引；<b>休克患者考慮半量</b></div></div>
+      <div class="row"><div class="k">妨礙預氧合</div><div class="v zh">完成 RSI 各項準備，並給予 Ketamine 20 – 40 mg IV 以利預氧合</div></div>
+    </div>
+    <div class="panel warn">
+      <span class="chip">用藥注意</span>
+      <p><b>頭部外傷患者於 RSI 前不應以 Midazolam 控制躁動</b>，因有低血壓與呼吸抑制之風險。</p>
+      <p>休克患者之重度躁動妨礙立即救命處置（如出血控制）時，採 CPG A0708 建議劑量之<b>半量</b> Ketamine（&lt; 60 kg：100 mg｜60 – 90 kg：150 mg｜&gt; 90 kg：200 mg），預期屬極罕見情形；其餘患者採標準劑量。</p>
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section id="s11">
+    <div class="sec-head"><span class="idx">11</span><h2>傳明酸與低血鈣</h2></div>
+    <div class="sec-en">TXA &amp; HYPOCALCAEMIA</div>
+
+    <div class="panel warn">
+      <span class="chip">時效原則</span>
+      <p>TXA 之給予<b>具時間敏感性但非最急迫</b>——不得為給藥而延誤立即救命處置或後送。</p>
+    </div>
+    <ul class="list">
+      <li>受傷後<b>未逾 2 小時</b>，且符合下列<b>任一</b>條件者可給予：
+        <ul class="list">
+          <li>任何 COAST 評分 ≥ 3 之創傷患者；</li>
+          <li>疑似重度損傷合併低血壓。</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="drugcard">
+      <div class="nm">傳明酸（Tranexamic Acid, TXA）</div>
+      <div class="ds">1 g IV over 10 min，或 IM</div>
+    </div>
+    <div class="panel">
+      <span class="chip">實證</span>
+      <p>TXA 於受傷後 2 小時內給予，可降低具凝血障礙風險出血患者之死亡率；逾此時間窗則無益處且可能有害。給藥愈早效益愈大——實證顯示<b>每延遲 15 分鐘，效益減少約 10%</b>。</p>
+      <p>本指引提供兩種辨識高風險患者之途徑：<b>COAST 評分 ≥ 3</b>（該評分係為辨識創傷引發凝血功能障礙高風險者而發展）；以及<b>強烈懷疑重度損傷合併低血壓</b>——用意在對明顯危重、COAST 必然 ≥ 3 之患者簡化流程，避免因逐項計算延誤給藥。</p>
+    </div>
+
+    <h3>低血鈣</h3>
+    <ul class="list">
+      <li>如具即時檢驗（point-of-care）能力，出血性休克患者應盡早量測離子鈣（ionised calcium, iCa）。</li>
+      <li>輸注 4 單位 PRBC 後可經驗性給予 10% 葡萄糖酸鈣；或於確認低血鈣時給予（不論已輸注之 PRBC 單位數）。</li>
+      <li>首劑後仍低血鈣者，可重複給予一劑。</li>
+    </ul>
+  </section>
+
+  <!-- 12 -->
+  <section id="s12">
+    <div class="sec-head"><span class="idx">12</span><h2>特殊情境</h2></div>
+    <div class="sec-en">SPECIAL CIRCUMSTANCES</div>
+
+    <h3>非創傷性出血</h3>
+    <div class="strip">
+      <div class="row"><div class="k">AAA／大量消化道出血</div><div class="v zh">輸液復甦與升壓劑依本指引辦理；<b>TXA 不適用</b></div></div>
+      <div class="row"><div class="k">產後大出血 PPH</div><div class="v zh">依 CPG M0401 原發性產後大出血指引處置</div></div>
+    </div>
+    <div class="panel">
+      <span class="chip">說明</span>
+      <p>允許性低血壓之原則亦適用於疑似腹主動脈瘤（Abdominal Aortic Aneurysm, AAA）破裂與大量消化道出血；於尚無專屬指引前，本指引之輸液與升壓劑作法屬適當。高品質實證（HALT-IT 試驗）顯示 TXA 無法改善消化道出血預後；用於主動脈剝離之直接證據亦有限，相關主題將於未來檢討並評估另訂專屬指引。</p>
+    </div>
+
+    <h3>孕婦患者</h3>
+    <ul class="list">
+      <li>本指引可適用於重大創傷之孕婦；應<b>盡早</b>經 AV Clinician 諮詢 AV 醫療顧問。</li>
+      <li><b>產前出血（Antepartum Haemorrhage, APH）合併重大創傷：</b>經 AV Clinician 諮詢周產期緊急轉診服務（PIPER）。</li>
+      <li><b>APH 合併輕微創傷：</b>依 CPG M0201 產前出血指引處置。</li>
+    </ul>
+  </section>
+
+  <!-- 13 -->
+  <section id="s13">
+    <div class="sec-head"><span class="idx">13</span><h2>實證依據</h2></div>
+    <div class="sec-en">EVIDENCE BASE · 18 REFERENCES</div>
+    <p>原文援引 18 篇文獻，擇要如下：</p>
+    <ol class="refs">
+      <li><b>PATCH-Trauma</b>（Gruen 等，NEJM 2023）：到院前 TXA 用於重度創傷之隨機對照試驗。</li>
+      <li><b>CRASH-2</b>（Shakur 等，Lancet 2010）：TXA 於顯著出血創傷患者之里程碑試驗。</li>
+      <li><b>抗纖溶治療延遲效應統合分析</b>（Gayet-Ageron 等，Lancet 2018）：40,138 名出血患者個別資料分析，為「延遲 15 分鐘、效益減 10%」之依據。</li>
+      <li><b>COAST 評分原始研究</b>（Mitra 等，Resuscitation 2011）：急性創傷性凝血障礙之早期預測工具。</li>
+      <li><b>NICE NG39</b>（2016）：英國重大創傷評估與初始處置指引。</li>
+      <li><b>TCCC 輸液復甦指引修訂 21-01</b>（Deaton 等，J Spec Oper Med 2021）：戰術戰傷救護（Tactical Combat Casualty Care, TCCC）輸液復甦準則。</li>
+      <li><b>歐洲創傷大出血與凝血障礙處置指引第五版</b>（Spahn 等，Critical Care 2019）。</li>
+      <li><b>允許性低血壓系統性回顧與統合分析</b>（Tran 等 2018；Owattanapanich 等 2018）。</li>
+      <li><b>穿刺性軀幹傷立即與延遲輸液比較</b>（Bickell 等，NEJM 1994）：允許性低血壓之經典 RCT。</li>
+      <li><b>TBI 院外最佳血壓研究</b>（Spaite 等，Ann Emerg Med 2022）：挑戰現行低血壓定義之重要研究。</li>
+      <li><b>HALT-IT</b>（Roberts 等，Lancet 2020）：TXA 用於急性消化道出血之國際隨機試驗（陰性結果）。</li>
+    </ol>
+    <p style="font-size:14px;color:var(--muted)">完整 18 篇書目詳原文第 14 – 15 頁；另附相關資源：血品調度作業（WIN OPS 404／405）、醫療諮詢委員會（MAC）立場文件（重大創傷、TXA、3% 高張生理食鹽水）及教學影片。</p>
+  </section>
+
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="inner">
+    <p><b>文件性質聲明｜</b>原文件標示「This is an uncontrolled document, it is the reader's responsibility to ensure currency.」（本文件為非管制文件，讀者有責任確認其現行有效性。）</p>
+    <p>本中文詳解係依 Ambulance Victoria CPG A0810 Major Trauma（Version 1.3.0，2025-12-02）編譯，供內政部消防署緊急救護政策研究及國際制度比較之內部參考使用。臨床處置授權、藥品品項及劑量規範悉依我國《緊急醫療救護法》、《救護技術員管理辦法》及各直轄市、縣（市）救護作業規定辦理，<b>不得逕引本文件為國內臨床執行依據</b>。</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>救護安全手冊 SAFER｜重點整理</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1F3A5F; --vermilion:#B02E24; --paper:#F4F6F8; --ink:#1A2532;
+  --mist:#D5DDE6; --wash:#E9EEF4; --muted:#56657A; --white:#FFFFFF;
+  --serif:"Noto Serif TC","Songti TC",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --latin:"Space Grotesk","Noto Sans TC",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8;-webkit-text-size-adjust:100%}
+a{color:var(--navy)}
+:focus-visible{outline:3px solid var(--vermilion);outline-offset:2px}
+
+/* 騎縫線 */
+.binding{position:fixed;top:0;bottom:0;left:18px;border-left:1.5px dashed rgba(176,46,36,.5);pointer-events:none;z-index:1}
+.binding::before{content:"騎縫";position:absolute;top:40%;left:-9px;writing-mode:vertical-rl;font-family:var(--serif);font-size:11px;letter-spacing:.4em;color:var(--vermilion);background:var(--paper);padding:6px 0}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 80px 44px}
+
+/* 文件抬頭 */
+.doc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-top:28px}
+.corner{border:1.5px solid var(--navy);background:var(--white);font-size:12.5px;line-height:1.6;min-width:0}
+.corner div{display:grid;grid-template-columns:5.8em 1fr;border-bottom:1px solid var(--mist)}
+.corner div:last-child{border-bottom:0}
+.corner span{padding:3px 8px}
+.corner span:first-child{background:var(--navy);color:var(--white)}
+.stamp{flex:none;width:108px;height:108px;border-radius:50%;border:3px double var(--vermilion);color:var(--vermilion);display:grid;place-content:center;text-align:center;transform:rotate(-14deg);font-family:var(--serif);font-weight:900;line-height:1.15;animation:press .55s cubic-bezier(.2,.9,.3,1.3) .25s both}
+.stamp b{font-size:21px;letter-spacing:.08em}
+.stamp small{font-family:var(--latin);font-size:11px;letter-spacing:.12em;font-weight:700;margin-top:4px}
+@keyframes press{from{opacity:0;transform:rotate(-14deg) scale(1.9)}to{opacity:.92;transform:rotate(-14deg) scale(1)}}
+@media (prefers-reduced-motion:reduce){.stamp{animation:none;opacity:.92}html{scroll-behavior:auto}}
+
+.hero{padding:26px 0 8px}
+.hero h1{font-family:var(--serif);font-weight:900;font-size:clamp(2.3rem,9vw,3.8rem);line-height:1.1;margin:0;color:var(--navy);letter-spacing:.02em}
+.hero .acro{display:block;font-family:var(--latin);font-weight:700;font-size:clamp(1.1rem,4vw,1.5rem);letter-spacing:.3em;color:var(--vermilion);margin-top:10px}
+.hero .full{font-family:var(--latin);color:var(--muted);font-size:14px;margin:2px 0 14px}
+.hero .pub{font-size:14.5px;color:var(--ink);margin:0}
+
+.principle{margin:22px 0 0;background:var(--white);border-left:5px solid var(--vermilion);padding:16px 18px}
+.principle p{margin:0;font-family:var(--serif);font-weight:600;font-size:1.15rem;line-height:1.6;color:var(--navy)}
+.principle small{display:block;margin-top:6px;color:var(--muted);font-size:13px}
+
+.layers{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:14px;border:1.5px solid var(--navy);background:var(--white)}
+.layers div{padding:12px 14px;border-right:1px solid var(--mist)}
+.layers div:last-child{border-right:0}
+.layers h3{margin:0 0 2px;font-family:var(--serif);font-size:1rem;color:var(--navy)}
+.layers p{margin:0;font-size:14px;line-height:1.6}
+
+/* 導覽 */
+nav.toc{position:sticky;top:0;z-index:5;background:rgba(244,246,248,.96);backdrop-filter:blur(6px);border-bottom:1.5px solid var(--navy);margin:28px -20px 0 -44px;padding:0 20px 0 44px}
+nav.toc ul{list-style:none;margin:0 auto;padding:10px 0;max-width:860px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+nav.toc ul::-webkit-scrollbar{display:none}
+nav.toc a{display:block;white-space:nowrap;text-decoration:none;font-size:13.5px;padding:4px 10px;border:1px solid var(--mist);background:var(--white);color:var(--navy)}
+nav.toc a.num{font-family:var(--latin);font-weight:700}
+nav.toc a:hover{border-color:var(--navy)}
+
+section.block{margin-top:44px}
+h2{font-family:var(--serif);font-weight:900;color:var(--navy);font-size:1.55rem;margin:0 0 6px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+h2 .en{font-family:var(--latin);font-weight:500;font-size:.8rem;color:var(--muted);letter-spacing:.04em}
+.lead{color:var(--muted);font-size:14.5px;margin:0 0 16px}
+
+/* 全書架構 */
+ol.map{list-style:none;margin:0;padding:0;border-top:1.5px solid var(--navy)}
+ol.map li{border-bottom:1px solid var(--mist)}
+ol.map a{display:grid;grid-template-columns:2.6em 1fr;gap:10px;padding:10px 4px;text-decoration:none;color:var(--ink)}
+ol.map .n{font-family:var(--latin);font-weight:700;font-size:1.35rem;color:var(--vermilion);line-height:1.3}
+ol.map b{font-family:var(--serif);color:var(--navy);font-size:1.02rem}
+ol.map span.s{display:block;font-size:14px;color:var(--muted);line-height:1.6}
+
+/* 章節 */
+.tools{display:flex;gap:8px;margin:0 0 12px}
+button{font-family:var(--sans);font-size:13.5px;cursor:pointer;border:1.5px solid var(--navy);background:var(--white);color:var(--navy);padding:5px 12px}
+button:hover{background:var(--navy);color:var(--white)}
+details.ch{background:var(--white);border:1px solid var(--mist);border-top:3px solid var(--navy);margin-bottom:14px}
+details.ch[open]{border-top-color:var(--vermilion)}
+details.ch summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:3.2rem 1fr auto;align-items:center;gap:10px;padding:12px 14px}
+details.ch summary::-webkit-details-marker{display:none}
+summary .no{font-family:var(--latin);font-weight:700;font-size:2rem;line-height:1;color:var(--navy)}
+details[open] summary .no{color:var(--vermilion)}
+summary .t b{display:block;font-family:var(--serif);font-weight:900;font-size:1.12rem;color:var(--navy);line-height:1.4}
+summary .t i{font-style:normal;font-family:var(--latin);font-size:12.5px;color:var(--muted)}
+summary .pg{font-family:var(--latin);font-size:12.5px;color:var(--muted);text-align:right}
+summary .pg::after{content:"＋";display:block;font-size:18px;color:var(--navy)}
+details[open] summary .pg::after{content:"－";color:var(--vermilion)}
+.body{padding:0 16px 18px;border-top:1px dashed var(--mist)}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:10px 0 0}
+.gist{margin:12px 0 4px;padding:10px 14px;background:var(--wash);font-family:var(--serif);font-weight:600;color:var(--navy);line-height:1.65}
+.body h4{font-family:var(--serif);font-size:1rem;color:var(--navy);margin:18px 0 4px;padding-left:10px;border-left:3px solid var(--navy)}
+.body ul,.body ol{margin:4px 0 0;padding-left:1.3em}
+.body li{margin:3px 0}
+.body li::marker{color:var(--vermilion)}
+.case{margin-top:18px;border:1.5px dashed var(--vermilion);padding:10px 14px 12px}
+.case h4{border-left:0;padding-left:0;margin-top:2px;color:var(--vermilion)}
+.case p{margin:4px 0;font-size:15px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+table.mini{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+table.mini th,table.mini td{border:1px solid var(--mist);padding:5px 8px;text-align:left;vertical-align:top}
+table.mini th{background:var(--navy);color:var(--white);font-weight:500}
+
+/* 速查表 */
+.ref{border-top:1.5px solid var(--navy);background:var(--white)}
+.ref .row{display:grid;grid-template-columns:11em 1fr 3em;gap:12px;padding:9px 12px;border-bottom:1px solid var(--mist);font-size:14.5px;line-height:1.65}
+.ref .row.head{background:var(--navy);color:var(--white);font-size:13px}
+.ref .k{font-weight:700;color:var(--navy);min-width:0}
+.ref .v{min-width:0;overflow-wrap:anywhere}
+.ref .row.head .k{color:var(--white);font-weight:500}
+.ref .c{font-family:var(--latin);font-weight:700;color:var(--vermilion);text-align:right}
+.ref .row.head .c{color:var(--white);font-weight:500}
+.note{background:var(--white);border:1.5px solid var(--vermilion);padding:12px 16px}
+.note ol{margin:0;padding-left:1.3em}
+.note li{margin:6px 0;font-size:14.5px}
+
+footer.colophon{margin-top:44px;border-top:1.5px solid var(--navy);padding-top:14px;font-size:13.5px;color:var(--muted);line-height:1.75}
+footer.colophon b{color:var(--navy)}
+
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--navy);color:var(--white);padding:8px 16px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:10}
+.toast.on{opacity:1}
+
+@media (max-width:640px){
+  .binding{left:7px}
+  .binding::before{display:none}
+  .wrap{padding:0 14px 60px 22px}
+  nav.toc{margin:24px -14px 0 -22px;padding:0 14px 0 22px}
+  .doc-head{padding-top:18px}
+  .stamp{width:86px;height:86px}
+  .stamp b{font-size:17px}
+  .layers{grid-template-columns:1fr}
+  .layers div{border-right:0;border-bottom:1px solid var(--mist)}
+  .layers div:last-child{border-bottom:0}
+  .grid2{grid-template-columns:1fr}
+  .ref .row{grid-template-columns:1fr auto;gap:2px 10px}
+  .ref .row .k{grid-column:1}
+  .ref .row .c{grid-column:2;grid-row:1}
+  .ref .row .v{grid-column:1 / -1}
+  .ref .row.head{display:none}
+  details.ch summary{grid-template-columns:2.6rem 1fr auto}
+  summary .no{font-size:1.6rem}
+}
+@media print{
+  nav.toc,.tools,button,.binding{display:none!important}
+  details.ch{break-inside:auto}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<div class="binding" aria-hidden="true"></div>
+<div class="wrap">
+
+<header>
+  <div class="doc-head">
+    <div class="corner" aria-label="文件資訊">
+      <div><span>書名</span><span>救護安全手冊 SAFER</span></div>
+      <div><span>ISBN</span><span>978-626-439-077-4</span></div>
+      <div><span>GPN</span><span>1011500861</span></div>
+      <div><span>整理日期</span><span>中華民國115年9月11日</span></div>
+    </div>
+    <div class="stamp" aria-hidden="true"><b>重點整理</b><small>SAFER</small></div>
+  </div>
+
+  <div class="hero">
+    <h1>救護安全手冊<span class="acro">SAFER</span></h1>
+    <p class="full">Safety And Field Emergency Response Handbook</p>
+    <p class="pub">內政部消防署｜115年7月初版｜全書232頁、12章｜編輯委員25位（醫師與消防救護教官協作）</p>
+  </div>
+
+  <div class="principle">
+    <p>出勤人員的安全，是所有救護勤務的最高指導原則，而非任務成功。</p>
+    <small>全書主軸：由「究責個人」轉向「修正系統」，以公正文化、團隊資源管理與標準化作業建構安全生態系。</small>
+  </div>
+
+  <div class="layers" aria-label="安全的三個層次">
+    <div><h3>個人層次</h3><p>掌握疲勞、體能與心理狀態，勤前自評，主動求助。</p></div>
+    <div><h3>團隊層次</h3><p>開放互信、閉圈式溝通、人人有權喊停。</p></div>
+    <div><h3>組織層次</h3><p>投資訓練、裝備與人力，建立疲勞政策與事件檢討系統。</p></div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="章節導覽">
+  <ul>
+    <li><a href="#map">總覽</a></li>
+    <li><a class="num" href="#ch01">01</a></li><li><a class="num" href="#ch02">02</a></li>
+    <li><a class="num" href="#ch03">03</a></li><li><a class="num" href="#ch04">04</a></li>
+    <li><a class="num" href="#ch05">05</a></li><li><a class="num" href="#ch06">06</a></li>
+    <li><a class="num" href="#ch07">07</a></li><li><a class="num" href="#ch08">08</a></li>
+    <li><a class="num" href="#ch09">09</a></li><li><a class="num" href="#ch10">10</a></li>
+    <li><a class="num" href="#ch11">11</a></li><li><a class="num" href="#ch12">12</a></li>
+    <li><a href="#mnemonic">口訣速查</a></li>
+    <li><a href="#numbers">關鍵數據</a></li>
+    <li><a href="#law">法規依據</a></li>
+    <li><a href="#review">校讀備註</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<section class="block" id="map">
+  <h2>全書架構<span class="en">12 chapters</span></h2>
+  <p class="lead">點選章名可直接跳至該章重點。</p>
+  <ol class="map">
+    <li><a href="#ch01"><span class="n">01</span><span><b>安全文化與勤務準備</b><span class="s">公正文化、勤前身心自評、功能性勤前檢查、PTSD與心理支持。</span></span></a></li>
+    <li><a href="#ch02"><span class="n">02</span><span><b>團隊資源管理與情境感知</b><span class="s">TRM四大模組、情境感知三層次、認知偏差與無懼報告。</span></span></a></li>
+    <li><a href="#ch03"><span class="n">03</span><span><b>救護車與道路安全</b><span class="s">防禦駕駛九習慣、相對路權、逐段停煞、二次事故與TIMA分區。</span></span></a></li>
+    <li><a href="#ch04"><span class="n">04</span><span><b>操作與現場安全</b><span class="s">暴力退避、電動車與危害物質、高能見度、醫療艙零拋射物、直升機協同。</span></span></a></li>
+    <li><a href="#ch05"><span class="n">05</span><span><b>臨床照護與病人安全</b><span class="s">ABCDE、急性惡化辨識、生命徵象趨勢、三讀五對、ISBAR交接。</span></span></a></li>
+    <li><a href="#ch06"><span class="n">06</span><span><b>暴力預防與降階應對</b><span class="s">4S應變、AOJ緊急性判準、DEFUSE降階、約束原則、警消協同。</span></span></a></li>
+    <li><a href="#ch07"><span class="n">07</span><span><b>感染控制與除污</b><span class="s">標準防護、五類傳播途徑防護、PPE穿脫、車輛清消、職業暴露與PEP。</span></span></a></li>
+    <li><a href="#ch08"><span class="n">08</span><span><b>病人搬運與人體工學</b><span class="s">不抬舉政策、5B原則、輔具運用、SAFE多人協作。</span></span></a></li>
+    <li><a href="#ch09"><span class="n">09</span><span><b>特殊與大量傷患事件</b><span class="s">主動攻擊者事件、四區劃分、RTF、MARCH、SALT、LCAN、MIST。</span></span></a></li>
+    <li><a href="#ch10"><span class="n">10</span><span><b>溝通、交接與法律責任</b><span class="s">告知後同意、拒絕送醫、救護紀錄表、隱私與登載不實責任。</span></span></a></li>
+    <li><a href="#ch11"><span class="n">11</span><span><b>個人健康與職業韌性</b><span class="s">睡眠債、補水營養、HALT、PCL-5、同儕支援REACT、心理韌性。</span></span></a></li>
+    <li><a href="#ch12"><span class="n">12</span><span><b>案例討論與整合學習</b><span class="s">5 Whys、RCA、HRO、TRM四種分析手法與三大整合案例。</span></span></a></li>
+  </ol>
+</section>
+
+<section class="block" id="chapters">
+  <h2>各章重點<span class="en">Chapter digest</span></h2>
+  <div class="tools"><button type="button" id="openAll">全部展開</button><button type="button" id="closeAll">全部收合</button></div>
+
+<!-- 01 -->
+<details class="ch" id="ch01" open>
+<summary><span class="no">01</span><span class="t"><b>安全文化與勤務準備</b><i>Safety Culture &amp; Readiness</i></span><span class="pg">p.5</span></summary>
+<div class="body">
+<p class="meta"><span>編撰：洪士強、郭書豪｜<a href="https://limzijiang.github.io/nfa-safer-handbook/#p5" target="_blank" rel="noopener">原書 p.5</a></span><button type="button" class="copy">複製本章</button></p>
+<p class="gist">緊急醫療救護安全（EMS Safety）的核心，是救護技術員（Emergency Medical Technician, EMT）、病人與社會大眾三方安全；安全文化由組織與個人共同承諾。</p>
+
+<h4>公正文化（Just Culture）與通報</h4>
+<ul>
+<li>管理重點由「誰犯了錯」轉為「出了什麼問題」，以根本原因分析（Root Cause Analysis, RCA）修正系統。</li>
+<li>非完全無責備：人為錯誤（Human Error）以輔導與系統改善處理；魯莽行為（Reckless Behavior）予以紀律處分。</li>
+<li>管理者為其設計的系統負責，個人為其在系統中的選擇負責。</li>
+<li>鼓勵通報錯誤、幾近錯誤（Near Miss）與暴力事件；處置錯誤應主動告知接手醫療團隊。</li>
+</ul>
+
+<h4>領導層與組織責任</h4>
+<ul>
+<li>安全列為單位戰略方向並納入使命宣言，界定各職級安全職責與通報管道。</li>
+<li>制定實證為基礎之標準作業程序（SOP），訓練持續更新並建立定期回饋機制。</li>
+<li>推動跨單位資源共享與開放式溝通環境。</li>
+</ul>
+
+<h4>每個人的安全責任</h4>
+<ul>
+<li>發現不安全行為應「大聲說出來」，不以「不關我事」切割。</li>
+<li>留意危險訊號（Red Flags）：危險駕駛、未繫安全帶、PPE使用不當、搬運技術不當。</li>
+<li>在執業權限內作業；行車全員繫安全帶、依規定穿高能見度背心。</li>
+<li>副駕駛負責協助觀察路況、降低駕駛分心。</li>
+</ul>
+
+<h4>勤前身心自我評估</h4>
+<ul>
+<li>四面向：身體素質、疲勞與睡眠、心理健康與壓力、個人責任。</li>
+<li>臺灣勤一休一屬極端長工時合併睡眠剝奪；連續清醒24小時約等同血液酒精濃度（Blood Alcohol Concentration, BAC）0.10%，並可能出現微睡眠。</li>
+<li>建議將勞安所過勞量表等疲勞評估工具納入疲勞管理計畫；嚴禁過度疲勞下駕駛。</li>
+<li>「傷害預防在輪班前就開始」：暖身伸展、補水與均衡飲食。</li>
+</ul>
+
+<h4>勤務整備紀律</h4>
+<ul>
+<li>勤前檢查使用結構化檢核表，重點是功能性測試（警報器、電池電量），拒絕形式勾選與口頭保證。</li>
+<li>關鍵設備故障立即回報並報停車輛；出勤後由該趟人員補足器耗材。</li>
+<li>PPE穿戴順序：隔離衣、口罩、護目鏡、手套；脫除先取手套；空氣傳播風險升級N95。</li>
+</ul>
+
+<h4>PTSD與心理支持</h4>
+<ul>
+<li>救護技術員創傷後壓力症（Post-Traumatic Stress Disorder, PTSD）症狀盛行率約15%–22%；兒童案件、目睹死亡、職場暴力為關鍵風險因子。</li>
+<li>主要障礙為「英雄形象」與污名；應將心理疾病視為「傷害」而非性格缺陷。</li>
+<li>多層次支持：同儕支持（Peer Support）、員工協助方案（Employee Assistance Program, EAP）、重大事件壓力管理（Critical Incident Stress Management, CISM：初步減壓 Defusing 與正式回顧 Debriefing）。</li>
+<li>心理急救（Psychological First Aid, PFA）RAPID-PFA五步驟：反思性聆聽、評估、優先處理、介入、後續處置。</li>
+<li>實證療法：眼動身心重建法（EMDR）、認知行為療法（CBT）、情緒釋放技術（EFT）。</li>
+<li>心理韌性可學習，被視為心理健康「疫苗」並可促進創傷後成長（Posttraumatic Growth, PTG）。</li>
+</ul>
+
+<h4>體能與職業傷害預防</h4>
+<ul>
+<li>強化核心肌群（腹部、骨盆、髖部、臀部），執行有氧、阻力、功能性與柔軟度訓練。</li>
+<li>抬舉背部挺直、腿部發力、負重貼近身體；強力握法（Power Grip）掌心向上、雙手間距至少25公分。</li>
+<li>搬運口令用「準備、就位、抬起」取代單純1-2-3；超重病人或困難地形主動請求支援。</li>
+<li>吸菸者工作受傷機率為非吸菸者2.5倍；推動體重管理與戒菸。</li>
+</ul>
+
+<h4>溝通與紀錄</h4>
+<ul>
+<li>高達65%醫療錯誤源於溝通與團隊合作不良。</li>
+<li>閉圈式溝通（Closed-loop Communication）：接收者複誦、發送者確認。</li>
+<li>交接使用ISBAR、IMIST等結構化工具（詳見第10章）。</li>
+<li>紀錄CARE原則：合規完整（Compliant/Complete）、易取得準確（Accessible/Accurate）、易讀（Readable）、持久（Enduring）；事件報告儘速完成。</li>
+</ul>
+
+<div class="case"><h4>案例：藥物昏沉執勤與AED電池耗盡</h4>
+<p>EMT服感冒藥後昏沉，以「昨天開過」為由省略勤前檢查；OHCA出勤受警報器症候群（Siren syndrome）與隧道視野影響險撞，現場AED電池耗盡延誤電擊，搭檔堅持通報。</p>
+<p>學習：勤前自評不適應回報調整勤務；自滿導致偏差正常化；瑞士起司理論說明多重漏洞疊加。系統修正：定期更新電池、每趟OHCA後充電並查核、每日交班檢查電量。</p>
+</div>
+</div>
+</details>
+
+<!-- 02 -->
+<details class="ch" id="ch02">
+<summary><span class="no">02</span><span class="t"><b>團隊資源管理與情境感知</b><i>Team Resource Management &amp; Situational Awareness</i></span><span class="pg">p.23</span></summary>
+<div class="body">
+<p class="meta"><span>編撰：陳建志、黃志然｜<a href="https://limzijiang.github.io/nfa-safer-handbook/#p23" target="_blank" rel="noopener">原書 p.23</a></span><button type="button" class="copy">複製本章</button></p>
+<p class="gist">團隊資源管理（Team Resource Management, TRM）源自航空業組員資源管理（Crew Resource Management, CRM），整合人力、知識、經驗與設備以辨識並管理風險。</p>
+
+<h4>TRM四大模組</h4>
+<ul>
+<li>領導（Leadership）：事前簡報（Brief）、突發狀況調整（Huddle）、事後反饋（Debrief）。</li>
+<li>溝通（Communication）：閉圈式溝通、ISBAR、重申關切（Two-challenge Rule，至少提出兩次）。</li>
+<li>守望（Situation Monitoring）：監測病人與環境變化、互相照應（Cross Monitoring）。</li>
+<li>相助（Mutual Support）：清楚分工、預測夥伴需求、避免單人負荷過重。</li>
+</ul>
+
+<h4>TRM限制</h4>
+<ul>
+<li>高壓、疲勞、資源與人力不足會削弱成效；組織若不支持開放溝通則難以落實。</li>
+<li>非技術性技能須以高擬真模擬演練（High-Fidelity Simulation, HFS）內化，約三個月後易出現高原或衰退，須持續投入。</li>
+</ul>
+
+<h4>團隊角色與溝通</h4>
+<ul>
+<li>領導者保持雙手不動的觀察姿態（Hands-off），負責分派任務、防止隧道視野、建立心理安全感。</li>
+<li>成員尊重指揮鏈，同時主動回報進度、夥伴忙不過來時提醒或接手。</li>
+<li>CUS語句：表達「我擔心這會影響安全」。</li>
+<li>明確陳述五要素：直接指名、表達關切、陳述問題、提供建議、尋求同意。</li>
+<li>主動聆聽：開放肢體語言、閉圈回饋、提問澄清。</li>
+</ul>
+
+<h4>情境感知（Situational Awareness, SA）</h4>
+<ul>
+<li>三層次：認知（Perception）取得資訊、理解（Comprehension）判斷意義、預測（Projection）推估下一步。</li>
+<li>風險掃描應於安全位置（如下車前）完成：暴力毒品火災、防護等級、結構穩定、病人精神行為、是否需警消支援。</li>
+<li>現場不安全即撤出等待支援，保護團隊為第一優先。</li>
+</ul>
+
+<h4>派遣資訊風險預判</h4>
+<ul>
+<li>派遣令是初步線索而非診斷；三類指標：環境現場、病人相關、社會人員因素（如家暴、敵意）。</li>
+<li>危害辨識：物理性（電線、玻璃）、化學生物性（異味、針頭）、人為暴力（激動家屬、犬隻）。</li>
+<li>受傷機轉（MOI）與疾病特質（NOI）：擋風玻璃蜘蛛網狀裂痕提示頭部撞擊；藥袋、酒瓶、燒炭痕跡。</li>
+</ul>
+
+<h4>公正文化三類行為</h4>
+<table class="mini">
+<tr><th>行為</th><th>例子</th><th>對策</th></tr>
+<tr><td>人為錯誤</td><td>忙中錯認相似藥瓶</td><td>慰問、系統改善</td></tr>
+<tr><td>風險行為（Risky Behavior）</td><td>行進中處置不抓扶手</td><td>教育、督導</td></tr>
+<tr><td>魯莽行為</td><td>酒後出勤、不帶AED上樓</td><td>懲戒、行政處分</td></tr>
+</table>
+<ul>
+<li>缺乏公正文化將導致隱瞞證據、被提醒者防衛、Debrief淪為互推責任。</li>
+<li>主管落實：問「為什麼」而非「是誰」、公開表揚主動通報者、以James Reason行為分類圖客觀判斷，避免人治處罰。</li>
+</ul>
+
+<h4>認知偏差（Cognitive Bias）</h4>
+<ul>
+<li>確認偏誤：忽略年輕人胸痛可能為心臟病。</li>
+<li>定錨偏誤：派遣為摔傷即忽略意識不清的神經外傷可能。</li>
+<li>可用性啟發：近期處理中風多，看誰都像中風。</li>
+<li>自滿與過度自信：認為常客、酒醉路倒不需完整評估。</li>
+<li>偏差正常化（Normalization of Deviance）：習慣不繫安全帶後不再質疑。</li>
+<li>對策：持續教育、標準化檢查清單、團隊挑戰制度、情境訓練、事後反饋；維持「健康的懷疑態度」。</li>
+</ul>
+
+<div class="case"><h4>案例：72歲女性浴室跌倒</h4>
+<p>病人服用阿斯匹靈並有阿茲海默症；搬運中資淺隊員發現臉色蒼白、心率115、腹部瘀傷，學長立即停止搬運重評，懷疑腹內出血並提早通報，到院確認脾臟破裂，及時手術。</p>
+<p>學習：人人觀察皆有價值、SA須持續、授權資淺人員發聲、事後以公正文化反思。</p>
+</div>
+</div>
+</details>
+
+<!-- 03 -->
+<details class="ch" id="ch03">
+<summary><span class="no">03</span><span class="t"><b>救護車與道路安全</b><i>Vehicle &amp; Roadway Safety</i></span><span class="pg">p.39</span></summary>
+<div class="body">
+<p class="meta"><span>編撰：黃泰霖、藍晉豪｜<a href="https://limzijiang.github.io/nfa-safer-handbook/#p39" target="_blank" rel="noopener">原書 p.39</a></span><button type="button" class="copy">複製本章</button></p>
+<p class="gist">緊急車輛只有「相對路權」；救護車緊急任務事故多屬次因或無責，但最大宗為闖紅燈過路口遭側向來車碰撞，路口通行是行車安全核心。</p>
+
+<h4>駕駛風險三角：人、路、車</h4>
+<ul>
+<li>人：動態視野靜止約200°，時速40公里剩一半、70公里約65°、100公里約40°（隧道視覺效應）；警鳴與時間壓力易誘發路怒症。</li>
+<li>路：高公局安全車距為時速除以2（公尺）；虛線4公尺加間隔6公尺為10公尺，可目測車距；採2秒法則，大型車3秒。</li>
+<li>車：煞車油下降勿自行添加，應先檢查來令片；熟悉ABS作動回饋震動，勿因震動鬆踏板；後視鏡外側僅見車身邊緣、路面約占2/3；左A柱盲點（約11點鐘）大於右A柱（約2點鐘）。</li>
+</ul>
+
+<h4>防禦駕駛九項習慣</h4>
+<ol>
+<li>牢記口訣：「左轉不切」（行至路口中心處再左轉）、「右轉關門」（30–60公尺前切入慢車道）、路權「幹多直右大」（幹線、多線、直行、右方車、大彎優先）。</li>
+<li>儀表板與擋風玻璃下方淨空，淺色物品易反光遮蔽視線。</li>
+<li>避免單手開車，否則僅能單向閃避。</li>
+<li>預作煞車準備：過路口右腳輕觸煞車，省去移腳約0.4秒；反應時間合計約1秒，時速54公里可少行6公尺。</li>
+<li>警覺前方人車動態：利用高底盤看前車之前的車流；高快速路採錯位行駛。</li>
+<li>轉彎擺頭加身體前傾：左轉撞行人機率約為右轉5倍，A柱盲點隨轉彎移動。</li>
+<li>注意超車陷阱：近路口、網狀線、雙黃線、T字路口、機車前有路邊停車、前車突減速偏移（不超齊頭車）。</li>
+<li>迴轉或轉彎避免繞彎（U字路徑），大型車需繞彎時由副駕駛確認右後方。</li>
+<li>同車責任制：副駕駛操作無線電與GPS、手勢示意、確認右側、倒車下車引導。</li>
+</ol>
+
+<h4>相對路權</h4>
+<ul>
+<li>道路交通安全規則第93條第2項：執行緊急任務得不受速限及標誌、標線、號誌限制。</li>
+<li>交通部函釋：仍應特別顧及行人及其他車輛安全。最高法院90年度台上字第7133號：未盡注意義務致人傷亡，縱對方違規亦不必然免責。</li>
+</ul>
+
+<h4>路口通行六項習慣</h4>
+<ol>
+<li>紅燈直行或左轉：「逐段停煞、按鳴喇叭、身體前傾、左右探頭」；可隨時煞停速度為時速20公里以下，並以該速度越過行人穿越道後才完全停止，避免他車誤判讓行。雙手在方向盤順勢按喇叭，勿低頭切換警報器音頻。</li>
+<li>無號誌路口比照紅燈處理，即使位於幹道。</li>
+<li>慢車道僅於混合車道壅塞時使用，時速不超過40公里，行穿線前停車再開。</li>
+<li>避免在路口前逆向跨越雙黃線。</li>
+<li>有交警指揮仍逐段停煞，初判仍可能認定「未注意車前狀況」。</li>
+<li>車組跟車時後車仍逐段停煞，民眾常於前車通過後搶行。</li>
+</ol>
+
+<h4>道路作業威脅與二次事故</h4>
+<ul>
+<li>112年國道二次事故致死10件12人，占死亡事故件數14.3%；二次事故非主要肇因但加劇嚴重度。</li>
+<li>前例：100年救護技術員遭夾擊於事故車與救護車間致截肢，監察院糾正未設明顯警告標誌。</li>
+<li>後方來車視為潛在威脅，預設「5D駕駛人」：Drunk、Drugged、Drowsy、Distracted、Dull。</li>
+<li>彎道後、坡頂、隧道口視距不足；雨霧、油漬、散落物增加風險；兩車之間為「斷腿區」。</li>
+</ul>
+
+<h4>交通事故管理</h4>
+<ul>
+<li>以事故位置為基準區分「上游」（來車方向）與「下游」。</li>
+<li>交通事故管理區（Traffic Incident Management Area, TIMA）：先期警示區、漸變區、作業區、撤離區；作業區內車與車、車與事故、前後端點均留10公尺緩衝，區內不得有人員器材。</li>
+<li>斜向停放15–45°：下車有防禦視野、警示最大化、傳達靜止狀態、反光標識引導車流。</li>
+<li>事故在外側車道向左阻擋，後廂門開向外側相對安全區；在內側車道向右阻擋並請求下游部署；距事故車10公尺、阻擋逾1.5車道寬，坡道雨霧加長。</li>
+<li>高快速路以派遣車組（1救護車加1消防車）為原則，消防車停上游阻擋並可部署水線。</li>
+<li>最上游警告標誌（道路交通事故處理辦法第4條第1項）：高速公路100公尺；快速道路或速限逾60公里80公尺；速限逾50至60公里50公尺；速限50公里以下30公尺；壅塞或時速低於10公里5公尺。</li>
+</ul>
+</div>
+</details>
+
+<!-- 04 -->
+<details class="ch" id="ch04">
+<summary><span class="no">04</span><span class="t"><b>操作與現場安全</b><i>Operational &amp; Scene Safety</i></span><span class="pg">p.65</span></summary>
+<div class="body">
+<p class="meta"><span>編撰：許昕璘、張鐘嘉｜<a href="https://limzijiang.github.io/nfa-safer-handbook/#p65" target="_blank" rel="noopener">原書 p.65</a></span><button type="button" class="copy">複製本章</button></p>
+<p class="gist">救護現場沒有絕對安全；抵達是最高不確定性時刻，評估須動態持續，遇不可控危險先撤退至相對安全區。</p>
+
+<h4>不安全現場評估</h4>
+<ul>
+<li>停妥未下車前透過車窗全方位評估：人群聚集、激動家屬、潛在武器、傾倒電線。</li>
+<li>鬥毆、槍擊、精神異常暴力：救護車勿直接駛入，停於視線外（必要時數個街口外），關閉警報器。</li>
+<li>先警後救；高風險通報依規定穿防彈背心與頭盔；醫療處置優先於冷區，救命需要進入暖區須有警力近身掩護。</li>
+<li>掩護（Cover）可物理阻擋威脅，如厚磚牆、引擎室、輪軸；掩蔽（Concealment）僅遮蔽視線，如樹叢、一般車門。</li>
+<li>進入前確保至少一條撤退路線（Egress path），盡量同路進出；局勢升溫立即停止處置撤退並呼叫支援。</li>
+</ul>
+
+<h4>電動車與新能源車（Electric Vehicles, EVs）</h4>
+<ul>
+<li>即使無明火，仍視為危害物質加高壓電氣複合風險；嚴禁觸碰橘色高壓線纜，接觸前以檢電器檢測，視為持續帶電。</li>
+<li>鋰電池熱失控可無預警復燃並釋放氟化氫（HF）；接近熱區須完整PPE與SCBA，病人不置於電池排氣路徑。</li>
+<li>停車距離：無燃燒於25公尺外上風處；已熱失控燃燒退避至500公尺外上風高處（依搶救電動車與儲能系統安全指導原則）；感應鑰匙隔離於車外5公尺。</li>
+</ul>
+
+<h4>危害物質（Hazardous Materials, HazMat）</h4>
+<ul>
+<li>思維切換為「辨識、隔離、通報」。</li>
+<li>「三上」停放：上風（Upwind）、高處（Uphill）、水體洩漏時上游（Upstream）；無法同時滿足以遠離污染源為優先並回報指揮官。</li>
+<li>熱區：僅最高防護人員進入，一般救護技術員不處置、只移出病人。暖區：除污，僅執行救命處置。冷區：接收已除污病人、設指揮站與救護站。</li>
+<li>未完成除污者嚴禁進入冷區或上車；病情危急時由指揮官、化災小組與接收醫院共同決定，由化災人員先行最小化乾式除污並通報醫院，途中監控艙內空氣與人員症狀。</li>
+</ul>
+
+<h4>高能見度與照明</h4>
+<ul>
+<li>高能見度安全服裝（High-Visibility Safety Apparel, HVSA）可參考ISO 20471或ANSI/ISEA 107 Class 2/3；反光失效立即報廢更換。</li>
+<li>兼任火災或化災角色時，反光背心穿於消防衣外；道路與邊坡救援配戴頭盔。</li>
+<li>避免遠光燈、白色工作燈、高強度警示燈直射來車；停於下游時減少朝向來車的閃爍燈；工作燈朝下照作業區。</li>
+<li>車身兩側巴騰堡格紋（Battenburg markings），車尾黃紅斜線反光條；低光源環境使用頭燈。</li>
+</ul>
+
+<h4>醫療艙安全</h4>
+<ul>
+<li>全車乘員含家屬全程繫安全帶，僅救命處置時解開並同步告知駕駛放慢、避免急煞急彎。</li>
+<li>建議獨立式、朝車頭方向急救座椅，配3點或4點式安全帶；乘載以行照核定人數為上限。</li>
+<li>已配發機械式CPR裝置且不延誤處置時優先採用，減少站立操作。</li>
+</ul>
+
+<h4>零拋射物：ABCDEPX配置原則</h4>
+<table class="mini">
+<tr><th>類別</th><th>內容</th><th>位置</th></tr>
+<tr><td>A 呼吸道</td><td>喉罩、抽吸器、頸圈</td><td>病人頭側</td></tr>
+<tr><td>B 通氣</td><td>氧氣組、面罩、血氧機、甦醒球</td><td>病人頭側</td></tr>
+<tr><td>C 循環</td><td>急救箱（止血、包紮、輸液）</td><td>病人腰側</td></tr>
+<tr><td>D 電擊</td><td>AED</td><td>病人腰側</td></tr>
+<tr><td>E 搬運固定</td><td>擔架、長背板、搬運椅、固定器</td><td>專屬位置或下肢側、上方</td></tr>
+<tr><td>P 防護</td><td>手套等耗材</td><td>上方易取處</td></tr>
+<tr><td>X 其他</td><td>滅火器、保護固定帶</td><td>固定定位處</td></tr>
+</table>
+<ul>
+<li>目的在於跨單位支援時快速熟悉布局；廠牌差異大時以文字標籤輔助。</li>
+<li>所有可攜器材（含個人手機）車動前入槽或扣帶，嚴禁重物置於擔架或空座椅。</li>
+<li>擔架推入後再次確認底座鎖定；除橫向束帶外建議加肩部束帶，兒童使用專用固定帶。</li>
+</ul>
+
+<h4>空中救護協同</h4>
+<ul>
+<li>降落區（Landing Zone, LZ）平坦堅固、周邊無高壓電線與樹木，清除可被下洗氣流（Downwash）捲起之物。</li>
+<li>未獲機組員明確手勢不得靠近；由機師視線內的前方或側前方接近，嚴禁靠近尾旋翼；斜坡由下坡側接近。</li>
+<li>配戴護目鏡、頭盔與聽力防護；夜間勿以手電筒、遠光燈、雷射筆照射駕駛艙。</li>
+</ul>
+
+<div class="case"><h4>案例：國道雨夜化災與醫療艙拋射物</h4>
+<p>救護技術員察覺貨車洩漏刺鼻液體，立即撤至上風高處冷區並請求化災支援，病人除污後才接收；但途中急煞，未歸位的生理監視器砸中隊員致鎖骨骨折。</p>
+<p>學習：「車輛開動前，裝備收好、人員繫妥」為不可妥協鐵則。</p>
+</div>
+</div>
+</details>
+
+<!-- 05 -->
+<details class="ch" id="ch05">
+<summary><span class="no">05</span><span class="t"><b>臨床照護與病人安全</b><i>Clinical Care &amp; Patient Safety</i></span><span class="pg">p.83</span></summary>
+<div class="body">
+<p class="meta"><span>編撰：高正國、莊曜仲｜<a href="https://limzijiang.github.io/nfa-safer-handbook/#p83" target="_blank" rel="noopener">原書 p.83</a></span><button type="button" class="copy">複製本章</button></p>
+<p class="gist">醫師負責判斷病因與治療方向；EMT是「動態監測者」，在到院前避免低血氧、低血壓、給藥錯誤與資訊遺漏。交接要交出趨勢，而非單一數字。</p>
+
+<h4>ABCDE初步評估：先救命，再診斷</h4>
+<ul>
+<li>A 呼吸道：鼾聲、喘鳴、咕嚕聲提示阻塞；姿勢調整、下顎推舉、抽吸、OPA/NPA；重點是持續維持通氣與氧合，而非優先插管。</li>
+<li>B 呼吸：不能只看血氧；觀察速率、胸廓起伏、輔助呼吸肌、說話能力；喘鳴突然消失或病人突然安靜可能是即將衰竭。</li>
+<li>C 循環：早期休克血壓可仍正常，但已心搏過速、皮膚濕冷、微血管回填超過2秒；外出血立即加壓。</li>
+<li>D 神經：AVPU快速評估，必要時瞳孔與GCS；低血糖常見可逆，須優先排除；GCS≤8為建立確切呼吸道之關鍵閾值。</li>
+<li>E 暴露：完整檢查後立即覆蓋保暖，低體溫會惡化凝血功能。</li>
+</ul>
+
+<h4>急性惡化六訊號</h4>
+<div class="grid2">
+<ul><li>意識變差或躁動</li><li>呼吸速率上升、說話中斷</li><li>心搏過速、濕冷、回填延長</li></ul>
+<ul><li>疼痛加劇或性質改變</li><li>蒼白、花斑或紫斑</li><li>突然安靜、不再喊痛</li></ul>
+</div>
+<ul>
+<li>醫師採「最壞情境思考」優先排除高死亡率疾病；EMT重點是及早以ISBAR通報，不必等診斷確定。</li>
+</ul>
+
+<h4>生命徵象監測</h4>
+<ul>
+<li>呼吸速率最常被低估卻是最重要的早期惡化指標，超過30次/分為明顯警訊，須目視計數。</li>
+<li>成人參考值：呼吸12–20次/分、收縮壓&lt;120 mmHg、心率60–100 bpm、SpO₂≥94%、體溫36.5–37.5°C、血糖60–100 mg/dL。</li>
+<li>注意量測品質（壓脈帶尺寸、車輛震動）；測不到血壓可能已休克；胸痛儘早取得12導程心電圖。</li>
+<li>原則：固定頻率、異常加密、處置後重測；交接報告「最初、最差、目前」。</li>
+</ul>
+
+<h4>安全給藥</h4>
+<ul>
+<li>WHO「Medication Without Harm」（2017）目標十年內減少嚴重可避免藥物傷害50%。</li>
+<li>三讀：取藥時、調配時、用藥前讀出完整藥名。五對：病人、藥名、劑量、時間、途徑；核心在判斷合理性（如靜脈通路是否通暢、上次給藥時間）。</li>
+<li>院前以閉圈式溝通執行：執行者口頭讀出、接收者複誦。</li>
+<li>高警訊藥物（High-Alert Medications, HAM）雙重核查；epinephrine 1:1000與1:10000濃度差十倍；給藥紀錄與交接遺漏易致重複給藥。</li>
+</ul>
+
+<h4>特殊族群</h4>
+<ul>
+<li>老年：感染可能不發燒，心肌梗塞可能僅虛弱或意識混亂，多重用藥影響評估。</li>
+<li>兒童：早期休克血壓可正常，變安靜無力比哭鬧危險；劑量器材依Broselow量尺。</li>
+<li>孕婦：優先穩定母體；懷孕逾20週休克採左側臥；外傷注意陰道出血與胎動改變。</li>
+<li>精神或認知障礙：躁動可能源於低血糖、頭部外傷、感染；先降階，約束須監測呼吸與嘔吐，避免俯臥壓迫。</li>
+</ul>
+
+<h4>運送安全、幾近錯誤與交接</h4>
+<ul>
+<li>先評估再搬動、先固定再移動；脊椎固定依機轉與臨床表現，不反射性施作。</li>
+<li>開車前清單：擔架雙側鎖點卡聲、安全帶扣緊、輸液袋掛固定架而非單純懸掛、氧氣鋼瓶固定環與餘量、ECG電極穩定、無拋射物。</li>
+<li>途中同時關注病人、設備、環境；交接須含途中所有事件。</li>
+<li>海因里希法則：1件嚴重傷害背後約300件幾近錯誤；通報簡單快速非懲罰，建立閉環回饋，否則通報文化會消失。</li>
+<li>TeamSTEPPS（Team Strategies and Tools to Enhance Performance and Patient Safety）Debrief三問：哪裡做得好、哪裡差點出錯、下次改變什麼。</li>
+<li>ISBAR（Introduction, Situation, Background, Assessment, Recommendation）：含已排除資訊；不確定就說「未知」，比錯誤的確定更安全。</li>
+</ul>
+
+<h4>十大整合原則</h4>
+<ol>
+<li>先處理立即威脅生命的問題。</li>
+<li>以ABCDE為共同語言並定期重評。</li>
+<li>看趨勢，異常時加密監測。</li>
+<li>處置後重評，交接報告最初、最差、目前。</li>
+<li>高風險病人提早求援。</li>
+<li>三讀五對、高警訊藥物雙重核查、閉圈溝通。</li>
+<li>特殊族群不硬套一般框架。</li>
+<li>搬運運送本身就是醫療處置。</li>
+<li>交接結構化，含趨勢、已排除資訊與未解決問題。</li>
+<li>幾近錯誤通報轉化為系統改善。</li>
+</ol>
+
+<div class="case"><h4>案例：72歲男性意識不清（心房顫動、服用Warfarin）</h4>
+<p>鼾聲、SpO₂ 83%，先開呼吸道置NPA並BVM輔助；HR 118、BP 104/68、回填3秒，休克指數大於1建立IV；AVPU僅對痛有反應、瞳孔不等大，疑顱內出血。途中HR、SpO₂、RR三者同步惡化，立即通報醫院並從A重新評估。</p>
+<p>交接要點：以趨勢呈現惡化、在S即點出瞳孔危急徵象、交代Warfarin以利備妥Vitamin K或4F-PCC、過敏史未知須明說。</p>
+</div>
+</div>
+</details>
+
+<!-- 06 -->
+<details class="ch" id="ch06">
+<summary><span class="no">06</span><span class="t"><b>暴力預防與降階應對</b><i>Violence Prevention &amp; De-escalation</i></span><span class="pg">p.103</span></summary>
+<div class="body">
+<p class="meta"><span>編撰：陳璿羽、羅光廷、褚偉基、楊適瑋｜<a href="https://limzijiang.github.io/nfa-safer-handbook/#p103" target="_blank" rel="noopener">原書 p.103</a></span><button type="button" class="copy">複製本章</button></p>
+<p class="gist">EMS人員遭暴力攻擊受傷機率可能為一般職業的22倍；多數暴力是處置過程中情緒加劇的結果，整趟出勤須持續感知暴力風險，撤退優先於反擊。</p>
+
+<h4>風險辨識</h4>
+<ul>
+<li>高風險情境：集會遊行、家暴、行為急症、酒醉路倒、藥物濫用、犯罪現場、警方已先到場案件、交通事故。</li>
+<li>4S應變原則：評估（Size up）、安全（Safety）、回報（Send back）、部署（Set up）；行前向派遣端蒐集資訊、隊內先擬行動方案、有疑慮先請警方支援。</li>
+<li>精神危機初步評估「叫、叫、C、A、B、D」：叫團隊（衛生、警察）、叫周邊與裝備、認知（Cognition）、情緒（Affect）、行為（Behavior）、決定壓制或降階（Decide and defuse）。</li>
+<li>次級評估「居安思危、枕戈待旦」：居住空間可介入撤離、個人安全、思想怪異、感覺危險相信直覺、精神病史（診）、武器或藥物（戈）、如何對待重要關係人（待）、升溫時緊急計畫（旦）。</li>
+<li>情緒曲線五階段：誘發、升溫、危機、高原或恢復、危機後抑鬱；危機階段不能僅靠言語降階，須強制力介入。</li>
+<li>情境感知「停看聽聞感」：停下環顧360°、看武器與酒瓶、聽怒吼或突然安靜、聞酒精毒品瓦斯、感受氛圍及對方持續縮短距離。</li>
+</ul>
+
+<h4>緊急性判準：AOJ原則</h4>
+<ul>
+<li>能力（Ability）：對方是否有能力造成傷害。</li>
+<li>機會（Opportunity）：距離與阻隔下是否有機會造成傷害。</li>
+<li>意圖（Jeopardy）：是否表現攻擊意圖並持續逼近。</li>
+<li>司法實務見解：侵害進入「預備最後緊接著手」階段即屬「現在」；迫在眼前或隨時轉為實害之危難屬「緊急」。</li>
+</ul>
+
+<h4>DEFUSE降階：「選擇安全關係、需要界線評估」</h4>
+<ol>
+<li>選擇（Decide）：判斷是否仍能理智溝通；失控則請求支援或合併約束，口頭仍持續降階。</li>
+<li>安全（Ensure Safety）：移除環境武器，維持兩公尺以上（約兩臂長），持械則更遠。</li>
+<li>關係（Form Relationship）：自我介紹、詢問稱呼、眼神交流不凝視，禁用歧視性字眼。</li>
+<li>需要（Utilize Interests）：主動傾聽同理，於許可範圍滿足需求。</li>
+<li>界線（Set Limits）：以事實說明後果並給予選擇感。</li>
+<li>評估（Enforce/Evaluate）：動態重評，升溫即啟動備援。</li>
+</ol>
+<ul><li>溝通風格可在溫和與堅定之間切換；越溝通越惡化時換隊友接手，啟動強制力前先啟動隊友支援。</li></ul>
+
+<h4>現場安全應變</h4>
+<ul>
+<li>接觸者與掩護者（Contact and Cover）分工，抵達前律定；維持單一聲音（One Voice）。</li>
+<li>電梯大樓先到目標樓層下一層再走樓梯；預想撤離動線與可關門阻隔處。</li>
+<li>安全距離是動態概念：徒手激動者約3公尺；持刀者6公尺仍不足，能多遠就多遠。</li>
+<li>敲門後側身、勿正對門；空間狹小以沙發桌子製造緩衝。</li>
+<li>水泥牆擋子彈、實木家具擋刀；撤退時以器材包格擋、卡門縫、翻倒家具，戰術手電筒強光爭取時間。</li>
+</ul>
+
+<h4>約束原則</h4>
+<ul>
+<li>物理或化學約束為無法降階時的最後手段；肥胖、藥物濫用、慢性病者猝死風險高。</li>
+<li>警訊：突然停止掙扎、呼吸淺快或費力。</li>
+<li>有預立醫療流程時可合併化學約束（如Haloperidol、Olanzapine、Lorazepam）。</li>
+<li>理想至少5人、一人控制一肢；禁止面朝下或無法確保呼吸道之約束；器材須可快速移除，警方戒具須有警員隨侍。</li>
+<li>紀錄約束原因、方式、生命徵象與時間，兼顧病人安全與人員法律保障。</li>
+</ul>
+
+<h4>與警方協同</h4>
+<ul>
+<li>分段（Stage）分區（Zone）：先於安全處待命（Staging），警方宣布現場安全（Scene Secure）後進入；熱區僅武裝執法人員，暖區在警力戒護下僅限必要急救並儘速撤離，冷區進行集結與進階處置。</li>
+<li>執法與救護雙軌並行，不互斥。</li>
+<li>警械使用時站位呈V型或L型，保持180°視野，避免火線交叉。</li>
+<li>回報五項：位置動態、看到什麼、要做什麼、需要什麼、表達疑慮（如擔心背銬俯臥送醫不安全）。</li>
+<li>部署依TRM：資深者擔任救護領導與警方對話、雙向溝通、互相守望、互助（如提供手套給警方）。</li>
+</ul>
+
+<div class="case"><h4>案例：酒後持刀並潑灑不明液體</h4>
+<p>警方以指責語氣喊話後，病人開門持菜刀並潑灑液體，人員皮膚紅熱刺痛。</p>
+<p>安全提示：出勤前詢問現場環境、請救指中心向心衛中心確認列管並預先請警；抵達先確認撤離動線、主動向警方表達溝通疑慮；讓警方在前並穿防割背心與防刺手套；遭化學潑灑先撤離、除污、啟動化學防護後再接觸病人。</p>
+</div>
+</div>
+</details>
+
+<!-- 07 -->
+<details class="ch" id="ch07">
+<summary><span class="no">07</span><span class="t"><b>感染控制與除污</b><i>Infection Prevention, Control &amp; Decontamination</i></span><span class="pg">p.119</span></summary>
+<div class="body">
+<p class="meta"><span>編撰：謝明儒、楊文碩｜<a href="https://limzijiang.github.io/nfa-safer-handbook/#p119" target="_blank" rel="noopener">原書 p.119</a></span><button type="button" class="copy">複製本章</button></p>
+<p class="gist">把每位病人都當成潛在感染源；控制層級依序為消除、工程控制（安全針具）、行政控制，個人防護裝備（Personal Protective Equipment, PPE）是最後一道防線。戴手套不能取代洗手。</p>
+
+<h4>標準防護措施（Standard Precautions）</h4>
+<ul>
+<li>血液、體液、分泌物（汗水除外）、排泄物、非完整皮膚與黏膜皆視為具傳染性，不因確診狀態而改變。</li>
+<li>四項作為：依情境選PPE、手部衛生、安全尖銳物處置（防刺穿收集盒）、環境與設備清潔消毒。</li>
+</ul>
+
+<h4>傳播途徑防護</h4>
+<table class="mini">
+<tr><th>類別</th><th>代表病原</th><th>防護重點</th></tr>
+<tr><td>接觸</td><td>MRSA、VRE、C. diff、大量滲出液傷口</td><td>手套、隔離衣；C. diff以次氯酸鹽清消</td></tr>
+<tr><td>飛沫（2公尺內）</td><td>流感、百日咳、腺病毒、細菌性腦膜炎</td><td>外科口罩、護目鏡或面罩；病人戴口罩，鼻導管可置口罩內</td></tr>
+<tr><td>空氣（可逾3.6公尺）</td><td>結核病、麻疹、水痘、COVID-19</td><td>密合檢查之N95或PAPR；開艙窗、空調非內循環、隔離駕駛艙</td></tr>
+<tr><td>氣溶膠產生處置（AGP）</td><td>抽吸、CPR、插管、CPAP/BiPAP、BVM、霧化、高流量氧</td><td>升級空氣防護；盡量車外執行，否則開窗或開門</td></tr>
+<tr><td>病毒性出血熱</td><td>Ebola、Lassa、Marburg</td><td>雙層手套、防水隔離衣、全面罩；指定區域除污</td></tr>
+</table>
+
+<h4>PPE穿脫與分級</h4>
+<ul>
+<li>PPE會隨時間與高溫劣化；過早穿戴易勾破且產生虛假安全感。</li>
+<li>穿戴：隔離衣、口罩或呼吸防護具（每次密合檢查）、護目鏡或面罩、手套包覆袖口。</li>
+<li>脫除（高自我污染風險，放慢動作）：手套、護目鏡或面罩、隔離衣（內面外翻）、口罩（先拉下方綁帶，勿觸正面）、手部衛生。</li>
+<li>穿脫避免同一地點；手套破損即更換並先行手部衛生；創傷勤務可加第二層手套。</li>
+<li>分級：一般出勤、基本防護、標準防護、C級防護，依疾管署或消防局防疫需求調整。</li>
+</ul>
+
+<h4>手部衛生</h4>
+<ul>
+<li>調查顯示僅13%救護技術員於接觸病人前執行手部衛生，29%幾乎從不在戴手套前洗手；77%處置後手部殘留大量微生物。</li>
+<li>五時機：接觸病人前、無菌技術或處理侵入性設備前、暴露體液後、接觸病人後、接觸病人周遭環境設備後。</li>
+<li>肥皂與水搓揉15–20秒，以紙巾包覆關水龍頭；C. diff芽孢僅能以物理洗手移除。</li>
+<li>乾洗手酒精濃度62%–90%（WHO建議75%–85%），搓至完全乾燥。</li>
+</ul>
+
+<h4>車輛與器材清消</h4>
+<ul>
+<li>先清潔後消毒，有機物殘留會大幅降低消毒效力。</li>
+<li>確保表面接觸時間（依產品約1–5分鐘），達時後自然風乾。</li>
+<li>高頻接觸表面每趟清消：擔架框、護欄、床墊、扶手、無線電、壓脈帶、血氧指夾。</li>
+<li>1000 ppm漂白水：市售5–6%取20 c.c.加水980 c.c.；10–12%取10 c.c.加水990 c.c.；擦拭不噴灑，30分鐘後清水擦拭或自然乾；勿與酸或氨混用。</li>
+<li>載送空氣傳染病人後全開車門通風：23分鐘排除約90%、46分鐘99%、69分鐘99.9%。</li>
+<li>改良型過氧化氫（IHP）、UV-C與氣體消毒僅作輔助，UV-C無法穿透布料且有陰影死角。</li>
+</ul>
+
+<h4>職業暴露與疫苗</h4>
+<ul>
+<li>約18%救護技術員一年內曾遭針扎；資深15年以上達39%、EMT-P 32%高於EMT 27%。</li>
+<li>設指定感染控制人員（Designated Infection Control Officer, DICO）作為單一窗口。</li>
+<li>緊急醫療救護法第19條第3項：醫院收治之傳染病經主管機關證實後，應通知運送救護車所屬機關。</li>
+<li>處理流程：大量清水沖洗（勿擠壓）、回報救指中心或權責科室、取得來源病人檢體檢驗、依醫囑預防性投藥、第1、3、6個月追蹤。</li>
+<li>暴露後預防（Post-Exposure Prophylaxis, PEP）：HIV越早越好，24–36小時後效力大降；B肝未具抗體者7天內（最好24小時內）注射HBIG；C肝無PEP，需持續監測。</li>
+<li>建議疫苗：B肝、每年流感、MMR、水痘、Tdap、腦膜炎雙球菌、COVID-19。</li>
+</ul>
+
+<h4>病人源頭控制</h4>
+<ul>
+<li>疑似呼吸道感染即為病人戴口罩；禁忌：2歲以下、嚴重呼吸困難、意識不清、無法自行摘除者。</li>
+<li>門外觀察（Doorway Observation），限制入內人數；詢問一個月內旅遊、群聚、接觸史。</li>
+<li>BVM、CPAP、插管管路前端加裝HEPA或細菌病毒過濾器。</li>
+<li>以乾淨床單包裹病人；提前通報醫院備妥動線與負壓隔離室。</li>
+<li>對暴露事件採不責備（No-blame）態度，強調保護病人與家屬以提升遵從率。</li>
+</ul>
+</div>
+</details>
+
+<!-- 08 -->
+<details class="ch" id="ch08">
+<summary><span class="no">08</span><span class="t"><b>病人搬運與人體工學</b><i>Patient Handling &amp; Ergonomics</i></span><span class="pg">p.143</span></summary>
+<div class="body">
+<p class="meta"><span>編撰：張育通、陳亮甫｜<a href="https://limzijiang.github.io/nfa-safer-handbook/#p143" target="_blank" rel="noopener">原書 p.143</a></span><button type="button" class="copy">複製本章</button></p>
+<p class="gist">安全搬運是技術活而非體力活；人體工學（Ergonomics）的核心是調整作業方式以適應人，落實不抬舉政策（No Lift Policy）。</p>
+
+<h4>職傷現況</h4>
+<ul>
+<li>國內研究：77.5% EMT曾於勤務中受傷，平均工作第5.3年發生搬運所致嚴重受傷。</li>
+<li>EMT受傷機會為一般勞工4.29倍、護理師1.42倍；下背占65.6%；40.3%受傷起因於雙人搬運法。</li>
+</ul>
+
+<h4>安全搬運核心觀念</h4>
+<ul>
+<li>控制層級：消除風險（可自行行走即不搬運）、工程控制（電動設備）、執行控制（技巧）、個人防護（護腰）。</li>
+<li>四原則：使用病人最大潛力（約31%病人意識清楚，引導自行轉位）、水平取代垂直、器械取代人力、抬舉作為最後手段。</li>
+<li>能在平地移動就不抬起；能用機器就不用人力；接觸前先評估路徑、移除絆倒物、判斷是否增援。</li>
+</ul>
+
+<h4>5B原則</h4>
+<ol>
+<li>保持正確姿勢（Be in position）：雙腳與肩同寬，避免脊椎扭轉。</li>
+<li>尋求支撐（Bracket）：利用環境或肢體穩定脊椎。</li>
+<li>收緊核心（Brace）：用力前收緊腹部，形成天然護腰。</li>
+<li>利用體重（Body weight）：以重心轉移帶動，而非單靠手臂。</li>
+<li>大肌肉發力（Big muscles）：使用股四頭肌與臀大肌。</li>
+</ol>
+
+<h4>基本動作</h4>
+<ul>
+<li>半深蹲（Semi Squat）：重心足中至足跟、臀部後坐、腰部中立，勿蹲到底。</li>
+<li>前弓箭步（Forward Lunge）：單人推擔架入車時，以重心前移產生推力。</li>
+<li>避免負重扭轉與側彎，轉向時移動雙腳。</li>
+<li>擔架上抬進入車內滑軌段最易傷腰，宜雙人協作。</li>
+</ul>
+
+<h4>輔助裝置</h4>
+<ul>
+<li>電動擔架（Power-Loading Stretcher）：減少上下車抬舉；崎嶇路面由兩人分別導向與穩固。</li>
+<li>移位滑板、移位滑布：水平推拉取代垂直抬舉。</li>
+<li>移位腰帶、一字帶：提供施力點，避免拉提腋下或抓衣物。</li>
+<li>充氣式搬運墊（Inflatable Transfer Mattress）：適用過重病人與跨樓層移動。</li>
+</ul>
+
+<h4>多人協作SAFE守則</h4>
+<ul>
+<li>S（Scan &amp; Stop）：檢視危害、暫停並建立指揮者。</li>
+<li>A（Assess the scene）：評估環境、病人體重與配合度、器材與人力。</li>
+<li>F（Form a plan）：擬定主要與備用策略，建立夥伴機制（Buddy System）。</li>
+<li>E（Extricate &amp; Evaluate）：執行並持續監控，異常立即中止重評。</li>
+<li>單一指揮者（通常位於病人頭側）下達清晰口令並確認病人家屬就緒；身高相近者對角或同側站位；手滑或體力不支立即報告。</li>
+</ul>
+
+<h4>救護車內作業</h4>
+<ul>
+<li>行駛中保持三點支撐（雙腳加一手抓扶手）；侵入性處置於車輛平穩或暫停時進行。</li>
+<li>所有裝備確實固定，病人全程繫安全帶。</li>
+</ul>
+
+<div class="case"><h4>案例：五樓無電梯、90公斤呼吸困難長者</h4>
+<p>評估狹窄樓梯後改用搬運毯合併椅式擔架並請求增援；先給氧穩定情緒並向病人家屬說明配合事項；下樓時前方人員以大腿緩衝，轉角由指揮者喊停、增援人員側邊穩定；上車換電動擔架，EMT繫安全帶監測。</p>
+</div>
+</div>
+</details>
+
+<!-- 09 -->
+<details class="ch" id="ch09">
+<summary><span class="no">09</span><span class="t"><b>特殊與大量傷患事件</b><i>Special Incidents &amp; MCI</i></span><span class="pg">p.155</span></summary>
+<div class="body">
+<p class="meta"><span>編撰：林文鴻、侯勝文、林皓陽｜<a href="https://limzijiang.github.io/nfa-safer-handbook/#p155" target="_blank" rel="noopener">原書 p.155</a></span><button type="button" class="copy">複製本章</button></p>
+<p class="gist">攻擊性致命行為事件的思維由「醫療優先」轉為「戰術優先、醫療隨後」：先停止殺戮（Stop the Killing），再停止死亡（Stop the Dying）。</p>
+
+<h4>定義與核心思維</h4>
+<ul>
+<li>涵蓋主動攻擊者（Active Assailant）、主動槍手、暴力衝突、暴力極端分子與恐怖攻擊。</li>
+<li>大量傷患事件（Mass Casualty Incident, MCI）：依緊急醫療救護法第30條第1項所定大量傷病患救護辦法，單一現場傷患達15人以上或預判可能達15人以上。</li>
+<li>生命優先順序：無辜平民、第一線應變人員、攻擊者。</li>
+<li>保持360°水平與垂直警覺，運用距離與掩體。</li>
+</ul>
+
+<h4>指揮架構</h4>
+<ul>
+<li>單一指揮：通常由警察擔任事件指揮官（Incident Commander, IC）；涉及火災或化學威脅時啟動警消聯合指揮（Unified Command）。</li>
+<li>分工：警察壓制威脅與場地安全；消防救護負責檢傷、治療、快速運送。</li>
+<li>警消指揮所（ICP）共設於冷區，保持視線與聲音可及。</li>
+<li>遭警方盤查（Challenge Situation）：遵令靜止、勿突然移動轉身、口頭表明職級姓名、待允許再行動。</li>
+</ul>
+
+<h4>警方抵達前</h4>
+<ul>
+<li>不得進入存在威脅之現場；集結於視線外或不被槍彈穿透的掩體後，並通報救指中心。</li>
+<li>懷疑次要威脅時，敏感資訊改以手機、安全頻道或救護平板（Mobile Data Terminal, MDT）傳輸。</li>
+<li>遭遇攻擊立即撤退，無法撤退時尋找堅固掩護（Hard Cover）；回報加害者人數位置、受害者與人質、武器、加害者通訊方式。</li>
+</ul>
+
+<h4>救援環境四區</h4>
+<table class="mini">
+<tr><th>分區</th><th>定義</th><th>作業限制</th></tr>
+<tr><td>熱區</td><td>威脅仍在、交火或疑有IED</td><td>僅限警察；消防嚴禁，僅受訓戰術醫護可快速撤離</td></tr>
+<tr><td>暖區</td><td>警方已清理但仍有潛在威脅</td><td>須警察武力保護且經消防指揮官批准</td></tr>
+<tr><td>暖區走廊</td><td>警方控制之安全路線</td><td>須警方護送，僅供進出與撤離，不停留治療</td></tr>
+<tr><td>冷區</td><td>無已知威脅或已控制</td><td>設ICP、集結區、檢傷治療區、後送點</td></tr>
+</table>
+
+<h4>主動攻擊者事件應變</h4>
+<ul>
+<li>監測槍聲、人群流向、爆裂物預警；集結於冷區外堅固掩護後。</li>
+<li>無線電宣告：所有單位不得在無警方武力保護下進入建築物，並要求回覆確認。</li>
+<li>消防指揮官職責：確認警方IC位置、定義威脅、確認生命危害與區域邊界、規劃冷區轉移點與救護車路線、提供甲乙種搶救圖與建築平面圖。</li>
+<li>燈火管制避免暴露位置，車頭朝撤離方向。</li>
+<li>LCAN情資傳遞：地點（Location）、狀況（Condition）、行動（Actions）、需求（Needs）。</li>
+</ul>
+
+<h4>暖區作業</h4>
+<ul>
+<li>進入前確認暖區走廊及入口、電梯、樓梯、避難區安全；始終在武力保護範圍內，快進快出（Rapid Entry &amp; Extraction）。</li>
+<li>專注紅標傷患；區域不安全由警方戰略反應組（Strategic Response Group, SRG）小組長下令撤退；成員重傷即停止作業。</li>
+<li>照護限於止血與基本呼吸道，依MARCH順序：大出血（Massive hemorrhage）、呼吸道（Airway）、呼吸（Respiration）、循環（Circulation）、低體溫與頭部（Hypothermia/Head）。</li>
+</ul>
+
+<h4>解除潛在危險者武裝</h4>
+<ul>
+<li>槍枝四守則：視為上膛、槍口朝安全方向、手指不入扳機框、注意目標及後方。</li>
+<li>優先由執法人員處理；疑似嫌犯先辨識、上銬、搜身再急救。</li>
+<li>EMT不貿然清槍；槍在槍套內採「移除腰帶法」；不在槍套內採「武器包裹法」：夾鏈袋保存指紋、以膠帶或護木包覆扳機護弓。</li>
+<li>全程錄影、戴手套，通訊裝備與機敏資料一併保管，於安全區逐一點交警方。</li>
+</ul>
+
+<h4>冷暖交界物資集中點</h4>
+<ul>
+<li>設於冷區邊緣，面向暖區有堅固掩體；暖進冷出單向動線。</li>
+<li>依MARCH模組化擺放（如大出血控制組）、備妥已拆封止血帶；氧氣瓶與精密儀器置於後方治療區。</li>
+<li>「一換一」補給確保RTF滿載；專區管理醫療廢棄物與武器保管。</li>
+<li>後勤官清點，止血帶等關鍵物資低於30%即請求增援；以螢光旗或LED標記位置。</li>
+</ul>
+
+<h4>SALT檢傷</h4>
+<ol>
+<li>篩選（Sort）：先喊能走者移至安全區，再請不能走者揮手回應，優先前往無反應、無法移動、明顯大出血者。</li>
+<li>評估（Assess）：遵從指令、橈動脈脈搏、呼吸窘迫、出血控制。</li>
+<li>救命介入（Lifesaving Interventions）：暖區僅執行2分鐘內可完成者，止血帶、NPA、兒童2次人工呼吸、密封敷料、針刺減壓。</li>
+<li>處置與後送（Treatment/Transport）：紅（立即）、黃（延遲）、綠（輕傷）、黑（無呼吸且介入無效）。</li>
+</ol>
+<ul>
+<li>檢傷五類安全風險：現場物理危害、感染暴露、人群失控、心理認知負荷、溝通錯誤。</li>
+<li>傷患收集點（Casualty Collection Point, CCP）設於暖區有掩護處；進入時喊「消防！消防！」或「Blue! Blue!」並配合手勢以免誤擊；救護車不足可由警車協助運送。</li>
+</ul>
+
+<h4>跨單位協作與復原</h4>
+<ul>
+<li>使用直白語彙（Plain Language），捨棄代碼；RTF撤出使用專用暖區戰術頻道，交接採MIST：受傷機制（Mechanism）、傷勢（Injury）、徵象（Signs）、處置（Treatment）。</li>
+<li>簡易爆炸裝置（Improvised Explosive Device, IED）：不碰炸彈與炸彈客（即使已死亡），撤退並轉過至少一個90度彎角。</li>
+<li>壓力生理反應可致隧道視野、聽覺屏蔽、精細動作失靈，須以演練使止血帶操作成為反射。</li>
+<li>高強度勤務後啟動關鍵事件壓力減壓（Critical Incident Stress Debriefing, CISD）七階段：引言、事實、認知、情緒、症狀、教導、重返；定期警消聯合實戰演練。</li>
+</ul>
+
+<h4>附錄：救援任務小組（Rescue Task Force, RTF）</h4>
+<ul>
+<li>典型編組：消防與救護技術員7名（含小組長，可依現況調整）加警察SRG 4名。</li>
+<li>「滾動T字隊形」：警察3名前鋒、1名後衛兼小組長控制速度；消防雙人組居中受保護。</li>
+<li>警方負責移動速度與安全，消防負責醫療處置。</li>
+<li>個人裝備：戰術等級防彈背心與頭盔、明顯消防或EMS識別、戰術照明、穿戴式攝影機。</li>
+<li>醫療包（以5–10名傷患計）：戰術止血帶10–12條、止血紗布6–8捲、彈性繃帶6捲、各尺寸NPA 4套、胸封貼片10片、14G針刺減壓針2–4支、檢傷卡20張、軟式擔架2–4組、粗麥克筆2支。</li>
+<li>禁止攜入：氧氣瓶（爆炸風險且重）、AED（暖區不做CPR）、大型急救箱。</li>
+<li>MIST移交卡：A6防水材質，固定於胸前明顯處勿塞口袋；額頭同步標註「T加施用時間」；執法人員傷患註記武器已移除。</li>
+</ul>
+
+<div class="case"><h4>案例：購物中心持刀隨機攻擊</h4>
+<p>首到人員未衝入建物、於停車場檢傷並上止血帶，LCAN回報完整；警方確保暖區後RTF進入撤出重傷者。</p>
+<p>檢討：RTF與冷區指揮所一度失聯約三分鐘；修訂為RTF配置專用頻道並每兩分鐘定時回報。</p>
+</div>
+</div>
+</details>
+
+<!-- 10 -->
+<details class="ch" id="ch10">
+<summary><span class="no">10</span><span class="t"><b>溝通、交接與法律責任</b><i>Communication, Documentation &amp; Legal Safety</i></span><span class="pg">p.181</span></summary>
+<div class="body">
+<p class="meta"><span>編撰：張鴻傑、戴誌毅｜<a href="https://limzijiang.github.io/nfa-safer-handbook/#p181" target="_blank" rel="noopener">原書 p.181</a></span><button type="button" class="copy">複製本章</button></p>
+<p class="gist">確保資訊傳遞正確、送醫決策具法律正當性，並降低糾紛風險；救護紀錄表為法定公文書。</p>
+
+<h4>與病人溝通四階段</h4>
+<ol>
+<li>開場：自我介紹、確認身分、平穩語氣建立信任。</li>
+<li>理解病人觀點：探詢主訴並理解病人或照顧者最需要的幫助，兼顧心理需求。</li>
+<li>展現同理心：語言與非語言表達關心，避免冷漠命令語氣。</li>
+<li>結尾：說明處置計畫與是否送醫，確認理解。</li>
+</ol>
+
+<h4>告知後同意（Informed Consent）四要素</h4>
+<ul>
+<li>資訊揭露：初步診斷、建議處置、風險副作用、替代方案、不處置風險。</li>
+<li>理解能力：避免過度專業術語。</li>
+<li>自願性：不得威脅或誘導。</li>
+<li>決策能力：無能力者由代理人決定。</li>
+</ul>
+
+<h4>拒絕送醫或處置</h4>
+<ul>
+<li>先確認病人意識清楚、具理解風險與決策能力。</li>
+<li>依消防機關救護紀錄表填寫作業原則：病人本人簽名並留電話；病人意識不清由家屬簽名並註明關係；拒簽或不能簽者由員警、村里幹事等公務性第三人簽名並註記關係。</li>
+<li>緊急救護辦法第7條：拒絕運送者於紀錄表簽名後不予運送。</li>
+<li>未適當評估、說明與紀錄，或明顯需醫療而未採合理作為，可能涉遺棄罪或過失致死罪。</li>
+</ul>
+
+<h4>結構化交接與提前通報</h4>
+<ul>
+<li>ISBAR、IMIST等工具提升一致性；優先使用救護平板或網路系統即時傳輸。</li>
+<li>應儘早通報：STEMI、急性腦中風、重大外傷、中毒或毒物暴露、孕婦急症；依轄區作業程序辦理。</li>
+<li>重大外傷：現場環境與受傷機轉，可輔以照片。急性腦中風：確認發作時間，請熟悉病人之照顧者隨車。中毒：攜帶藥物包裝、藥殼、化學容器。</li>
+<li>疑似親密伴侶暴力、兒童虐待疏忽、老人虐待：完整交接、依法啟動保護通報並記載於紀錄。</li>
+</ul>
+
+<h4>救護紀錄表</h4>
+<ul>
+<li>即時、客觀、完整、描述明確；不得因填寫而延誤評估與處置。</li>
+<li>五大欄位：派遣資料、病人資料、現場狀況、處置項目、簽名欄；依救護技術員教科書及填寫作業原則標準化填寫。</li>
+<li>緊急救護辦法第14條：送抵醫院時由醫護人員簽章確認。</li>
+</ul>
+
+<h4>隱私與法律責任</h4>
+<ul>
+<li>檢查處置選擇隱蔽場所、以衣物被單遮蔽、避免不必要暴露、注意周遭人員。</li>
+<li>刑法第315條之1：禁止無故竊錄他人非公開活動或身體隱私部位。</li>
+<li>緊急醫療救護法第35條：因業務知悉之秘密不得無故洩漏；違反依第45條處新臺幣1萬元以上5萬元以下罰鍰。</li>
+<li>刑法第213條：公務員明知不實登載於職務上公文書，處1年以上7年以下有期徒刑。</li>
+<li>紀錄應依規定妥善保存。</li>
+</ul>
+
+<div class="case"><h4>案例</h4>
+<p>酒醉頭傷拒送：言語降階、說明顱內出血風險、確認意識與判斷力後由警察見證簽署並詳實記錄，同時勸阻路人拍攝。</p>
+<p>私改已簽章紀錄：補登長背板、頸圈與途中30秒意識喪失時直接修改電子紀錄，可能涉公務員登載不實；應依縣市規定於備註欄「補述」修正內容與原因，重大修改循行政程序同步醫院端紀錄，並將意識喪失資訊告知醫療團隊。</p>
+</div>
+</div>
+</details>
+
+<!-- 11 -->
+<details class="ch" id="ch11">
+<summary><span class="no">11</span><span class="t"><b>個人健康與職業韌性</b><i>Provider Wellness &amp; Resilience</i></span><span class="pg">p.193</span></summary>
+<div class="body">
+<p class="meta"><span>編撰：常安安、劉柏群｜<a href="https://limzijiang.github.io/nfa-safer-handbook/#p193" target="_blank" rel="noopener">原書 p.193</a></span><button type="button" class="copy">複製本章</button></p>
+<p class="gist">先照顧好自己，才能守護他人。休息要成為習慣、求助是維持戰力，韌性是可以練習的技能。</p>
+
+<h4>睡眠與疲勞管理</h4>
+<ul>
+<li>非快速動眼期（NREM）負責身體修復，並讓腦脊髓液清除代謝廢物；快速動眼期（REM）支撐學習與情緒。</li>
+<li>成人每24小時需7–9小時睡眠；清醒17小時約等同BAC 0.05%，24小時約0.10%。</li>
+<li>睡眠債（Sleep Debt）無法以單次長睡償還；可用史丹佛「黃金90分鐘」7題自評（滿分9分，6分以上須立即休息）。</li>
+<li>微睡眠（Microsleep）：時速60公里下4秒可失控約70公尺。</li>
+<li>長期輪班增加心血管疾病、糖尿病風險，失眠與睡眠呼吸中止症須就醫。</li>
+<li>策略性小睡約30分鐘；睡超過45分鐘但少於90分鐘易產生約20分鐘睡眠慣性（Sleep inertia）。</li>
+<li>咖啡後立即小睡30分鐘，醒來時咖啡因正好作用；需要時使用，勿全天濫用。</li>
+<li>睡眠環境黑暗安靜，白天用遮光窗簾與白噪音；睡前避免咖啡因、酒精、大餐與藍光。</li>
+<li>國際救護車服務認證委員會（CAAS）標準：班與班之間建議10小時以上休息。</li>
+</ul>
+
+<h4>飲食與補水</h4>
+<ul>
+<li>國健署建議成人每日白開水1500–2000 c.c.，每次約200 c.c.分次補充；90分鐘無排尿或口渴即已缺水；尿色清澈為佳。</li>
+<li>手搖飲高糖造成滲透性利尿（Osmotic Diuresis）與血糖驟升驟降；零卡飲料人工甜味劑亦有疑慮。</li>
+<li>高油鹽便當導致體脂、血鈉、血糖上升並造成能量驟降；制服變緊或變鬆反映壓力影響飲食。</li>
+<li>外食原則：半盤蔬果、半數穀物換全穀、選瘦肉、每日鹽6公克。</li>
+<li>高強度勤務後可稀釋運動飲料；極端高溫備口服補液（Oral Rehydration Solution, ORS）：開水1公升、糖25公克、鹽3公克。</li>
+</ul>
+
+<h4>壓力識別</h4>
+<ul>
+<li>良性壓力（Eustress）促進成長；負向壓力（Distress）造成耗竭。</li>
+<li>四大壓力源：勤務衝擊與決策（兒虐、OHCA）、體制與人際（醫院質疑、派遣落差、跨轄支援）、內心耗損與社會（常客與酒醉謾罵、恐懼究責、生活剝奪）、外在感官與生理剝奪。</li>
+<li>壓力桶理論（The Stress Bucket）：沒有排水孔，最後一滴也會讓水溢出。</li>
+<li>HALT快速檢測：飢餓（Hungry）、憤怒（Angry）、孤立（Lonely）、疲憊（Tired）。</li>
+<li>PCL-5（PTSD Checklist for DSM-5）檢視過去一個月四類症狀：闖入、逃避、認知與情緒負向改變、警覺性改變；手冊標示總分超過31–33分建議專業評估。</li>
+<li>生理警訊：頭痛、腸胃問題、失眠；成癮警訊：暴飲暴食、狂喝提神飲料、抽菸量增、飲酒助眠。搭檔常比本人更早察覺。</li>
+</ul>
+
+<h4>即時調適與角色切換</h4>
+<ul>
+<li>上陣前：戰術呼吸，吸氣、閉氣、吐氣、閉氣各4秒，重複4次。</li>
+<li>當機混亂時：五感著陸法5-4-3-2-1（看5、摸4、聽3、聞2、嚐1）。</li>
+<li>任務結束後：一分鐘放鬆呼吸，吸4秒吐6秒連續6–8次，配合肩頸下背身體掃描。</li>
+<li>返隊：清洗車輛時簡單聊感受（戰術減壓）；以洗手、換制服作為任務結束暗示。</li>
+<li>下班：20–30分鐘緩衝區、關閉工作群組通知、培養與救護無關的興趣、休假用於復原、脫下英雄包袱。</li>
+</ul>
+
+<h4>自傷與心理危機</h4>
+<ul>
+<li>美國消防員行為健康聯盟統計：救護技術員自殺意念為一般人10倍、企圖自殺13倍。</li>
+<li>急性壓力症（Acute Stress Disorder, ASD）一個月內出現；未處理者約15%–20%發展為PTSD；PTSD、憂鬱與物質濫用共病為自殺主因。</li>
+<li>危機訊號：重大案件後極度內疚、職業倦怠，或於社群發布暗示性、交代後事之動態，須立即介入。</li>
+<li>通報是「心理止血帶」，不是抓耙子。</li>
+<li>支持系統：分隊內事先約定的傾聽者與建議者；EAP（保密、不向上回報、不影響考績）；1925安心專線（24小時）、張老師1980、生命線1995。</li>
+</ul>
+
+<h4>同儕支援與組織心理支持</h4>
+<ul>
+<li>搭檔五大徵兆：情緒行為劇變、社交退縮、幽默感變得過度黑暗、成癮行為增加、生理抗議。</li>
+<li>REACT：識別（Recognize）、評估（Evaluate，找洗車時機詢問）、倡導（Advocate，將反應正常化）、協調（Coordinate，陪同撥打EAP或1925）、追蹤（Track）。</li>
+<li>主管打破報喜不報憂；將行車紀錄器與密錄器回顧視為「心理壓力雷達」，異常粗暴或恍神先關心身心。</li>
+<li>先降溫再開會：先確保喝水、用餐、休息，情緒穩定後再Debrief。</li>
+<li>應做：一句「剛剛辛苦了」、安靜傾聽、主動連結資源。避免：逼對方正向、當下檢討技術、貼上抗壓性不足標籤。</li>
+<li>Near Miss可能是身心撐不住的警訊，以關懷取代懲處，保密轉介EAP。</li>
+</ul>
+
+<h4>心理韌性（Resilience）</h4>
+<ul>
+<li>韌性是後天可教導的行為與認知技能，如同練習IV或CPR。</li>
+<li>缺乏韌性之救護技術員PTSD風險達34%，一般大眾約3.5%；「我沒事」的假性堅強常是壓抑。</li>
+<li>耗盡警訊：易怒失去耐心、咬指甲踱步磨牙、心悸、體重劇變、蕁麻疹落髮。</li>
+<li>穿戴式裝置指標：SDNN（身心總電力）、LF（壓力油門）、HF（修復煞車）、REM（情緒重整）、HRV（身心彈性總指標，偏低示過勞）。</li>
+<li>強化方法：目標拆解找回秩序感、功能性體能訓練與勤務間微休息、認知重構（在資訊不足下已做出當時最合理處置）、主動尋求專業治療。</li>
+</ul>
+
+<div class="case"><h4>案例：凌晨連續三趟後漏掉評估</h4>
+<p>執勤逾18小時、脫水頭痛，漏掉評估步驟後出現自責、畫面閃回、情緒麻木並想以飲酒助眠，屬ASD初期警訊。搭檔察覺沉默與眼神空洞，不急檢討，遞水並邀約用餐，執行簡單PFA。</p>
+<p>學習：以量表辨識修復需求、建立切換開關、症狀逾一個月須防PTSD，善用EAP與1925。</p>
+</div>
+</div>
+</details>
+
+<!-- 12 -->
+<details class="ch" id="ch12">
+<summary><span class="no">12</span><span class="t"><b>案例討論與整合學習</b><i>Case Review &amp; Integration</i></span><span class="pg">p.219</span></summary>
+<div class="body">
+<p class="meta"><span>編撰：侯勝文｜<a href="https://limzijiang.github.io/nfa-safer-handbook/#p219" target="_blank" rel="noopener">原書 p.219</a></span><button type="button" class="copy">複製本章</button></p>
+<p class="gist">前十一章構成完整安全生態系；本章以病人安全分析手法拆解案例，目的是培養安全文化素養，而非頭痛醫頭。</p>
+
+<h4>四種分析手法</h4>
+<table class="mini">
+<tr><th>手法</th><th>適用</th><th>要點</th></tr>
+<tr><td>5 Whys</td><td>單一原因小型事件、Near Miss</td><td>客觀、不帶責備地追問；易流於主觀線性思考</td></tr>
+<tr><td>根本原因分析（RCA）</td><td>系統性檢視</td><td>人因、設備、環境、作業流程、管理五面向</td></tr>
+<tr><td>高信度組織（High Reliability Organization, HRO）</td><td>建立長期安全文化</td><td>五原則（見下）</td></tr>
+<tr><td>團隊資源管理（TRM）</td><td>團隊行為與溝通</td><td>領導、溝通、守望、相助、情境感知</td></tr>
+</table>
+
+<h4>案例一：STEMI運送途中路口急煞</h4>
+<ul>
+<li>黃昏視線差、大型車遮擋，駕駛晚發現未禮讓機車而急煞；病人家屬前衝擦傷、靜脈留置針滑脫、監測器失訊。</li>
+<li>5 Whys追到路口辨識時機，但難涵蓋「病人為何未妥善固定」之支線。</li>
+<li>RCA：駕駛認知負荷過高；擔架或病人固定不足；黃昏眩光與機車動態；缺路口車道確認與艙內固定檢查流程；管理面過度強調縮短送醫時間、缺行車安全複訓與Near Miss監測。</li>
+<li>策略：強化防禦駕駛訓練；病人上車必固定；設備使用防震固定座；盡量不載家屬，必要時簡短安全教育與風險告知。</li>
+</ul>
+
+<h4>案例二：家暴現場病人暴起、EMT-P遭抓傷（病人HIV帶原）</h4>
+<ul>
+<li>對失敗保持警覺（Preoccupation with Failure）：有等警方確認，但忽略安全與情緒是動態、疼痛刺激可觸發攻擊。</li>
+<li>拒絕過度簡化（Reluctance to Simplify）：勿歸咎「不夠小心」或污名化病人；誘因可能是快速近身、制服恐懼、燈光、疼痛、過往創傷、酒精藥物。</li>
+<li>對前線運作保持敏感（Sensitivity to Operations）：狹小空間與多重任務之認知負荷極高。</li>
+<li>建立韌性（Commitment to Resilience）：快速後退、同伴牽制、警方降階、暴露後就醫流程順暢。</li>
+<li>重視專業而非階級（Deference to Expertise）：現場觀察即時共享，成員皆有中斷任務權限。</li>
+<li>策略：進入前確認警方管制狀況；辨識暴力升級並保持3公尺以上距離；簡短平緩降階語句；高風險個案加穿長袖、防穿刺手套與背心；熟悉縣市PEP流程（本案檢測陰性）。</li>
+</ul>
+
+<h4>案例三：略過班前檢查與定錨偏誤</h4>
+<ul>
+<li>資深學長口頭保證免檢查；到場聽到喘鳴即判氣喘，資淺隊員發現粉紅泡沫痰、高血壓、回填延長疑急性肺水腫卻不敢說；給支氣管擴張劑後惡化，才發現主要氧氣鋼瓶已空。</li>
+<li>情境感知：資淺隊員完成認知與理解，但未共享導致團隊無法預測；兩人皆缺乏設備層面的感知。</li>
+<li>守望相助因階級壓力與自滿失效；應出聲攔截錯誤給藥。</li>
+<li>重申關切：第一次提出擔憂未被回應時，須以CUS語句提出第二次，直到重新評估。</li>
+<li>策略：結構化功能性班前檢查不接受口頭保證；賦予資淺人員中斷作業權限，運用CUS（Concerned, Uncomfortable, Safety）；持續監測並保持最壞情境思考；鼓勵Near Miss通報；TRM納入日常模擬訓練。</li>
+</ul>
+
+<h4>結語：從案例到文化</h4>
+<ul>
+<li>安全三層次：個人（疲勞、健康、心理、主動求助）、團隊（開放互信、清晰溝通框架）、組織（投資訓練裝備人力、疲勞政策、事件檢討系統）。</li>
+<li>安全不是目的地而是持續旅程；讓人員不害怕揭露錯誤、尋求幫助與提出改進，才能實現零傷害。</li>
+</ul>
+</div>
+</details>
+</section>
+
+<section class="block" id="mnemonic">
+  <h2>口訣與工具速查<span class="en">Mnemonics &amp; tools</span></h2>
+  <div class="ref">
+    <div class="row head"><span class="k">名稱</span><span class="v">內容</span><span class="c">章</span></div>
+    <div class="row"><span class="k">CARE</span><span class="v">紀錄原則：合規完整、易取得準確、易讀、持久</span><span class="c">01</span></div>
+    <div class="row"><span class="k">RAPID-PFA</span><span class="v">反思性聆聽、評估、優先處理、介入、後續處置</span><span class="c">01</span></div>
+    <div class="row"><span class="k">TRM四模組</span><span class="v">領導、溝通、守望、相助</span><span class="c">02</span></div>
+    <div class="row"><span class="k">明確陳述五要素</span><span class="v">直接指名、表達關切、陳述問題、提供建議、尋求同意</span><span class="c">02</span></div>
+    <div class="row"><span class="k">CUS／重申關切</span><span class="v">擔憂、不安、安全疑慮；至少提出兩次</span><span class="c">02、12</span></div>
+    <div class="row"><span class="k">SA三層次</span><span class="v">認知、理解、預測</span><span class="c">02</span></div>
+    <div class="row"><span class="k">轉彎路權口訣</span><span class="v">左轉不切、右轉關門；幹多直右大</span><span class="c">03</span></div>
+    <div class="row"><span class="k">路口通行</span><span class="v">逐段停煞、按鳴喇叭、身體前傾、左右探頭</span><span class="c">03</span></div>
+    <div class="row"><span class="k">5D駕駛人</span><span class="v">Drunk、Drugged、Drowsy、Distracted、Dull</span><span class="c">03</span></div>
+    <div class="row"><span class="k">TIMA四分區</span><span class="v">先期警示區、漸變區、作業區、撤離區</span><span class="c">03</span></div>
+    <div class="row"><span class="k">三上</span><span class="v">上風、上游、高處</span><span class="c">04</span></div>
+    <div class="row"><span class="k">ABCDEPX</span><span class="v">醫療艙器材七類定位：呼吸道、通氣、循環、電擊、搬運固定、防護、其他</span><span class="c">04</span></div>
+    <div class="row"><span class="k">ABCDE</span><span class="v">呼吸道、呼吸、循環、神經、暴露</span><span class="c">05</span></div>
+    <div class="row"><span class="k">三讀五對</span><span class="v">取藥、調配、用藥前讀出；病人、藥名、劑量、時間、途徑</span><span class="c">05</span></div>
+    <div class="row"><span class="k">ISBAR／IMIST</span><span class="v">結構化交接；報告最初、最差、目前，未知就說未知</span><span class="c">05、10</span></div>
+    <div class="row"><span class="k">4S</span><span class="v">評估、安全、回報、部署</span><span class="c">06</span></div>
+    <div class="row"><span class="k">叫叫CABD</span><span class="v">叫團隊、叫周邊裝備、認知、情緒、行為、決定壓制或降階</span><span class="c">06</span></div>
+    <div class="row"><span class="k">居安思危、枕戈待旦</span><span class="v">精神危機次級評估八項</span><span class="c">06</span></div>
+    <div class="row"><span class="k">停看聽聞感</span><span class="v">暴力情境感知</span><span class="c">06</span></div>
+    <div class="row"><span class="k">AOJ</span><span class="v">能力、機會、意圖</span><span class="c">06</span></div>
+    <div class="row"><span class="k">DEFUSE</span><span class="v">選擇安全關係、需要界線評估</span><span class="c">06</span></div>
+    <div class="row"><span class="k">5B</span><span class="v">姿勢、支撐、核心、體重、大肌肉</span><span class="c">08</span></div>
+    <div class="row"><span class="k">SAFE</span><span class="v">確認排除風險、評估現場、擬定策略、執行與動態評估</span><span class="c">08</span></div>
+    <div class="row"><span class="k">LCAN</span><span class="v">地點、狀況、行動、需求</span><span class="c">09</span></div>
+    <div class="row"><span class="k">MARCH</span><span class="v">大出血、呼吸道、呼吸、循環、低體溫與頭部</span><span class="c">09</span></div>
+    <div class="row"><span class="k">SALT</span><span class="v">篩選、評估、救命介入、處置與後送</span><span class="c">09</span></div>
+    <div class="row"><span class="k">MIST</span><span class="v">受傷機制、傷勢、徵象、處置</span><span class="c">09</span></div>
+    <div class="row"><span class="k">HALT</span><span class="v">飢餓、憤怒、孤立、疲憊</span><span class="c">11</span></div>
+    <div class="row"><span class="k">REACT</span><span class="v">識別、評估、倡導、協調、追蹤</span><span class="c">01、11</span></div>
+    <div class="row"><span class="k">HRO五原則</span><span class="v">警覺失敗、拒絕簡化、敏感前線、建立韌性、重視專業</span><span class="c">12</span></div>
+  </div>
+</section>
+
+<section class="block" id="numbers">
+  <h2>關鍵數據速查<span class="en">Key figures</span></h2>
+  <div class="ref">
+    <div class="row head"><span class="k">數值</span><span class="v">意義</span><span class="c">章</span></div>
+    <div class="row"><span class="k">15%–22%</span><span class="v">救護技術員PTSD症狀盛行率</span><span class="c">01</span></div>
+    <div class="row"><span class="k">BAC 0.05%／0.10%</span><span class="v">清醒17小時／24小時之等同酒醉程度</span><span class="c">01、11</span></div>
+    <div class="row"><span class="k">65%</span><span class="v">醫療錯誤源於溝通與團隊合作不良</span><span class="c">01</span></div>
+    <div class="row"><span class="k">2.5倍</span><span class="v">吸菸者工作受傷機率</span><span class="c">01</span></div>
+    <div class="row"><span class="k">約40°</span><span class="v">時速100公里時之動態視野（靜止約200°）</span><span class="c">03</span></div>
+    <div class="row"><span class="k">2秒／3秒</span><span class="v">安全車距；大型車採3秒</span><span class="c">03</span></div>
+    <div class="row"><span class="k">≤20 km/h</span><span class="v">路口逐段停煞之可隨時煞停速度</span><span class="c">03</span></div>
+    <div class="row"><span class="k">≤40 km/h</span><span class="v">慢車道行駛上限</span><span class="c">03</span></div>
+    <div class="row"><span class="k">15–45°</span><span class="v">斜向停放角度；阻擋逾1.5車道、距事故車10公尺</span><span class="c">03</span></div>
+    <div class="row"><span class="k">100／80／50／30／5 m</span><span class="v">最上游警告標誌距離（依道路類型與速限）</span><span class="c">03</span></div>
+    <div class="row"><span class="k">14.3%</span><span class="v">112年國道死亡事故中二次事故占比</span><span class="c">03</span></div>
+    <div class="row"><span class="k">25／500／5 m</span><span class="v">EV無燃燒停車、熱失控退避、感應鑰匙隔離</span><span class="c">04</span></div>
+    <div class="row"><span class="k">&gt;30次/分</span><span class="v">呼吸速率明顯警訊</span><span class="c">05</span></div>
+    <div class="row"><span class="k">&gt;2秒</span><span class="v">微血管回填延長</span><span class="c">05</span></div>
+    <div class="row"><span class="k">GCS ≤8</span><span class="v">建立確切呼吸道之關鍵閾值</span><span class="c">05</span></div>
+    <div class="row"><span class="k">1：300</span><span class="v">嚴重傷害與幾近錯誤比例（海因里希法則）</span><span class="c">05</span></div>
+    <div class="row"><span class="k">22倍</span><span class="v">EMS人員遭暴力受傷機率相較一般職業</span><span class="c">06</span></div>
+    <div class="row"><span class="k">≥2 m／≥5人</span><span class="v">降階會談距離／執行約束人力</span><span class="c">06</span></div>
+    <div class="row"><span class="k">1000 ppm</span><span class="v">漂白水救護車清消濃度</span><span class="c">07</span></div>
+    <div class="row"><span class="k">23／46／69分鐘</span><span class="v">全開車門通風排除90%／99%／99.9%微粒</span><span class="c">07</span></div>
+    <div class="row"><span class="k">62%–90%</span><span class="v">乾洗手酒精濃度（WHO 75%–85%）</span><span class="c">07</span></div>
+    <div class="row"><span class="k">24–36小時／7天</span><span class="v">HIV PEP效力大降時點／HBIG施打期限</span><span class="c">07</span></div>
+    <div class="row"><span class="k">77.5%／65.6%</span><span class="v">EMT勤務受傷率／下背受傷占比</span><span class="c">08</span></div>
+    <div class="row"><span class="k">4.29倍</span><span class="v">EMT受傷機會相較一般勞工</span><span class="c">08</span></div>
+    <div class="row"><span class="k">≥15人</span><span class="v">大量傷病患定義</span><span class="c">09</span></div>
+    <div class="row"><span class="k">2分鐘／30%</span><span class="v">暖區救命介入時限／關鍵物資請求增援門檻</span><span class="c">09</span></div>
+    <div class="row"><span class="k">7–9小時／≥10小時</span><span class="v">成人睡眠需求／班與班間休息（CAAS）</span><span class="c">11</span></div>
+    <div class="row"><span class="k">1500–2000 c.c.</span><span class="v">每日白開水建議量</span><span class="c">11</span></div>
+    <div class="row"><span class="k">10倍／13倍</span><span class="v">救護技術員自殺意念／企圖比例</span><span class="c">11</span></div>
+    <div class="row"><span class="k">34%／3.5%</span><span class="v">缺乏韌性者／一般大眾PTSD風險</span><span class="c">11</span></div>
+  </div>
+</section>
+
+<section class="block" id="law">
+  <h2>法規與指引依據<span class="en">Legal basis</span></h2>
+  <div class="ref">
+    <div class="row head"><span class="k">依據</span><span class="v">重點</span><span class="c">章</span></div>
+    <div class="row"><span class="k">道路交通安全規則§93Ⅱ</span><span class="v">緊急任務得不受速限及標誌、標線、號誌限制</span><span class="c">03</span></div>
+    <div class="row"><span class="k">道路交通安全規則§102</span><span class="v">轉彎方式與無號誌路口路權</span><span class="c">03</span></div>
+    <div class="row"><span class="k">交通部66.2.28交路字第01740號、70.11.18交路字第26173號函</span><span class="v">得排除§102Ⅰ，但仍應特別顧及行人與車輛安全</span><span class="c">03</span></div>
+    <div class="row"><span class="k">最高法院90年度台上字第7133號</span><span class="v">未盡注意義務致人傷亡，不因對方違規當然免責（相對路權）</span><span class="c">03</span></div>
+    <div class="row"><span class="k">道路交通標誌標線號誌設置規則§152</span><span class="v">虛線4公尺、間隔6公尺</span><span class="c">03</span></div>
+    <div class="row"><span class="k">道路交通事故處理辦法§4Ⅰ</span><span class="v">事故後方警告標誌設置距離</span><span class="c">03</span></div>
+    <div class="row"><span class="k">消防人員救災安全手冊（執行車禍救助安全指導原則）</span><span class="v">停車角度15–45°、警告標誌距離</span><span class="c">03</span></div>
+    <div class="row"><span class="k">各級消防機關救護勤務安全指導原則（消署救字第1110700069號）</span><span class="v">救護勤務安全基準</span><span class="c">04、11</span></div>
+    <div class="row"><span class="k">搶救電動車與儲能系統安全指導原則</span><span class="v">EV檢電、25公尺與500公尺疏散隔離警戒區</span><span class="c">04</span></div>
+    <div class="row"><span class="k">最高法院111年度台上字第3235號、109年度台上字第5037號</span><span class="v">「現在」不法侵害與「緊急」危難之認定參考</span><span class="c">06</span></div>
+    <div class="row"><span class="k">緊急醫療救護法§19Ⅲ</span><span class="v">傳染病經證實後醫院通知救護車所屬機關</span><span class="c">07</span></div>
+    <div class="row"><span class="k">緊急醫療救護法§30Ⅰ（大量傷病患救護辦法）</span><span class="v">傷患達15人以上或預判達15人</span><span class="c">09</span></div>
+    <div class="row"><span class="k">緊急醫療救護法§35、§45</span><span class="v">業務秘密保密義務；罰鍰新臺幣1萬至5萬元</span><span class="c">10</span></div>
+    <div class="row"><span class="k">緊急救護辦法§7</span><span class="v">拒絕運送者簽名後不予運送</span><span class="c">10</span></div>
+    <div class="row"><span class="k">緊急救護辦法§14</span><span class="v">送抵醫院由醫護人員簽章確認紀錄表</span><span class="c">10</span></div>
+    <div class="row"><span class="k">消防機關救護紀錄表填寫作業原則</span><span class="v">拒絕送醫簽名三情境</span><span class="c">10</span></div>
+    <div class="row"><span class="k">刑法§213</span><span class="v">公務員登載不實，1年以上7年以下有期徒刑</span><span class="c">10</span></div>
+    <div class="row"><span class="k">刑法§315-1</span><span class="v">無故竊錄非公開活動或身體隱私</span><span class="c">10</span></div>
+  </div>
+</section>
+
+<section class="block" id="review">
+  <h2>校讀備註<span class="en">Notes for revision</span></h2>
+  <p class="lead">整理過程發現之章節間差異，供後續修訂或教學一致性參考。</p>
+  <div class="note">
+    <ol>
+      <li><b>PCL-5題數與計分：</b>第11章表11-1列18題、總分0–72分；原版PCL-5（Weathers et al., 2013）為20題、總分0–80分，31–33分切點係以20題版本建立。建議核對題項並統一計分方式。</li>
+      <li><b>PPE穿戴順序：</b>第1章與第7章內文為隔離衣、口罩、護目鏡、手套；表7-1檢核表則為N95、隔離衣、髮帽、全罩式面鏡、外科口罩、手套。兩者並陳易生教學歧異，建議統一或加註適用情境。</li>
+      <li><b>ISBAR項目：</b>第2章列為現況、背景、評估、建議四項；第5章起含自我介紹（Introduction）共五項，建議全書一致。</li>
+    </ol>
+  </div>
+</section>
+
+</main>
+
+<footer class="colophon">
+  <p><b>資料來源</b>｜內政部消防署（115年7月）。《救護安全手冊 SAFER》初版。ISBN 978-626-439-077-4；GPN 1011500861。非賣品，引用圖文請徵詢內政部消防署授權。</p>
+  <p><b>編輯委員會</b>｜發行人蕭煥章；召集人簡鈺純、侯勝文；專業諮詢台灣緊急救護醫療指導醫師學會。</p>
+  <p><b>線上閱讀</b>｜<a href="https://limzijiang.github.io/nfa-safer-handbook/" target="_blank" rel="noopener">SAFER線上閱讀版</a>　<a href="https://www.nfa.gov.tw/cht/index.php?code=list&amp;flag=detail&amp;ids=72&amp;article_id=21753" target="_blank" rel="noopener">消防署原始發布頁</a></p>
+  <p>本頁為重點摘要，條文與數值以原書及現行法規為準。</p>
+</footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var chs = Array.prototype.slice.call(document.querySelectorAll('details.ch'));
+  document.getElementById('openAll').addEventListener('click', function(){ chs.forEach(function(d){ d.open = true; }); });
+  document.getElementById('closeAll').addEventListener('click', function(){ chs.forEach(function(d){ d.open = false; }); });
+
+  function openTarget(hash){
+    if(!hash) return;
+    var el = document.querySelector(hash);
+    if(el && el.tagName === 'DETAILS'){ el.open = true; }
+  }
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(){ openTarget(a.getAttribute('href')); });
+  });
+  openTarget(location.hash);
+
+  var toast = document.getElementById('toast'), timer;
+  function show(msg){ toast.textContent = msg; toast.classList.add('on'); clearTimeout(timer); timer = setTimeout(function(){ toast.classList.remove('on'); }, 1600); }
+
+  function fallbackCopy(text){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    var ok = false; try { ok = document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta); return ok;
+  }
+
+  document.querySelectorAll('button.copy').forEach(function(btn){
+    btn.addEventListener('click', function(ev){
+      ev.preventDefault();
+      var d = btn.closest('details');
+      var no = d.querySelector('.no').textContent;
+      var title = d.querySelector('.t b').textContent;
+      var body = d.querySelector('.body').cloneNode(true);
+      var m = body.querySelector('.meta'); if(m) m.parentNode.removeChild(m);
+      var text = '第' + no + '章　' + title + '\n' + body.innerText.replace(/\n{3,}/g, '\n\n').trim();
+      var done = function(){ show('已複製第' + no + '章'); };
+      if(navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(text).then(done, function(){ fallbackCopy(text) ? done() : show('複製失敗，請手動選取'); });
+      } else {
+        fallbackCopy(text) ? done() : show('複製失敗，請手動選取');
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

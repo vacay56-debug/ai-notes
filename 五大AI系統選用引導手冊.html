@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>五大 AI 系統選用引導手冊｜EMS 業務應用</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EAEEF1; --panel:#FFFFFF; --ink:#14202B; --muted:#5C6B78;
+    --line:#D3DBE2; --line-soft:#E4E9EE;
+    --console:#0E3644; --console-2:#134458; --signal:#E39B34;
+    --cg:#10A37F; --gk:#242830; --gm:#2E7CF6; --gm2:#EBA13C; --cl:#D9784F; --px:#6B45C0;
+    --radius:4px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:"Noto Sans TC",-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;
+    font-size:15.5px; line-height:1.72; letter-spacing:.01em;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:"IBM Plex Mono","Noto Sans TC",monospace}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 22px}
+
+  /* ---- console top bar ---- */
+  .statusbar{
+    background:var(--console); color:#BFD6DE;
+    font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.08em;
+    border-bottom:1px solid #0a2833;
+  }
+  .statusbar .wrap{display:flex; flex-wrap:wrap; gap:6px 20px; align-items:center; padding-top:9px; padding-bottom:9px}
+  .statusbar .dot{width:7px;height:7px;border-radius:50%;background:var(--signal);display:inline-block;margin-right:7px;box-shadow:0 0 0 3px rgba(227,155,52,.18)}
+  .statusbar b{color:#EAF3F6;font-weight:500}
+
+  /* ---- hero ---- */
+  header.hero{background:var(--console); color:#F2F7F9; position:relative; overflow:hidden}
+  header.hero::after{content:"";position:absolute;inset:0;
+    background-image:linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+    background-size:34px 100%; pointer-events:none; opacity:.5}
+  header.hero .wrap{padding:46px 22px 40px; position:relative; z-index:1}
+  .eyebrow{font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.22em; color:var(--signal); text-transform:uppercase; margin-bottom:16px}
+  h1{font-weight:900; font-size:clamp(30px,5.4vw,50px); line-height:1.1; letter-spacing:.005em}
+  h1 .grot{font-family:"Space Grotesk",sans-serif; font-weight:700}
+  h1 .x{color:var(--signal); font-family:"Space Grotesk",sans-serif; padding:0 .12em}
+  .sub{margin-top:16px; color:#B8D0D8; font-size:15px; max-width:60ch}
+  .herometa{margin-top:26px; display:flex; flex-wrap:wrap; gap:10px}
+  .herometa span{font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.06em;
+    border:1px solid rgba(255,255,255,.22); border-radius:2px; padding:5px 10px; color:#CFE2E8}
+
+  /* ---- section frame ---- */
+  section{padding:40px 0}
+  .sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:22px; border-bottom:2px solid var(--ink); padding-bottom:10px}
+  .sec-no{font-family:"Space Grotesk",monospace; font-weight:700; font-size:13px; color:var(--console); background:#DCE6EA; padding:3px 9px; border-radius:2px; letter-spacing:.05em; align-self:center}
+  .sec-head h2{font-size:clamp(20px,3.2vw,26px); font-weight:900; letter-spacing:.01em}
+  .sec-head .cap{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--muted); letter-spacing:.05em; align-self:center}
+
+  /* ---- overview table ---- */
+  .tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--panel)}
+  table{border-collapse:collapse; width:100%; min-width:720px; font-size:14px}
+  th,td{text-align:left; padding:12px 14px; vertical-align:top; border-bottom:1px solid var(--line-soft)}
+  thead th{background:var(--console); color:#EAF3F6; font-weight:500; font-size:12.5px; letter-spacing:.05em; position:sticky; top:0}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:nth-child(even){background:#F6F9FA}
+  .sysname{font-weight:700; white-space:nowrap}
+  .swatch{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;vertical-align:middle;transform:translateY(-1px)}
+  td.neg{color:#8a5140}
+
+  /* ---- tabs ---- */
+  .tabs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:0}
+  .tab{
+    font-family:"IBM Plex Mono",monospace; font-size:13px; letter-spacing:.03em;
+    background:var(--panel); border:1px solid var(--line); border-bottom:none;
+    padding:11px 16px 12px; cursor:pointer; color:var(--muted);
+    border-radius:5px 5px 0 0; display:flex; align-items:center; gap:8px; transition:.15s;
+  }
+  .tab:hover{color:var(--ink); background:#fff}
+  .tab .sw{width:10px;height:10px;border-radius:2px;flex:none}
+  .tab[aria-selected="true"]{color:var(--ink); font-weight:600; background:#fff; border-top-width:3px; margin-top:-2px}
+  .tab:focus-visible{outline:2px solid var(--signal); outline-offset:2px}
+
+  .panel{border:1px solid var(--line); border-radius:0 5px 5px 5px; background:var(--panel); padding:26px 26px 30px; display:none}
+  .panel.active{display:block; animation:fade .28s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .panel .lead{display:flex; align-items:flex-start; gap:16px; flex-wrap:wrap; border-bottom:1px solid var(--line-soft); padding-bottom:18px; margin-bottom:20px}
+  .badge{font-family:"Space Grotesk",sans-serif; font-weight:700; color:#fff; font-size:20px; width:52px;height:52px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex:none}
+  .panel h3{font-size:22px; font-weight:900}
+  .panel h3 small{display:block; font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:400; color:var(--muted); letter-spacing:.04em; margin-top:3px}
+  .position{flex:1 1 260px; min-width:220px; align-self:center; color:var(--ink); font-weight:500}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:22px}
+  @media(max-width:680px){.grid2{grid-template-columns:1fr}}
+  .block h4{font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.12em; color:var(--console); text-transform:uppercase; margin-bottom:9px; display:flex; align-items:center; gap:8px}
+  .block h4::before{content:"▸"; color:var(--signal)}
+  .block ul{list-style:none; margin-bottom:4px}
+  .block li{padding-left:16px; position:relative; margin-bottom:6px; font-size:14.3px}
+  .block li::before{content:"–"; position:absolute; left:0; color:var(--muted)}
+  .block.neg li::before{content:"×"; color:#c0704f; font-weight:700}
+
+  /* signal bars */
+  .signals{margin:4px 0 2px}
+  .sigrow{display:flex; align-items:center; gap:10px; margin-bottom:7px; font-size:13px}
+  .siglabel{flex:none; width:82px; color:var(--muted); font-size:12.5px}
+  .bars{display:flex; gap:3px}
+  .bars i{width:15px; height:11px; background:#E0E6EB; border-radius:1px; display:block; transition:.2s}
+
+  /* example / prompt block */
+  .demo{margin-top:22px; border:1px solid var(--line); border-radius:6px; overflow:hidden; background:#fff}
+  .demo-top{background:var(--console-2); color:#DDEBEF; font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.08em; padding:8px 14px; display:flex; gap:8px; align-items:center}
+  .demo-top .rd{width:9px;height:9px;border-radius:50%;background:#E8695B;box-shadow:15px 0 0 #E6B94A,30px 0 0 #6FBE7E;margin-right:26px}
+  .prompt{background:#14222c; color:#D7E6EB; padding:16px 18px; font-family:"IBM Plex Mono","Noto Sans TC",monospace; font-size:13.3px; line-height:1.7; white-space:pre-wrap; word-break:break-word}
+  .prompt .u{color:var(--signal)}
+  .demo-note{padding:13px 18px; font-size:13.6px; color:var(--muted); border-top:1px solid var(--line-soft); background:#FAFCFC}
+  .demo-note b{color:var(--ink); font-weight:700}
+
+  .extbar{margin-top:20px}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
+  .chip{font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.02em; background:#EEF3F5; border:1px solid var(--line); border-radius:20px; padding:5px 12px; color:var(--ink)}
+
+  .callout{margin-top:16px; border-left:3px solid var(--signal); background:#FCF6EC; padding:11px 15px; font-size:13.6px; border-radius:0 4px 4px 0}
+  .callout b{font-weight:700}
+
+  /* router */
+  .router{display:grid; grid-template-columns:1fr; gap:0; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:var(--panel)}
+  .routerhelp{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--muted); margin-bottom:14px; letter-spacing:.03em}
+  .rrow{display:grid; grid-template-columns:1.3fr auto; gap:14px; align-items:center; padding:13px 16px; border-bottom:1px solid var(--line-soft); cursor:pointer; transition:.15s}
+  .rrow:last-child{border-bottom:none}
+  .rrow:hover{background:#F4F8F9}
+  .rrow:focus-visible{outline:2px solid var(--signal); outline-offset:-2px}
+  .rscene{font-weight:500; font-size:14.5px}
+  .rscene .k{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--muted); display:block; letter-spacing:.05em; margin-bottom:2px}
+  .rtools{display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end}
+  .rt{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:#fff; padding:4px 9px; border-radius:3px; white-space:nowrap}
+  .rt.sub{background:#8795A0}
+
+  /* workflow */
+  .flowcards{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  @media(max-width:680px){.flowcards{grid-template-columns:1fr}}
+  .fc{border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); padding:16px 18px}
+  .fc .t{font-weight:700; font-size:15px; margin-bottom:10px; display:flex; align-items:center; gap:8px}
+  .fc .t .n{font-family:"Space Grotesk",monospace; font-size:11px; color:#fff; background:var(--console); width:22px;height:22px;border-radius:4px; display:flex;align-items:center;justify-content:center;flex:none}
+  .chain{display:flex; flex-wrap:wrap; gap:6px; align-items:center; font-size:12.5px}
+  .step{font-family:"IBM Plex Mono",monospace; background:#EEF3F5; border:1px solid var(--line); border-radius:3px; padding:4px 9px}
+  .arr{color:var(--signal); font-weight:700}
+
+  /* principles */
+  .princ{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  @media(max-width:680px){.princ{grid-template-columns:1fr}}
+  .pr{border:1px solid var(--line); border-left:3px solid var(--console); background:var(--panel); border-radius:0 var(--radius) var(--radius) 0; padding:15px 18px}
+  .pr .n{font-family:"Space Grotesk",monospace; font-weight:700; color:var(--console); font-size:13px; letter-spacing:.05em}
+  .pr .h{font-weight:700; margin:3px 0 5px; font-size:15px}
+  .pr p{font-size:13.8px; color:var(--muted)}
+
+  footer{background:var(--console); color:#B9D0D8; margin-top:20px}
+  footer .wrap{padding:30px 22px}
+  footer .discl{font-size:12.8px; line-height:1.8; border:1px solid rgba(255,255,255,.16); border-radius:4px; padding:15px 18px; background:rgba(255,255,255,.03)}
+  footer .discl b{color:var(--signal); font-weight:500; font-family:"IBM Plex Mono",monospace; letter-spacing:.05em}
+  footer .sig{font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.06em; margin-top:16px; color:#88A6B0}
+
+  @media(prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important; scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="statusbar"><div class="wrap">
+  <span><span class="dot"></span>SYSTEM READY</span>
+  <span>UNIT · <b>NFA / EMS</b></span>
+  <span>DOC · <b>AI-SELECT v1.0</b></span>
+  <span>DATE · 2026-07</span>
+  <span>OUTPUT · 繁體中文</span>
+</div></div>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">AI Tool Dispatch · 選用引導</div>
+  <h1><span class="grot">ChatGPT</span> <span class="x">×</span> <span class="grot">Grok</span> <span class="x">×</span> <span class="grot">Gemini</span> <span class="x">×</span> <span class="grot">Claude</span> <span class="x">×</span> <span class="grot">Perplexity</span></h1>
+  <p class="sub">五大 AI 系統的定位、範例教學與擴充功能，對應到院前緊急救護（Emergency Medical Services, EMS）業務——從公文起草、政策研究到簡報產製，一份手冊決定「哪個任務派哪套工具」。</p>
+  <div class="herometa">
+    <span>結論先行</span><span>可直接複製</span><span>附範例教學</span><span>含業務工作流</span>
+  </div>
+</div></header>
+
+<!-- 0 · 一頁總覽 -->
+<section id="overview"><div class="wrap">
+  <div class="sec-head"><span class="sec-no">00</span><h2>一頁總覽</h2><span class="cap mono">QUICK MATRIX</span></div>
+  <div class="tablewrap"><table>
+    <thead><tr>
+      <th>系統</th><th>一句話定位</th><th>最適場景</th><th>不適場景</th><th>救護科業務對應</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="sysname"><span class="swatch" style="background:var(--cg)"></span>ChatGPT</td>
+        <td>全能生產力與程式輔助引擎</td>
+        <td>資料分析、自動化腳本、腦力激盪、初稿</td>
+        <td class="neg">逐句可溯來源的正式研究</td>
+        <td>問卷統計、Excel 整併、教材大綱</td>
+      </tr>
+      <tr>
+        <td class="sysname"><span class="swatch" style="background:var(--gk)"></span>Grok</td>
+        <td>即時輿情與社群脈動雷達</td>
+        <td>X／社群即時反應、突發事件輿情</td>
+        <td class="neg">正式政策文獻、高精度摘要</td>
+        <td>收費改革、人力議題輿情監測</td>
+      </tr>
+      <tr>
+        <td class="sysname"><span class="swatch" style="background:var(--gm)"></span>Gemini</td>
+        <td>Google Workspace 原生 AI</td>
+        <td>Docs／Gmail／Drive 就地協作、多檔彙整</td>
+        <td class="neg">非 Google 生態串接、要求輸出一致性</td>
+        <td>計畫共筆、Drive 檔案摘要</td>
+      </tr>
+      <tr>
+        <td class="sysname"><span class="swatch" style="background:var(--cl)"></span>Claude</td>
+        <td>長文件深讀與政策撰寫主力</td>
+        <td>公文、簡報、預算、採購、逐條審閱</td>
+        <td class="neg">即時網路輿情、Google 就地協作</td>
+        <td>公文、簽稿、政策簡報、法規研修</td>
+      </tr>
+      <tr>
+        <td class="sysname"><span class="swatch" style="background:var(--px)"></span>Perplexity</td>
+        <td>可驗證研究引擎（逐句引用）</td>
+        <td>國際制度比較、文獻查證、附出處蒐集</td>
+        <td class="neg">程式開發、純創意寫作</td>
+        <td>各國 EMS 法規、研討會資料查證</td>
+      </tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<!-- 1 · 系統詳解（tabs） -->
+<section id="detail" style="padding-top:8px"><div class="wrap">
+  <div class="sec-head"><span class="sec-no">01</span><h2>五大系統詳解 · 範例教學</h2><span class="cap mono">CLICK TO SWITCH</span></div>
+
+  <div class="tabs" role="tablist" aria-label="五大 AI 系統">
+    <button class="tab" role="tab" aria-selected="true" aria-controls="p-cg" id="t-cg"><span class="sw" style="background:var(--cg)"></span>ChatGPT</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="p-gk" id="t-gk"><span class="sw" style="background:var(--gk)"></span>Grok</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="p-gm" id="t-gm"><span class="sw" style="background:var(--gm)"></span>Gemini</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="p-cl" id="t-cl"><span class="sw" style="background:var(--cl)"></span>Claude</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="p-px" id="t-px"><span class="sw" style="background:var(--px)"></span>Perplexity</button>
+  </div>
+
+  <!-- ChatGPT -->
+  <div class="panel active" id="p-cg" role="tabpanel" aria-labelledby="t-cg" style="border-top:3px solid var(--cg)">
+    <div class="lead">
+      <div class="badge" style="background:var(--cg)">GP</div>
+      <div><h3>ChatGPT<small>OpenAI · GPT-5 系列</small></h3></div>
+      <div class="position">日常寫作、腦力激盪、資料處理與自動化腳本的萬用工具。不確定用哪套時，先從這裡起手。</div>
+    </div>
+    <div class="grid2">
+      <div class="block"><h4>適用時機</h4><ul>
+        <li>撰寫自動化腳本：Excel 整併、批次改檔名、產製圖表</li>
+        <li>政策方向腦力激盪、教材／課程大綱初稿</li>
+        <li>一般公告、行政信件快速產出</li>
+        <li>上傳檔案做資料分析（Code Interpreter 實際執行運算）</li>
+      </ul></div>
+      <div class="block neg"><h4>不適場景</h4><ul>
+        <li>需逐句可溯來源的政策研究 → 改用 Perplexity</li>
+        <li>超長合約／報告逐條審閱 → 改用 Claude</li>
+        <li>Google 文件內就地協作 → 改用 Gemini</li>
+      </ul></div>
+    </div>
+    <div class="signals" style="margin-top:18px">
+      <div class="sigrow"><span class="siglabel">即時網路</span><span class="bars" data-n="4" data-c="var(--cg)"></span></div>
+      <div class="sigrow"><span class="siglabel">內容產製</span><span class="bars" data-n="5" data-c="var(--cg)"></span></div>
+      <div class="sigrow"><span class="siglabel">資料分析</span><span class="bars" data-n="5" data-c="var(--cg)"></span></div>
+      <div class="sigrow"><span class="siglabel">生態整合</span><span class="bars" data-n="4" data-c="var(--cg)"></span></div>
+    </div>
+    <div class="demo">
+      <div class="demo-top"><span class="rd"></span>範例教學 · 問卷統計自動化</div>
+      <div class="prompt"><span class="u">你</span>：你是資料分析助理。附件為 PCC 訓練滿意度問卷（22 份、5 點量表）。請：
+1. 計算各題平均與標準差
+2. 找出滿意度最低的兩題
+3. 產出一張長條圖
+4. 用三句話寫成長官報告摘要
+輸出繁體中文。〔並上傳該 Excel 檔〕</div>
+      <div class="demo-note"><b>會發生什麼：</b>Code Interpreter 會實際跑 Python 計算、回傳可下載圖表與可直接複製的摘要，省去手動樞紐分析。</div>
+    </div>
+    <div class="extbar"><h4 class="mono" style="font-size:12px;letter-spacing:.12em;color:var(--console)">▸ 擴充功能</h4>
+      <div class="chips"><span class="chip">Custom GPTs 自訂助理</span><span class="chip">GPT Store</span><span class="chip">Deep Research 深度研究</span><span class="chip">Agent 代理模式</span><span class="chip">Code Interpreter</span><span class="chip">Connectors（Drive／SharePoint）</span></div>
+    </div>
+    <div class="callout"><b>擴充建議：</b>建立一個「救護科文書助理」Custom GPT，內建三段式公文格式與機關用語，固定產出風格。</div>
+  </div>
+
+  <!-- Grok -->
+  <div class="panel" id="p-gk" role="tabpanel" aria-labelledby="t-gk" style="border-top:3px solid var(--gk)">
+    <div class="lead">
+      <div class="badge" style="background:var(--gk)">GK</div>
+      <div><h3>Grok<small>xAI · Grok 4.x</small></h3></div>
+      <div class="position">即時輿情雷達。唯一以 X（原 Twitter）即時貼文為主要來源的研究工具，掌握「現在大家在說什麼」。</div>
+    </div>
+    <div class="grid2">
+      <div class="block"><h4>適用時機</h4><ul>
+        <li>追蹤特定議題輿情：救護車收費改革、消防人力等民眾即時反應</li>
+        <li>突發事件（重大災害、爭議新聞）社群第一手反應彙整</li>
+        <li>快速判讀公眾情緒與輿論風向</li>
+      </ul></div>
+      <div class="block neg"><h4>不適場景</h4><ul>
+        <li>正式政策文獻研究：來源品質參差，部落格與權威報導並列</li>
+        <li>高精度文件摘要：Think 模式反而可能提高幻覺率</li>
+        <li>學術文獻檢索 → 改用 Perplexity（Academic 模式）</li>
+      </ul></div>
+    </div>
+    <div class="signals" style="margin-top:18px">
+      <div class="sigrow"><span class="siglabel">即時網路</span><span class="bars" data-n="5" data-c="var(--gk)"></span></div>
+      <div class="sigrow"><span class="siglabel">引用可溯</span><span class="bars" data-n="3" data-c="var(--gk)"></span></div>
+      <div class="sigrow"><span class="siglabel">生態整合</span><span class="bars" data-n="2" data-c="var(--gk)"></span></div>
+      <div class="sigrow"><span class="siglabel">內容產製</span><span class="bars" data-n="3" data-c="var(--gk)"></span></div>
+    </div>
+    <div class="demo">
+      <div class="demo-top"><span class="rd"></span>範例教學 · 議題輿情初篩</div>
+      <div class="prompt"><span class="u">你</span>：Use DeepSearch：彙整過去 7 天 X 與新聞中，關於「救護車收費／派遣量能」的討論。分成三部分：
+1. 民眾主要抱怨
+2. 媒體報導角度
+3. 可能的政策風險
+附來源連結，輸出繁體中文。</div>
+      <div class="demo-note"><b>會發生什麼：</b>DeepSearch 跑多輪檢索並產出附引用的報告。適合輿情初篩；<b>正式引用前務必人工複核來源可信度。</b></div>
+    </div>
+    <div class="extbar"><h4 class="mono" style="font-size:12px;letter-spacing:.12em;color:var(--console)">▸ 擴充功能</h4>
+      <div class="chips"><span class="chip">DeepSearch／DeeperSearch</span><span class="chip">Think 推理模式</span><span class="chip">即時 X 整合</span><span class="chip">語音模式</span><span class="chip">Grok Imagine 生圖</span></div>
+    </div>
+    <div class="callout"><b>使用提醒：</b>Grok 來源常混雜社群貼文與正式報導，且對高風險議題校準較弱。政府文件僅宜將其產出作為「輿情線索」，不宜直接作為政策依據。</div>
+  </div>
+
+  <!-- Gemini -->
+  <div class="panel" id="p-gm" role="tabpanel" aria-labelledby="t-gm" style="border-top:3px solid var(--gm)">
+    <div class="lead">
+      <div class="badge" style="background:linear-gradient(135deg,var(--gm),var(--gm2))">GM</div>
+      <div><h3>Gemini<small>Google · Gemini 3 系列</small></h3></div>
+      <div class="position">Google Workspace 原生 AI。在 Docs／Sheets／Gmail／Drive 裡就地協作，免切換視窗。</div>
+    </div>
+    <div class="grid2">
+      <div class="block"><h4>適用時機</h4><ul>
+        <li>團隊在 Google 文件共筆、彙整 Drive 內多份檔案</li>
+        <li>Gmail 內摘要長信件串、草擬回覆</li>
+        <li>跨多份簡報／報告的大量文件分析（1M+ token 超長脈絡）</li>
+        <li>影片、多模態內容分析（如訓練影片判讀）</li>
+      </ul></div>
+      <div class="block neg"><h4>不適場景</h4><ul>
+        <li>非 Google 生態的第三方工具串接 → Custom GPTs／Connectors 更彈性</li>
+        <li>要求高度一致輸出：同問題可能得到不同答案</li>
+        <li>需要最精緻中文文稿 → Claude 文字品質較佳</li>
+      </ul></div>
+    </div>
+    <div class="signals" style="margin-top:18px">
+      <div class="sigrow"><span class="siglabel">生態整合</span><span class="bars" data-n="5" data-c="var(--gm)"></span></div>
+      <div class="sigrow"><span class="siglabel">長文處理</span><span class="bars" data-n="5" data-c="var(--gm)"></span></div>
+      <div class="sigrow"><span class="siglabel">即時網路</span><span class="bars" data-n="4" data-c="var(--gm)"></span></div>
+      <div class="sigrow"><span class="siglabel">多模態</span><span class="bars" data-n="5" data-c="var(--gm)"></span></div>
+    </div>
+    <div class="demo">
+      <div class="demo-top"><span class="rd"></span>範例教學 · Docs 側欄就地摘要</div>
+      <div class="prompt"><span class="u">你</span>〔在 Google Docs 側欄呼叫 Gemini〕：請將本文件（韌性國家醫療整備計畫初稿）整理成三段式摘要，並列出五個待補資料項目。
+
+〔或建立 Gem〕救護科簡報助理：一律繁體中文、結論先行、以表格呈現、英文術語採「中文（全稱, 縮寫）」格式。</div>
+      <div class="demo-note"><b>會發生什麼：</b>Gemini 直接讀取當前文件內容產出摘要；建立 Gem 後可重複套用固定風格，並即時同步 Drive 檔案。</div>
+    </div>
+    <div class="extbar"><h4 class="mono" style="font-size:12px;letter-spacing:.12em;color:var(--console)">▸ 擴充功能</h4>
+      <div class="chips"><span class="chip">Gems／Super Gems</span><span class="chip">Deep Research</span><span class="chip">Workspace 側欄</span><span class="chip">NotebookLM 連動</span><span class="chip">Imagen／Veo 生圖生影</span></div>
+    </div>
+    <div class="callout"><b>擴充建議：</b>您已在用 NotebookLM——可將政策文獻餵入 NotebookLM 建知識庫，再於 Gemini 中做延伸分析與簡報草稿，形成 Google 生態內的閉環。</div>
+  </div>
+
+  <!-- Claude -->
+  <div class="panel" id="p-cl" role="tabpanel" aria-labelledby="t-cl" style="border-top:3px solid var(--cl)">
+    <div class="lead">
+      <div class="badge" style="background:var(--cl)">CL</div>
+      <div><h3>Claude<small>Anthropic · Opus / Sonnet</small></h3></div>
+      <div class="position">長文件深讀、政策撰寫與結構化產製的主力。公文、簡報、預算、採購文件的內容引擎。</div>
+    </div>
+    <div class="grid2">
+      <div class="block"><h4>適用時機</h4><ul>
+        <li>審閱冗長報告／合約／法規逐條分析</li>
+        <li>公文（簽、函）、政策簡報、預算說明書、採購規格書起草</li>
+        <li>需精確語氣、細膩推理與高事實準確度的產出</li>
+        <li>以 Skills／Projects 建立可重複使用的機關工作流</li>
+      </ul></div>
+      <div class="block neg"><h4>不適場景</h4><ul>
+        <li>需要即時網路輿情 → 改用 Grok／Perplexity</li>
+        <li>Google 文件內就地協作 → 改用 Gemini</li>
+      </ul></div>
+    </div>
+    <div class="signals" style="margin-top:18px">
+      <div class="sigrow"><span class="siglabel">長文處理</span><span class="bars" data-n="5" data-c="var(--cl)"></span></div>
+      <div class="sigrow"><span class="siglabel">內容產製</span><span class="bars" data-n="5" data-c="var(--cl)"></span></div>
+      <div class="sigrow"><span class="siglabel">生態整合</span><span class="bars" data-n="4" data-c="var(--cl)"></span></div>
+      <div class="sigrow"><span class="siglabel">即時網路</span><span class="bars" data-n="3" data-c="var(--cl)"></span></div>
+    </div>
+    <div class="demo">
+      <div class="demo-top"><span class="rd"></span>範例教學 · 三段式公文起草（本手冊即由 Claude 產製）</div>
+      <div class="prompt"><span class="u">你</span>：你是消防署救護科公文助理。依三段式（主旨／說明／辦法）起草一份函，行文衛生福利部，主旨為協調到院前血液輸注（prehospital blood transfusion）試辦計畫之權責分工。繁體中文，可直接複製。</div>
+      <div class="demo-note"><b>會發生什麼：</b>搭配 nfa-gongwen 等 Skills 可固定格式與用語；Artifacts 能直接產出可下載的 Word／簡報／互動工具（本 HTML 手冊即為一例）。</div>
+    </div>
+    <div class="extbar"><h4 class="mono" style="font-size:12px;letter-spacing:.12em;color:var(--console)">▸ 擴充功能</h4>
+      <div class="chips"><span class="chip">Projects 持久工作區</span><span class="chip">Skills 自訂技能</span><span class="chip">Artifacts 即時產製</span><span class="chip">Connectors</span><span class="chip">Claude Code</span><span class="chip">Cowork</span></div>
+    </div>
+    <div class="callout"><b>擴充建議：</b>延續「一任務一 Skill」原則——公文、預算、採購、簡報、出國報告各建一個 Skill，並以 Projects 收納對應知識庫，讓格式與規範自動套用。</div>
+  </div>
+
+  <!-- Perplexity -->
+  <div class="panel" id="p-px" role="tabpanel" aria-labelledby="t-px" style="border-top:3px solid var(--px)">
+    <div class="lead">
+      <div class="badge" style="background:var(--px)">PX</div>
+      <div><h3>Perplexity<small>Perplexity · Sonar / 多模型</small></h3></div>
+      <div class="position">可驗證研究引擎。每個答案附編號引用、一鍵溯源，適合須具名負責的政策研究。</div>
+    </div>
+    <div class="grid2">
+      <div class="block"><h4>適用時機</h4><ul>
+        <li>國際 EMS 制度比較、各國救護法規查證（附來源）</li>
+        <li>多來源交叉比對、學術文獻檢索（Academic 焦點模式）</li>
+        <li>需在報告中標註出處的資料蒐集</li>
+      </ul></div>
+      <div class="block neg"><h4>不適場景</h4><ul>
+        <li>端到端程式開發 → 改用 ChatGPT／Claude</li>
+        <li>純創意寫作、細膩文稿 → 改用 Claude</li>
+        <li>來源品質標示不一致，弱來源偶被同等引用，仍須人工判讀</li>
+      </ul></div>
+    </div>
+    <div class="signals" style="margin-top:18px">
+      <div class="sigrow"><span class="siglabel">引用可溯</span><span class="bars" data-n="5" data-c="var(--px)"></span></div>
+      <div class="sigrow"><span class="siglabel">即時網路</span><span class="bars" data-n="5" data-c="var(--px)"></span></div>
+      <div class="sigrow"><span class="siglabel">長文處理</span><span class="bars" data-n="3" data-c="var(--px)"></span></div>
+      <div class="sigrow"><span class="siglabel">內容產製</span><span class="bars" data-n="3" data-c="var(--px)"></span></div>
+    </div>
+    <div class="demo">
+      <div class="demo-top"><span class="rd"></span>範例教學 · 國際制度比較（附來源）</div>
+      <div class="prompt"><span class="u">你</span>〔開 Academic 焦點模式〕：比較澳洲 NSW Ambulance 與 Ambulance Victoria 在到院前血液輸注的實施範圍、授權層級與適應症。以表格呈現並附來源，優先採官方與同儕審查來源。繁體中文。</div>
+      <div class="demo-note"><b>會發生什麼：</b>回覆逐句附編號引用，可一鍵查看原始出處。建議建立 Spaces「EMS 國際制度研究」，設定固定指令長期累積。</div>
+    </div>
+    <div class="extbar"><h4 class="mono" style="font-size:12px;letter-spacing:.12em;color:var(--console)">▸ 擴充功能</h4>
+      <div class="chips"><span class="chip">Spaces 研究工作區</span><span class="chip">Pro Search</span><span class="chip">Deep Research</span><span class="chip">Focus 焦點模式</span><span class="chip">Pages 發布</span><span class="chip">Comet 瀏覽器</span><span class="chip">Model Council</span></div>
+    </div>
+    <div class="callout"><b>擴充建議：</b>依主題各開一個 Space（如「各國 EMT 分級」「TECC/PCC 國際做法」），內設「一律附官方或同儕審查來源、繁體中文」的常駐指令，形同一位可溯源的研究助理。</div>
+  </div>
+</div></section>
+
+<!-- 2 · 情境路由器 -->
+<section id="router"><div class="wrap">
+  <div class="sec-head"><span class="sec-no">02</span><h2>情境路由器 · 哪個任務派哪套</h2><span class="cap mono">TAP A SCENARIO</span></div>
+  <p class="routerhelp">// 點選任務情境，右側顯示建議工具（實色＝主力，灰色＝輔助）</p>
+  <div class="router" id="routerBox">
+    <div class="rrow" tabindex="0"><div class="rscene"><span class="k">TASK-01</span>起草公文、簽稿、函文</div><div class="rtools"><span class="rt" style="background:var(--cl)">Claude</span></div></div>
+    <div class="rrow" tabindex="0"><div class="rscene"><span class="k">TASK-02</span>國際制度／法規查證（要來源）</div><div class="rtools"><span class="rt" style="background:var(--px)">Perplexity</span></div></div>
+    <div class="rrow" tabindex="0"><div class="rscene"><span class="k">TASK-03</span>輿情、社群即時反應</div><div class="rtools"><span class="rt" style="background:var(--gk)">Grok</span><span class="rt sub">Perplexity</span></div></div>
+    <div class="rrow" tabindex="0"><div class="rscene"><span class="k">TASK-04</span>Google 文件協作、Drive 彙整</div><div class="rtools"><span class="rt" style="background:var(--gm)">Gemini</span></div></div>
+    <div class="rrow" tabindex="0"><div class="rscene"><span class="k">TASK-05</span>Excel 資料分析、自動化腳本</div><div class="rtools"><span class="rt" style="background:var(--cg)">ChatGPT</span><span class="rt sub">Claude</span></div></div>
+    <div class="rrow" tabindex="0"><div class="rscene"><span class="k">TASK-06</span>長報告／合約逐條審閱</div><div class="rtools"><span class="rt" style="background:var(--cl)">Claude</span><span class="rt sub">Gemini</span></div></div>
+    <div class="rrow" tabindex="0"><div class="rscene"><span class="k">TASK-07</span>政策簡報內容產製</div><div class="rtools"><span class="rt" style="background:var(--cl)">Claude</span><span class="rt sub">Gemini</span></div></div>
+    <div class="rrow" tabindex="0"><div class="rscene"><span class="k">TASK-08</span>深度研究報告（多步驟）</div><div class="rtools"><span class="rt" style="background:var(--px)">Perplexity</span><span class="rt sub">ChatGPT</span></div></div>
+  </div>
+</div></section>
+
+<!-- 3 · 業務工作流整合 -->
+<section id="workflow"><div class="wrap">
+  <div class="sec-head"><span class="sec-no">03</span><h2>業務工作流整合</h2><span class="cap mono">CHAINED PIPELINES</span></div>
+  <div class="flowcards">
+    <div class="fc"><div class="t"><span class="n">A</span>政策簡報產製</div>
+      <div class="chain"><span class="step">Perplexity 找資料含來源</span><span class="arr">→</span><span class="step">Claude 結構＋內容</span><span class="arr">→</span><span class="step">Gamma 美化</span><span class="arr">→</span><span class="step">PowerPoint 定稿</span></div>
+    </div>
+    <div class="fc"><div class="t"><span class="n">B</span>公文起草</div>
+      <div class="chain"><span class="step">Claude（nfa-gongwen Skill）</span><span class="arr">→</span><span class="step">三段式草稿</span><span class="arr">→</span><span class="step">Word 定稿</span></div>
+    </div>
+    <div class="fc"><div class="t"><span class="n">C</span>國際研討會／制度研究</div>
+      <div class="chain"><span class="step">Perplexity 制度比較</span><span class="arr">→</span><span class="step">Claude 整理成報告</span><span class="arr">→</span><span class="step">Gamma／Word</span></div>
+    </div>
+    <div class="fc"><div class="t"><span class="n">D</span>出國考察報告</div>
+      <div class="chain"><span class="step">Claude（nfa-overseas-report Skill）</span><span class="arr">→</span><span class="step">Word 定稿</span></div>
+    </div>
+    <div class="fc"><div class="t"><span class="n">E</span>預算／採購文件</div>
+      <div class="chain"><span class="step">Claude（budget／procurement Skill）</span><span class="arr">→</span><span class="step">Excel／Word</span></div>
+    </div>
+    <div class="fc"><div class="t"><span class="n">F</span>輿情監測</div>
+      <div class="chain"><span class="step">Grok DeepSearch</span><span class="arr">→</span><span class="step">人工複核來源</span><span class="arr">→</span><span class="step">Claude 彙整摘要</span></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- 4 · 擴充原則 -->
+<section id="principles" style="padding-bottom:46px"><div class="wrap">
+  <div class="sec-head"><span class="sec-no">04</span><h2>擴充與長期使用原則</h2><span class="cap mono">OPERATING DOCTRINE</span></div>
+  <div class="princ">
+    <div class="pr"><div class="n">P-01</div><div class="h">一任務一技能</div><p>Claude 以「一種文件類型 = 一個 Skill」建置；ChatGPT 以 Custom GPT、Gemini 以 Gem 對應，固定機關格式與用語。</p></div>
+    <div class="pr"><div class="n">P-02</div><div class="h">分工鏈：內容 → 美學 → 定稿</div><p>Claude 負責內容結構，Gamma 負責簡報美學，Office 負責最終格式；各司其職，品質最穩。</p></div>
+    <div class="pr"><div class="n">P-03</div><div class="h">研究要溯源</div><p>正式引用一律走 Perplexity／Deep Research，保留編號來源；Grok 產出僅作輿情線索，不作政策依據。</p></div>
+    <div class="pr"><div class="n">P-04</div><div class="h">知識庫常駐化</div><p>Perplexity Spaces、Claude Projects、NotebookLM 依主題長期累積，避免每次從零餵資料。</p></div>
+    <div class="pr"><div class="n">P-05</div><div class="h">人工把關為終點</div><p>任何 AI 產出在對外行文或長官報告前，均須人工查核事實、來源與法規正確性。</p></div>
+    <div class="pr"><div class="n">P-06</div><div class="h">版本快速變動</div><p>五套系統更新頻繁（模型、功能名稱常變）；本手冊為 2026-07 快照，使用前留意介面差異。</p></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="discl">
+    <b>免責與使用須知</b><br>
+    本手冊為 AI 工具選用之一般性引導，不構成對特定產品之背書。各系統功能、模型版本與定價變動快速，內容為 2026 年 7 月之狀態快照。AI 產出可能含錯誤或過時資訊；用於政府正式文書、對外行文或政策決策前，務必人工查核事實、來源可信度與法規正確性。涉及個人資料、機敏或密級內容時，請依機關資安與保密規定審慎使用。
+  </div>
+  <div class="sig">// 內政部消防署 救護科 · AI 工具選用引導 v1.0 · 本 HTML 由 Claude（Opus 4.8）以 Artifacts 產製 · 繁體中文</div>
+</div></footer>
+
+<script>
+  // signal bars
+  document.querySelectorAll('.bars').forEach(function(b){
+    var n=parseInt(b.dataset.n,10)||0, c=b.dataset.c||'#333';
+    for(var i=1;i<=5;i++){var s=document.createElement('i'); if(i<=n){s.style.background=c;} b.appendChild(s);}
+  });
+  // tabs
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  function activate(tab){
+    tabs.forEach(function(t){
+      var sel=t===tab; t.setAttribute('aria-selected',sel);
+      document.getElementById(t.getAttribute('aria-controls')).classList.toggle('active',sel);
+    });
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){activate(t);});
+    t.addEventListener('keydown',function(e){
+      var idx=i;
+      if(e.key==='ArrowRight'){idx=(i+1)%tabs.length;}
+      else if(e.key==='ArrowLeft'){idx=(i-1+tabs.length)%tabs.length;}
+      else return;
+      e.preventDefault(); tabs[idx].focus(); activate(tabs[idx]);
+    });
+  });
+  // router highlight
+  document.querySelectorAll('#routerBox .rrow').forEach(function(r){
+    function flash(){
+      document.querySelectorAll('#routerBox .rrow').forEach(function(x){x.style.background='';});
+      r.style.background='#EDF6F1';
+      var main=r.querySelector('.rt:not(.sub)');
+      if(main){r.style.boxShadow='inset 3px 0 0 '+getComputedStyle(main).backgroundColor;}
+    }
+    r.addEventListener('click',flash);
+    r.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();flash();}});
+  });
+</script>
+</body>
+</html>

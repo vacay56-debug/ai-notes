@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>提示工程 vs 脈絡工程 vs 束具工程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --indigo:#1F2B5B;
+  --indigo-lt:#E3EAF7;
+  --indigo-md:#B9CBE8;
+  --rose:#D6446E;
+  --rose-lt:#FBE4EC;
+  --rose-md:#F3BCCE;
+  --navy:#0F1B3D;
+  --navy-lt:#DDE3F0;
+  --paper:#F4F4F1;
+  --ink:#181B26;
+  --slate:#5C6478;
+  --line:#D8D8D2;
+  --white:#FFFFFF;
+  --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Noto Sans TC',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.7;
+  font-size:15px;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px 80px;}
+
+/* ===== Header ===== */
+header{padding:64px 0 40px;text-align:center;}
+header .eyebrow{
+  font-family:var(--mono);font-size:12px;letter-spacing:.25em;
+  color:var(--slate);text-transform:uppercase;margin-bottom:16px;
+}
+header h1{
+  font-size:clamp(28px,4.5vw,46px);font-weight:900;line-height:1.25;
+  letter-spacing:.02em;
+}
+header h1 .c1{color:var(--indigo);}
+header h1 .c2{color:var(--rose);}
+header h1 .c3{color:var(--navy);}
+header h1 .vs{
+  display:inline-block;font-family:var(--mono);font-size:.45em;
+  vertical-align:middle;background:var(--ink);color:var(--white);
+  padding:2px 10px;border-radius:99px;margin:0 10px;transform:translateY(-4px);
+}
+header .sub{margin-top:18px;color:var(--slate);font-size:15px;max-width:640px;margin-left:auto;margin-right:auto;}
+
+/* ===== Layer band ===== */
+.layer{
+  background:var(--white);border-radius:20px;overflow:hidden;
+  margin-top:36px;border:1px solid var(--line);
+  box-shadow:0 2px 12px rgba(20,25,50,.05);
+}
+.layer-head{
+  display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;
+  padding:26px 32px 20px;color:var(--white);
+}
+.layer.l1 .layer-head{background:var(--indigo);}
+.layer.l2 .layer-head{background:var(--rose);}
+.layer.l3 .layer-head{background:var(--navy);}
+.layer-head .num{
+  font-family:var(--mono);font-size:13px;font-weight:600;
+  border:1px solid rgba(255,255,255,.5);border-radius:99px;padding:2px 12px;
+}
+.layer-head h2{font-size:24px;font-weight:900;letter-spacing:.02em;}
+.layer-head .en{font-family:var(--mono);font-size:13px;opacity:.75;}
+.layer-head .tag{
+  margin-left:auto;font-size:13px;font-weight:700;
+  background:rgba(255,255,255,.16);border-radius:8px;padding:4px 14px;
+}
+.layer-body{padding:28px 32px 36px;}
+.def{
+  font-size:15.5px;color:var(--ink);max-width:860px;margin-bottom:26px;
+}
+.def strong{font-weight:700;}
+.l1 .def strong{color:var(--indigo);}
+.l2 .def strong{color:var(--rose);}
+.l3 .def strong{color:var(--navy);}
+
+/* ===== Pipeline ===== */
+.pipe-label{
+  font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+  color:var(--slate);text-transform:uppercase;margin-bottom:12px;
+}
+.pipe{
+  display:flex;align-items:stretch;gap:0;flex-wrap:wrap;
+  margin-bottom:8px;
+}
+.node{
+  flex:1;min-width:130px;border-radius:12px;padding:14px 16px;
+  position:relative;margin-right:34px;margin-bottom:14px;
+}
+.node:last-child{margin-right:0;}
+.node::after{
+  content:'→';position:absolute;right:-27px;top:50%;
+  transform:translateY(-50%);font-size:18px;font-weight:700;color:var(--slate);
+}
+.node:last-child::after{content:none;}
+.l1 .node{background:var(--indigo-lt);border:1px solid var(--indigo-md);}
+.l2 .node{background:var(--rose-lt);border:1px solid var(--rose-md);}
+.l3 .node{background:var(--navy-lt);border:1px solid #B6C2DE;}
+.node .step{
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  display:inline-block;border-radius:99px;padding:0 8px;margin-bottom:6px;
+  color:var(--white);
+}
+.l1 .node .step{background:var(--indigo);}
+.l2 .node .step{background:var(--rose);}
+.l3 .node .step{background:var(--navy);}
+.node b{display:block;font-size:14.5px;font-weight:700;margin-bottom:2px;}
+.node span{display:block;font-size:12.5px;color:var(--slate);line-height:1.5;}
+.unit{
+  font-size:13px;color:var(--slate);margin-bottom:26px;
+  border-left:3px solid var(--line);padding-left:12px;
+}
+.l1 .unit{border-color:var(--indigo);}
+.l2 .unit{border-color:var(--rose);}
+.l3 .unit{border-color:var(--navy);}
+.unit b{color:var(--ink);}
+
+/* ===== Components table ===== */
+h3.sec{
+  font-size:16px;font-weight:900;margin:26px 0 12px;
+  display:flex;align-items:center;gap:10px;
+}
+h3.sec::before{
+  content:'';width:10px;height:10px;border-radius:3px;flex:none;
+}
+.l1 h3.sec::before{background:var(--indigo);}
+.l2 h3.sec::before{background:var(--rose);}
+.l3 h3.sec::before{background:var(--navy);}
+table{width:100%;border-collapse:collapse;font-size:14px;}
+th,td{padding:10px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line);}
+th{font-weight:700;font-size:13px;color:var(--white);white-space:nowrap;}
+.l1 th{background:var(--indigo);}
+.l2 th{background:var(--rose);}
+.l3 th{background:var(--navy);}
+tr:nth-child(even) td{background:#FAFAF8;}
+td b{font-weight:700;}
+td .en{font-family:var(--mono);font-size:12px;color:var(--slate);}
+
+/* ===== Example block ===== */
+.example{
+  margin-top:26px;border-radius:14px;overflow:hidden;
+  border:1px solid var(--line);
+}
+.example-head{
+  padding:12px 20px;font-size:14px;font-weight:900;color:var(--white);
+  display:flex;align-items:center;gap:10px;
+}
+.example-head .chip{
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  background:rgba(255,255,255,.2);border-radius:99px;padding:1px 10px;
+}
+.l1 .example-head{background:var(--indigo);}
+.l2 .example-head{background:var(--rose);}
+.l3 .example-head{background:var(--navy);}
+.example-body{background:#1B1E2B;padding:20px 22px;overflow-x:auto;}
+.example-body pre{
+  font-family:var(--mono);font-size:12.8px;line-height:1.85;
+  color:#D9DCEA;white-space:pre-wrap;word-break:break-word;
+}
+.example-body .cm{color:#7C86A8;}
+.example-body .k{color:#8FC7FF;font-weight:600;}
+.l2 .example-body .k{color:#FF9EBC;}
+.l3 .example-body .k{color:#9FB4E8;}
+.example-note{
+  background:#FAFAF8;padding:14px 20px;font-size:13.5px;color:var(--slate);
+  border-top:1px solid var(--line);
+}
+.example-note b{color:var(--ink);}
+
+/* ===== Compare ===== */
+.compare{
+  margin-top:48px;background:var(--white);border-radius:20px;
+  border:1px solid var(--line);padding:32px;
+  box-shadow:0 2px 12px rgba(20,25,50,.05);
+}
+.compare h2{font-size:22px;font-weight:900;margin-bottom:6px;}
+.compare .sub{color:var(--slate);font-size:14px;margin-bottom:20px;}
+.compare th{background:var(--ink);}
+.compare td:first-child{font-weight:700;white-space:nowrap;}
+.dot{display:inline-block;width:9px;height:9px;border-radius:99px;margin-right:7px;vertical-align:1px;}
+.dot.d1{background:var(--indigo);}
+.dot.d2{background:var(--rose);}
+.dot.d3{background:var(--navy);}
+
+/* ===== Takeaway ===== */
+.takeaway{
+  margin-top:36px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+}
+.take{
+  border-radius:16px;padding:22px 22px 24px;color:var(--white);
+}
+.take.t1{background:var(--indigo);}
+.take.t2{background:var(--rose);}
+.take.t3{background:var(--navy);}
+.take .q{font-family:var(--mono);font-size:11px;letter-spacing:.15em;opacity:.7;margin-bottom:8px;text-transform:uppercase;}
+.take b{display:block;font-size:16px;font-weight:900;margin-bottom:6px;}
+.take p{font-size:13.5px;opacity:.9;line-height:1.65;}
+
+footer{
+  margin-top:48px;text-align:center;font-size:12.5px;color:var(--slate);
+  font-family:var(--mono);
+}
+
+@media(max-width:760px){
+  .layer-body{padding:22px 18px 28px;}
+  .layer-head{padding:20px 18px 16px;}
+  .takeaway{grid-template-columns:1fr;}
+  .node{min-width:100%;margin-right:0;}
+  .node::after{content:'↓';right:auto;left:50%;top:auto;bottom:-16px;transform:translateX(-50%);}
+  th,td{padding:8px 10px;}
+  .compare{padding:22px 16px;}
+  table{display:block;overflow-x:auto;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">LLM Engineering Framework · 三層架構對照</div>
+  <h1>
+    <span class="c1">提示工程</span><span class="vs">VS</span><span class="c2">脈絡工程</span><span class="vs">VS</span><span class="c3">束具工程</span>
+  </h1>
+  <p class="sub">與大型語言模型（Large Language Model, LLM）協作的三個工程層次：從「寫好一則訊息」、「管好一段記憶」，到「建好一部機器」。層次越高，人的角色越像系統設計師而非對話者。</p>
+</header>
+
+<!-- ============ Layer 1 ============ -->
+<section class="layer l1">
+  <div class="layer-head">
+    <span class="num">01</span>
+    <h2>提示工程</h2>
+    <span class="en">Prompt Engineering</span>
+    <span class="tag">訊息層 · The Message</span>
+  </div>
+  <div class="layer-body">
+    <p class="def">聚焦於<strong>單一輸入的品質</strong>：把角色、背景、指令、範例與輸出格式組裝成一則完整提示（Prompt），送入模型推論後取得回應。若結果不理想，回頭<strong>調整最弱的那個成分</strong>再送一次。</p>
+
+    <div class="pipe-label">Pipeline · 運作流程</div>
+    <div class="pipe">
+      <div class="node"><span class="step">1</span><b>組裝 Compose</b><span>將五大成分組合為一則提示</span></div>
+      <div class="node"><span class="step">2</span><b>送出 Send</b><span>提交至 LLM 進行推論</span></div>
+      <div class="node"><span class="step">3</span><b>生成 Generate</b><span>模型產出回應</span></div>
+      <div class="node"><span class="step">4</span><b>精修 Refine</b><span>調整最弱成分，重新送出</span></div>
+    </div>
+    <p class="unit"><b>工作單位：</b>一則輸入（one input）。每次互動是獨立事件，優化對象是「這一則訊息寫得夠不夠好」。</p>
+
+    <h3 class="sec">五大組成成分</h3>
+    <table>
+      <tr><th>成分</th><th>內容</th><th>作用</th></tr>
+      <tr><td><b>角色</b><br><span class="en">Role</span></td><td>「你是一位資深□□專家……」</td><td>設定模型的專業視角與語氣基準</td></tr>
+      <tr><td><b>背景</b><br><span class="en">Context</span></td><td>相關文件、對話歷史、任務背景</td><td>提供判斷所需的事實基礎</td></tr>
+      <tr><td><b>指令</b><br><span class="en">Instructions</span></td><td>具體要做什麼、步驟為何</td><td>界定任務範圍與執行順序</td></tr>
+      <tr><td><b>範例</b><br><span class="en">Examples</span></td><td>少樣本示例（few-shot pairs）</td><td>用輸入→輸出對示範期望品質</td></tr>
+      <tr><td><b>格式</b><br><span class="en">Format</span></td><td>JSON 結構、表格、三段式架構等</td><td>約束輸出形態，利於後續使用</td></tr>
+    </table>
+
+    <div class="example">
+      <div class="example-head">實務範例<span class="chip">公文起草提示</span></div>
+      <div class="example-body"><pre><span class="cm"># 一則完整提示，五大成分齊備 ↓</span>
+
+<span class="k">【角色】</span>你是內政部消防署救災救護組的資深承辦人，
+熟悉《文書處理手冊》與三段式公文格式。
+
+<span class="k">【背景】</span>本科擬函請各直轄市、縣（市）消防局於 8 月底前
+回報 115 年度救護技術員（EMT）複訓需求人數，
+作為明年度訓練量能規劃依據。
+
+<span class="k">【指令】</span>請起草一份「函」稿：
+1. 主旨一句話，以「請 查照」結尾
+2. 說明分項敘述法源依據與回報方式
+3. 語氣公務、精簡，避免贅詞
+
+<span class="k">【範例】</span>主旨寫法參考：
+「為辦理○○事宜，請於○月○日前惠復，請 查照。」
+
+<span class="k">【格式】</span>依「主旨／說明／辦法」三段式輸出，
+說明段落逐項編號（一、二、三）。</pre></div>
+      <div class="example-note"><b>觀察重點：</b>五個成分各司其職。若產出的主旨太冗長，只需精修「範例」成分（多給一個好主旨示範）即可，不必重寫整則提示——這就是「調整最弱成分」的精神。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Layer 2 ============ -->
+<section class="layer l2">
+  <div class="layer-head">
+    <span class="num">02</span>
+    <h2>脈絡工程</h2>
+    <span class="en">Context Engineering</span>
+    <span class="tag">記憶層 · The Memory</span>
+  </div>
+  <div class="layer-body">
+    <p class="def">聚焦於<strong>脈絡視窗（Context Window）這塊有限預算</strong>的管理：多輪互動中，資訊來源眾多（查詢、系統提示、檢索文件、工具輸出、記憶、先前對話），必須由「策展者（Curator）」<strong>篩選、壓縮、捨棄</strong>，決定每一步「什麼留在視窗內」。</p>
+
+    <div class="pipe-label">Pipeline · 運作流程</div>
+    <div class="pipe">
+      <div class="node"><span class="step">1</span><b>蒐集 Gather</b><span>彙整六類資訊來源</span></div>
+      <div class="node"><span class="step">2</span><b>策展 Curate</b><span>篩選／壓縮／捨棄，塞入有限視窗</span></div>
+      <div class="node"><span class="step">3</span><b>餵入 Feed</b><span>視窗內容送入 LLM 推論</span></div>
+      <div class="node"><span class="step">4</span><b>更新 Update</b><span>新輸出成為下一步的脈絡</span></div>
+    </div>
+    <p class="unit"><b>工作單位：</b>每一步「留在視窗內的內容」（what stays in the window, step by step）。優化對象不是單則訊息，而是資訊的取捨策略。</p>
+
+    <h3 class="sec">六類資訊來源與策展策略</h3>
+    <table>
+      <tr><th>來源</th><th>特性</th><th>常見策展手法</th></tr>
+      <tr><td><b>使用者查詢</b><br><span class="en">User query</span></td><td>當下任務的核心訊號</td><td>永遠保留，優先權最高</td></tr>
+      <tr><td><b>系統提示</b><br><span class="en">System prompt</span></td><td>固定行為規範</td><td>精簡化，避免佔用過多預算</td></tr>
+      <tr><td><b>檢索文件</b><br><span class="en">Retrieved docs</span></td><td>量大且雜訊多</td><td>僅取相關段落，摘要後餵入</td></tr>
+      <tr><td><b>工具輸出</b><br><span class="en">Tool outputs</span></td><td>結構化但可能冗長</td><td>擷取關鍵欄位，捨棄原始雜訊</td></tr>
+      <tr><td><b>記憶</b><br><span class="en">Memory</span></td><td>跨對話的長期資訊</td><td>只載入與當前任務相關者</td></tr>
+      <tr><td><b>先前對話</b><br><span class="en">Prior turns</span></td><td>隨輪次線性膨脹</td><td>壓縮為摘要，早期輪次可捨棄</td></tr>
+    </table>
+
+    <div class="example">
+      <div class="example-head">實務範例<span class="chip">法規研修知識庫的脈絡策展</span></div>
+      <div class="example-body"><pre><span class="cm"># 任務：比對《緊急醫療救護法》第 20 條各縣市收費規定
+# 視窗預算有限，策展者的取捨決策 ↓</span>
+
+<span class="k">[保留・原文]</span> 使用者查詢：「彙整六都救護車收費差異」
+<span class="k">[保留・原文]</span> 《緊急醫療救護法》第 20 條條文全文
+<span class="k">[壓縮・摘要]</span> 22 份縣市自治條例
+              → 壓縮成一張「縣市×收費級距」對照表
+<span class="k">[壓縮・摘要]</span> 前 15 輪討論
+              → 濃縮為 3 行結論：「已確認法源、
+              已排除離島特例、待補台中市修正版本」
+<span class="k">[捨棄]</span>       檢索到的 8 篇新聞報導全文
+              （僅留 1 行：輿情關注收費爭議）
+<span class="k">[捨棄]</span>       與本題無關的 EMT 訓練討論串
+
+<span class="cm"># 結果：視窗只裝「回答本題必需的最小資訊集」
+# 下一輪：本輪產出的對照表 → 成為新的脈絡</span></pre></div>
+      <div class="example-note"><b>觀察重點：</b>同樣的提示技巧，若視窗被 8 篇新聞全文塞爆，模型反而抓不到重點。脈絡工程的價值在於「捨棄什麼」與「保留什麼」同等重要——這正是 Claude 專案（Projects）知識庫、檢索增強生成（Retrieval-Augmented Generation, RAG）系統設計的核心課題。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Layer 3 ============ -->
+<section class="layer l3">
+  <div class="layer-head">
+    <span class="num">03</span>
+    <h2>束具工程</h2>
+    <span class="en">Harness Engineering</span>
+    <span class="tag">機器層 · The Machine</span>
+  </div>
+  <div class="layer-body">
+    <p class="def">聚焦於<strong>整部自動化系統的設計</strong>：把脈絡工程（蒐集區）與提示工程（組裝區）包進一個可循環的束具（Harness）中，讓模型能<strong>行動（呼叫工具、調度子代理人）並被驗證（Verify）</strong>。驗證未通過即帶著更新後的脈絡重跑，直到產出可信的最終結果。</p>
+
+    <div class="pipe-label">Pipeline · 運作流程（Gather → Act → Verify 循環）</div>
+    <div class="pipe">
+      <div class="node"><span class="step">1</span><b>蒐集 Gather</b><span>策展者整理脈絡，塞入視窗（脈絡工程區）</span></div>
+      <div class="node"><span class="step">2</span><b>組裝 Compose</b><span>視窗內容組成提示（提示工程區）</span></div>
+      <div class="node"><span class="step">3</span><b>行動 Act</b><span>LLM 呼叫工具、調度子代理人專家</span></div>
+      <div class="node"><span class="step">4</span><b>驗證 Verify</b><span>測試／LLM 評審把關；未過→重跑循環</span></div>
+    </div>
+    <p class="unit"><b>工作單位：</b>整個「蒐集→行動→驗證」的循環（the loop）。優化對象是系統的可靠度，而非任何單次輸出。</p>
+
+    <h3 class="sec">關鍵組件</h3>
+    <table>
+      <tr><th>組件</th><th>角色</th><th>對應實例</th></tr>
+      <tr><td><b>策展者</b><br><span class="en">Curator</span></td><td>入口守門：篩選、壓縮、捨棄脈絡</td><td>RAG 檢索器、記憶管理模組</td></tr>
+      <tr><td><b>工具輸出</b><br><span class="en">Tool outputs</span></td><td>賦予模型計算、抓取等實際能力</td><td>程式執行、網頁擷取、API 呼叫</td></tr>
+      <tr><td><b>子代理人</b><br><span class="en">Sub-agent specialists</span></td><td>將複雜任務分派給專責代理人</td><td>Claude Code 子代理人、多代理協作</td></tr>
+      <tr><td><b>驗證器</b><br><span class="en">Verifier</span></td><td>自動測試或 LLM 評審（LLM-as-judge）把關</td><td>Python 驗證腳本、格式檢核器</td></tr>
+      <tr><td><b>重試機制</b><br><span class="en">Retry loop</span></td><td>驗證未過即帶新脈絡重跑</td><td>n8n 工作流、CI 自動重試</td></tr>
+    </table>
+
+    <div class="example">
+      <div class="example-head">實務範例<span class="chip">採購文件自動審查束具</span></div>
+      <div class="example-body"><pre><span class="cm"># 目標：招標規格書產出後「自動審查、自動修正」
+# 一個完整的 Gather → Act → Verify 循環 ↓</span>
+
+<span class="k">① Gather</span>  策展者載入：使用者需求
+           + 《政府採購法》相關條文摘要
+           + 歷年同類案規格書範本（壓縮版）
+
+<span class="k">② Compose</span> 組裝提示：「依上述法規與範本，
+           產出○○器材財物採購規格書草案」
+
+<span class="k">③ Act</span>     LLM 產出草案，並呼叫工具：
+           · 子代理人 A（法規審查員）：逐條核對
+             有無違反《政府採購法》第 26 條
+             （規格綁標禁止）
+           · 子代理人 B（格式審查員）：檢查章節
+             編號、必要欄位完整性
+
+<span class="k">④ Verify</span>  Python 驗證腳本執行：
+           ✓ 必備章節齊全？
+           ✗ 發現「指定廠牌未加註『或同等品』」
+           → 驗證未過
+
+<span class="k">⑤ Retry</span>   將驗證器的錯誤訊息加入脈絡，
+           重跑 ①～④ → 第二輪通過 ✓
+           → 輸出最終規格書給使用者</pre></div>
+      <div class="example-note"><b>觀察重點：</b>人不再逐字審稿，而是設計「審稿的機器」。附帶驗證腳本的 Claude 技能（Skills）、Claude Code 的測試迴圈、n8n 自動化流程，本質上都是束具工程的產物——品質由系統保證，而非單次提示的運氣。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Compare ============ -->
+<section class="compare">
+  <h2>三層框架總對照</h2>
+  <p class="sub">三者非互斥，而是包含關係：束具工程之內有脈絡工程區與提示工程區。</p>
+  <table>
+    <tr>
+      <th>面向</th>
+      <th><span class="dot d1"></span>提示工程</th>
+      <th><span class="dot d2"></span>脈絡工程</th>
+      <th><span class="dot d3"></span>束具工程</th>
+    </tr>
+    <tr><td>隱喻</td><td>訊息（The Message）</td><td>記憶（The Memory）</td><td>機器（The Machine）</td></tr>
+    <tr><td>工作單位</td><td>一則輸入</td><td>每步留在視窗內的內容</td><td>整個蒐集→行動→驗證循環</td></tr>
+    <tr><td>核心問題</td><td>這則訊息寫得夠好嗎？</td><td>有限視窗該裝什麼？</td><td>系統能自我把關嗎？</td></tr>
+    <tr><td>優化手段</td><td>調整角色／指令／範例／格式</td><td>篩選、壓縮、捨棄資訊來源</td><td>設計工具、子代理人、驗證器與重試</td></tr>
+    <tr><td>典型失敗模式</td><td>指令模糊、缺範例、格式失控</td><td>視窗塞爆、關鍵資訊被雜訊淹沒</td><td>缺驗證器導致錯誤輸出直達使用者</td></tr>
+    <tr><td>代表場景</td><td>單次對話、一次性任務</td><td>長對話、知識庫、RAG 系統</td><td>Claude Code、代理人工作流、n8n 自動化</td></tr>
+    <tr><td>人的角色</td><td>寫作者</td><td>圖書館員／策展人</td><td>系統架構師</td></tr>
+  </table>
+</section>
+
+<!-- ============ Takeaway ============ -->
+<div class="takeaway">
+  <div class="take t1">
+    <div class="q">When · 何時用</div>
+    <b>單次任務 → 提示工程</b>
+    <p>起草一份公文、翻譯一段文件、產出一張表格。把五大成分寫齊，就能拿到穩定品質。</p>
+  </div>
+  <div class="take t2">
+    <div class="q">When · 何時用</div>
+    <b>長期協作 → 脈絡工程</b>
+    <p>經營專案知識庫、跨多輪修訂大型文件。決定「留什麼、丟什麼」比「怎麼問」更關鍵。</p>
+  </div>
+  <div class="take t3">
+    <div class="q">When · 何時用</div>
+    <b>批量自動化 → 束具工程</b>
+    <p>需要無人值守、可重複、可驗證的產線。把審查標準寫進驗證器，讓循環替你把關品質。</p>
+  </div>
+</div>
+
+<footer>原圖概念：Rathnakumar Udayakumar（@rathanuday）· 內容擴充與中文化重製</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Design 速成教練指南｜7 天上手 × 12 週精進</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C2733;
+    --steel:#3D5A73;
+    --muted:#64748B;
+    --red:#B3382F;
+    --red-soft:#F6E7E5;
+    --paper:#FFFFFF;
+    --bg:#EDF1F5;
+    --line:#D8DFE6;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Noto Sans TC',"Microsoft JhengHei",sans-serif;
+    font-size:16px;line-height:1.75;
+    padding:32px 16px 64px;
+  }
+  .sheet{
+    max-width:920px;margin:0 auto;background:var(--paper);
+    border:1px solid var(--red);
+    outline:3px solid var(--red);
+    outline-offset:5px;
+    padding:56px 56px 64px;
+  }
+  @media (max-width:640px){
+    body{padding:20px 8px 40px}
+    .sheet{padding:32px 20px 40px;outline-offset:3px;outline-width:2px}
+  }
+  /* ---------- Hero ---------- */
+  .doc-meta{
+    display:flex;justify-content:space-between;align-items:flex-start;
+    font-family:var(--mono);font-size:12px;color:var(--muted);
+    border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:36px;
+    letter-spacing:.04em;
+  }
+  .hero{position:relative;margin-bottom:48px}
+  .hero .eyebrow{
+    font-family:var(--mono);font-size:13px;color:var(--steel);
+    letter-spacing:.22em;margin-bottom:14px;
+  }
+  h1{
+    font-family:'Noto Serif TC',serif;font-weight:900;
+    font-size:clamp(30px,5vw,46px);line-height:1.28;letter-spacing:.02em;
+  }
+  h1 .red{color:var(--red)}
+  .hero .sub{margin-top:16px;max-width:34em;color:var(--muted);font-size:15px}
+  .seal{
+    position:absolute;right:0;top:4px;width:104px;height:104px;border-radius:50%;
+    border:3px solid var(--red);color:var(--red);
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    font-family:'Noto Serif TC',serif;font-weight:700;font-size:17px;line-height:1.4;
+    transform:rotate(-8deg);opacity:.88;
+    box-shadow:inset 0 0 0 2px rgba(179,56,47,.25);
+  }
+  @media (max-width:720px){.seal{position:static;transform:rotate(-6deg);margin-top:20px}}
+  /* ---------- Sections ---------- */
+  section{margin-bottom:52px}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;border-bottom:2px solid var(--ink);padding-bottom:10px}
+  .sec-num{
+    font-family:'Noto Serif TC',serif;font-weight:900;font-size:15px;color:var(--paper);
+    background:var(--red);padding:3px 10px;white-space:nowrap;
+  }
+  h2{font-family:'Noto Serif TC',serif;font-weight:700;font-size:clamp(20px,3vw,25px);letter-spacing:.03em}
+  h3{font-family:'Noto Serif TC',serif;font-weight:700;font-size:17px;margin:20px 0 8px;color:var(--steel)}
+  p+p{margin-top:10px}
+  strong{font-weight:700}
+  .note{font-size:13.5px;color:var(--muted);margin-top:12px;padding-left:14px;border-left:3px solid var(--line)}
+  code.k{font-family:var(--mono);font-size:.9em;background:#F1F4F7;border:1px solid var(--line);padding:1px 6px;color:var(--steel)}
+  /* key list (80/20) */
+  ol.keys{list-style:none;counter-reset:k}
+  ol.keys li{
+    counter-increment:k;position:relative;padding:14px 0 14px 58px;
+    border-bottom:1px dashed var(--line);
+  }
+  ol.keys li::before{
+    content:counter(k,decimal-leading-zero);
+    position:absolute;left:0;top:16px;
+    font-family:var(--mono);font-size:20px;font-weight:500;color:var(--red);
+  }
+  ol.keys li b{display:block;font-size:16.5px;margin-bottom:2px}
+  ol.keys li span{color:var(--muted);font-size:14.5px}
+  /* tables */
+  table{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:6px}
+  th{
+    background:var(--ink);color:#fff;font-weight:500;text-align:left;
+    padding:9px 12px;font-size:13.5px;letter-spacing:.05em;white-space:nowrap;
+  }
+  td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:nth-child(even) td{background:#F8FAFC}
+  td.t{font-family:var(--mono);font-size:12.5px;color:var(--steel);white-space:nowrap}
+  td.d{font-family:'Noto Serif TC',serif;font-weight:700;white-space:nowrap}
+  .table-wrap{overflow-x:auto}
+  /* exercises */
+  .ex{border:1px solid var(--line);margin-top:16px}
+  .ex-head{
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;
+    background:#F3F6F9;border-bottom:1px solid var(--line);padding:12px 18px;
+  }
+  .ex-head b{font-family:'Noto Serif TC',serif;font-size:16.5px}
+  .ex-head .lv{font-family:var(--mono);font-size:12px;color:var(--red);letter-spacing:.1em}
+  .ex-body{padding:16px 18px}
+  .ex-body dl{display:grid;grid-template-columns:5.5em 1fr;gap:6px 14px;font-size:14.5px}
+  .ex-body dt{color:var(--steel);font-weight:700;white-space:nowrap}
+  .ex-body dd{color:var(--ink)}
+  .ex.star{border-color:var(--red)}
+  .ex.star .ex-head{background:var(--red-soft);border-bottom-color:var(--red)}
+  /* mistakes */
+  .mistake{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-bottom:none}
+  .mistake:last-of-type{border-bottom:1px solid var(--line)}
+  .mistake>div{padding:12px 16px;font-size:14.5px}
+  .mistake .bad{background:#FBF4F3;border-right:1px solid var(--line)}
+  .mistake .bad::before{content:'✕ ';color:var(--red);font-weight:700}
+  .mistake .fix::before{content:'✓ ';color:var(--steel);font-weight:700}
+  @media (max-width:640px){.mistake{grid-template-columns:1fr}.mistake .bad{border-right:none;border-bottom:1px dashed var(--line)}}
+  /* resources */
+  ul.res{list-style:none}
+  ul.res li{padding:12px 0;border-bottom:1px dashed var(--line)}
+  ul.res b{font-family:'Noto Serif TC',serif}
+  ul.res .tag{
+    font-family:var(--mono);font-size:11px;color:#fff;background:var(--steel);
+    padding:2px 7px;margin-right:8px;letter-spacing:.06em;vertical-align:1px;
+  }
+  ul.res span{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+  /* case */
+  .case{
+    background:#F3F6F9;border-left:4px solid var(--red);
+    padding:20px 24px;font-size:15px;
+  }
+  .case .kpi{margin-top:12px;font-family:var(--mono);font-size:13px;color:var(--steel)}
+  footer{
+    margin-top:56px;padding-top:16px;border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:12px;color:var(--muted);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  }
+</style>
+</head>
+<body>
+<main class="sheet">
+
+  <div class="doc-meta">
+    <span>COACHING PLAYBOOK · CLAUDE DESIGN</span>
+    <span>版本 1.0 ／ 2026.07</span>
+  </div>
+
+  <header class="hero">
+    <p class="eyebrow">7 天上手 × 12 週精進 · 教練式速成指南</p>
+    <h1>Claude Design<br><span class="red">拿來即用</span>的政策視覺產線</h1>
+    <p class="sub">為政策幕僚量身設計的最短路徑：從公文與計畫書大綱出發，直接產出簡報、一頁式報告與國際研討會視覺素材，匯出即定稿。</p>
+    <div class="seal" aria-hidden="true">拿來<br>即用</div>
+  </header>
+
+  <!-- 壹 核心概念 -->
+  <section id="s1">
+    <div class="sec-head"><span class="sec-num">壹</span><h2>核心概念（白話說明）</h2></div>
+    <p>Claude Design（claude.ai/design）是一個「對話式設計工作台」：左邊聊天、右邊畫布，你用文字描述需求，AI 即時在畫布上生成並修改設計，產出的是<strong>真實網頁程式碼（HTML／CSS／JS）驅動的可編輯版面</strong>，而非一張改不動的靜態圖片。</p>
+    <p>它的本質是「把你的想法翻譯成設計」，因此關鍵能力不是操作軟體，而是<strong>把需求說清楚</strong>——說得越具體，成品越接近定稿。完成後可直接匯出 PPTX、PDF、獨立 HTML，或送 Canva 後製，一條龍銜接公務產出。</p>
+    <p class="note">使用門檻：目前為研究預覽版（Research Preview），限 Pro／Max／Team／Enterprise 付費方案使用，且用量為獨立配額——每一次生成都是成本，這點會直接影響後面的操作策略。</p>
+  </section>
+
+  <!-- 貳 80/20 -->
+  <section id="s2">
+    <div class="sec-head"><span class="sec-num">貳</span><h2>80／20 關鍵（最重要的 20%）</h2></div>
+    <ol class="keys">
+      <li><b>四要素提示詞：目的 → 受眾 → 內容 → 限制</b><span>每次生成前先寫齊：用在哪（研討會海報／長官簡報）、給誰看、要放哪些文字、什麼不能做（如「機關 Logo 必留、不得使用簡體字」）。這一項決定 60% 的成品品質。</span></li>
+      <li><b>Design System（設計系統）一次設定，終身受用</b><span>上傳機關識別色、字體、Logo 與過往定稿範例，之後所有產出自動套用同一套視覺語言，跨檔案（海報、簡報、社群圖）品牌一致，免除重複溝通。</span></li>
+      <li><b>三種修改模式分工：Tweaks／Edit／Comments</b><span>整體換風格配色用 Tweaks 滑桿；改一段文字、字級、間距直接點畫布用 Edit；要 AI 重做特定區塊就圈選加 Comments。<strong>能點就不要用打字描述位置</strong>，省時又省配額。</span></li>
+      <li><b>從既有文件出發，不從零開始</b><span>直接貼上公文說明段、計畫書大綱或議程表，請它「轉為 10 頁簡報」——結構是你的，設計交給它，這是幕僚最高投報比的用法。</span></li>
+      <li><b>匯出策略：PPTX 是主幹，Canva 是後製</b><span>需要口頭簡報→匯 PPTX；需要陳核附件→匯 PDF；需要精修或印刷→匯 PPTX 後上傳 Canva 微調（比內建的 Send to Canva 穩定）。</span></li>
+      <li><b>配額管理：先想清楚，再按送出</b><span>用量獨立且消耗快。養成「一次生成前先在記事本寫好完整提示詞」的習慣，避免以五、六次瑣碎對話換一個結果。</span></li>
+    </ol>
+  </section>
+
+  <!-- 參 7天 -->
+  <section id="s3">
+    <div class="sec-head"><span class="sec-num">參</span><h2>7 天速成計畫（每天具體任務）</h2></div>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>日次</th><th>行動項目</th><th>時間</th><th>成果檢核</th></tr></thead>
+      <tbody>
+        <tr><td class="d">Day 1</td><td>① 進入 claude.ai/design，逛完 Prototype／Slide deck／From template 四個入口 ② 建立 Design System：上傳機關色票、標準字、Logo</td><td class="t">60 min</td><td>品牌系統設定完成，之後生成自動套用</td></tr>
+        <tr><td class="d">Day 2</td><td>用「四要素提示詞」生成第一份一頁式文件（One-Pager），主題自選一項手上業務</td><td class="t">45 min</td><td>完成第一份 One-Pager 並匯出 PDF</td></tr>
+        <tr><td class="d">Day 3</td><td>貼上一份既有計畫書大綱，請它轉為 8–10 頁簡報（Slide deck）</td><td class="t">60 min</td><td>取得第一份可匯出 PPTX 的簡報初稿</td></tr>
+        <tr><td class="d">Day 4</td><td>只練修改：對 Day 3 簡報分別用 Tweaks 換主題色、用 Edit 改標題文字、用 Comments 圈選要求重做一頁</td><td class="t">45 min</td><td>能在 3 分鐘內判斷「哪種修改用哪個模式」</td></tr>
+        <tr><td class="d">Day 5</td><td>匯出實測：同一份簡報分別匯 PPTX、PDF、HTML，PPTX 上傳 Canva 檢查中文字體與版面是否跑掉</td><td class="t">40 min</td><td>建立自己的「匯出檢核清單」</td></tr>
+        <tr><td class="d">Day 6</td><td>做非簡報格式：一張直式 A1 活動海報＋一張 16:9 橫式視覺，測試同一 Design System 下的跨格式一致性</td><td class="t">60 min</td><td>兩種尺寸素材風格一致、可交付</td></tr>
+        <tr><td class="d">Day 7</td><td>整合驗收：挑一個真實小案，從提示詞到匯出一氣呵成完成整套產出，記錄總耗時</td><td class="t">60–90 min</td><td>完成第一個「拿來即用」的完整專案</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- 肆 三個練習 -->
+  <section id="s4">
+    <div class="sec-head"><span class="sec-num">肆</span><h2>三個實作練習（由淺入深）</h2></div>
+
+    <div class="ex">
+      <div class="ex-head"><b>練習一：政策一頁式說明（One-Pager）</b><span class="lv">LEVEL 1 · 30–45 MIN</span></div>
+      <div class="ex-body"><dl>
+        <dt>目標</dt><dd>用一次提示詞產出可直接陳核附件的一頁式政策說明。</dd>
+        <dt>步驟重點</dt><dd>先在記事本寫齊四要素 → 貼入生成 → 只允許自己用 Edit 修文字 → 匯出 PDF。重點是體驗「一次到位」的提示詞紀律。</dd>
+        <dt>工具</dt><dd>Claude Design（Other／一頁式）、記事本</dd>
+      </dl></div>
+    </div>
+
+    <div class="ex">
+      <div class="ex-head"><b>練習二：跨機關報告簡報（10 頁）</b><span class="lv">LEVEL 2 · 60–90 MIN</span></div>
+      <div class="ex-body"><dl>
+        <dt>目標</dt><dd>把一份既有計畫書轉為 10 頁、含數據頁與期程表的正式簡報。</dd>
+        <dt>步驟重點</dt><dd>貼大綱生成 → Tweaks 調整為機關色系 → Comments 圈選數據頁要求改為圖表呈現 → 匯 PPTX 進 Canva 做最後 10% 精修。</dd>
+        <dt>工具</dt><dd>Claude Design（Slide deck）、Canva、PowerPoint</dd>
+      </dl></div>
+    </div>
+
+    <div class="ex star">
+      <div class="ex-head"><b>練習三：國際研討會整套視覺（可展示作品）</b><span class="lv">LEVEL 3 · 2–3 HR</span></div>
+      <div class="ex-body"><dl>
+        <dt>目標</dt><dd>為一場真實研討會產出「同一視覺語言」的三件套：直式 A1 主視覺海報、16:9 開場投影片組、IG／FB 方形宣傳圖。</dd>
+        <dt>步驟重點</dt><dd>先用 Design System 鎖定主視覺（主色、標準字、關鍵圖形）→ 依序生成三種格式並互相對照一致性 → 分別匯出印刷用 PDF、PPTX、社群用圖。完成後即是一套可放入實績的「作品集」。</dd>
+        <dt>工具</dt><dd>Claude Design、Canva（印刷出血與尺寸微調）</dd>
+      </dl></div>
+    </div>
+  </section>
+
+  <!-- 伍 常見錯誤 -->
+  <section id="s5">
+    <div class="sec-head"><span class="sec-num">伍</span><h2>常見錯誤與避免方法</h2></div>
+    <div class="mistake"><div class="bad">提示詞太籠統（「幫我做一份漂亮的簡報」），生成結果離需求很遠，再花十輪對話救回來。</div><div class="fix">強制執行四要素：目的、受眾、內容、限制寫齊才按送出；內容段直接貼真實文字，不用「XX」佔位。</div></div>
+    <div class="mistake"><div class="bad">跳過 Design System，每個檔案都重新描述一次配色與字體，跨素材風格不一致。</div><div class="fix">第一天就把機關識別上傳建檔；之後所有專案自動套用，只描述「這一件要什麼」。</div></div>
+    <div class="mistake"><div class="bad">什麼修改都用聊天打字描述（「第三頁右上角那個標題往左一點」），又慢又燒配額。</div><div class="fix">改文字與間距→點畫布用 Edit；換整體風格→Tweaks 滑桿；要 AI 重做某區塊→圈選加 Comments。</div></div>
+    <div class="mistake"><div class="bad">把它當 Midjourney 用，期待直接「畫」出一張精美插圖或直接拖拉物件排版。</div><div class="fix">認清定位：它生成的是程式碼驅動的版面與原型，強項是結構、排版與品牌一致性；需要插圖素材另行準備後置入。</div></div>
+    <div class="mistake"><div class="bad">匯出後直接交付，沒檢查中文字體替換、標點溢出與表格跑版，正式場合當場出包。</div><div class="fix">建立三點匯出檢核：①中文字型是否被替換 ②每頁文字是否溢出邊界 ③表格與圖表數字是否正確，逐項打勾才算定稿。</div></div>
+  </section>
+
+  <!-- 陸 資源 -->
+  <section id="s6">
+    <div class="sec-head"><span class="sec-num">陸</span><h2>精簡資源推薦（台灣友善）</h2></div>
+    <ul class="res">
+      <li><span class="tag">官方</span><b>Anthropic 官方發布影片與說明文件（@claude YouTube／support.claude.com）</b><span>功能第一手來源，研究預覽版更新頻繁，以官方為準最不會走冤枉路。</span></li>
+      <li><span class="tag">圖解</span><b>經理人《Claude Design 怎麼用？9 步驟圖解》</b><span>繁中逐步截圖教學，從建案到匯出 PPTX 完整走一遍，最適合第一天照著做。</span></li>
+      <li><span class="tag">深度</span><b>布萊登週報《Claude Design 從 0 到 1 完整教學》</b><span>把 Tweaks／Edit／Comments 三種修改模式的分工講得最清楚，附提示詞範本。</span></li>
+      <li><span class="tag">觀點</span><b>數位時代《Claude Design 是什麼？》專題</b><span>快速掌握它與 Figma、Canva 的定位差異與適用場景，適合向長官或同仁說明時引用。</span></li>
+      <li><span class="tag">社群</span><b>Facebook「Claude AI 台灣使用者社團」等繁中 AI 社群</b><span>研究預覽版變動快，社群實測回報（配額、bug、匯出問題）往往比文章更即時。</span></li>
+    </ul>
+  </section>
+
+  <!-- 柒 每天1小時 -->
+  <section id="s7">
+    <div class="sec-head"><span class="sec-num">柒</span><h2>每天 1 小時 × 12 週優化策略</h2></div>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>週次</th><th>每週焦點</th><th>檢核點（週末自評）</th></tr></thead>
+      <tbody>
+        <tr><td class="d">W1–2</td><td>環境與品牌：介面熟悉、Design System 建置、四要素提示詞練習 5 次</td><td>不看筆記能寫出合格四要素提示詞</td></tr>
+        <tr><td class="d">W3–4</td><td>一頁式文件：每週產出 2 份不同主題 One-Pager 並匯 PDF</td><td>單份產出時間壓到 30 分鐘內</td></tr>
+        <tr><td class="d">W5–6</td><td>簡報主線：既有文件轉簡報、圖表頁與期程表頁的生成技巧</td><td>完成 1 份 10 頁簡報，PPTX 匯出無跑版</td></tr>
+        <tr><td class="d">W7–8</td><td>修改效率：三種修改模式刻意練習，記錄每次修改的耗時</td><td>90% 的修改能一次選對模式</td></tr>
+        <tr><td class="d">W9–10</td><td>跨格式視覺：海報、橫式視覺、社群圖三件套，Canva 後製流程定型</td><td>三件套風格一致，含印刷檢核清單</td></tr>
+        <tr><td class="d">W11</td><td>實戰整合：接一個真實業務案全程用此流程產出</td><td>成品直接交付使用，零二次重製</td></tr>
+        <tr><td class="d">W12</td><td>沉澱輸出：整理個人提示詞範本庫與 SOP 一頁紙，可教會同仁</td><td>完成可複用的個人 SOP 與範本庫</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">壓縮原則：每天 1 小時只做「一個明確產出」，不逛功能；週五那小時固定做回顧與範本歸檔，累積速度比每天亂試快一倍。</p>
+  </section>
+
+  <!-- 捌 案例 -->
+  <section id="s8">
+    <div class="sec-head"><span class="sec-num">捌</span><h2>實際應用案例（台灣情境）</h2></div>
+    <div class="case">
+      <p><strong>場景：</strong>中央機關主辦國際研討會（如危機介入小組（Crisis Intervention Team, CIT）國際交流研討會），需在兩週內完成主視覺海報（直式 A1）、開幕簡報（16:9）與社群宣傳圖三套素材，且須維持機關識別一致。<strong>做法：</strong>承辦人先於 Claude Design 建立機關 Design System，貼入議程與講者資訊以四要素提示詞生成三種格式，經 Tweaks 統一色系後匯出 PDF 付印、PPTX 供開幕使用、方形圖發布社群。</p>
+      <p class="kpi">可衡量成果：素材製作時程由外包往返約 10 個工作天縮短至 2 個工作天內；設計外包費用歸零；三套素材視覺一致性由承辦人單人即可管控。</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>CLAUDE DESIGN COACHING PLAYBOOK · 繁體中文版</span>
+    <span>壹 概念 → 捌 實戰 · 印出即為行動清單</span>
+  </footer>
+
+</main>
+</body>
+</html>

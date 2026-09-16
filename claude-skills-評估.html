@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>12 項第三方 Claude Skill 適用性評估｜消防署救護科</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#ECEEEA;
+  --panel:#F7F8F5;
+  --ink:#1A1F1C;
+  --ink-soft:#4E5A54;
+  --rule:#C7CEC8;
+  --adopt:#14594F;
+  --cond:#9C6608;
+  --reject:#A3202C;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Noto Sans TC",system-ui,"PingFang TC","Microsoft JhengHei",sans-serif;
+  font-size:16px;
+  line-height:1.75;
+}
+.wrap{max-width:960px;margin:0 auto;padding:0 22px}
+code,.cmd{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.82em}
+
+/* ---------- 開頭 ---------- */
+header{padding:64px 0 40px}
+.kicker{font-size:.85rem;color:var(--ink-soft);letter-spacing:.02em;margin:0 0 18px}
+h1{
+  font-family:"Noto Serif TC",serif;font-weight:700;
+  font-size:clamp(1.9rem,5.4vw,3.1rem);line-height:1.28;
+  margin:0 0 18px;letter-spacing:-.01em;max-width:20ch;
+}
+.lede{font-size:1.05rem;max-width:60ch;color:var(--ink-soft);margin:0 0 34px}
+.lede strong{color:var(--ink);font-weight:700}
+
+/* 分佈色條 */
+.spectrum{display:flex;gap:3px;margin:0 0 14px}
+.spectrum span{height:56px;flex:1;display:block;position:relative}
+.spectrum span b{
+  position:absolute;left:0;right:0;bottom:8px;text-align:center;
+  color:#fff;font-size:.72rem;font-weight:500;font-family:"IBM Plex Mono",monospace;
+}
+.sp-a{background:var(--adopt)} .sp-c{background:var(--cond)} .sp-r{background:var(--reject)}
+.legend{display:flex;flex-wrap:wrap;gap:20px;font-size:.9rem;color:var(--ink-soft);margin:0 0 8px}
+.legend i{display:inline-block;width:11px;height:11px;margin-right:7px;vertical-align:baseline}
+.src{font-size:.82rem;color:var(--ink-soft);border-top:1px solid var(--rule);padding-top:14px;margin-top:34px}
+
+/* ---------- 通用區塊 ---------- */
+section{padding:44px 0;border-top:1px solid var(--rule)}
+h2{
+  font-family:"Noto Serif TC",serif;font-weight:600;
+  font-size:1.42rem;margin:0 0 6px;line-height:1.4;
+}
+.sub{color:var(--ink-soft);font-size:.94rem;margin:0 0 26px;max-width:62ch}
+
+/* 判準 */
+.crit{display:grid;gap:0;margin:0;padding:0;list-style:none}
+.crit li{
+  display:grid;grid-template-columns:112px 1fr;gap:18px;
+  padding:14px 0;border-bottom:1px solid var(--rule);
+}
+.crit li:first-child{border-top:1px solid var(--rule)}
+.crit dt,.crit .k{font-weight:700;font-size:.92rem}
+.crit .v{color:var(--ink-soft);font-size:.94rem}
+
+/* ---------- 條目 ---------- */
+.group{margin-bottom:38px}
+.grouphead{display:flex;align-items:baseline;gap:12px;margin:0 0 4px}
+.grouphead h3{font-family:"Noto Serif TC",serif;font-size:1.16rem;margin:0;font-weight:600}
+.grouphead .count{font-family:"IBM Plex Mono",monospace;font-size:.85rem;color:var(--ink-soft)}
+.groupnote{color:var(--ink-soft);font-size:.9rem;margin:0 0 18px;max-width:60ch}
+
+.item{background:var(--panel);border-left:5px solid var(--rule);padding:20px 22px;margin-bottom:10px}
+.g-a .item{border-left-color:var(--adopt)}
+.g-c .item{border-left-color:var(--cond)}
+.g-r .item{border-left-color:var(--reject)}
+.item h4{margin:0 0 2px;font-size:1.03rem;font-weight:700}
+.item .cmd{color:var(--ink-soft);display:block;margin-bottom:12px}
+.item p{margin:0 0 10px;font-size:.95rem}
+.item p:last-child{margin-bottom:0}
+.tag{
+  display:inline-block;font-size:.8rem;font-weight:700;
+  padding:1px 0;margin-right:8px;
+}
+.g-a .tag{color:var(--adopt)} .g-c .tag{color:var(--cond)} .g-r .tag{color:var(--reject)}
+.orig{color:var(--ink-soft);font-size:.9rem}
+
+/* ---------- 表格 ---------- */
+.tablewrap{overflow-x:auto;border-top:1px solid var(--rule)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+th,td{text-align:left;padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:700;font-size:.88rem}
+td.mark{font-weight:700}
+.m-dup{color:var(--reject)}
+.m-add{color:var(--adopt)}
+
+/* ---------- 導入順序 ---------- */
+ol.steps{counter-reset:s;list-style:none;margin:0;padding:0}
+ol.steps li{
+  counter-increment:s;position:relative;padding:0 0 22px 46px;
+  border-left:1px solid var(--rule);margin-left:14px;
+}
+ol.steps li:last-child{border-left-color:transparent;padding-bottom:0}
+ol.steps li::before{
+  content:counter(s);position:absolute;left:-14px;top:0;
+  width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--paper);
+  font-family:"IBM Plex Mono",monospace;font-size:.85rem;
+  display:flex;align-items:center;justify-content:center;
+}
+ol.steps b{display:block;font-size:1rem}
+ol.steps span{color:var(--ink-soft);font-size:.93rem}
+
+/* ---------- 注意事項 ---------- */
+.warn{border:1px solid var(--reject);padding:22px 24px;background:#fbf6f6}
+.warn h2{color:var(--reject)}
+.warn ul{margin:0;padding-left:1.1em}
+.warn li{margin-bottom:10px;font-size:.95rem}
+.warn li:last-child{margin-bottom:0}
+
+footer{padding:38px 0 70px;color:var(--ink-soft);font-size:.85rem;border-top:1px solid var(--rule)}
+
+@media (max-width:620px){
+  header{padding:44px 0 30px}
+  .spectrum span b{display:none}
+  .spectrum span{height:34px}
+  .crit li{grid-template-columns:1fr;gap:4px}
+}
+@media print{
+  body{background:#fff}
+  section{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">內政部消防署 救災救護組 緊急救護科｜工具評估</p>
+  <h1>12 項第三方 Claude Skill 適用性評估</h1>
+  <p class="lede">附件圖卡列出 12 項可下載的 Claude Skill。以救護科既有業務（公文、預算、採購、政策研究、國際交流）與已建置的 6 項自建 Skill 為基準逐項檢視，結論為：<strong>4 項建議採用、4 項條件採用、4 項不建議導入</strong>。</p>
+
+  <div class="spectrum" aria-label="12 項評估結果分佈">
+    <span class="sp-a"><b>04</b></span><span class="sp-a"><b>05</b></span><span class="sp-a"><b>03</b></span><span class="sp-a"><b>09</b></span>
+    <span class="sp-c"><b>01</b></span><span class="sp-c"><b>12</b></span><span class="sp-c"><b>07</b></span><span class="sp-c"><b>08</b></span>
+    <span class="sp-r"><b>02</b></span><span class="sp-r"><b>06</b></span><span class="sp-r"><b>10</b></span><span class="sp-r"><b>11</b></span>
+  </div>
+  <p class="legend">
+    <span><i style="background:var(--adopt)"></i>建議採用</span>
+    <span><i style="background:var(--cond)"></i>條件採用</span>
+    <span><i style="background:var(--reject)"></i>不建議導入</span>
+  </p>
+
+  <p class="src">附件來源為第三方電子報 how-to-ai.guide 所整理之免費 Skill 包，非 Anthropic 官方發布。圖卡宣稱「上傳一次，Claude 自動觸發」，實際觸發率取決於各 Skill 的 description 撰寫品質；本科已安裝 6 項自建 Skill，泛用型 Skill 併入後可能產生誤觸發，詳見末段。</p>
+</header>
+
+<section>
+  <h2>評估判準</h2>
+  <p class="sub">四項判準，任一項不通過即降級。</p>
+  <ul class="crit">
+    <li><span class="k">業務相關性</span><span class="v">是否對應公文、預算、採購、政策研究、國際交流其中之一。</span></li>
+    <li><span class="k">重疊程度</span><span class="v">功能是否已被 nfa-gongwen、nfa-budget-doc、nfa-procurement、nfa-policy-slides、nfa-ems-research、nfa-overseas-report 涵蓋。</span></li>
+    <li><span class="k">文風相容性</span><span class="v">是否與繁體中文公文體例（三段式、極簡直述）相容，或反而破壞格式。</span></li>
+    <li><span class="k">觸發風險</span><span class="v">描述是否過於泛用，導致在撰寫公文時被錯誤啟用。</span></li>
+  </ul>
+</section>
+
+<section>
+  <h2>逐項評估</h2>
+  <p class="sub">各項標示附件原文功能、對應本科的實際用途，以及與既有 Skill 的關係。</p>
+
+  <div class="group g-a">
+    <div class="grouphead"><h3>建議採用</h3><span class="count">4 項</span></div>
+    <p class="groupnote">補足既有 Skill 未涵蓋的環節：來源查核、研究整併、工具治理、需求規格化。</p>
+
+    <div class="item">
+      <h4>04　Fact checker</h4>
+      <span class="cmd">/fact-checker</span>
+      <p class="orig">原文功能：逐條檢查草稿中的每一項主張，並回溯比對原始來源。</p>
+      <p><span class="tag">適用</span>本科文件涉及法規條號（《緊急醫療救護法》、《救護技術員管理辦法》）、預算金額、統計數據與國際課程規格，任一項誤植即產生行政責任。此 Skill 提供獨立查核層，與 nfa-review（法制、會計、倫理、長官視角）互補：nfa-review 檢視論理與立場，fact-checker 檢視事實與出處。</p>
+      <p><span class="tag">用法</span>簽稿定稿前、預算說明書送審前、研討會講義付印前執行一次。</p>
+    </div>
+
+    <div class="item">
+      <h4>05　Deep Research Analyzer</h4>
+      <span class="cmd">/deep-research-synthesizer</span>
+      <p class="orig">原文功能：將雜亂來源整併為附引註的摘要，且僅採用所引來源內容。</p>
+      <p><span class="tag">適用</span>國際 EMS 制度比較（NAEMT、ITLS、PHTLS、TCCC/TECC/PCC/CIT）常須同時處理官方課程綱要、期刊文獻與各國法規。「只用引註來源、不外插」的限制正是政策研究文件最需要的約束，可有效抑制模型自行補述。與 nfa-ems-research 分工：後者提供研究框架與比較維度，前者處理來源整併與引註紀律。</p>
+      <p><span class="tag">用法</span>院前輸血、CIT 制度、救護分級等主題的文獻整理階段。</p>
+    </div>
+
+    <div class="item">
+      <h4>03　Skill audit</h4>
+      <span class="cmd">/skill-audit</span>
+      <p class="orig">原文功能：盤點所有已安裝的 Claude Skill，找出功能重疊之處。</p>
+      <p><span class="tag">適用</span>本科已建置 8 項自建 Skill 與 1 項編排型 Skill（nfa-knowledge-flow）。Skill 數量增加後，觸發邊界模糊化是必然問題，例如「寫預算計畫書」可能同時觸發 nfa-budget-doc 與 nfa-gongwen。此 Skill 屬工具治理性質，本身不產出業務文件，但可維持整體架構清晰。</p>
+      <p><span class="tag">用法</span>每次新增 Skill 後執行一次；本次導入完成後應立即執行。</p>
+    </div>
+
+    <div class="item">
+      <h4>09　Prompt maker</h4>
+      <span class="cmd">/prompt-maker</span>
+      <p class="orig">原文功能：把零散的想法整理成清楚的規格，再開始產出。</p>
+      <p><span class="tag">適用</span>採購規格書與計畫書的品質，取決於需求描述是否完整。此 Skill 的價值不在於寫提示詞，而在於強制把模糊需求（例如「辦一場國際研討會」）轉為可執行規格（場次、對象、時數、講師資格、驗收標準），恰為 nfa-procurement 的前置作業。</p>
+      <p><span class="tag">用法</span>採購案研擬初期、跨機關協調前的需求釐清。</p>
+    </div>
+  </div>
+
+  <div class="group g-c">
+    <div class="grouphead"><h3>條件採用</h3><span class="count">4 項</span></div>
+    <p class="groupnote">功能可用，但須調整設定或與既有 Skill 擇一，否則產生重疊或格式衝突。</p>
+
+    <div class="item">
+      <h4>01　Grill me</h4>
+      <span class="cmd">/grill-me</span>
+      <p class="orig">原文功能：動手產出前，先以 10 至 15 個問題訪談使用者。</p>
+      <p><span class="tag">條件</span>功能與第 09 項高度重疊，兩者擇一即可，否則需求釐清階段會被重複追問。若選用本項，建議將題數下修至 5 至 8 題，並限定於高複雜度案件（年度預算、三年期採購案），日常公文不宜啟用。</p>
+    </div>
+
+    <div class="item">
+      <h4>12　Infographic Builder</h4>
+      <span class="cmd">/infographic-builder</span>
+      <p class="orig">原文功能：輸入文字，輸出一張 1080×1350 可直接發布的圖卡。</p>
+      <p><span class="tag">條件</span>1080×1350 為社群平臺直式比例，不符政府用途。須改為 A4 直式（研討會單頁說明、EMT 訓練海報）或 16:9（簡報插頁）。另須確認產出不含未經授權字型與圖庫素材。與 nfa-policy-slides 定位不同：後者產製完整簡報，本項產製單張視覺摘要，可並存。</p>
+    </div>
+
+    <div class="item">
+      <h4>07　Personal voice</h4>
+      <span class="cmd">/personal-voice</span>
+      <p class="orig">原文功能：學習使用者的真實文稿，再據以檢查每一份草稿。</p>
+      <p><span class="tag">條件</span>本科既有的自訂寫作風格（繁體中文臺灣用語、結論先行、表格優先、三段式公文）已履行相同職能。若導入，應以既有核准公文為樣本，並限定用於對外說明稿、研討會致詞稿等非公文文件；不宜讓其覆寫 nfa-gongwen 的格式規則。</p>
+    </div>
+
+    <div class="item">
+      <h4>08　How to</h4>
+      <span class="cmd">/how-to</span>
+      <p class="orig">原文功能：把「我想用 Claude 做某件事」拆解為逐步完成的流程。</p>
+      <p><span class="tag">條件</span>對個人已無太大效益，本科 AI 工作流架構已建置完成。實際價值在於科內同仁推廣：可作為新進人員的自助教學層，降低一對一指導成本。建議在內部教育訓練情境使用，不納入文件產製流程。</p>
+    </div>
+  </div>
+
+  <div class="group g-r">
+    <div class="grouphead"><h3>不建議導入</h3><span class="count">4 項</span></div>
+    <p class="groupnote">與公文體例衝突，或屬社群行銷用途，與公部門業務無涉。</p>
+
+    <div class="item">
+      <h4>02　Be a damn human</h4>
+      <span class="cmd">/be-a-damn-human</span>
+      <p class="orig">原文功能：拒絕模糊指令，先發問，再以「像個在乎的人」的方式回答。</p>
+      <p><span class="tag">不建議</span>「像人一樣說話」的語感導向與公文的中性、去人格化要求相反。且其描述極為泛用，極易在撰寫簽稿時被觸發，干擾 nfa-gongwen 的三段式輸出。前半段的「先問再答」功能已由第 09 項涵蓋。</p>
+    </div>
+
+    <div class="item">
+      <h4>06　Humanizer</h4>
+      <span class="cmd">/humanizer</span>
+      <p class="orig">原文功能：改寫為讀起來像真人所寫，去除破折號與機器腔。</p>
+      <p><span class="tag">不建議</span>其規則（避免破折號、避免制式語氣）係針對英文網路寫作設計，套用於中文公文無實益。公文的「制式感」為體例要求而非缺陷，去除後反而不合格式。觸發風險高，建議不安裝。</p>
+    </div>
+
+    <div class="item">
+      <h4>10　Linkedin hook</h4>
+      <span class="cmd">/linkedin-hook</span>
+      <p class="orig">原文功能：產出決定讀者是否往下讀的前兩行鉤子。</p>
+      <p><span class="tag">不建議</span>社群平臺個人品牌經營用途，與機關業務無對應場景。</p>
+    </div>
+
+    <div class="item">
+      <h4>11　Viral recipe</h4>
+      <span class="cmd">/viral-recipe</span>
+      <p class="orig">原文功能：逆向拆解某篇爆紅貼文的成因，再依同一公式重製。</p>
+      <p><span class="tag">不建議</span>同上。機關對外訊息以正確性與一致性為先，流量導向的寫作策略不適用。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>與既有 Skill 的關係</h2>
+  <p class="sub">僅列出有互動關係者；未列入表中之項目與既有架構無交集。</p>
+  <div class="tablewrap">
+  <table>
+    <thead>
+      <tr><th>新增項目</th><th>既有 Skill</th><th>關係</th><th>處置</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Fact checker</td><td>nfa-review</td><td class="mark m-add">互補</td><td>並存，nfa-review 查論理、本項查事實</td></tr>
+      <tr><td>Deep Research Analyzer</td><td>nfa-ems-research</td><td class="mark m-add">互補</td><td>並存，本項置於研究流程前段</td></tr>
+      <tr><td>Prompt maker</td><td>nfa-procurement</td><td class="mark m-add">前置</td><td>並存，作為規格書需求釐清階段</td></tr>
+      <tr><td>Grill me</td><td>Prompt maker（新增）</td><td class="mark m-dup">重疊</td><td>二擇一，建議保留 Prompt maker</td></tr>
+      <tr><td>Personal voice</td><td>自訂寫作風格設定</td><td class="mark m-dup">重疊</td><td>限用於非公文文件</td></tr>
+      <tr><td>Humanizer</td><td>nfa-gongwen</td><td class="mark m-dup">衝突</td><td>不安裝</td></tr>
+      <tr><td>Be a damn human</td><td>nfa-gongwen</td><td class="mark m-dup">衝突</td><td>不安裝</td></tr>
+      <tr><td>Infographic Builder</td><td>nfa-policy-slides</td><td class="mark m-add">互補</td><td>並存，須先調整輸出尺寸</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>導入順序</h2>
+  <p class="sub">分四階段，每階段完成後再進行下一階段，以便觀察觸發行為變化。</p>
+  <ol class="steps">
+    <li><b>先裝 Fact checker</b><span>單一功能、無觸發衝突、效益最直接。以一份既有簽稿實測查核品質。</span></li>
+    <li><b>再裝 Deep Research Analyzer</b><span>以院前輸血或 CIT 主題實測，確認引註格式可轉為本科研究報告體例。</span></li>
+    <li><b>加入 Prompt maker，並執行 Skill audit</b><span>兩者同時導入後立即盤點，確認與 8 項自建 Skill 的觸發邊界。</span></li>
+    <li><b>最後評估 Infographic Builder 與 How to</b><span>前者須改尺寸設定後測試，後者於科內教育訓練場景試用。</span></li>
+  </ol>
+</section>
+
+<section class="warn">
+  <h2>導入前應確認事項</h2>
+  <ul>
+    <li><b>來源與內容審視。</b>此 12 項為第三方個人整理，非 Anthropic 官方發布。安裝前應開啟各 Skill 的 SKILL.md 與所附腳本，確認無外部連線、無資料回傳行為。</li>
+    <li><b>公務資料處理。</b>未公開之預算數字、採購底價、廠商資料、個資，不得作為 Personal voice 的學習樣本或任何 Skill 的內建範例；樣本應先去識別化。</li>
+    <li><b>觸發衝突。</b>圖卡強調「自動觸發、不必詢問」，但泛用型 Skill（Humanizer、Be a damn human）的描述會與公文情境重疊。建議逐項導入，而非一次全數上傳。</li>
+    <li><b>著作權。</b>Infographic Builder 產出的圖卡若用於對外文宣或研討會材料，須確認所用字型與素材授權範圍涵蓋政府機關公開使用。</li>
+  </ul>
+</section>
+
+<footer>
+  評估基準日：2026 年 9 月 8 日。附件圖卡原始出處標示為 how-to-ai.guide 電子報。本評估僅就與緊急救護科業務之適用性為之，不涉及各 Skill 之技術品質保證。
+</footer>
+
+</div>
+</body>
+</html>

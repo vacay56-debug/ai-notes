@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026 十大 AI 能力盤點｜公部門實務版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#141C26;
+  --ink-soft:#28333F;
+  --paper:#FBF9F5;
+  --sand:#E9E2D6;
+  --seal:#A5192B;
+  --jade:#2C6A5F;
+  --grey:#6E6A62;
+  --rule:#D6CFC2;
+  --maxw:1080px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Noto Sans TC",system-ui,sans-serif;
+  font-weight:400;
+  font-size:16.5px;
+  line-height:1.9;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:"Noto Serif TC",serif;line-height:1.35;margin:0}
+p{margin:0 0 1em}
+a{color:var(--seal)}
+
+/* ---------- 版心 ---------- */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+/* ---------- 封面 ---------- */
+.cover{background:var(--ink);color:var(--paper);padding:76px 0 64px;position:relative;overflow:hidden}
+.cover::after{
+  content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;
+  border:1px solid rgba(251,249,245,.14);transform:rotate(18deg);
+}
+.cover .kick{font-size:14px;letter-spacing:.22em;color:#9FB0BF;margin-bottom:26px}
+.cover h1{
+  font-size:clamp(38px,7vw,74px);font-weight:900;letter-spacing:-.01em;
+  margin-bottom:10px;position:relative;z-index:1;
+}
+.cover h1 .num{color:#E8B44A}
+.cover .sub{
+  font-family:"Noto Serif TC",serif;font-size:clamp(18px,2.6vw,25px);
+  font-weight:400;color:#C7D2DB;margin-bottom:34px;position:relative;z-index:1;
+}
+.cover .lede{max-width:44em;color:#B9C4CD;font-weight:300;font-size:16px;position:relative;z-index:1}
+.metabar{
+  display:flex;flex-wrap:wrap;gap:0;margin-top:40px;border-top:1px solid rgba(251,249,245,.18);
+  position:relative;z-index:1;
+}
+.metabar div{
+  flex:1 1 150px;padding:18px 20px 4px 0;border-right:1px solid rgba(251,249,245,.12);
+}
+.metabar div:last-child{border-right:0}
+.metabar b{display:block;font-family:"Noto Serif TC",serif;font-size:26px;font-weight:600;color:#fff}
+.metabar span{font-size:13px;color:#8FA0AE}
+
+/* ---------- 導讀 ---------- */
+.intro{padding:62px 0 10px}
+.note{
+  border-left:3px solid var(--seal);background:#F3EDE6;
+  padding:18px 22px;font-size:15px;color:#4A4239;margin:0 0 40px;
+}
+.note b{color:var(--seal)}
+
+h2.sec{
+  font-size:27px;font-weight:600;margin:0 0 6px;
+}
+.sec-sub{color:var(--grey);font-size:15px;margin-bottom:28px}
+
+/* ---------- 分層圖 ---------- */
+.layers{display:grid;gap:14px;margin-bottom:56px}
+.layer{
+  display:grid;grid-template-columns:130px 1fr;gap:22px;align-items:start;
+  border:1px solid var(--rule);background:#fff;padding:18px 20px;
+}
+.layer-name{font-family:"Noto Serif TC",serif;font-weight:600;font-size:17px;color:var(--ink)}
+.layer-name small{display:block;font-family:"Noto Sans TC";font-weight:400;font-size:12.5px;color:var(--grey);margin-top:2px}
+.layer-body{font-size:14.5px;color:#3C4550}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.chip{
+  font-size:12.5px;background:var(--sand);color:#4A4239;padding:3px 10px;
+  border:1px solid #DCD2C1;text-decoration:none;
+}
+.chip:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* ---------- 目錄 ---------- */
+.toc{display:grid;grid-template-columns:repeat(2,1fr);gap:0 36px;margin-bottom:64px;border-top:1px solid var(--rule)}
+.toc a{
+  display:flex;gap:14px;align-items:baseline;padding:11px 2px;
+  border-bottom:1px solid var(--rule);text-decoration:none;color:var(--ink);font-size:15.5px;
+}
+.toc a:hover{background:#F2ECE3}
+.toc i{font-style:normal;font-family:"Noto Serif TC";color:var(--seal);font-weight:600;min-width:22px}
+.toc em{font-style:normal;margin-left:auto;font-size:12px;color:var(--grey)}
+
+/* ---------- 條目 ---------- */
+.entry{padding:46px 0;border-top:2px solid var(--ink)}
+.entry-head{display:grid;grid-template-columns:76px 1fr;gap:24px;align-items:start}
+.seal{
+  width:56px;height:56px;background:var(--seal);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Noto Serif TC",serif;font-weight:900;font-size:28px;line-height:1;
+}
+.entry h3{font-size:clamp(25px,3.6vw,33px);font-weight:900;letter-spacing:-.01em}
+.entry .en{font-family:"Noto Sans TC";font-weight:400;font-size:14px;color:var(--grey);margin-top:4px;letter-spacing:.02em}
+.entry-body{margin-left:100px}
+.lead{font-family:"Noto Serif TC",serif;font-size:19px;line-height:1.85;color:var(--ink-soft);margin:22px 0 26px}
+
+.spec{border-top:1px solid var(--rule)}
+.spec dl{display:grid;grid-template-columns:118px 1fr;margin:0;border-bottom:1px solid var(--rule)}
+.spec dt{
+  padding:14px 14px 14px 0;font-size:14px;font-weight:500;color:var(--seal);
+  border-right:1px solid var(--rule);
+}
+.spec dd{margin:0;padding:14px 0 14px 18px;font-size:15.5px}
+.spec dd ul{margin:0;padding-left:1.15em}
+.spec dd li{margin-bottom:5px}
+.spec dd li:last-child{margin-bottom:0}
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+.tool{border:1px solid var(--rule);background:#fff;padding:3px 11px;font-size:13px;color:#3C4550}
+.tool b{font-weight:500}
+.tool span{color:var(--grey);font-size:12px}
+
+.apply{border-left:3px solid var(--jade);background:#EDF3F1;padding:16px 20px;margin-top:26px}
+.apply h4{font-size:15.5px;color:var(--jade);margin-bottom:8px;font-weight:600}
+.apply ol{margin:0;padding-left:1.25em;font-size:15px}
+.apply li{margin-bottom:6px}
+.apply li:last-child{margin-bottom:0}
+
+.pitfall{border-left:3px solid var(--seal);background:#F6EDEC;padding:16px 20px;margin-top:14px;font-size:15px}
+.pitfall h4{font-size:15.5px;color:var(--seal);margin-bottom:8px;font-weight:600}
+.pitfall ul{margin:0;padding-left:1.15em}
+.pitfall li{margin-bottom:6px}
+.pitfall li:last-child{margin-bottom:0}
+
+.first-step{
+  margin-top:14px;padding:14px 18px;background:var(--ink);color:#E6ECF1;font-size:15px;
+}
+.first-step b{color:#E8B44A;font-weight:500;margin-right:8px;font-family:"Noto Serif TC"}
+
+/* ---------- 路徑 ---------- */
+.road{margin:70px 0 0}
+.stage{display:grid;grid-template-columns:96px 1fr;gap:24px;border-top:1px solid var(--rule);padding:22px 0}
+.stage:last-child{border-bottom:1px solid var(--rule)}
+.stage-t{font-family:"Noto Serif TC",serif;font-weight:600;font-size:17px;color:var(--seal)}
+.stage-t small{display:block;font-family:"Noto Sans TC";font-size:12.5px;color:var(--grey);font-weight:400}
+.stage ul{margin:0;padding-left:1.15em;font-size:15px}
+.stage li{margin-bottom:6px}
+
+/* ---------- 表 ---------- */
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:8px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{background:var(--ink);color:#fff;font-weight:500;font-size:13.5px;font-family:"Noto Sans TC"}
+tbody tr:nth-child(even){background:#F4EFE8}
+td:first-child{font-weight:500;white-space:nowrap}
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* ---------- 名詞 ---------- */
+.gloss{columns:2;column-gap:40px;font-size:14.5px;margin-top:8px}
+.gloss div{break-inside:avoid;padding:9px 0;border-bottom:1px solid var(--rule)}
+.gloss b{font-weight:500}
+.gloss span{color:var(--grey);display:block;font-size:13.5px}
+
+footer{background:var(--ink);color:#93A3B1;font-size:13.5px;margin-top:80px;padding:34px 0}
+footer b{color:#E6ECF1;font-weight:500;font-family:"Noto Serif TC"}
+
+.totop{
+  position:fixed;right:20px;bottom:20px;background:var(--ink);color:#fff;
+  width:44px;height:44px;display:flex;align-items:center;justify-content:center;
+  text-decoration:none;font-size:18px;opacity:.88;
+}
+.totop:hover{opacity:1;color:#fff}
+
+@media(max-width:820px){
+  body{font-size:16px}
+  .toc{grid-template-columns:1fr}
+  .entry-body{margin-left:0}
+  .entry-head{grid-template-columns:48px 1fr;gap:16px}
+  .seal{width:44px;height:44px;font-size:22px}
+  .spec dl{grid-template-columns:1fr}
+  .spec dt{border-right:0;padding-bottom:0;border-bottom:0}
+  .spec dd{padding-left:0;padding-top:6px}
+  .layer{grid-template-columns:1fr;gap:10px}
+  .stage{grid-template-columns:1fr;gap:8px}
+  .gloss{columns:1}
+  .metabar div{flex:1 1 46%;border-right:0}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="wrap">
+    <div class="kick">能力盤點與學習路徑｜公部門實務版</div>
+    <h1><span class="num">10</span> 項 AI 能力</h1>
+    <div class="sub">2026 年值得投入時間學的，以及為什麼</div>
+    <p class="lede">這不是工具清單，而是一張能力地圖。十項能力彼此有依賴關係：底層沒打好，上層的工具買再多也只是換個地方手動操作。本文逐項說明「是什麼、何時用、用什麼工具、在政府機關可以怎麼落地、最常見的失敗點」。</p>
+    <div class="metabar">
+      <div><b>10</b><span>核心能力</span></div>
+      <div><b>4</b><span>能力層級</span></div>
+      <div><b>90</b><span>天學習路徑（日）</span></div>
+      <div><b>30+</b><span>對應工具</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap intro">
+
+  <div class="note">
+    <b>原圖勘誤：</b>原始資訊圖中第 1 項「工作流自動化」與第 5 項「提示工程」的 WHAT IT IS／WHEN TO USE IT 文字完全相同，應為排版重複錯誤。本文已依各項能力的實際定義重寫。另，工具欄位變動極快，表列以 2026 年上半年常見者為準，請以實際採購與資安規範為最終依據。
+  </div>
+
+  <h2 class="sec">四個層級：先後順序比清單重要</h2>
+  <p class="sec-sub">十項能力不是並列的十個選項，而是由下往上疊。建議照層級投入時間。</p>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-name">第一層　地基<small>不會這層，其他都白做</small></div>
+      <div class="layer-body">
+        決定輸出品質的是提問方式，不是模型。同一個模型，敘述清楚與否的落差往往大於不同模型之間的落差。
+        <div class="chips"><a class="chip" href="#s5">05 提示工程</a><a class="chip" href="#s1">01 工作流自動化</a></div>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-name">第二層　資料與治理<small>讓 AI 用「你的」資料</small></div>
+      <div class="layer-body">
+        通用模型不知道貴機關的法規、SOP 與歷年函釋。把自有知識接進來，並持續量測成本與正確率，AI 才可能進入正式業務。
+        <div class="chips"><a class="chip" href="#s9">09 RAG 檢索增強生成</a><a class="chip" href="#s4">04 工具堆疊</a><a class="chip" href="#s6">06 LLM 管理</a></div>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-name">第三層　產出<small>把能力換成交付物</small></div>
+      <div class="layer-body">
+        文件、簡報、教材、影像與語音處理，是多數人最先有感的部分，也是最容易被要求提高產量的部分。
+        <div class="chips"><a class="chip" href="#s7">07 內容生成</a><a class="chip" href="#s8">08 多模態 AI</a><a class="chip" href="#s10">10 AEO／GEO</a></div>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-name">第四層　自主執行<small>從「幫我寫」到「幫我做完」</small></div>
+      <div class="layer-body">
+        AI 自行規劃步驟、呼叫工具、檢查結果。報酬最高、風險也最高，必須建立在前三層之上，且需要明確的權限邊界與人工覆核點。
+        <div class="chips"><a class="chip" href="#s2">02 AI 代理人</a><a class="chip" href="#s3">03 代理式 AI</a></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="sec">目錄</h2>
+  <p class="sec-sub">依原圖編號排列，右側標示所屬層級。</p>
+  <nav class="toc">
+    <a href="#s1"><i>01</i>工作流自動化<em>地基</em></a>
+    <a href="#s2"><i>02</i>AI 代理人<em>自主執行</em></a>
+    <a href="#s3"><i>03</i>代理式 AI<em>自主執行</em></a>
+    <a href="#s4"><i>04</i>AI 工具堆疊<em>資料與治理</em></a>
+    <a href="#s5"><i>05</i>提示工程<em>地基</em></a>
+    <a href="#s6"><i>06</i>LLM 管理<em>資料與治理</em></a>
+    <a href="#s7"><i>07</i>AI 內容生成<em>產出</em></a>
+    <a href="#s8"><i>08</i>多模態 AI<em>產出</em></a>
+    <a href="#s9"><i>09</i>RAG 檢索增強生成<em>資料與治理</em></a>
+    <a href="#s10"><i>10</i>AEO／GEO<em>產出</em></a>
+  </nav>
+
+<!-- 01 -->
+<section class="entry" id="s1">
+  <div class="entry-head">
+    <div class="seal">1</div>
+    <div>
+      <h3>工作流自動化</h3>
+      <div class="en">Workflow Automation</div>
+    </div>
+  </div>
+  <div class="entry-body">
+    <p class="lead">把重複、規則明確、不需判斷的工作交給系統，讓人只處理需要判斷的部分。核心不是「串工具」，而是先把流程講清楚：什麼事件觸發、資料從哪來、經過哪些轉換、最後落在哪裡。</p>
+
+    <div class="spec">
+      <dl><dt>是什麼</dt><dd>以「觸發（Trigger）－ 條件 － 動作（Action）」為骨架，讓不同系統之間自動傳遞資料。不涉及 AI 也能運作，加入 AI 後可處理非結構化內容（如自由文字、附件）。</dd></dl>
+      <dl><dt>何時使用</dt><dd>一件事每週做三次以上、步驟固定、錯一次的代價可承受。若流程本身還在變動，先別自動化，會把錯誤放大。</dd></dl>
+      <dl><dt>關鍵概念</dt><dd><ul>
+        <li>觸發器與排程：事件驅動（收到信件）與時間驅動（每日 08:00）</li>
+        <li>網頁鉤子（Webhook）：系統間即時通知的標準做法</li>
+        <li>冪等性（Idempotency）：重跑一次不會產生重複資料</li>
+        <li>錯誤處理與重試：失敗要能通知人，而不是靜默漏掉</li>
+      </ul></dd></dl>
+      <dl><dt>代表工具</dt><dd><div class="tools">
+        <span class="tool"><b>Zapier</b> <span>上手最快、模板多</span></span>
+        <span class="tool"><b>Make</b> <span>視覺化流程、分支處理強</span></span>
+        <span class="tool"><b>n8n</b> <span>可自架，資料不出機關</span></span>
+        <span class="tool"><b>Power Automate</b> <span>與既有 Microsoft 365 環境相容</span></span>
+      </div></dd></dl>
+    </div>
+
+    <div class="apply">
+      <h4>在機關業務的可能落地</h4>
+      <ol>
+        <li>各縣市每月回報的統計表自動彙整、格式檢核並產生異常清單，承辦只看有問題的那幾筆。</li>
+        <li>研討會報名表單填答後，自動寄發確認信、建立名冊、同步至簽到系統。</li>
+        <li>採購案期程節點（公告、開標、決標、驗收）自動提醒，避免逾期。</li>
+      </ol>
+    </div>
+
+    <div class="pitfall">
+      <h4>常見失敗點</h4>
+      <ul>
+        <li>把「爛流程」自動化，只是讓錯誤發生得更快。先簡化流程，再自動化。</li>
+        <li>雲端自動化平台會經手資料，涉及個人資料或公務敏感資訊者，須先確認資安與委外規範，必要時改採可自架方案。</li>
+        <li>沒有人維護。自動化流程需指定維護人與異常通報管道，否則半年後壞掉沒人知道。</li>
+      </ul>
+    </div>
+
+    <div class="first-step"><b>第一步</b>挑一件你每週固定做、且完全不需思考的事，把它的步驟寫成 5 行以內的文字，再去找工具。</div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section class="entry" id="s2">
+  <div class="entry-head">
+    <div class="seal">2</div>
+    <div>
+      <h3>AI 代理人</h3>
+      <div class="en">AI Agents</div>
+    </div>
+  </div>
+  <div class="entry-body">
+    <p class="lead">能端到端把一件任務做完的 AI，而不只是回答一個問題。你交付的是目標（「查出這五個國家的救護技術員分級制度並做成比較表」），不是步驟。</p>
+
+    <div class="spec">
+      <dl><dt>是什麼</dt><dd>具備工具使用能力的模型：能搜尋、讀檔、呼叫應用程式介面（Application Programming Interface, API）、寫入檔案，並在多輪之間保留任務狀態，直到達成目標或撞到邊界。</dd></dl>
+      <dl><dt>何時使用</dt><dd>原本會交給助理或實習生的工作：資料蒐集、初步整理、格式轉換、例行查核。任務要有明確的完成標準。</dd></dl>
+      <dl><dt>關鍵概念</dt><dd><ul>
+        <li>工具使用（Tool Use）：模型自行決定何時呼叫外部功能</li>
+        <li>權限邊界：能讀什麼、能寫什麼、絕對不能碰什麼</li>
+        <li>人機交接點（Human-in-the-loop）：哪一步一定要人按下確認</li>
+        <li>可追溯性：每一步做了什麼，要留得下紀錄供覆核</li>
+      </ul></dd></dl>
+      <dl><dt>代表工具</dt><dd><div class="tools">
+        <span class="tool"><b>OpenAI Agents</b></span>
+        <span class="tool"><b>Claude Agent SDK</b></span>
+        <span class="tool"><b>各家聊天介面的代理／研究模式</b> <span>不需寫程式</span></span>
+      </div></dd></dl>
+    </div>
+
+    <div class="apply">
+      <h4>在機關業務的可能落地</h4>
+      <ol>
+        <li>國際制度掃描：指定主題與國家清單，自動蒐集官方來源、摘要重點、標註出處，人再做判斷與取捨。</li>
+        <li>大量文件初篩：從數十份廠商投標文件中，逐項對照資格條件產出檢核表，供評選前置作業使用。</li>
+        <li>會議資料整備：依議程自動調出相關法規條文、歷次會議結論與統計數據，彙整成一份會前包。</li>
+      </ol>
+    </div>
+
+    <div class="pitfall">
+      <h4>常見失敗點</h4>
+      <ul>
+        <li>把「有出處」當成「正確」。代理人會蒐集到過時或非官方的資料，涉及法規與數據者必須人工回查原始來源。</li>
+        <li>權限開太大。不要一開始就給它寄信、送出表單、刪除檔案的權限。先讓它只讀不寫。</li>
+        <li>目標描述模糊，導致它自行腦補範圍，做了一堆不需要的東西。</li>
+      </ul>
+    </div>
+
+    <div class="first-step"><b>第一步</b>先用唯讀任務練習：給一個查找＋整理的題目，全程檢查它的每一個出處。</div>
+  </div>
+</section>
+
+<!-- 03 -->
+<section class="entry" id="s3">
+  <div class="entry-head">
+    <div class="seal">3</div>
+    <div>
+      <h3>代理式 AI</h3>
+      <div class="en">Agentic AI</div>
+    </div>
+  </div>
+  <div class="entry-body">
+    <p class="lead">能自行規劃、執行並自我修正的 AI，而非照固定腳本跑。與第 2 項的差別在於：「AI 代理人」是產品形態，「代理式」是能力特性——遇到失敗會改變做法，而不是原地重複。</p>
+
+    <div class="spec">
+      <dl><dt>是什麼</dt><dd>模型在執行中形成計畫、執行、觀察結果、修正計畫的循環。當第一種方法行不通，它會換方法，而不是回報錯誤就停住。</dd></dl>
+      <dl><dt>何時使用</dt><dd>步驟無法事先窮舉的複雜任務：程式開發、資料清理、跨系統疑難排解、需要反覆嘗試的研究工作。</dd></dl>
+      <dl><dt>關鍵概念</dt><dd><ul>
+        <li>規劃－執行－反思循環：自我檢查是關鍵差異</li>
+        <li>停止條件：避免無限嘗試消耗成本</li>
+        <li>沙箱環境：讓它在隔離環境試錯，不影響正式檔案</li>
+        <li>與工作流自動化的分工：規則明確用自動化，需判斷才用代理式</li>
+      </ul></dd></dl>
+      <dl><dt>代表工具</dt><dd><div class="tools">
+        <span class="tool"><b>Claude Code</b> <span>終端機內的代理式開發</span></span>
+        <span class="tool"><b>DSPy</b> <span>提示與流程的程式化最佳化</span></span>
+        <span class="tool"><b>各類編碼代理</b></span>
+      </div></dd></dl>
+    </div>
+
+    <div class="apply">
+      <h4>在機關業務的可能落地</h4>
+      <ol>
+        <li>把數十份格式不一的縣市回報檔（Excel、PDF、掃描件）整併成單一標準格式，過程中自行處理欄位對不上的例外。</li>
+        <li>建置內部小工具：如訓練時數試算、EMT 分級換證條件自我檢核頁面，由 AI 撰寫、測試並修正。</li>
+        <li>資料一致性稽核：跨年度比對數據，找出異常值並回報可能原因。</li>
+      </ol>
+    </div>
+
+    <div class="pitfall">
+      <h4>常見失敗點</h4>
+      <ul>
+        <li>自我修正也可能修正到錯的方向，且說得很有信心。最終產物一定要有人驗收。</li>
+        <li>沒設停止條件，任務失控並產生大量無用中間檔案與成本。</li>
+        <li>直接讓它操作正式資料夾。務必先複製一份在隔離目錄操作。</li>
+      </ul>
+    </div>
+
+    <div class="first-step"><b>第一步</b>找一個「你知道正確答案」的任務讓它做，用來校準它的可靠度，而不是拿未知任務開始。</div>
+  </div>
+</section>
+
+<!-- 04 -->
+<section class="entry" id="s4">
+  <div class="entry-head">
+    <div class="seal">4</div>
+    <div>
+      <h3>AI 工具堆疊</h3>
+      <div class="en">AI Tool Stacking</div>
+    </div>
+  </div>
+  <div class="entry-body">
+    <p class="lead">把分散的工具組成一套會互相傳遞資料的系統。重點不是工具多，而是資料只有一份、由誰負責、傳到哪裡去。工具愈多而沒有主從關係，管理成本會反過來吃掉效率。</p>
+
+    <div class="spec">
+      <dl><dt>是什麼</dt><dd>以單一事實來源（Single Source of Truth）為中心，周邊工具各司其職：一個地方存資料、一個地方跑流程、一個地方對外呈現。</dd></dl>
+      <dl><dt>何時使用</dt><dd>當你開始在三個以上的地方重複貼同一份資料，或同一份名冊出現兩個版本時。</dd></dl>
+      <dl><dt>關鍵概念</dt><dd><ul>
+        <li>單一事實來源：任何欄位只在一處被修改</li>
+        <li>職責分工：資料庫、流程引擎、呈現層不要混用</li>
+        <li>介接方式：原生整合 &gt; 自動化平台 &gt; 手動匯出入</li>
+        <li>可攜性：資料能不能整批匯出，決定你未來換不換得掉</li>
+      </ul></dd></dl>
+      <dl><dt>代表工具</dt><dd><div class="tools">
+        <span class="tool"><b>Notion</b> <span>文件與知識庫</span></span>
+        <span class="tool"><b>Airtable</b> <span>結構化資料庫</span></span>
+        <span class="tool"><b>ClickUp</b> <span>專案與任務追蹤</span></span>
+        <span class="tool"><b>Zapier／n8n</b> <span>系統之間的黏著劑</span></span>
+        <span class="tool"><b>Obsidian</b> <span>本機知識庫，資料不外流</span></span>
+      </div></dd></dl>
+    </div>
+
+    <div class="apply">
+      <h4>在機關業務的可能落地</h4>
+      <ol>
+        <li>國際研討會籌辦：講者名單、議程、報名、接待、核銷各自為政 → 改以一份主資料表驅動所有輸出（議程手冊、名牌、簽到表）。</li>
+        <li>年度計畫管控：預算科目、執行進度、採購節點放在同一張表，簡報與報表由此自動生成，不再手抄。</li>
+        <li>訓練體系管理：師資資格、課程場次、學員名冊、時數紀錄互相關聯，換證審查時可一鍵調閱。</li>
+      </ol>
+    </div>
+
+    <div class="pitfall">
+      <h4>常見失敗點</h4>
+      <ul>
+        <li>工具蒐集症。每個月換一套新工具，資料散在十個地方，比純用 Excel 還糟。</li>
+        <li>沒有指定主檔。兩份名單都在改，最後沒人知道哪份是對的。</li>
+        <li>公務資料放在個人帳號的商用雲端服務上，離職或帳號異動即失聯，且涉及公文書管理規範。</li>
+      </ul>
+    </div>
+
+    <div class="first-step"><b>第一步</b>盤點你手上重複出現三次以上的同一份資料，先讓它只存在一個地方。</div>
+  </div>
+</section>
+
+<!-- 05 -->
+<section class="entry" id="s5">
+  <div class="entry-head">
+    <div class="seal">5</div>
+    <div>
+      <h3>提示工程</h3>
+      <div class="en">Prompt Engineering</div>
+    </div>
+  </div>
+  <div class="entry-body">
+    <p class="lead">平庸輸出與可直接使用的答案，差別多半在提問方式。把腦中的隱含條件寫出來——對象是誰、用途為何、格式怎樣、什麼不要——模型才有辦法對準。這是投入產出比最高的一項能力，且完全免費。</p>
+
+    <div class="spec">
+      <dl><dt>是什麼</dt><dd>以結構化方式描述任務，使模型的輸出穩定、可預測、可重複使用。好的提示本身就是一份規格書。</dd></dl>
+      <dl><dt>何時使用</dt><dd>每一次。尤其是同一類產出你會做很多次時（公文、簡報、摘要），值得把提示存成範本重複使用。</dd></dl>
+      <dl><dt>五個要素</dt><dd><ul>
+        <li><b>角色與對象</b>：誰在寫、寫給誰看（首長？縣市局？外賓？）</li>
+        <li><b>任務</b>：一句話說明要產出什麼，動詞明確</li>
+        <li><b>脈絡</b>：背景、限制、法規依據、既有資料</li>
+        <li><b>格式</b>：段落結構、字數、是否須三段式、要不要表格</li>
+        <li><b>範例</b>：給一份過去寫得好的成品，效果遠勝十句形容詞</li>
+      </ul></dd></dl>
+      <dl><dt>進階技巧</dt><dd><ul>
+        <li>少量範例提示（Few-shot）：附 1～3 個範例定調風格</li>
+        <li>要求先列大綱、確認後再展開，避免一次寫歪整篇</li>
+        <li>指定「不要做什麼」：不要客套語、不要自行編造數據</li>
+        <li>要求標示不確定處，而非硬掰完整答案</li>
+      </ul></dd></dl>
+      <dl><dt>代表工具</dt><dd><div class="tools">
+        <span class="tool"><b>Claude</b></span><span class="tool"><b>ChatGPT</b></span>
+        <span class="tool"><b>Gemini</b></span><span class="tool"><b>Perplexity</b> <span>偏檢索型問答</span></span>
+      </div></dd></dl>
+    </div>
+
+    <div class="apply">
+      <h4>在機關業務的可能落地</h4>
+      <ol>
+        <li>公文提示範本：固定寫明三段式架構（主旨、說明、辦法）、行文對象、法規依據、字數上限，產出即可直接進入修稿階段。</li>
+        <li>會議紀錄轉決議：指定輸出「決議事項／辦理機關／期限」三欄表格，取代逐字整理。</li>
+        <li>外文資料摘要：要求保留原文專有名詞並附中英對照，避免譯名不一致。</li>
+      </ol>
+    </div>
+
+    <div class="pitfall">
+      <h4>常見失敗點</h4>
+      <ul>
+        <li>把提示寫成願望清單（「寫得專業一點」），沒有可檢驗的標準。改成「不超過 400 字、分三段、每段首句即結論」。</li>
+        <li>一次塞進五個不相關的任務，模型會顧此失彼。拆開來問。</li>
+        <li>好不容易調出好用的提示卻沒存起來，下次從零開始。</li>
+      </ul>
+    </div>
+
+    <div class="first-step"><b>第一步</b>把你最常寫的那一類文件，做成一份含五要素的提示範本，存在隨手可取的地方。</div>
+  </div>
+</section>
+
+<!-- 06 -->
+<section class="entry" id="s6">
+  <div class="entry-head">
+    <div class="seal">6</div>
+    <div>
+      <h3>大型語言模型管理</h3>
+      <div class="en">LLM Management</div>
+    </div>
+  </div>
+  <div class="entry-body">
+    <p class="lead">當 AI 從「偶爾用一下」變成業務的一部分，就必須能回答三個問題：花了多少錢、答得準不準、出錯時怎麼發現。沒有量測，就無法對外說明成效，也無從編列預算。</p>
+
+    <div class="spec">
+      <dl><dt>是什麼</dt><dd>對模型的成本、正確率與回應品質建立可觀測性（Observability）與評測機制，讓 AI 應用可被管理而非憑感覺。</dd></dl>
+      <dl><dt>何時使用</dt><dd>當 AI 產出開始影響對外文件、對民眾的回覆，或每月費用需要編列與核銷時。</dd></dl>
+      <dl><dt>關鍵概念</dt><dd><ul>
+        <li>評測集（Evaluation Set）：準備 20～50 題含標準答案的題庫，每次調整後重跑</li>
+        <li>詞元（Token）成本：輸入與輸出分別計價，長文件是主要成本來源</li>
+        <li>模型選型：簡單任務用小模型，複雜推理才用旗艦模型</li>
+        <li>版本管理：提示與模型版本都要記錄，否則無法回溯品質變化</li>
+        <li>幻覺率追蹤：針對你的實際使用情境量測，而非引用廠商公布的通用數據</li>
+      </ul></dd></dl>
+      <dl><dt>代表工具</dt><dd><div class="tools">
+        <span class="tool"><b>LangSmith</b> <span>追蹤與評測</span></span>
+        <span class="tool"><b>TruLens</b> <span>回應品質評估</span></span>
+        <span class="tool"><b>各家平台用量儀表板</b></span>
+      </div></dd></dl>
+    </div>
+
+    <div class="apply">
+      <h4>在機關業務的可能落地</h4>
+      <ol>
+        <li>法規問答評測：用 30 題實際承辦常見問題建立題庫，量測回答正確率，作為是否擴大導入的依據。</li>
+        <li>年度預算編列：以實際用量推估次年經費，並在計畫書中呈現單位成本與效益。</li>
+        <li>導入前後對照：同一項作業導入前需時幾小時、導入後幾小時、錯誤率變化，作為成果報告素材。</li>
+      </ol>
+    </div>
+
+    <div class="pitfall">
+      <h4>常見失敗點</h4>
+      <ul>
+        <li>只憑「感覺變好了」就擴大使用，無法應付督導查核與成效評估。</li>
+        <li>長文件反覆全文送入，成本暴增卻沒察覺。</li>
+        <li>模型或提示更新後未重測，品質默默下滑。</li>
+      </ul>
+    </div>
+
+    <div class="first-step"><b>第一步</b>寫下 20 題你業務上最常問的問題與標準答案，存成一份試算表。這就是你的評測集。</div>
+  </div>
+</section>
+
+<!-- 07 -->
+<section class="entry" id="s7">
+  <div class="entry-head">
+    <div class="seal">7</div>
+    <div>
+      <h3>AI 內容生成</h3>
+      <div class="en">AI Content Generation</div>
+    </div>
+  </div>
+  <div class="entry-body">
+    <p class="lead">不必擴編團隊也能維持穩定產量。對機關而言，價值不在「產出更多」，而在讓宣導與教材的產製不再卡在一兩個人身上，同時維持一致的用語與視覺調性。</p>
+
+    <div class="spec">
+      <dl><dt>是什麼</dt><dd>以 AI 協助完成文稿、圖像、簡報、教材與社群素材的初稿與變體產製，人力集中於審稿、事實查核與定調。</dd></dl>
+      <dl><dt>何時使用</dt><dd>需要持續、規律產出且格式重複的內容：宣導貼文、教材講義、簡報、新聞稿、年報。</dd></dl>
+      <dl><dt>關鍵概念</dt><dd><ul>
+        <li>風格指南：把用語規範、禁用詞、標點與譯名寫成文件供 AI 參照</li>
+        <li>初稿而非定稿：AI 負責 0 到 70 分，人負責 70 到 100 分</li>
+        <li>一稿多用：同一份內容改寫成簡報、懶人包、新聞稿三種形式</li>
+        <li>事實查核責任：對外發布的數據與法條，須由承辦逐項核對</li>
+      </ul></dd></dl>
+      <dl><dt>代表工具</dt><dd><div class="tools">
+        <span class="tool"><b>Gamma</b> <span>簡報與網頁快速成形</span></span>
+        <span class="tool"><b>Canva</b> <span>版面與視覺素材</span></span>
+        <span class="tool"><b>各家聊天模型</b> <span>文稿主力</span></span>
+        <span class="tool"><b>整合型行銷工具</b></span>
+      </div></dd></dl>
+    </div>
+
+    <div class="apply">
+      <h4>在機關業務的可能落地</h4>
+      <ol>
+        <li>教材同步產製：一份訓練教材同時產出講師手冊、學員講義、測驗題庫與投影片。</li>
+        <li>政策懶人包：把冗長的計畫書轉為民眾看得懂的圖文說明與社群素材。</li>
+        <li>研討會素材：議程說明、講者介紹、會後新聞稿以同一份資料為本，避免版本不一致。</li>
+      </ol>
+    </div>
+
+    <div class="pitfall">
+      <h4>常見失敗點</h4>
+      <ul>
+        <li>AI 生成的法條條號、統計數字與機關名稱常有誤，對外文件必須逐項回查。</li>
+        <li>通篇 AI 腔：大量「不僅⋯更是」「賦能」「深化」，讀者一眼看得出來。設定禁用詞。</li>
+        <li>未經授權的圖像素材用於正式文宣，衍生著作權爭議。</li>
+      </ul>
+    </div>
+
+    <div class="first-step"><b>第一步</b>整理一份 1 頁的用語規範（慣用詞、禁用詞、譯名對照），每次生成時一併附上。</div>
+  </div>
+</section>
+
+<!-- 08 -->
+<section class="entry" id="s8">
+  <div class="entry-head">
+    <div class="seal">8</div>
+    <div>
+      <h3>多模態 AI</h3>
+      <div class="en">Multimodal AI</div>
+    </div>
+  </div>
+  <div class="entry-body">
+    <p class="lead">在同一個流程中處理文字、影像、語音與程式碼。對公部門最直接的價值是：紙本、掃描件、照片、會議錄音這些原本要人工轉錄的東西，現在可以直接餵給模型。</p>
+
+    <div class="spec">
+      <dl><dt>是什麼</dt><dd>模型可同時理解與生成多種型態的資料，不需要先由人工轉成純文字。</dd></dl>
+      <dl><dt>何時使用</dt><dd>來源資料不是乾淨文字時：掃描公文、手寫表單、現場照片、錄音檔、簡報截圖。</dd></dl>
+      <dl><dt>關鍵概念</dt><dd><ul>
+        <li>影像理解：讀表格、看圖說明、辨識版面結構</li>
+        <li>語音轉文字與摘要：會議錄音直接產出紀錄初稿</li>
+        <li>跨型態轉換：文字大綱轉圖解、圖表轉文字說明</li>
+        <li>品質前提：來源解析度與清晰度直接決定辨識正確率</li>
+      </ul></dd></dl>
+      <dl><dt>代表工具</dt><dd><div class="tools">
+        <span class="tool"><b>Gemini</b></span><span class="tool"><b>Claude</b></span>
+        <span class="tool"><b>GPT 系列</b></span>
+        <span class="tool"><b>NotebookLM</b> <span>多來源文件的整合問答</span></span>
+      </div></dd></dl>
+    </div>
+
+    <div class="apply">
+      <h4>在機關業務的可能落地</h4>
+      <ol>
+        <li>掃描件數位化：舊年度紙本函文與統計表轉為可檢索文字，建立歷史資料庫。</li>
+        <li>會議紀錄：錄音檔轉逐字稿後，自動萃取決議事項、辦理機關與期限。</li>
+        <li>教材圖解：將操作流程文字轉為步驟圖說，或反向把國外教材圖表轉為中文說明。</li>
+      </ol>
+    </div>
+
+    <div class="pitfall">
+      <h4>常見失敗點</h4>
+      <ul>
+        <li>模糊掃描件的數字辨識錯誤率不低，統計數據務必抽樣核對。</li>
+        <li>含個人資料的影像、錄音上傳至外部服務前，須先確認蒐集利用與委外規範。</li>
+        <li>把生成影像當成真實紀錄使用，在公務場合會產生嚴重後果。</li>
+      </ul>
+    </div>
+
+    <div class="first-step"><b>第一步</b>拿一份掃描的舊表格，請模型讀出內容並自行核對，感受它的準確度與極限。</div>
+  </div>
+</section>
+
+<!-- 09 -->
+<section class="entry" id="s9">
+  <div class="entry-head">
+    <div class="seal">9</div>
+    <div>
+      <h3>檢索增強生成</h3>
+      <div class="en">Retrieval-Augmented Generation, RAG</div>
+    </div>
+  </div>
+  <div class="entry-body">
+    <p class="lead">讓 AI 從你的資料回答，而不是從通用記憶回答。這是公部門導入 AI 最關鍵的一步：法規、函釋、SOP、歷年會議紀錄，通用模型一概不知，答錯了還講得很肯定。</p>
+
+    <div class="spec">
+      <dl><dt>是什麼</dt><dd>提問時先從你的文件庫檢索最相關的片段，連同問題一起交給模型，由模型依據這些片段作答並附出處。</dd></dl>
+      <dl><dt>何時使用</dt><dd>答案必須來自特定文件、且必須可查證時：法規諮詢、SOP 問答、新進人員上手、客服知識庫。</dd></dl>
+      <dl><dt>關鍵概念</dt><dd><ul>
+        <li>切塊（Chunking）：文件切太大會夾雜雜訊，切太小會失去上下文</li>
+        <li>嵌入（Embedding）與向量檢索：以語意相近而非關鍵字相同來找資料</li>
+        <li>重排序（Re-ranking）：初步檢索後再排一次，大幅提升命中率</li>
+        <li>出處標註：每一句答案要能指回原文，這是可信度的來源</li>
+        <li>資料時效：舊版法規未下架，模型就會引用舊版</li>
+      </ul></dd></dl>
+      <dl><dt>代表工具</dt><dd><div class="tools">
+        <span class="tool"><b>Pinecone</b> <span>向量資料庫</span></span>
+        <span class="tool"><b>Elastic</b> <span>既有搜尋架構可延伸</span></span>
+        <span class="tool"><b>NotebookLM</b> <span>免建置的輕量做法</span></span>
+        <span class="tool"><b>自架開源方案</b> <span>資料不出機關</span></span>
+      </div></dd></dl>
+    </div>
+
+    <div class="apply">
+      <h4>在機關業務的可能落地</h4>
+      <ol>
+        <li>法規知識庫：將法律、施行細則、管理辦法與歷年函釋建庫，承辦提問即得到附條號出處的回答。</li>
+        <li>訓練課程問答：教材、教官手冊與常見問題建庫，供學員與縣市單位自助查詢。</li>
+        <li>新進人員上手包：把業務移交文件建庫，減少反覆口頭詢問。</li>
+      </ol>
+    </div>
+
+    <div class="pitfall">
+      <h4>常見失敗點</h4>
+      <ul>
+        <li>資料未清理就直接倒進去。重複、過期、草案版本混雜，結果比沒做還糟。</li>
+        <li>沒有更新機制。法規修正後知識庫沒跟著更新，錯誤答案會被當成正解引用。</li>
+        <li>不要求標註出處，使用者無從查證，也就無法承擔行政責任。</li>
+      </ul>
+    </div>
+
+    <div class="first-step"><b>第一步</b>選一個範圍明確的主題（例如單一法規及其子法），先做小規模驗證，再談擴大。</div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="entry" id="s10">
+  <div class="entry-head">
+    <div class="seal">10</div>
+    <div>
+      <h3>答案引擎最佳化</h3>
+      <div class="en">Answer Engine Optimization / Generative Engine Optimization, AEO／GEO</div>
+    </div>
+  </div>
+  <div class="entry-body">
+    <p class="lead">當民眾不再用搜尋引擎、改問 AI 時，AI 會拿誰的資料回答？對企業來說這是品牌曝光；對政府機關來說，這是「正確的官方資訊有沒有被 AI 正確引用」——重要性更高，因為錯誤答案可能直接影響民眾的緊急應變行為。</p>
+
+    <div class="spec">
+      <dl><dt>是什麼</dt><dd>調整資訊的呈現方式，使 AI 在生成答案時更容易正確擷取與引用你的內容，並標示來源。</dd></dl>
+      <dl><dt>何時使用</dt><dd>當你的受眾開始以 AI 工具取代搜尋引擎查找資訊時。對民眾服務與政策宣導單位而言，現在就是。</dd></dl>
+      <dl><dt>關鍵概念</dt><dd><ul>
+        <li>結構化內容：清楚標題、明確定義、問答形式，比長篇敘述更容易被正確擷取</li>
+        <li>直述句優先：把結論寫在段落第一句</li>
+        <li>權威來源標示：明確標示發布機關、法規依據與更新日期</li>
+        <li>可及性：內容必須是可被讀取的網頁文字，鎖在 PDF 或圖片裡的資訊難以被引用</li>
+        <li>定期查核：實際拿常見問題去問各家 AI，看它怎麼答、引用了誰</li>
+      </ul></dd></dl>
+      <dl><dt>代表工具</dt><dd><div class="tools">
+        <span class="tool"><b>各家 AI 聊天介面</b> <span>直接測試答案</span></span>
+        <span class="tool"><b>Answer The Public</b> <span>民眾實際提問樣態</span></span>
+        <span class="tool"><b>網站結構化標記</b> <span>Schema.org</span></span>
+      </div></dd></dl>
+    </div>
+
+    <div class="apply">
+      <h4>在機關業務的可能落地</h4>
+      <ol>
+        <li>定期以民眾常見問題（如報案方式、急救處置、證照換發條件）測試主流 AI，記錄錯誤答案並針對性改寫官網內容。</li>
+        <li>官網常見問答改為結構化格式：一題一答、結論在前、附法規依據與更新日期。</li>
+        <li>重要公告避免只發圖卡或 PDF，同步提供純文字網頁版本。</li>
+      </ol>
+    </div>
+
+    <div class="pitfall">
+      <h4>常見失敗點</h4>
+      <ul>
+        <li>把資訊全鎖在 PDF 與圖片中，AI 讀不到，民眾得到的就是別處的錯誤答案。</li>
+        <li>內容沒有更新日期，AI 無從判斷時效，舊資訊持續流通。</li>
+        <li>只做一次就結束。AI 模型與檢索行為持續變動，需定期複測。</li>
+      </ul>
+    </div>
+
+    <div class="first-step"><b>第一步</b>拿三個民眾最常問的問題，分別問三家 AI，把錯誤答案記錄下來——那就是你的待辦清單。</div>
+  </div>
+</section>
+
+<!-- 學習路徑 -->
+<section class="road">
+  <h2 class="sec">90 天學習路徑</h2>
+  <p class="sec-sub">以每週可投入 3～5 小時、且不需寫程式為前提設計。重點是每一階段都要產出一個實際可用的東西。</p>
+
+  <div class="stage">
+    <div class="stage-t">第 1–14 天<small>打地基</small></div>
+    <div><ul>
+      <li>專攻提示工程。把最常寫的三類文件各做一份提示範本。</li>
+      <li>建立個人提示庫（一份文件即可），每次調整後回存。</li>
+      <li>驗收標準：同一份提示交給同事使用，也能得到可用的初稿。</li>
+    </ul></div>
+  </div>
+  <div class="stage">
+    <div class="stage-t">第 15–35 天<small>接上自有資料</small></div>
+    <div><ul>
+      <li>選一個範圍明確的主題建立文件問答庫，先用免建置工具驗證可行性。</li>
+      <li>同步整理資料：刪除過期與草案版本，統一檔名與版本標示。</li>
+      <li>驗收標準：能以 20 題實測，正確率與出處標註皆可接受。</li>
+    </ul></div>
+  </div>
+  <div class="stage">
+    <div class="stage-t">第 36–60 天<small>自動化與整併</small></div>
+    <div><ul>
+      <li>挑一條每週重複的流程自動化，並設定失敗通知。</li>
+      <li>盤點工具，訂出單一事實來源，收掉重複的資料存放點。</li>
+      <li>驗收標準：該流程連續四週無人工介入仍正常運作。</li>
+    </ul></div>
+  </div>
+  <div class="stage">
+    <div class="stage-t">第 61–90 天<small>量測與擴大</small></div>
+    <div><ul>
+      <li>建立評測集，量測導入前後的工時與錯誤率差異。</li>
+      <li>試用代理式工具處理一件「已知正確答案」的複雜任務，校準可靠度。</li>
+      <li>驗收標準：能以一頁 A4 向長官說明成效、成本與風險控管方式。</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- 對照表 -->
+<section style="margin-top:70px">
+  <h2 class="sec">選用對照表</h2>
+  <p class="sec-sub">遇到問題時，先判斷屬於哪一類，再決定用什麼。</p>
+  <div class="tbl-scroll">
+  <table>
+    <thead><tr><th>你的情況</th><th>對應能力</th><th>先做什麼</th><th>風險等級</th></tr></thead>
+    <tbody>
+      <tr><td>輸出品質不穩</td><td>05 提示工程</td><td>把五要素寫進提示，並附一份範例成品</td><td>低</td></tr>
+      <tr><td>AI 不知道我們的法規</td><td>09 RAG</td><td>單一主題小規模建庫，要求標註出處</td><td>中</td></tr>
+      <tr><td>每週重複貼資料</td><td>01 自動化</td><td>先簡化流程，再串接，設失敗通知</td><td>中</td></tr>
+      <tr><td>資料版本亂掉</td><td>04 工具堆疊</td><td>指定單一主檔，收掉其他副本</td><td>低</td></tr>
+      <tr><td>產量跟不上需求</td><td>07 內容生成</td><td>建立用語規範，AI 做初稿、人做定稿</td><td>中</td></tr>
+      <tr><td>紙本與錄音待處理</td><td>08 多模態</td><td>先抽樣驗證辨識率，再決定規模</td><td>中</td></tr>
+      <tr><td>要向長官說明成效</td><td>06 LLM 管理</td><td>建評測集，量測工時與正確率</td><td>低</td></tr>
+      <tr><td>民眾被 AI 誤導</td><td>10 AEO／GEO</td><td>實測常見問題，改寫官網為結構化文字</td><td>低</td></tr>
+      <tr><td>整件事想交出去做完</td><td>02 代理人</td><td>從唯讀任務開始，逐項核對出處</td><td>高</td></tr>
+      <tr><td>步驟無法事先列清楚</td><td>03 代理式 AI</td><td>沙箱環境試錯，設停止條件與人工驗收</td><td>高</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- 名詞 -->
+<section style="margin-top:70px">
+  <h2 class="sec">名詞對照</h2>
+  <p class="sec-sub">中英對照，供行文引用。</p>
+  <div class="gloss">
+    <div><b>大型語言模型</b><span>Large Language Model, LLM</span></div>
+    <div><b>檢索增強生成</b><span>Retrieval-Augmented Generation, RAG</span></div>
+    <div><b>代理式 AI</b><span>Agentic AI</span></div>
+    <div><b>提示工程</b><span>Prompt Engineering</span></div>
+    <div><b>詞元</b><span>Token — 模型計價與長度的基本單位</span></div>
+    <div><b>嵌入向量</b><span>Embedding — 將文字轉為可比較語意的數值表示</span></div>
+    <div><b>切塊</b><span>Chunking — 將長文件切分為檢索單位</span></div>
+    <div><b>重排序</b><span>Re-ranking — 對檢索結果二次排序</span></div>
+    <div><b>幻覺</b><span>Hallucination — 模型生成看似合理但不實的內容</span></div>
+    <div><b>工具使用</b><span>Tool Use / Function Calling</span></div>
+    <div><b>人機交接</b><span>Human-in-the-loop — 流程中的人工確認點</span></div>
+    <div><b>可觀測性</b><span>Observability — 成本與品質的可量測性</span></div>
+    <div><b>單一事實來源</b><span>Single Source of Truth, SSOT</span></div>
+    <div><b>網頁鉤子</b><span>Webhook — 系統間即時事件通知</span></div>
+    <div><b>答案引擎最佳化</b><span>Answer Engine Optimization, AEO</span></div>
+    <div><b>生成引擎最佳化</b><span>Generative Engine Optimization, GEO</span></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <b>使用說明</b>　本文依原始資訊圖「10 AI Skills You Need To Learn In 2026」的十項架構擴寫，並修正原圖第 1 項與第 5 項說明重複之錯誤。工具名稱與版本變動快速，列舉僅供方向參考；實際導入前應依機關資通安全規定、個人資料保護法及政府採購相關規範辦理，涉及公務敏感資料者建議優先評估可自行部署之方案。
+  </div>
+</footer>
+
+<a href="#" class="totop" aria-label="回到頁首">↑</a>
+
+</body>
+</html>

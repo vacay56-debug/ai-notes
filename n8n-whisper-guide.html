@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行政流程自動化雙工具導入手冊｜n8n × Whisper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1B2431;
+  --paper:#F7F8FA;
+  --card:#FFFFFF;
+  --line:#E3E7ED;
+  --gray:#5C6675;
+  --n8n:#D93A63;
+  --n8n-soft:#FDEEF2;
+  --wsp:#0E8A7B;
+  --wsp-soft:#E8F5F2;
+  --code-bg:#1B2431;
+  --code-fg:#D8E2EE;
+  --warn:#B45309;
+  --warn-soft:#FEF3E2;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{
+  font-family:'Noto Sans TC',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.75;
+  font-size:16px;
+}
+.mono{font-family:'IBM Plex Mono',monospace}
+
+/* ===== Header ===== */
+header{
+  background:var(--ink);
+  color:#fff;
+  padding:48px 20px 40px;
+}
+.hwrap{max-width:860px;margin:0 auto}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;letter-spacing:.18em;
+  color:#8FA3BC;text-transform:uppercase;
+  margin-bottom:14px;
+}
+h1{
+  font-size:clamp(26px,5vw,40px);
+  font-weight:900;line-height:1.3;
+  margin-bottom:14px;
+}
+h1 .hl-n8n{color:#FF7A9C}
+h1 .hl-wsp{color:#5ED4C3}
+.lede{color:#B9C4D2;font-size:15px;max-width:640px}
+
+/* ===== Sticky nav ===== */
+nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+}
+.navwrap{
+  max-width:860px;margin:0 auto;
+  display:flex;gap:4px;padding:8px 12px;
+  overflow-x:auto;
+}
+.navwrap a{
+  flex-shrink:0;
+  text-decoration:none;color:var(--gray);
+  font-size:14px;font-weight:500;
+  padding:8px 14px;border-radius:99px;
+  transition:background .15s,color .15s;
+}
+.navwrap a:hover,.navwrap a:focus-visible{background:#EEF1F5;color:var(--ink)}
+.navwrap a:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.navwrap a.tag-n8n{color:var(--n8n);font-weight:700}
+.navwrap a.tag-wsp{color:var(--wsp);font-weight:700}
+.navwrap a.tag-n8n:hover{background:var(--n8n-soft)}
+.navwrap a.tag-wsp:hover{background:var(--wsp-soft)}
+
+/* ===== Layout ===== */
+main{max-width:860px;margin:0 auto;padding:36px 20px 80px}
+section{margin-bottom:64px}
+h2{
+  font-size:clamp(21px,3.6vw,27px);
+  font-weight:900;
+  padding-bottom:10px;margin-bottom:22px;
+  border-bottom:3px solid var(--ink);
+  display:flex;align-items:center;gap:12px;
+}
+h2 .chip{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;font-weight:600;
+  padding:3px 10px;border-radius:6px;
+  letter-spacing:.06em;
+}
+.sec-n8n h2{border-color:var(--n8n)}
+.sec-n8n h2 .chip{background:var(--n8n-soft);color:var(--n8n)}
+.sec-wsp h2{border-color:var(--wsp)}
+.sec-wsp h2 .chip{background:var(--wsp-soft);color:var(--wsp)}
+h3{font-size:18px;font-weight:700;margin:30px 0 12px}
+p{margin-bottom:14px}
+p:last-child{margin-bottom:0}
+
+/* ===== Tables ===== */
+.tblwrap{overflow-x:auto;margin:16px 0 24px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+th{
+  background:var(--ink);color:#fff;
+  text-align:left;padding:10px 14px;
+  font-weight:700;white-space:nowrap;
+}
+td{padding:10px 14px;border-top:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:#FAFBFC}
+.tblwrap.t-n8n th{background:var(--n8n)}
+.tblwrap.t-wsp th{background:var(--wsp)}
+td b{font-weight:700}
+
+/* ===== Step cards（SOP 式編號）===== */
+.step{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:20px 20px 18px;
+  margin-bottom:16px;
+  position:relative;
+}
+.step-code{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;font-weight:600;
+  letter-spacing:.08em;
+  display:inline-block;
+  padding:3px 10px;border-radius:6px;
+  margin-bottom:10px;
+}
+.sec-n8n .step{border-left:4px solid var(--n8n)}
+.sec-n8n .step-code{background:var(--n8n-soft);color:var(--n8n)}
+.sec-wsp .step{border-left:4px solid var(--wsp)}
+.sec-wsp .step-code{background:var(--wsp-soft);color:var(--wsp)}
+.step h4{font-size:16.5px;font-weight:700;margin-bottom:8px}
+.step p,.step li{font-size:15px}
+.step ul,.step ol{padding-left:22px;margin:8px 0}
+.step li{margin-bottom:6px}
+
+/* ===== Code blocks ===== */
+pre{
+  background:var(--code-bg);
+  color:var(--code-fg);
+  border-radius:10px;
+  padding:14px 16px;
+  overflow-x:auto;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:13px;line-height:1.7;
+  margin:12px 0;
+}
+pre .c{color:#7E92AB}
+code.inline{
+  font-family:'IBM Plex Mono',monospace;
+  background:#EDF0F4;color:var(--ink);
+  padding:1px 6px;border-radius:5px;
+  font-size:.88em;
+}
+
+/* ===== Callouts ===== */
+.callout{
+  border-radius:10px;
+  padding:14px 16px;
+  margin:16px 0;
+  font-size:14.5px;
+  border:1px solid;
+}
+.callout b{font-weight:700}
+.co-warn{background:var(--warn-soft);border-color:#F0D9B5;color:#7C4A0A}
+.co-info{background:#EDF3FB;border-color:#CFE0F2;color:#1F3A5C}
+.co-n8n{background:var(--n8n-soft);border-color:#F5CBD7;color:#8C2643}
+.co-wsp{background:var(--wsp-soft);border-color:#BFE3DC;color:#0A5A50}
+
+/* ===== Flow diagram ===== */
+.flow{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+  background:var(--card);border:1px solid var(--line);
+  border-radius:10px;padding:16px;margin:14px 0;
+  font-size:13.5px;
+}
+.flow .node{
+  background:var(--ink);color:#fff;
+  padding:6px 12px;border-radius:8px;
+  font-weight:500;white-space:nowrap;
+}
+.flow .arrow{color:var(--gray);font-weight:700}
+.sec-n8n .flow .node{background:var(--n8n)}
+.sec-wsp .flow .node{background:var(--wsp)}
+
+footer{
+  text-align:center;color:var(--gray);
+  font-size:13px;padding:24px 20px 48px;
+  border-top:1px solid var(--line);
+}
+@media(max-width:520px){
+  body{font-size:15px}
+  .step{padding:16px 14px 14px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hwrap">
+    <div class="eyebrow">NFA EMS · AI Workflow Handbook</div>
+    <h1>行政流程自動化雙工具導入手冊<br><span class="hl-n8n">n8n</span> × <span class="hl-wsp">Whisper</span></h1>
+    <p class="lede">面向公務情境的完整導入指引：從安裝、核心概念到第一個實作範例。Whisper 解決會議逐字稿，n8n 解決重複性行政流程，兩者皆可本機部署、資料不出機。</p>
+  </div>
+</header>
+
+<nav>
+  <div class="navwrap">
+    <a href="#compare">總覽比較</a>
+    <a href="#wsp" class="tag-wsp">Whisper 逐字稿</a>
+    <a href="#n8n" class="tag-n8n">n8n 自動化</a>
+    <a href="#combo">兩者串接</a>
+    <a href="#security">資安須知</a>
+    <a href="#roadmap">導入順序</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ================= 總覽 ================= -->
+<section id="compare">
+  <h2>總覽比較</h2>
+  <p><b>結論先講：先導入 Whisper，再導入 n8n。</b>Whisper 安裝後一小時內即可產出第一份逐字稿，投資報酬立即可見；n8n 屬平台型工具，需要一至兩週熟悉節點邏輯，效益隨累積的工作流數量成長。</p>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th>項目</th><th>Whisper</th><th>n8n</th></tr></thead>
+      <tbody>
+        <tr><td><b>解決什麼</b></td><td>錄音檔 → 文字逐字稿（語音辨識）</td><td>重複性流程自動執行（監測、彙整、通知、串接）</td></tr>
+        <tr><td><b>開發者</b></td><td>OpenAI（MIT 開源授權）</td><td>n8n GmbH（fair-code 授權，自架免費）</td></tr>
+        <tr><td><b>使用門檻</b></td><td>低：一行指令或圖形介面拖放</td><td>中：視覺化拖拉節點，少量邏輯思維</td></tr>
+        <tr><td><b>安裝時間</b></td><td>約 30 分鐘</td><td>約 30 分鐘（Docker）</td></tr>
+        <tr><td><b>費用</b></td><td>完全免費，本機運算</td><td>自架免費；官方雲端版另計費</td></tr>
+        <tr><td><b>資料流向</b></td><td>全程本機處理，錄音不上傳</td><td>自架時資料留在本機，視串接服務而定</td></tr>
+        <tr><td><b>公務適用場景</b></td><td>會議紀錄、研討會、長官談話、外賓交流</td><td>期刊監測、時程提醒、郵件彙整、表單處理</td></tr>
+        <tr><td><b>見效速度</b></td><td>當天</td><td>一至二週後開始累積</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ================= Whisper ================= -->
+<section id="wsp" class="sec-wsp">
+  <h2><span class="chip">TOOL 1</span>Whisper：會議逐字稿</h2>
+
+  <h3>是什麼</h3>
+  <p>Whisper 係 OpenAI 於 2022 年開源之語音辨識（Automatic Speech Recognition, ASR）模型，以 68 萬小時多語言語料訓練，中文辨識品質屬開源方案第一梯隊。<b>關鍵特性是可完全本機執行</b>：錄音檔不需上傳任何雲端服務，對涉及內部討論、人事、預算之會議錄音，符合公務資料保護要求。</p>
+
+  <h3>三種使用路徑</h3>
+  <div class="tblwrap t-wsp">
+    <table>
+      <thead><tr><th>路徑</th><th>形式</th><th>適合對象</th><th>備註</th></tr></thead>
+      <tbody>
+        <tr><td><b>A. Buzz</b>（建議入門）</td><td>圖形介面軟體，拖放即轉</td><td>不想碰指令列者</td><td>開源免費，Windows／Mac 皆有，內建 Whisper</td></tr>
+        <tr><td><b>B. openai-whisper</b></td><td>指令列（本手冊主線）</td><td>願意用終端機者</td><td>官方版，指令最單純</td></tr>
+        <tr><td><b>C. faster-whisper</b></td><td>指令列／Python</td><td>大量、長時間錄音</td><td>速度約為官方版四倍、記憶體減半</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout co-wsp"><b>建議：</b>先用路徑 A（Buzz）驗證效果與需求；確認要常態使用後，改路徑 B 或 C 以便批次處理與後續自動化串接。</div>
+
+  <h3>路徑 A：Buzz 圖形介面（零指令）</h3>
+
+  <div class="step">
+    <div class="step-code mono">WSP-A1</div>
+    <h4>下載安裝</h4>
+    <p>至 GitHub 專案頁 <code class="inline">github.com/chidiwilliams/buzz</code> 的 Releases 區下載對應版本（Windows 選 <code class="inline">.exe</code>，Mac 選 <code class="inline">.dmg</code>），依一般軟體安裝流程完成。</p>
+  </div>
+
+  <div class="step">
+    <div class="step-code mono">WSP-A2</div>
+    <h4>首次設定</h4>
+    <ul>
+      <li>開啟 Buzz → <b>File → Import Media File</b>，選擇會議錄音檔（支援 m4a、mp3、wav、mp4 等）。</li>
+      <li>Model 選 <b>Whisper</b>、大小選 <b>Medium</b>（中文品質與速度的平衡點）。</li>
+      <li>Language 選 <b>Chinese</b>；Task 選 <b>Transcribe</b>。</li>
+      <li>首次執行會自動下載模型檔（約 1.5 GB），僅需一次。</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <div class="step-code mono">WSP-A3</div>
+    <h4>匯出逐字稿</h4>
+    <p>轉錄完成後可匯出 TXT（純文字）或 SRT（含時間戳）。含時間戳版本便於回查原始錄音段落，建議兩種都存。</p>
+  </div>
+
+  <h3>路徑 B：指令列版（可批次、可自動化）</h3>
+
+  <div class="step">
+    <div class="step-code mono">WSP-B1</div>
+    <h4>安裝前置環境</h4>
+    <p>需要 Python 3.9 以上與 FFmpeg（音訊解碼用）。</p>
+    <pre><span class="c"># Windows（先安裝 Python：python.org 下載，安裝時勾選 Add to PATH）</span>
+winget install ffmpeg
+
+<span class="c"># macOS（先安裝 Homebrew：brew.sh）</span>
+brew install ffmpeg</pre>
+  </div>
+
+  <div class="step">
+    <div class="step-code mono">WSP-B2</div>
+    <h4>安裝 Whisper</h4>
+    <pre>pip install -U openai-whisper</pre>
+    <p>驗證安裝：執行 <code class="inline">whisper --help</code> 出現說明文字即成功。</p>
+  </div>
+
+  <div class="step">
+    <div class="step-code mono">WSP-B3</div>
+    <h4>轉錄第一份錄音</h4>
+    <pre>whisper 0711科務會議.m4a --language Chinese --model medium \
+  --initial_prompt "以下是臺灣消防機關的繁體中文會議逐字稿，內容涉及緊急救護政策。" \
+  --output_format txt --output_format srt</pre>
+    <ul>
+      <li><code class="inline">--initial_prompt</code> 是關鍵技巧：Whisper 的中文輸出<b>預設常出現簡體字</b>，以繁體中文提示語引導後，輸出將穩定為繁體，並提高專有名詞辨識率。可在提示語中加入常用術語（如「緊急醫療救護法、EMT、救護技術員」）。</li>
+      <li>首次執行會下載模型，之後離線可用。</li>
+      <li>輸出檔與錄音檔同資料夾，含 <code class="inline">.txt</code> 與 <code class="inline">.srt</code>。</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <div class="step-code mono">WSP-B4</div>
+    <h4>批次處理整個資料夾</h4>
+    <pre><span class="c"># 一次轉錄資料夾內全部錄音</span>
+whisper *.m4a --language Chinese --model medium --output_dir ./逐字稿</pre>
+  </div>
+
+  <h3>模型大小選擇</h3>
+  <div class="tblwrap t-wsp">
+    <table>
+      <thead><tr><th>模型</th><th>檔案大小</th><th>建議記憶體</th><th>相對速度</th><th>中文品質</th><th>適用</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">small</td><td>約 460 MB</td><td>2 GB</td><td>快</td><td>可用，專有名詞易錯</td><td>快速草稿</td></tr>
+        <tr><td class="mono">medium</td><td>約 1.5 GB</td><td>5 GB</td><td>中</td><td><b>良好（建議預設）</b></td><td>日常會議紀錄</td></tr>
+        <tr><td class="mono">large-v3</td><td>約 3 GB</td><td>10 GB</td><td>慢</td><td>最佳</td><td>重要會議、口音重、收音差</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout co-info"><b>速度參考：</b>一般辦公筆電（無獨立顯卡）以 medium 模型轉錄一小時錄音，約需 30 至 60 分鐘；有 NVIDIA 顯卡可縮短至數分鐘。長錄音建議改用 faster-whisper（<code class="inline">pip install faster-whisper</code>）或掛機夜間執行。</div>
+
+  <h3>完整工作流：從錄音到會議紀錄</h3>
+  <div class="flow">
+    <span class="node">會議錄音</span><span class="arrow">→</span>
+    <span class="node">Whisper 逐字稿</span><span class="arrow">→</span>
+    <span class="node">Claude 整理</span><span class="arrow">→</span>
+    <span class="node">三段式會議紀錄</span>
+  </div>
+  <p>逐字稿本身不是終點。將 <code class="inline">.txt</code> 交給 Claude（可搭配您既有的會議紀錄 Skill），指示「依決議事項、討論摘要、待辦分工整理為會議紀錄」，即完成從錄音到正式文書的完整鏈路。<b>注意：機敏會議之逐字稿是否可交付雲端 AI 整理，須依機關資安規範判斷；不可者，僅止於本機逐字稿。</b></p>
+</section>
+
+<!-- ================= n8n ================= -->
+<section id="n8n" class="sec-n8n">
+  <h2><span class="chip">TOOL 2</span>n8n：行政流程自動化</h2>
+
+  <h3>是什麼</h3>
+  <p>n8n 是開源工作流自動化平台，以「節點（node）」視覺化串接各項服務：某事件發生（觸發）→ 依序執行處理步驟（動作）。可理解為<b>不需寫程式的自動化排程員</b>，支援四百餘種服務整合（Gmail、Google 日曆、試算表、RSS、HTTP API 等），並內建 AI 節點可呼叫 Claude 等模型。自架版免費，資料留在自己機器。</p>
+
+  <h3>核心概念（五個名詞）</h3>
+  <div class="tblwrap t-n8n">
+    <table>
+      <thead><tr><th>名詞</th><th>意義</th><th>類比</th></tr></thead>
+      <tbody>
+        <tr><td><b>Workflow</b></td><td>一條完整的自動化流程</td><td>一份標準作業程序（SOP）</td></tr>
+        <tr><td><b>Node</b></td><td>流程中的單一步驟</td><td>SOP 中的一個作業項目</td></tr>
+        <tr><td><b>Trigger</b></td><td>啟動流程的條件（定時、收到郵件、表單送出）</td><td>SOP 的啟動時機</td></tr>
+        <tr><td><b>Credential</b></td><td>各服務的登入授權（如 Gmail 授權）</td><td>各系統的帳號憑證</td></tr>
+        <tr><td><b>Execution</b></td><td>流程每一次的實際執行紀錄</td><td>執行日誌，可回查除錯</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>安裝部署</h3>
+
+  <div class="step">
+    <div class="step-code mono">N8N-01</div>
+    <h4>選擇部署方式</h4>
+    <ul>
+      <li><b>Docker 自架（建議）</b>：資料留本機，免費，升級容易。本手冊採此路徑。</li>
+      <li><b>npm 安裝</b>：已有 Node.js 環境者可用 <code class="inline">npx n8n</code> 快速試用。</li>
+      <li><b>n8n Cloud 官方雲端</b>：免安裝但需付費，且資料經境外伺服器，<b>公務情境不建議</b>。</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <div class="step-code mono">N8N-02</div>
+    <h4>安裝 Docker Desktop</h4>
+    <p>至 <code class="inline">docker.com</code> 下載 Docker Desktop（Windows／Mac），安裝後啟動。Windows 首次安裝若提示需 WSL 2，依畫面指示完成即可。</p>
+  </div>
+
+  <div class="step">
+    <div class="step-code mono">N8N-03</div>
+    <h4>啟動 n8n</h4>
+    <pre><span class="c"># 建立資料儲存區（工作流與憑證存放處，僅首次需要）</span>
+docker volume create n8n_data
+
+<span class="c"># 啟動 n8n</span>
+docker run -d --name n8n --restart unless-stopped \
+  -p 5678:5678 \
+  -v n8n_data:/home/node/.n8n \
+  docker.n8n.io/n8nio/n8n</pre>
+    <p>開啟瀏覽器進入 <code class="inline">http://localhost:5678</code>，首次進入依畫面建立本機管理帳號。</p>
+  </div>
+
+  <div class="step">
+    <div class="step-code mono">N8N-04</div>
+    <h4>認識操作介面</h4>
+    <ul>
+      <li>左側為工作流清單；點 <b>Create Workflow</b> 進入畫布。</li>
+      <li>畫布中點 <b>＋</b> 新增節點，第一個節點必為 Trigger。</li>
+      <li>每個節點可單獨按 <b>Execute step</b> 測試，即時查看輸出資料。</li>
+      <li>右上角 <b>Active</b> 開關：開啟後流程才會依觸發條件自動執行。</li>
+    </ul>
+  </div>
+
+  <h3>實作範例：國際 EMS 動態每週自動彙整</h3>
+  <p>以下建立第一條具實用價值的工作流：每週一上午 8 時，自動抓取國際 EMS 新聞來源，由 AI 摘要後寄送至您的信箱，取代人工逐站瀏覽。</p>
+
+  <div class="flow">
+    <span class="node">每週一 08:00</span><span class="arrow">→</span>
+    <span class="node">讀取 RSS</span><span class="arrow">→</span>
+    <span class="node">過濾七日內</span><span class="arrow">→</span>
+    <span class="node">AI 摘要</span><span class="arrow">→</span>
+    <span class="node">寄送 Gmail</span>
+  </div>
+
+  <div class="step">
+    <div class="step-code mono">N8N-11</div>
+    <h4>建立定時觸發</h4>
+    <p>新增 <b>Schedule Trigger</b> 節點 → Trigger Interval 選 <b>Weeks</b> → 星期選 Monday、時間設 08:00。</p>
+  </div>
+
+  <div class="step">
+    <div class="step-code mono">N8N-12</div>
+    <h4>讀取新聞來源</h4>
+    <p>新增 <b>RSS Read</b> 節點，URL 填入 EMS 新聞來源，例如 <code class="inline">https://www.ems1.com/rss</code>（EMS1，美國最大 EMS 新聞站）。需多來源時，可並列多個 RSS Read 節點後以 <b>Merge</b> 節點合併。</p>
+  </div>
+
+  <div class="step">
+    <div class="step-code mono">N8N-13</div>
+    <h4>過濾近七日文章</h4>
+    <p>新增 <b>Filter</b> 節點，條件設定：欄位 <code class="inline">{{ $json.pubDate }}</code> → 運算子選 Date「is after」→ 值填 <code class="inline">{{ $now.minus(7, 'days') }}</code>。</p>
+  </div>
+
+  <div class="step">
+    <div class="step-code mono">N8N-14</div>
+    <h4>AI 摘要</h4>
+    <p>新增 <b>Anthropic</b> 節點（或 Basic LLM Chain）：</p>
+    <ul>
+      <li>Credential 填入 Anthropic API 金鑰（於 console.anthropic.com 申請）。</li>
+      <li>Prompt 範例：「以下為本週國際 EMS 新聞標題與摘要，請以繁體中文整理為條列式週報，每則含一句重點與政策相關性註記：{{ $json.title }}－{{ $json.contentSnippet }}」。</li>
+    </ul>
+    <div class="callout co-n8n"><b>省成本替代：</b>不接 AI 亦可，直接跳至下一步將標題與連結原文寄出，同樣省去逐站巡覽時間。</div>
+  </div>
+
+  <div class="step">
+    <div class="step-code mono">N8N-15</div>
+    <h4>寄送郵件</h4>
+    <p>新增 <b>Gmail</b> 節點 → Operation 選 Send → 首次使用依畫面完成 Google 帳號 OAuth 授權 → 收件人填自己，主旨如「國際 EMS 週報 {{ $now.format('yyyy-MM-dd') }}」，內文帶入前節點輸出。</p>
+  </div>
+
+  <div class="step">
+    <div class="step-code mono">N8N-16</div>
+    <h4>測試與啟用</h4>
+    <p>按 <b>Execute Workflow</b> 手動跑一次全流程，確認信箱收到週報後，將右上角 <b>Active</b> 切為開啟。此後每週一自動執行，可於 Executions 頁查看每次執行紀錄。</p>
+  </div>
+
+  <h3>公務情境延伸應用</h3>
+  <div class="tblwrap t-n8n">
+    <table>
+      <thead><tr><th>應用</th><th>觸發</th><th>流程</th><th>效益</th></tr></thead>
+      <tbody>
+        <tr><td><b>採購時程提醒</b></td><td>每日定時</td><td>讀 Google 試算表採購期程 → 判斷距截止日 ≤ 7 天 → 寄提醒</td><td>招標、開標、驗收節點不漏</td></tr>
+        <tr><td><b>預算執行月報</b></td><td>每月 1 日</td><td>讀執行率試算表 → AI 產出摘要段落 → 寄承辦與科長</td><td>月報初稿自動化</td></tr>
+        <tr><td><b>研討會報名彙整</b></td><td>表單送出時</td><td>Google 表單 → 寫入試算表 → 自動回信報到資訊</td><td>免人工登打與逐一回覆</td></tr>
+        <tr><td><b>國際期刊監測</b></td><td>每週</td><td>PubMed／期刊 RSS → 關鍵字過濾（prehospital、TECC）→ 摘要寄送</td><td>政策研究情蒐常態化</td></tr>
+        <tr><td><b>錄音自動轉逐字稿</b></td><td>資料夾出現新檔</td><td>見下節「兩者串接」</td><td>錄音丟資料夾即完成</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 串接 ================= -->
+<section id="combo" class="sec-n8n">
+  <h2>進階：n8n × Whisper 串接</h2>
+  <p>兩工具熟練後，可組成全自動逐字稿產線：指定一個「會議錄音」資料夾，n8n 監測到新檔即呼叫本機 Whisper 轉錄，完成後通知您。</p>
+  <div class="flow">
+    <span class="node">錄音存入資料夾</span><span class="arrow">→</span>
+    <span class="node">Local File Trigger</span><span class="arrow">→</span>
+    <span class="node">Execute Command 呼叫 whisper</span><span class="arrow">→</span>
+    <span class="node">逐字稿產出</span><span class="arrow">→</span>
+    <span class="node">Email 通知</span>
+  </div>
+  <ul style="padding-left:22px;font-size:15px">
+    <li style="margin-bottom:6px"><b>Local File Trigger</b> 節點監看指定資料夾之新增檔案（需於 Docker 啟動指令加掛該資料夾：<code class="inline">-v /本機路徑:/data</code>）。</li>
+    <li style="margin-bottom:6px"><b>Execute Command</b> 節點執行 whisper 指令，帶入觸發取得的檔名。</li>
+    <li>此屬進階題，建議兩項工具各自熟練一個月後再實作。</li>
+  </ul>
+</section>
+
+<!-- ================= 資安 ================= -->
+<section id="security">
+  <h2>公務資安須知</h2>
+  <div class="callout co-warn">
+    <b>導入前務必確認機關資安規範。</b>以下為通用原則，實際適用依內政部及消防署資通安全規定辦理。
+  </div>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th>面向</th><th>原則</th></tr></thead>
+      <tbody>
+        <tr><td><b>Whisper 本機轉錄</b></td><td>全程離線運算，錄音與逐字稿不出機，資安風險最低；此為其相對雲端轉錄服務之核心優勢。</td></tr>
+        <tr><td><b>逐字稿後續處理</b></td><td>將逐字稿交付雲端 AI（Claude 等）整理前，先去識別化並確認內容非屬機敏；機敏會議僅止於本機處理。</td></tr>
+        <tr><td><b>n8n 部署位置</b></td><td>自架於個人電腦或機關內網主機，勿使用境外雲端版處理公務資料。</td></tr>
+        <tr><td><b>n8n 憑證管理</b></td><td>Gmail、API 金鑰等憑證存於本機 n8n，設定管理帳號強密碼；離開座位鎖定電腦。</td></tr>
+        <tr><td><b>流經外部 API 之資料</b></td><td>工作流中凡經過外部服務（AI 摘要、雲端表單）之節點，內容以公開或低敏資訊為限。</td></tr>
+        <tr><td><b>公務帳號分際</b></td><td>串接郵件建議先以個人測試帳號驗證流程，涉公務信箱前先確認機關政策。</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ================= 路線 ================= -->
+<section id="roadmap">
+  <h2>建議導入順序</h2>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th>階段</th><th>時程</th><th>目標</th><th>驗收標準</th></tr></thead>
+      <tbody>
+        <tr><td><b>第一週</b></td><td>1–2 小時</td><td>Buzz 安裝，完成第一份會議逐字稿</td><td>一份 30 分鐘以上錄音之可用逐字稿</td></tr>
+        <tr><td><b>第二週</b></td><td>2 小時</td><td>指令列 Whisper + initial_prompt 繁中優化；逐字稿交 Claude 產會議紀錄</td><td>錄音→正式會議紀錄全鏈路走通</td></tr>
+        <tr><td><b>第三週</b></td><td>2–3 小時</td><td>Docker 安裝 n8n，完成 EMS 週報工作流</td><td>週一自動收到第一封週報</td></tr>
+        <tr><td><b>第四週起</b></td><td>每週 1 小時</td><td>逐條增建工作流（採購提醒、期刊監測）</td><td>每月新增一至二條穩定運作之流程</td></tr>
+        <tr><td><b>第二個月</b></td><td>選做</td><td>n8n × Whisper 串接，資料夾自動轉錄</td><td>錄音入夾即自動產出逐字稿</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><b>核心心法：</b>不追求一次到位。Whisper 每場會議即回收時間；n8n 每條穩定的工作流都是永久性的行政產能，累積十條後，等同多出一位不休假的助理。</p>
+</section>
+
+</main>
+
+<footer>
+  行政流程自動化雙工具導入手冊 · n8n × Whisper · 2026.07
+</footer>
+
+</body>
+</html>

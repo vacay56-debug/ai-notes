@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude 功能完整指南｜16 項功能 × 即用提示詞</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-deep:#0C1626;
+  --navy:#12203A;
+  --navy-card:#182A47;
+  --navy-line:#27436B;
+  --amber:#E8A33D;
+  --amber-soft:#F2C070;
+  --ink:#E9EDF4;
+  --ink-dim:#9FB0C8;
+  --mono:'JetBrains Mono',monospace;
+  --serif:'Noto Serif TC',serif;
+  --sans:'Noto Sans TC',sans-serif;
+  --disp:'Space Grotesk','Noto Sans TC',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--navy-deep);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.85;font-size:16px}
+a{color:var(--amber-soft);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:0 24px}
+
+/* ---------- Hero ---------- */
+header.hero{border-bottom:1px solid var(--navy-line);padding:72px 0 56px;background:
+  radial-gradient(ellipse 900px 420px at 80% -10%,rgba(232,163,61,.10),transparent 60%),
+  var(--navy-deep)}
+.hero-kicker{font-family:var(--disp);font-size:.78rem;letter-spacing:.32em;color:var(--amber);text-transform:uppercase;margin-bottom:20px}
+.hero h1{font-family:var(--serif);font-weight:900;font-size:clamp(2rem,5vw,3.1rem);line-height:1.3;letter-spacing:.02em}
+.hero h1 em{font-style:normal;color:var(--amber)}
+.hero p.sub{margin-top:22px;max-width:620px;color:var(--ink-dim);font-size:1.02rem}
+.hero-meta{margin-top:34px;display:flex;flex-wrap:wrap;gap:12px}
+.hero-meta span{font-family:var(--mono);font-size:.75rem;color:var(--ink-dim);border:1px solid var(--navy-line);border-radius:4px;padding:5px 12px}
+.hero-meta span b{color:var(--amber);font-weight:500}
+
+/* ---------- TOC ---------- */
+nav.toc{padding:48px 0;border-bottom:1px solid var(--navy-line)}
+nav.toc h2{font-family:var(--disp);font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:22px}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.toc-col{background:var(--navy);border:1px solid var(--navy-line);border-radius:8px;padding:20px 22px}
+.toc-col h3{font-family:var(--serif);font-weight:700;font-size:1rem;color:var(--amber-soft);margin-bottom:12px}
+.toc-col ol{list-style:none;counter-reset:toc}
+.toc-col li{counter-increment:toc;font-size:.9rem;padding:3px 0}
+.toc-col li::before{content:counter(toc,decimal-leading-zero);font-family:var(--mono);font-size:.72rem;color:var(--amber);margin-right:10px}
+.toc-col.p2 li{counter-increment:toc 1}
+.toc-col.p2 ol{counter-reset:toc 4}
+.toc-col.p3 ol{counter-reset:toc 9}
+
+/* ---------- Sections ---------- */
+section.part{padding:64px 0 16px}
+.part-head{display:flex;align-items:baseline;gap:18px;border-bottom:2px solid var(--amber);padding-bottom:14px;margin-bottom:14px}
+.part-num{font-family:var(--disp);font-weight:700;font-size:2.4rem;color:var(--amber);line-height:1}
+.part-head h2{font-family:var(--serif);font-weight:900;font-size:clamp(1.3rem,3vw,1.7rem)}
+.part-intro{color:var(--ink-dim);font-size:.95rem;max-width:640px;margin-bottom:8px}
+
+/* ---------- Feature card ---------- */
+article.feat{background:var(--navy);border:1px solid var(--navy-line);border-radius:10px;margin:28px 0;overflow:hidden}
+.feat-head{display:flex;align-items:center;gap:16px;padding:20px 26px;border-bottom:1px solid var(--navy-line);background:var(--navy-card)}
+.feat-no{font-family:var(--mono);font-size:.8rem;color:var(--navy-deep);background:var(--amber);border-radius:4px;padding:3px 9px;font-weight:500;flex-shrink:0}
+.feat-head h3{font-family:var(--serif);font-weight:700;font-size:1.15rem;line-height:1.45}
+.feat-head h3 small{display:block;font-family:var(--sans);font-weight:300;font-size:.8rem;color:var(--ink-dim);margin-top:2px}
+.feat-body{padding:22px 26px 26px}
+.feat-body p{margin-bottom:14px;font-size:.95rem}
+.feat-body p:last-of-type{margin-bottom:0}
+.howto{display:flex;gap:10px;align-items:flex-start;background:rgba(232,163,61,.07);border-left:3px solid var(--amber);border-radius:0 6px 6px 0;padding:12px 16px;margin:16px 0;font-size:.88rem;color:var(--amber-soft)}
+.howto b{font-weight:500}
+
+/* ---------- Prompt block ---------- */
+.prompt{margin-top:20px;border:1px solid var(--navy-line);border-radius:8px;overflow:hidden}
+.prompt-bar{display:flex;justify-content:space-between;align-items:center;background:var(--navy-deep);padding:8px 16px;border-bottom:1px solid var(--navy-line)}
+.prompt-bar span{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;color:var(--amber);text-transform:uppercase}
+.copy-btn{font-family:var(--mono);font-size:.72rem;color:var(--ink-dim);background:transparent;border:1px solid var(--navy-line);border-radius:4px;padding:4px 12px;cursor:pointer;transition:all .15s}
+.copy-btn:hover,.copy-btn:focus-visible{color:var(--navy-deep);background:var(--amber);border-color:var(--amber);outline:none}
+.prompt pre{background:#0A1220;padding:18px 20px;overflow-x:auto;white-space:pre-wrap;word-break:break-word;font-family:var(--mono);font-size:.82rem;line-height:1.9;color:#CFE0F5}
+
+/* ---------- Appendix ---------- */
+section.appendix{padding:64px 0 40px;border-top:1px solid var(--navy-line);margin-top:48px}
+.appendix .part-head{border-bottom-color:var(--navy-line)}
+.appendix .part-num{color:var(--ink-dim)}
+.src-box{background:var(--navy);border:1px dashed var(--navy-line);border-radius:10px;margin-top:26px}
+.src-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 20px;border-bottom:1px dashed var(--navy-line)}
+.src-bar .tag{font-family:var(--mono);font-size:.72rem;color:var(--amber);border:1px solid rgba(232,163,61,.4);border-radius:4px;padding:2px 10px}
+.src-bar .fname{font-family:var(--mono);font-size:.78rem;color:var(--ink-dim)}
+.src-box pre{padding:22px 24px;white-space:pre-wrap;word-break:break-word;font-family:var(--sans);font-weight:300;font-size:.85rem;line-height:2;color:var(--ink-dim);max-height:640px;overflow-y:auto}
+
+/* ---------- Footer ---------- */
+footer{border-top:1px solid var(--navy-line);padding:34px 0 48px;margin-top:24px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:.72rem;color:var(--ink-dim)}
+footer b{color:var(--amber);font-weight:500}
+
+@media (max-width:600px){
+  .feat-head{padding:16px 18px}
+  .feat-body{padding:18px}
+  .prompt pre{font-size:.78rem}
+}
+@media print{
+  body{background:#fff;color:#111}
+  .copy-btn{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-kicker">Claude Field Guide · 功能應用指南</div>
+    <h1>Claude 功能完整指南<br><em>16 項功能</em> × 即用提示詞</h1>
+    <p class="sub">Claude 能做的事，比大多數人以為的還要多。本指南整理全部功能：每項功能在哪裡找到、怎麼開啟，以及一段可直接複製使用的提示詞範本。挑出符合工作流程的功能，每項僅需幾分鐘設定，之後每天持續帶來回報。</p>
+    <div class="hero-meta">
+      <span>功能總數 <b>16</b></span>
+      <span>分類 <b>3 大部分</b></span>
+      <span>提示詞範本 <b>可一鍵複製</b></span>
+      <span>資料來源 <b>附錄原文參考</b></span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="wrap">
+    <h2>目錄 Contents</h2>
+    <div class="toc-grid">
+      <div class="toc-col">
+        <h3>壹、一般版隱藏功能</h3>
+        <ol>
+          <li><a href="#f1">Projects（專案）</a></li>
+          <li><a href="#f2">Artifacts（成品）</a></li>
+          <li><a href="#f3">Adaptive Thinking（自適應思考）</a></li>
+          <li><a href="#f4">Memory（記憶）</a></li>
+        </ol>
+      </div>
+      <div class="toc-col p2">
+        <h3>貳、角色化提示詞</h3>
+        <ol>
+          <li><a href="#f5">個人心理諮商師</a></li>
+          <li><a href="#f6">嚴厲的導師</a></li>
+          <li><a href="#f7">私人教練</a></li>
+          <li><a href="#f8">演練困難對話</a></li>
+          <li><a href="#f9">唱反調的人</a></li>
+        </ol>
+      </div>
+      <div class="toc-col p3">
+        <h3>參、進階產品功能</h3>
+        <ol>
+          <li><a href="#f10">Claude in Chrome</a></li>
+          <li><a href="#f11">Claude Cowork</a></li>
+          <li><a href="#f12">Scheduled Tasks（排程任務）</a></li>
+          <li><a href="#f13">Cowork 裡的 Skills</a></li>
+          <li><a href="#f14">CLAUDE.md 規則檔</a></li>
+          <li><a href="#f15">Claude Code</a></li>
+          <li><a href="#f16">Claude Design</a></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ PART 1 ============ -->
+<section class="part">
+  <div class="wrap">
+    <div class="part-head"><span class="part-num">壹</span><h2>一般版 Claude 裡的隱藏功能</h2></div>
+    <p class="part-intro">不需任何額外產品，網頁版與行動版即可使用，卻是大多數使用者從未開啟的核心功能。</p>
+
+    <article class="feat" id="f1">
+      <div class="feat-head"><span class="feat-no">01</span><h3>Projects（專案）<small>真正記得你的 Claude</small></h3></div>
+      <div class="feat-body">
+        <p>每次開新對話，Claude 都是從零開始：不知道你的名字、工作與偏好。大多數人接受這一點，於是每次都重新自我介紹。</p>
+        <p>Projects 解決此問題。建立一個專案、上傳文件、寫下固定指令，Claude 就會永久保留這些內容；下週再打開，會準確接續上次停下的地方。如果從未用過 Projects，這是本指南中應優先處理的第一件事。</p>
+        <div class="howto">⚙︎<span><b>設定位置：</b>建立 Project → 上傳文件 → 將固定指令貼入 Project Instructions 欄位。</span></div>
+        <div class="prompt">
+          <div class="prompt-bar"><span>Prompt · 專案指令範例</span><button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>你是我的內容研究助理。我經營一份給技術背景讀者看的AI與加密貨幣電子報。
+一律假設我的讀者已經懂基本概念，不用解釋什麼是LLM或什麼是區塊鏈。
+當我分享一個主題或文章時，你的任務是：
+1. 找出三個最違反直覺或最令人意外的角度
+2. 找出與我可能錯過的近期事件之間的關聯
+3. 建議如何把這個內容包裝成一個故事，而不是摘要
+語氣：直接，不要公司腔，不要贅語。
+格式：短段落，除非我要求，否則不要用條列式。
+絕對不要用「這是個好問題」或「當然」開頭回答。</pre>
+        </div>
+      </div>
+    </article>
+
+    <article class="feat" id="f2">
+      <div class="feat-head"><span class="feat-no">02</span><h3>Artifacts（成品）<small>對話裡真正能運作的應用程式</small></h3></div>
+      <div class="feat-body">
+        <p>很多人以為 Claude 只能產生文字，做不出真正能用的東西——這是錯的。Artifacts 是 Claude 在對話中直接做出的可運作產品：不是一段要複製到別處的程式碼，而是出現在側邊欄、真的能操作的計算機、習慣追蹤器、小遊戲、附圖表的儀表板。</p>
+        <p>SVG 圖形、互動式圖表、Mermaid 流程圖全部支援，免費方案即可使用，但大多數人從來沒試過。</p>
+        <div class="howto">⚙︎<span><b>使用方式：</b>直接在對話中描述需求，成品會出現在側邊欄，可即時開啟、點擊、操作。</span></div>
+        <div class="prompt">
+          <div class="prompt-bar"><span>Prompt · 試試這個</span><button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>幫我做一個能實際運作的習慣追蹤網頁應用。
+我想追蹤5個每日習慣。
+每天可以把它們打勾完成。
+顯示每個習慣的7天連續紀錄計數器。
+如果漏掉一天，連續紀錄就重置。
+設計：深色背景，乾淨簡約的風格。
+讓打勾這個動作有滿足感，完成時加一個小動畫。
+重新整理頁面後，資料要能保留。</pre>
+        </div>
+      </div>
+    </article>
+
+    <article class="feat" id="f3">
+      <div class="feat-head"><span class="feat-no">03</span><h3>Adaptive Thinking（自適應思考）<small>不同層次的推理</small></h3></div>
+      <div class="feat-body">
+        <p>大多數使用者從未開啟這項功能。Extended Thinking（延伸思考）模式下，Claude 會先一步步推理問題再給答案，且推理過程完全可見。</p>
+        <p>簡單問題用不到它；但遇到複雜決策、策略分析，或任何希望 Claude 真正思考而非套模式回答的情境，輸出結果的差異會非常明顯。把它打開，問跟平常一樣的問題，比較答案的差別。</p>
+        <div class="howto">⚙︎<span><b>設定位置：</b>對話輸入框旁的功能選單中開啟 Extended Thinking。</span></div>
+        <div class="prompt">
+          <div class="prompt-bar"><span>Prompt · 重大決策情境</span><button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>我正在兩個選項之間做決定，希望你在回答前先仔細思考過一遍。
+選項A：〔描述選項A〕
+選項B：〔描述選項B〕
+我的情況：〔你的背景、限制、最在意的事〕
+回答之前先想清楚以下幾點：
+．每個選項的第二層、第三層後續影響
+．我可能因為情緒而高估或低估了什麼
+．我可能缺少哪些資訊，而這些資訊會改變決定
+．如果事情出錯，哪個選項的下檔保護比較好
+想清楚之後，給我你真正的建議，並附上你的推理過程。</pre>
+        </div>
+      </div>
+    </article>
+
+    <article class="feat" id="f4">
+      <div class="feat-head"><span class="feat-no">04</span><h3>Memory（記憶）<small>認得你是誰的 Claude</small></h3></div>
+      <div class="feat-body">
+        <p>開啟 Memory 之後，Claude 會隨時間建立一份關於你的檔案：你的工作、專案、偏好的溝通方式、目前在忙什麼。即使開一個全新對話，它也已經知道背景脈絡，不必再自我介紹。</p>
+        <p>這項功能預設是關閉的，大多數人根本不知道它存在。</p>
+        <div class="howto">⚙︎<span><b>設定位置：</b>Settings（設定）中開啟 Memory 功能後，直接用提示詞寫入內容。</span></div>
+        <div class="prompt">
+          <div class="prompt-bar"><span>Prompt · 記憶寫入範本</span><button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>我希望你記住以下關於我的事，這樣你就不用每次都重新問一次：
+我叫〔姓名〕，在〔公司或專案〕擔任〔職稱〕。
+我目前的主要重心是〔你正在做的事〕。
+我的受眾或客戶是〔他們是誰〕。
+之後我請你幫忙時，除非我另外說明，否則一律假設這個背景脈絡成立。
+我偏好的溝通風格：〔直接／詳細／輕鬆／正式〕。
+我在回答中會覺得煩的地方：〔例如條列式、冗長的開場白、過多的但書〕。
+現在就把這些內容存進記憶。</pre>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ PART 2 ============ -->
+<section class="part">
+  <div class="wrap">
+    <div class="part-head"><span class="part-num">貳</span><h2>給 Claude 一個角色：一句提示詞改變一切</h2></div>
+    <p class="part-intro">Claude 不一定要當「一個 AI 助理」。給它一個明確的角色，它就會徹底投入：改變提問方式、改變反駁的地方、改變不輕易放過的地方。以下任一段提示詞，複製貼到新對話開頭即可。</p>
+
+    <article class="feat" id="f5">
+      <div class="feat-head"><span class="feat-no">05</span><h3>個人心理諮商師<small>用提問取代給答案</small></h3></div>
+      <div class="feat-body">
+        <p>大多數人把 Claude 當成一台認同機器：描述問題，Claude 說「這聽起來很不容易」，然後給五點條列建議。但好的心理諮商不是這樣運作的。</p>
+        <p>這段提示詞會把 Claude 變成更接近認知行為治療師（Cognitive Behavioral Therapy, CBT）的角色：用提問取代給答案，用挑戰思考取代單純認同。適合用在一直猶豫不決的決定、說不清原因的焦慮，或任何需要清醒旁觀者視角的情境。</p>
+        <div class="prompt">
+          <div class="prompt-bar"><span>Prompt · 角色設定</span><button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>你是一位擁有20年經驗的認知行為治療師。我等一下會分享一件讓我困擾的事。
+你的做法：
+．不要馬上給建議，先用提問幫我理解自己的思考模式。
+．留意認知扭曲，例如災難化思考、非黑即白、讀心術、預測未來，一旦發現就指出來。
+．一次只問一個問題，不要一次丟太多問題給我。
+．當我透過你的提問自己得出結論，那才是目標，不要直接把答案塞給我。
+．態度溫暖但誠實，如果我的想法明顯扭曲，不要附和我。
+．如果我看起來在迴避重要的事，直接點出來。
+不要用制式的開場白，直接問我發生了什麼事就好。</pre>
+        </div>
+      </div>
+    </article>
+
+    <article class="feat" id="f6">
+      <div class="feat-head"><span class="feat-no">06</span><h3>嚴厲的導師<small>對想法做壓力測試</small></h3></div>
+      <div class="feat-body">
+        <p>Claude 預設會同意你：替想法加分、支持推理、找出正面之處。但這幾乎總是錯的做法。</p>
+        <p>這段提示詞會關掉這個習慣。Claude 不再附和，而是開始對想法做壓力測試：找出薄弱假設、遺漏的考量、計畫會在哪裡出問題。過程會不太舒服，但正因如此才有效。</p>
+        <div class="prompt">
+          <div class="prompt-bar"><span>Prompt · 角色設定</span><button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>你是一位極度坦率的導師。你創業過也失敗過好幾次，看過上百個人帶著十足的自信犯下同樣的錯誤。
+你的任務不是鼓勵我，而是在我犯下代價高昂的錯誤之前，保護我不被自己的盲點害到。
+規則：
+．如果你認為我錯了，就明確反對我，並具體說明原因。
+．指出我沒看見的地方，尤其是那些我可能因為希望計畫成功而刻意迴避的地方。
+．問我自己沒想過要問的尖銳問題。
+．如果某件事是壞主意，就直接說是壞主意，不要用「話說回來⋯⋯」來平衡它。
+．在回答最後，告訴我在往下走之前，最該想清楚的一件事是什麼。
+我等一下會分享一個想法，不用對它客氣。</pre>
+        </div>
+      </div>
+    </article>
+
+    <article class="feat" id="f7">
+      <div class="feat-head"><span class="feat-no">07</span><h3>私人教練<small>依實際狀況打造並持續調整</small></h3></div>
+      <div class="feat-body">
+        <p>通用的健身建議到處都是，但不會考慮你的行程、傷病、器材與真正的目標。把真實數據給 Claude，它就能建立一份真正的計畫：不是範本，而是根據實際情況打造，並依每週回報的執行狀況持續調整。</p>
+        <div class="prompt">
+          <div class="prompt-bar"><span>Prompt · 角色設定</span><button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>你是一位專業的私人教練兼運動營養師。我想請你幫我打造一套完整的訓練計畫。
+我的狀況：
+年齡：〔年齡〕
+目前體重／體組成：〔細節〕
+目標：〔減脂／增肌／提升耐力／一般體能〕
+可用器材：〔健身房／居家／只有啞鈴等〕
+每週可訓練天數：〔數字〕
+每次訓練時間：〔分鐘〕
+是否有傷病或限制：〔細節，或「無」〕
+目前體能程度：〔初學／中階／進階〕
+幫我做一套12週的計畫。每週都要給我完整內容，包含動作、組數、次數與休息時間。並解釋為什麼要這樣安排，我想理解背後的邏輯，而不只是照做。開始之後，我每週會回報執行狀況，你再依此調整。</pre>
+        </div>
+      </div>
+    </article>
+
+    <article class="feat" id="f8">
+      <div class="feat-head"><span class="feat-no">08</span><h3>演練一場困難的對話<small>Claude 扮演對方，演得很真實</small></h3></div>
+      <div class="feat-body">
+        <p>大多數人走進困難對話時毫無準備：知道自己想說什麼，卻不知道對方會怎麼回應。Claude 會扮演對方，用對方真正會有的方式回應你，在論點薄弱時反駁你，讓你必須靠實力才能爭取到好結果。練習幾次之後，真正上場的對話會容易許多。</p>
+        <div class="prompt">
+          <div class="prompt-bar"><span>Prompt · 角色扮演設定</span><button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>我需要準備一場困難的對話，希望你扮演對方，讓我可以練習。
+這個人是：〔描述對方是誰，例如老闆、客戶、共同創辦人等〕
+我需要說的內容：〔你需要提出或告知的事〕
+為什麼這件事很難：〔你害怕什麼／可能出什麼問題〕
+這個人的特質：〔他的個性、通常會有什麼反應、在乎什麼〕
+整個對話過程請維持角色扮演，用這個人實際上會有的方式回應我，而不是我希望他有的反應。如果我說的話薄弱或沒有說服力，就反駁我。
+每一輪對話結束後，先短暫跳出角色，告訴我哪裡做得好、哪裡不好，然後再回到角色裡。最後給我完整的檢討：我哪裡做得好、該調整什麼，以及在真正對話時最需要記住的重點。
+先進入角色，等我開口。</pre>
+        </div>
+      </div>
+    </article>
+
+    <article class="feat" id="f9">
+      <div class="feat-head"><span class="feat-no">09</span><h3>唱反調的人<small>在投入之前，先建立反方論述</small></h3></div>
+      <div class="feat-body">
+        <p>你已經下定決心，也想過各種反對意見，你很確定——這正是該讓 Claude 攻擊這個決定的時候。不是客氣的提醒，而是完整的反對論述：這個決定最可能失敗的三種方式，以及你因為希望它成功而看不見的地方。花五分鐘，在真正投入之前，不是之後。</p>
+        <div class="prompt">
+          <div class="prompt-bar"><span>Prompt · 反方論述設定</span><button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>我已經做了一個決定，在我真正投入之前，希望你幫我建立最強而有力的反對論述。
+這個決定：〔具體描述你打算做的事〕
+我的理由：〔你認為這是個好主意的原因〕
+我已經想過的地方：〔你已經考慮過的反對意見〕
+你的任務：
+．建立最強而有力的反對這個決定的論述。
+不要用正面意見來平衡，我已經相信這個決定了，我需要的是反方論點。
+．找出我可能做錯的假設。
+．描述這件事最可能失敗或反噬的三種真實情境。
+．告訴我可能低估了什麼。
+．告訴我要相信什麼，才會讓這真的變成一個壞主意。
+不用留情面，如果這是個錯誤，我現在就需要知道。</pre>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ PART 3 ============ -->
+<section class="part">
+  <div class="wrap">
+    <div class="part-head"><span class="part-num">參</span><h2>大多數人不知道存在的產品功能</h2></div>
+    <p class="part-intro">超越對話框的七項產品能力：瀏覽器、桌面、排程、外掛、規則檔、程式開發與視覺設計。</p>
+
+    <article class="feat" id="f10">
+      <div class="feat-head"><span class="feat-no">10</span><h3>Claude in Chrome<small>跟你看到同樣畫面的 Claude</small></h3></div>
+      <div class="feat-body">
+        <p>大多數人開一個獨立分頁使用 Claude，然後手動複製貼上需要的內容——這是比較費工的做法。</p>
+        <p>Claude in Chrome 是一個瀏覽器擴充功能，讓 Claude 能完整看到你目前分頁的內容，並直接對它採取動作：讀取頁面、點擊連結、填寫表單、前往新網址。只要用平常的語言描述任務，就可以放手讓它去做。</p>
+        <div class="howto">⚙︎<span><b>安裝方式：</b>Chrome 線上應用程式商店搜尋「Claude for Chrome」→ 安裝 → 以 Claude 帳號登入 → 點擴充功能圖示開啟側邊欄。</span></div>
+        <div class="prompt">
+          <div class="prompt-bar"><span>Prompt · 任務範例</span><button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>我正在看這個職缺列表頁面。
+把畫面上每一則職缺都看過一遍，擷取出：職稱、公司名稱、有顯示的話就擷取薪資範圍、以及前三項職缺要求。
+幫我做一個比較表，依薪資由高到低排序。
+如果有多頁，就點進下一頁繼續，直到把所有結果都涵蓋完為止。</pre>
+        </div>
+      </div>
+    </article>
+
+    <article class="feat" id="f11">
+      <div class="feat-head"><span class="feat-no">11</span><h3>Claude Cowork<small>住在你桌面上的 Claude</small></h3></div>
+      <div class="feat-body">
+        <p>網頁版 Claude 無法存取你的電腦，看不到你的檔案，所有東西都得手動貼進去。</p>
+        <p>Cowork 是一款桌面應用程式，讓 Claude 能直接存取你的檔案系統：讀取實際的檔案、編輯文件、建立新檔案、整理資料夾，完全不用把任何東西複製貼進對話框。</p>
+        <div class="howto">⚙︎<span><b>取得方式：</b>下載並安裝 Claude 桌面應用程式（Desktop App），開啟 Cowork 模式。</span></div>
+      </div>
+    </article>
+
+    <article class="feat" id="f12">
+      <div class="feat-head"><span class="feat-no">12</span><h3>Scheduled Tasks（排程任務）<small>你睡覺時也在工作的 Claude</small></h3></div>
+      <div class="feat-body">
+        <p>大多數人把 Claude 當成一個需要自己去啟動的工具：開對話、打字、等結果、關分頁。Scheduled Tasks 改變了這件事：設定一次任務，Claude 就會依選定的時間與頻率自動執行——每天早上、每週一、每小時都行——並把結果存到你的資料夾裡。</p>
+        <div class="prompt">
+          <div class="prompt-bar"><span>Prompt · 排程任務描述範例</span><button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>每個平日早上7點30分，執行以下步驟：
+1. 搜尋過去24小時內最重要的AI與加密貨幣新聞
+2. 挑出5則最重要的story，聚焦在令人意外、違反直覺，或對創業者與投資人有實質影響的內容
+3. 每則story都要寫：標題、兩句話摘要、為什麼重要
+4. 把結果存成「brief-〔日期〕.md」，放到我的/briefs資料夾裡
+語氣要直接、分析導向，不要廢話，要能在3分鐘內讀完。</pre>
+        </div>
+      </div>
+    </article>
+
+    <article class="feat" id="f13">
+      <div class="feat-head"><span class="feat-no">13</span><h3>Cowork 裡的 Skills<small>像安裝外掛一樣安裝新能力</small></h3></div>
+      <div class="feat-body">
+        <p>Skills 是預先寫好的一組指令，讓 Claude 在 Cowork 裡具備特定能力。不用每次重新解釋需求，只要安裝一次 skill，Claude 就已經知道怎麼處理這類任務——製作 PowerPoint 檔案、處理 PDF，或執行特定工作流程。</p>
+        <p>可以把它想成手機上的 App：手機不裝 App 也能用，但裝了對的 App 之後，能做的事情多很多。</p>
+        <div class="howto">⚙︎<span><b>設定位置：</b>Cowork → Customize → Skills 檢視已安裝內容；點左側欄 Browse plugins 安裝 plugin，其中的 skills 會自動出現在 Skills 分頁，Claude 在任務需要時自動使用。</span></div>
+      </div>
+    </article>
+
+    <article class="feat" id="f14">
+      <div class="feat-head"><span class="feat-no">14</span><h3>CLAUDE.md<small>Claude 每次都會自動讀取的規則檔</small></h3></div>
+      <div class="feat-body">
+        <p>在 Cowork 與 Claude Code 裡，可以在專案資料夾建立一個 CLAUDE.md 檔案。Claude 每次開始新的工作階段都會自動讀取，不需要特別要求。</p>
+        <p>程式撰寫規範、文字風格規則、公司內部術語、品牌語氣指南，都可以寫進去。只要寫一次，Claude 之後在這個專案的每一次工作階段都會持續遵守。</p>
+        <div class="prompt">
+          <div class="prompt-bar"><span>範例 · CLAUDE.md 檔案內容</span><button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre># 專案：AI電子報
+
+## 關於這個專案
+一份給創業者與投資人看的AI與加密貨幣週報，訂閱數35,000。語氣直接、偏分析導向，偶爾帶點不客氣。
+
+## 寫作規則
+．短段落，最多3句話。
+．編輯內容不用條列式，一律用散文形式。
+．不用破折號，改用連字號或重新調整句子結構。
+．數字勝過形容詞，寫「省下3小時」而不是「省下大量時間」。
+．絕對不要用：「深入探討」、「劃時代」、「game-changing」、當動詞用的「leverage」、「utilize」。
+．可以用縮寫形式，而且鼓勵使用。
+
+## 內容規則
+．假設讀者已經知道什麼是LLM，不用解釋基本概念。
+．開頭先放最令人意外或違反直覺的內容。
+．每篇文章都要有具體的「所以呢」，也就是讀者該做什麼或該用不同角度思考什麼。
+
+## 檔案結構
+．草稿放在/drafts
+．已發佈的文章放在/published，檔名前面加日期：YYYY-MM-DD-title.md
+．研究筆記放在/research</pre>
+        </div>
+      </div>
+    </article>
+
+    <article class="feat" id="f15">
+      <div class="feat-head"><span class="feat-no">15</span><h3>Claude Code<small>在終端機裡寫程式、測試、修錯的 AI</small></h3></div>
+      <div class="feat-body">
+        <p>有些人還不知道可以用 Claude 寫程式，而且不只是片段程式碼，還包含完整的正式產品等級程式碼、整個功能、複雜的重構。只要用平常的語言描述需求，Claude 就會寫出來。</p>
+        <p>Claude Code 更進一步：它直接在你的開發環境裡運作，而不是在對話視窗裡。它會讀取實際的程式碼庫、寫新程式、跑測試、讀錯誤訊息，然後不斷循環修錯，直到任務完成。可整合 VS Code 與 JetBrains，也可放進 GitHub Actions，自動審查或撰寫 pull request。</p>
+        <div class="howto">⚙︎<span><b>運作環境：</b>終端機（Terminal）、VS Code、JetBrains、GitHub Actions。</span></div>
+      </div>
+    </article>
+
+    <article class="feat" id="f16">
+      <div class="feat-head"><span class="feat-no">16</span><h3>Claude Design<small>專門處理視覺工作的 AI</small></h3></div>
+      <div class="feat-body">
+        <p>大多數人不知道這個產品存在。Claude Design 是 Anthropic Labs 另外推出的視覺工作工具，可用來做產品一頁式簡介、募資簡報、原型、著陸頁版型。</p>
+        <p>你描述需求，Claude 就把它做出來，可匯出成 PPTX、Canva、PDF 或 HTML。對不是設計師的人來說，這等於把原本要花 3 小時的 Figma 作業，變成一段 10 分鐘的對話。</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ APPENDIX ============ -->
+<section class="appendix" id="appendix">
+  <div class="wrap">
+    <div class="part-head"><span class="part-num">附</span><h2>附錄：附件原文參考</h2></div>
+    <p class="part-intro">本指南內容依據下列附件文字整理編排，全文如實收錄以供查考。</p>
+    <div class="src-box">
+      <div class="src-bar"><span class="tag">SOURCE</span><span class="fname">Claude.txt（使用者提供之附件）</span></div>
+      <pre>Claude能做的事，比大多數人以為的還要多。這篇指南把所有功能都整理出來：每個功能在哪裡找到、怎麼開啟，以及一個你馬上就能用的提示詞。
+讀完之後，挑出符合你工作流程的功能，今天就設定起來。每一項只要花幾分鐘設定，之後每天都能持續帶來回報。
+
+一般版Claude裡的隱藏功能
+
+1. Projects（專案）：真正記得你的Claude
+每次你開一個新的Claude對話，它都是從零開始。它不知道你的名字、你的工作、你的偏好，什麼都不知道。大多數人接受了這一點，於是每次對話都要重新自我介紹一遍。
+Projects解決了這個問題。你建立一個專案，上傳你的文件，寫下固定指令，Claude就會永久保留這些內容。下週再打開，它會準確接續你上次停下的地方。
+如果你從沒用過Projects，這是這篇文章裡你該優先處理的第一件事。
+專案指令範例，貼到Project Instructions欄位即可
+➡️ 你是我的內容研究助理。我經營一份給技術背景讀者看的AI與加密貨幣電子報。一律假設我的讀者已經懂基本概念，不用解釋什麼是LLM或什麼是區塊鏈。當我分享一個主題或文章時，你的任務是：1. 找出三個最違反直覺或最令人意外的角度 2. 找出與我可能錯過的近期事件之間的關聯 3. 建議如何把這個內容包裝成一個故事，而不是摘要。語氣：直接，不要公司腔，不要贅語。格式：短段落，除非我要求，否則不要用條列式。絕對不要用「這是個好問題」或「當然」開頭回答。
+
+2. Artifacts（成品）：對話裡真正能運作的應用程式
+很多人以為Claude只能產生文字，沒辦法做出真正能用的東西。這是錯的。Artifacts就是Claude在對話裡直接做出一個真正能運作的東西，不是一段你得複製到別處的程式碼，而是一個出現在側邊欄、真的能用的產品：計算機、習慣追蹤器、小遊戲、附圖表的儀表板。你打開它、點它、使用它，完全不用離開對話。
+SVG圖形、互動式圖表、Mermaid流程圖，全部都支援。免費方案就能用。但大多數人從來沒試過。
+試試這個
+➡️ 幫我做一個能實際運作的習慣追蹤網頁應用。我想追蹤5個每日習慣。每天可以把它們打勾完成。顯示每個習慣的7天連續紀錄計數器。如果漏掉一天，連續紀錄就重置。設計：深色背景，乾淨簡約的風格。讓打勾這個動作有滿足感，完成時加一個小動畫。重新整理頁面後，資料要能保留。
+
+3. Adaptive Thinking（自適應思考）：不同層次的推理
+大多數Claude使用者從來沒開啟過這項功能。Extended Thinking（延伸思考）是一種模式，Claude會先一步步推理問題，再給你答案，而且你可以看到整個推理過程。
+簡單問題用不到它。但遇到複雜決策、策略分析，或任何你希望Claude真正思考而不是套模式回答的情境，輸出結果的差異會非常明顯。
+把它打開，問跟平常一樣的問題，比較一下答案的差別。
+遇到真正需要做決定時，可以用這個
+➡️ 我正在兩個選項之間做決定，希望你在回答前先仔細思考過一遍。選項A：〔描述選項A〕選項B：〔描述選項B〕我的情況：〔你的背景、限制、最在意的事〕回答之前先想清楚以下幾點：．每個選項的第二層、第三層後續影響．我可能因為情緒而高估或低估了什麼．我可能缺少哪些資訊，而這些資訊會改變決定．如果事情出錯，哪個選項的下檔保護比較好。想清楚之後，給我你真正的建議，並附上你的推理過程。
+
+4. Memory（記憶）：認得你是誰的Claude
+開啟Memory之後，Claude會隨著時間建立一份關於你的檔案：你的工作、你的專案、你喜歡的溝通方式、你目前在忙什麼。
+就算開一個全新的對話，它也已經知道背景脈絡，你不用再自我介紹一次。
+這項功能預設是關閉的，大多數人根本不知道它存在。
+➡️ 我希望你記住以下關於我的事，這樣你就不用每次都重新問一次：我叫〔姓名〕，在〔公司或專案〕擔任〔職稱〕。我目前的主要重心是〔你正在做的事〕。我的受眾或客戶是〔他們是誰〕。之後我請你幫忙時，除非我另外說明，否則一律假設這個背景脈絡成立。我偏好的溝通風格：〔直接／詳細／輕鬆／正式〕。我在回答中會覺得煩的地方：〔例如條列式、冗長的開場白、過多的但書〕。現在就把這些內容存進記憶。
+
+給Claude一個角色，一句提示詞就能改變一切
+Claude不一定要當「一個AI助理」。給它一個明確的角色，它就會徹底投入這個角色，改變它問你問題的方式、它會反駁你哪些地方、它不會輕易放過你哪些地方。把以下任何一段提示詞複製起來，貼到新對話的開頭就行。
+
+5. 個人心理諮商師
+大多數人把Claude當成一台認同機器：描述一個問題，Claude說這聽起來很不容易，然後給五點條列式建議。
+但好的心理諮商不是這樣運作的。這段提示詞會把Claude變成更接近認知行為治療師（CBT）的角色：用提問取代給答案，用挑戰你的思考取代單純認同你。
+適合用在你一直猶豫不決的決定、說不清楚原因的焦慮，或任何你需要一個清醒旁觀者視角的情境。
+➡️ 你是一位擁有20年經驗的認知行為治療師。我等一下會分享一件讓我困擾的事。你的做法：．不要馬上給建議，先用提問幫我理解自己的思考模式。．留意認知扭曲，例如災難化思考、非黑即白、讀心術、預測未來，一旦發現就指出來。．一次只問一個問題，不要一次丟太多問題給我。．當我透過你的提問自己得出結論，那才是目標，不要直接把答案塞給我。．態度溫暖但誠實，如果我的想法明顯扭曲，不要附和我。．如果我看起來在迴避重要的事，直接點出來。不要用制式的開場白，直接問我發生了什麼事就好。
+
+6. 嚴厲的導師
+Claude預設會同意你，替你的想法加分、支持你的推理、找出正面之處。但這幾乎總是錯的做法。
+這段提示詞會關掉這個習慣。Claude不再附和你，而是開始對你的想法做壓力測試，找出薄弱的假設、遺漏的考量，以及你的計畫會在哪裡出問題。
+過程會不太舒服，但正因如此才有效。
+➡️ 你是一位極度坦率的導師。你創業過也失敗過好幾次，看過上百個人帶著十足的自信犯下同樣的錯誤。你的任務不是鼓勵我，而是在我犯下代價高昂的錯誤之前，保護我不被自己的盲點害到。規則：．如果你認為我錯了，就明確反對我，並具體說明原因。．指出我沒看見的地方，尤其是那些我可能因為希望計畫成功而刻意迴避的地方。．問我自己沒想過要問的尖銳問題。．如果某件事是壞主意，就直接說是壞主意，不要用「話說回來⋯⋯」來平衡它。．在回答最後，告訴我在往下走之前，最該想清楚的一件事是什麼。我等一下會分享一個想法，不用對它客氣。
+
+7. 私人教練
+通用的健身建議到處都是，但它們不會考慮你的行程、你的傷病、你的器材、你真正的目標。
+把你的真實數據給Claude，它就能建立一份真正的計畫。不是範本，不是隨便一個健身網站都找得到的東西，而是根據你的實際情況打造，並且會依你回報的執行狀況持續調整的計畫。
+你是一位專業的私人教練兼運動營養師。我想請你幫我打造一套完整的訓練計畫。我的狀況：年齡：〔年齡〕目前體重／體組成：〔細節〕目標：〔減脂／增肌／提升耐力／一般體能〕可用器材：〔健身房／居家／只有啞鈴等〕每週可訓練天數：〔數字〕每次訓練時間：〔分鐘〕是否有傷病或限制：〔細節，或「無」〕目前體能程度：〔初學／中階／進階〕幫我做一套12週的計畫。每週都要給我完整內容，包含動作、組數、次數與休息時間。並解釋為什麼要這樣安排，我想理解背後的邏輯，而不只是照做。開始之後，我每週會回報執行狀況，你再依此調整。
+
+8. 演練一場困難的對話
+大多數人走進困難的對話時都毫無準備。他們知道自己想說什麼，卻不知道對方實際上會怎麼回應。
+Claude會扮演對方，而且演得很真實。它會用對方真正會有的方式回應你，在你論點薄弱時反駁你，讓你必須靠實力才能爭取到好的結果。練習幾次之後，真正上場的對話就會容易許多。
+➡️ 我需要準備一場困難的對話，希望你扮演對方，讓我可以練習。這個人是：〔描述對方是誰，例如老闆、客戶、共同創辦人等〕我需要說的內容：〔你需要提出或告知的事〕為什麼這件事很難：〔你害怕什麼／可能出什麼問題〕這個人的特質：〔他的個性、通常會有什麼反應、在乎什麼〕整個對話過程請維持角色扮演，用這個人實際上會有的方式回應我，而不是我希望他有的反應。如果我說的話薄弱或沒有說服力，就反駁我。每一輪對話結束後，先短暫跳出角色，告訴我哪裡做得好、哪裡不好，然後再回到角色裡。最後給我完整的檢討：我哪裡做得好、該調整什麼，以及在真正對話時最需要記住的重點。先進入角色，等我開口。
+
+9. 唱反調的人
+你已經下定決心，也已經想過各種反對意見，你很確定。
+這正是該讓Claude攻擊這個決定的時候。不是客氣的提醒，而是完整的反對論述：這個決定最可能失敗的三種方式，以及你因為希望它成功而看不見的地方。
+花五分鐘，在你真正投入之前，不是之後。
+➡️ 我已經做了一個決定，在我真正投入之前，希望你幫我建立最強而有力的反對論述。這個決定：〔具體描述你打算做的事〕我的理由：〔你認為這是個好主意的原因〕我已經想過的地方：〔你已經考慮過的反對意見〕你的任務：．建立最強而有力的反對這個決定的論述。不要用正面意見來平衡，我已經相信這個決定了，我需要的是反方論點。．找出我可能做錯的假設。．描述這件事最可能失敗或反噬的三種真實情境。．告訴我可能低估了什麼。．告訴我要相信什麼，才會讓這真的變成一個壞主意。不用留情面，如果這是個錯誤，我現在就需要知道。
+
+大多數人不知道存在的產品功能
+
+10. Claude in Chrome：跟你看到同樣畫面的Claude
+大多數人是開一個獨立分頁使用Claude，然後手動複製貼上需要的內容。這是比較費工的做法。
+Claude in Chrome是一個瀏覽器擴充功能，讓Claude能完整看到你目前分頁的內容，並且能直接對它採取動作：讀取頁面、點擊連結、填寫表單、前往新的網址。你只要用平常的語言描述任務，然後就可以放手讓它去做。
+在Chrome線上應用程式商店搜尋Claude for Chrome，安裝之後用你的Claude帳號登入。點擴充功能圖示打開側邊欄，Claude就能看到並操作你打開的任何頁面。
+可以交給它的任務範例
+➡️ 我正在看這個職缺列表頁面。把畫面上每一則職缺都看過一遍，擷取出：職稱、公司名稱、有顯示的話就擷取薪資範圍、以及前三項職缺要求。幫我做一個比較表，依薪資由高到低排序。如果有多頁，就點進下一頁繼續，直到把所有結果都涵蓋完為止。
+
+11. Claude Cowork：住在你桌面上的Claude
+網頁版Claude沒辦法存取你的電腦，看不到你的檔案，所有東西都得手動貼進去。
+Cowork是一款桌面應用程式，讓Claude能直接存取你的檔案系統。它可以讀取你實際的檔案、編輯文件、建立新檔案、整理資料夾，完全不用你把任何東西複製貼進對話框。
+
+12. Scheduled Tasks（排程任務）：你睡覺時也在工作的Claude
+大多數人把Claude當成一個需要自己去啟動的工具：開對話、打字提出需求、等結果、關掉分頁。
+Scheduled Tasks改變了這件事。你只要設定一次任務，Claude就會依你選定的時間與頻率自動執行，不需要你觸發：每天早上、每週一、每小時都行。Claude會自動執行並把結果存到你的資料夾裡。
+排程任務描述範例
+➡️ 每個平日早上7點30分，執行以下步驟：1. 搜尋過去24小時內最重要的AI與加密貨幣新聞 2. 挑出5則最重要的story，聚焦在令人意外、違反直覺，或對創業者與投資人有實質影響的內容 3. 每則story都要寫：標題、兩句話摘要、為什麼重要 4. 把結果存成「brief-〔日期〕.md」，放到我的/briefs資料夾裡。語氣要直接、分析導向，不要廢話，要能在3分鐘內讀完。
+
+13. Cowork裡的Skills：像安裝外掛一樣安裝新能力
+Skills是預先寫好的一組指令，讓Claude在Cowork裡具備特定能力。你不用每次都重新解釋需求，只要安裝一次skill，Claude就已經知道怎麼處理這類任務，不管是製作PowerPoint檔案、處理PDF，還是執行某個特定工作流程。
+可以把它想成手機上的App。手機本身不裝App也能用，但裝了對的App之後，能做的事情多很多。找到與安裝的方法：進入Cowork→Customize→Skills，可以看到目前已安裝的內容。
+要新增的話，點左側欄的Browse plugins，找到想要的plugin後安裝，該plugin裡的skills就會自動出現在你的Skills分頁，Claude在任務需要時就會自動使用。
+
+14. CLAUDE.md：Claude每次都會自動讀取的規則檔
+在Cowork與Claude Code裡，你可以在專案資料夾裡建立一個CLAUDE.md檔案。Claude每次開始新的工作階段時，都會自動讀取這個檔案，不需要你特別要求。
+你的程式撰寫規範、你的文字風格規則、你公司裡有特定意義的術語、品牌語氣指南，都可以寫進去。只要寫一次，Claude之後在這個專案的每一次工作階段，都會持續遵守。
+專案：AI電子報／關於這個專案／寫作規則／內容規則／檔案結構（範例全文詳見指南第 14 節）
+
+15. Claude Code：在終端機裡幫你寫程式、測試、修錯的AI
+有些人還不知道可以用Claude寫程式，而且不只是片段程式碼，還包含完整的正式產品等級程式碼、整個功能、複雜的重構。你只要用平常的語言描述需求，Claude就會寫出來。
+Claude Code更進一步，它直接在你的開發環境裡運作，而不是在對話視窗裡。它會讀取你實際的程式碼庫、寫新程式、跑測試、讀錯誤訊息，然後不斷循環修錯，直到任務完成為止。
+它可以整合進VS Code與JetBrains，也可以放進GitHub Actions，讓它自動審查或撰寫pull request，完全不用你動手。
+
+16. Claude Design：專門處理視覺工作的AI
+大多數人不知道這個產品存在。Claude Design是Anthropic Labs另外推出的視覺工作工具，可以用來做產品一頁式簡介、募資簡報、原型、著陸頁版型。
+你描述需求，Claude就把它做出來，可以匯出成PPTX、Canva、PDF或HTML。對不是設計師的人來說，這等於把原本要花3小時的Figma作業，變成一段10分鐘的對話。</pre>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Claude 功能完整指南 · 依附件 <b>Claude.txt</b> 整理編排</span>
+    <span>編製日期 中華民國 <b>115 年 7 月 17 日</b></span>
+  </div>
+</footer>
+
+<script>
+function cp(btn){
+  const pre=btn.closest('.prompt').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(()=>{
+    const t=btn.textContent;btn.textContent='已複製 ✓';
+    setTimeout(()=>btn.textContent=t,1600);
+  });
+}
+</script>
+</body>
+</html>

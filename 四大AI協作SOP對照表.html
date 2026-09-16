@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMS 政策業務・四大 AI 工具協作 SOP</title>
+<style>
+  :root{
+    --navy:#1F3A5F; --ink:#1A2B3C; --grey:#6B7683; --line:#AEB9C4;
+    --light:#EAF0F6; --perp:#2AA9C9; --gem:#4A6FA5; --note:#3C4A57; --claude:#C4713C;
+    --warn-bg:#FBF2EA; --warn-line:#C4713C; --warn-ink:#A0522D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:"Microsoft JhengHei","微軟正黑體","PingFang TC","Noto Sans TC",sans-serif;
+    color:var(--ink); background:#F4F6F8; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .sheet{
+    max-width:960px; margin:24px auto; background:#fff; padding:28px 32px;
+    box-shadow:0 2px 16px rgba(31,58,95,.12); border-radius:6px;
+  }
+  header{text-align:center; border-bottom:3px solid var(--navy); padding-bottom:10px; margin-bottom:18px;}
+  header h1{font-size:26px; color:var(--navy); letter-spacing:.5px;}
+  header .sub{font-size:13px; color:var(--grey); margin-top:4px;}
+  h2{font-size:15px; color:var(--navy); margin:18px 0 8px; display:flex; align-items:center; gap:8px;}
+  h2::before{content:""; width:5px; height:16px; background:var(--navy); border-radius:2px; display:inline-block;}
+  table{width:100%; border-collapse:collapse; font-size:13px; table-layout:fixed;}
+  th,td{border:1px solid var(--line); padding:7px 9px; vertical-align:middle;}
+  thead th{background:var(--navy); color:#fff; font-weight:700; text-align:center; font-size:13px;}
+  tbody tr:nth-child(even){background:var(--light);}
+  .tool{font-weight:700; text-align:center;}
+  .role{font-weight:700;}
+  .stage{font-weight:700; text-align:center;}
+  .flow{text-align:center; font-weight:700;}
+  .t-perp{color:var(--perp);} .t-gem{color:var(--gem);} .t-note{color:var(--note);} .t-claude{color:var(--claude);}
+  .scenario{margin-top:16px;}
+  .scenario .lead{font-size:14px; font-weight:700; color:var(--navy); margin-bottom:6px;}
+  .scenario p{font-size:13px; color:var(--grey); line-height:1.9;}
+  .scenario b{font-weight:700;}
+  .warn{
+    margin-top:16px; background:var(--warn-bg); border:1px solid var(--warn-line);
+    border-left:6px solid var(--warn-line); border-radius:4px; padding:10px 14px; font-size:13px;
+  }
+  .warn .tag{font-weight:700; color:var(--warn-ink); margin-right:6px;}
+  /* 表一欄寬 */
+  .t1 col:nth-child(1){width:14%;} .t1 col:nth-child(2){width:23%;}
+  .t1 col:nth-child(3){width:17%;} .t1 col:nth-child(4){width:46%;}
+  /* 表二欄寬 */
+  .t2 col:nth-child(1){width:12%;} .t2 col:nth-child(2){width:22%;}
+  .t2 col:nth-child(3){width:39%;} .t2 col:nth-child(4){width:27%;}
+
+  @media print{
+    body{background:#fff;}
+    .sheet{box-shadow:none; margin:0; max-width:100%; padding:12mm 14mm; border-radius:0;}
+    @page{size:A4 portrait; margin:0;}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <header>
+    <h1>EMS 政策業務・四大 AI 工具協作 SOP</h1>
+    <div class="sub">內政部消防署 救災救護組緊急救護科　｜　查・庫・產・修 四階段接力</div>
+  </header>
+
+  <h2>一、四大工具定位</h2>
+  <table class="t1">
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>工具</th><th>核心優勢</th><th>業務角色</th><th>EMS 業務適用場景</th></tr></thead>
+    <tbody>
+      <tr><td class="tool t-perp">Perplexity</td><td>即時網路搜尋＋來源引用</td><td class="role">情報偵蒐官</td><td>查各國救護制度、時事查證、抓來源連結</td></tr>
+      <tr><td class="tool t-gem">Gemini</td><td>Deep Research、Google 生態、多模態</td><td class="role">深度研究員</td><td>多來源整合研究報告、Workspace 協作、圖表處理</td></tr>
+      <tr><td class="tool t-note">NotebookLM</td><td>來源限定、可溯源問答、音檔摘要</td><td class="role">知識庫管家</td><td>法規／文獻／會議紀錄研讀，通勤聽摘要</td></tr>
+      <tr><td class="tool t-claude">Claude</td><td>內容結構化、Skills、文件產製</td><td class="role">產製主力</td><td>公文、預算、規格書、簡報、出國報告成稿</td></tr>
+    </tbody>
+  </table>
+
+  <h2>二、標準工作流程（查・庫・產・修 四階段）</h2>
+  <table class="t2">
+    <colgroup><col><col><col><col></colgroup>
+    <thead><tr><th>階段</th><th>使用工具</th><th>做什麼</th><th>產出</th></tr></thead>
+    <tbody>
+      <tr><td class="stage t-perp">① 偵蒐</td><td class="flow">Perplexity → Gemini</td><td>先掃描主題現況拿有引用輪廓，再把值得深挖的題目丟 Deep Research</td><td>多來源研究報告、來源連結清單</td></tr>
+      <tr><td class="stage t-note">② 建庫</td><td class="flow">NotebookLM</td><td>匯入 PDF／法規／既有文件／會議紀錄，建單一主題知識庫做溯源問答</td><td>溯源問答、心智圖、音檔摘要</td></tr>
+      <tr><td class="stage t-claude">③ 產製</td><td class="flow">Claude</td><td>餵入研究結論與知識庫重點，套用 NFA Skills 產出可直接複製文件</td><td>三段式公文、預算書、規格書、簡報骨架</td></tr>
+      <tr><td class="stage t-gem">④ 美化</td><td class="flow">Gamma → Office</td><td>簡報骨架送 Gamma 上視覺，最終進 PowerPoint／Word 套機關格式</td><td>定稿簡報、正式 Word 文件</td></tr>
+    </tbody>
+  </table>
+
+  <div class="scenario">
+    <div class="lead">實戰情境：救護車收費改革</div>
+    <p>
+      <b class="t-perp">Perplexity</b> 查各國收費模式與媒體事件　→　
+      <b class="t-gem">Gemini</b> 做制度比較報告　→　
+      <b class="t-note">NotebookLM</b> 匯入《緊急醫療救護法》相關條文與各縣市現況做溯源問答　→　
+      <b class="t-claude">Claude</b> 產出四階段推動策略、簽文與長官簡報　→　
+      <b class="t-gem">Gamma</b> 出 deck。
+    </p>
+  </div>
+
+  <div class="warn">
+    <span class="tag">⚠ 資安提醒</span>涉密或未公開內部資料上傳前，先確認機關資安與資料分級規範。內部文件優先放 NotebookLM（來源留自建庫、相對可控）；純網路查詢交給 Perplexity／Gemini，敏感檔案不外傳。
+  </div>
+</div>
+</body>
+</html>

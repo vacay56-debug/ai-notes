@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>30 分鐘學會 Claude｜救護科 AI 應用入門指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1f2733;            /* 墨黑 */
+  --gov-blue:#1c4587;       /* 政府藍 */
+  --gov-blue-light:#eaf0f8; /* 淺藍底 */
+  --vermilion:#c0392b;      /* 硃紅 */
+  --paper:#fdfcf9;          /* 公文紙白 */
+  --line:#c9d2de;           /* 細線 */
+  --gray:#5c6672;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:#e8e6e1;
+  font-family:'Noto Sans TC',sans-serif;
+  color:var(--ink);
+  line-height:1.85;
+  padding:32px 12px;
+}
+.sheet{
+  max-width:820px;margin:0 auto;background:var(--paper);
+  border:1px solid var(--line);
+  box-shadow:0 2px 14px rgba(0,0,0,.08);
+  padding:56px 64px 48px;
+  position:relative;
+}
+/* 騎縫線 */
+.sheet::before{
+  content:"";position:absolute;top:0;bottom:0;left:26px;
+  border-left:1px dashed var(--vermilion);opacity:.35;
+}
+header{border-bottom:3px double var(--gov-blue);padding-bottom:18px;margin-bottom:8px}
+.doc-no{font-size:.8rem;color:var(--gray);letter-spacing:.08em;display:flex;justify-content:space-between}
+h1{
+  font-family:'Noto Serif TC',serif;font-weight:900;
+  font-size:1.9rem;color:var(--gov-blue);letter-spacing:.12em;
+  text-align:center;margin:14px 0 4px;
+}
+.subtitle{text-align:center;font-size:.95rem;color:var(--gray);letter-spacing:.2em}
+.intro{
+  background:var(--gov-blue-light);border-left:4px solid var(--gov-blue);
+  padding:14px 18px;margin:24px 0;font-size:.95rem;
+}
+.intro strong{color:var(--gov-blue)}
+h2{
+  font-family:'Noto Serif TC',serif;font-weight:700;font-size:1.2rem;
+  color:var(--vermilion);margin:34px 0 12px;letter-spacing:.1em;
+  display:flex;align-items:baseline;gap:10px;
+}
+h2 .time{
+  font-family:'Noto Sans TC',sans-serif;font-size:.75rem;font-weight:500;
+  color:#fff;background:var(--gov-blue);padding:1px 10px;border-radius:2px;
+  letter-spacing:.05em;white-space:nowrap;
+}
+p{margin-bottom:10px;font-size:.95rem}
+ul,ol{margin:6px 0 12px 1.6em;font-size:.95rem}
+li{margin-bottom:5px}
+.formula{
+  font-family:'Noto Serif TC',serif;font-weight:700;font-size:1.05rem;
+  text-align:center;color:var(--gov-blue);
+  border:1px solid var(--gov-blue);padding:12px;margin:14px 0;
+  letter-spacing:.05em;background:#fff;
+}
+.example{
+  border:1px dashed var(--line);background:#fff;
+  padding:14px 18px;margin:12px 0;font-size:.9rem;
+}
+.example .tag{
+  display:inline-block;font-size:.72rem;color:#fff;background:var(--vermilion);
+  padding:1px 8px;margin-bottom:6px;letter-spacing:.1em;border-radius:2px;
+}
+.example code{
+  font-family:'Noto Sans TC',sans-serif;color:var(--ink);
+  display:block;white-space:pre-wrap;
+}
+table{width:100%;border-collapse:collapse;font-size:.88rem;margin:12px 0}
+th{background:var(--gov-blue);color:#fff;font-weight:500;padding:7px 10px;letter-spacing:.08em}
+td{border:1px solid var(--line);padding:7px 10px;vertical-align:top;background:#fff}
+td:first-child{white-space:nowrap;font-weight:700;color:var(--gov-blue)}
+.good{color:#1e7d46;font-weight:700}
+.bad{color:var(--vermilion);font-weight:700}
+footer{
+  margin-top:40px;border-top:1px solid var(--line);padding-top:14px;
+  font-size:.8rem;color:var(--gray);display:flex;justify-content:space-between;
+  letter-spacing:.05em;
+}
+@media(max-width:640px){
+  .sheet{padding:36px 22px 32px}
+  .sheet::before{left:10px}
+  h1{font-size:1.5rem}
+}
+@media print{body{background:#fff;padding:0}.sheet{box-shadow:none;border:none}}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header>
+  <div class="doc-no"><span>內部參考資料</span><span>中華民國 115 年 7 月 10 日</span></div>
+  <h1>30 分鐘學會 Claude</h1>
+  <div class="subtitle">救護科 AI 應用入門指南</div>
+</header>
+
+<div class="intro">
+  <strong>核心觀念：</strong>Claude 不是搜尋引擎，而是一位「聽得懂指令的幕僚」。你交代得越清楚，它產出的初稿就越接近可直接使用的程度。本指南分六個階段，每階段五分鐘，讀完即可上手。
+</div>
+
+<h2>一、認識 Claude <span class="time">0–5 分鐘</span></h2>
+<p>Claude 是對話式人工智慧（Artificial Intelligence, AI），擅長四件事：<strong>寫作</strong>（公文、報告、簡報大綱）、<strong>研究</strong>（整理與比較資料）、<strong>分析</strong>（找出文件重點與問題）、<strong>解決問題</strong>（提供做法與步驟）。使用方式就是打字對話，像交辦業務給同仁一樣。</p>
+
+<h2>二、黃金提示公式 <span class="time">5–10 分鐘</span></h2>
+<p>好的指令（提示，Prompt）決定產出品質。記住一個公式即可：</p>
+<div class="formula">角色 ＋ 任務 ＋ 背景 ＋ 限制 ＋ 輸出格式</div>
+<div class="example">
+  <span class="tag">實例</span>
+  <code>你是消防機關的公文承辦人（角色）。
+請起草一份函稿（任務），
+通知各直轄市、縣（市）消防局辦理 EMT 複訓調查（背景）。
+字數 300 字以內、語氣正式（限制），
+採主旨、說明、辦法三段式（輸出格式）。</code>
+</div>
+
+<h2>三、五個實用提示技巧 <span class="time">10–15 分鐘</span></h2>
+<table>
+  <tr><th style="width:26%">技巧</th><th>做法</th></tr>
+  <tr><td>角色設定</td><td>開頭指定身分，例：「你是政策研究員」，語氣與深度會隨之調整。</td></tr>
+  <tr><td>逐步拆解</td><td>要求「請分步驟說明」，複雜問題會被拆成可執行的順序。</td></tr>
+  <tr><td>提供範例</td><td>貼一份過去的公文或報告當樣板，說「照這個格式寫」。</td></tr>
+  <tr><td>設定限制</td><td>明確給字數、段落數、禁用詞，避免產出過長或離題。</td></tr>
+  <tr><td>反向批評</td><td>寫完後追問「這份稿子的弱點在哪？」，讓它自我挑錯。</td></tr>
+</table>
+
+<h2>四、建立工作系統 <span class="time">15–20 分鐘</span></h2>
+<p>單次問答只是起點，真正省時的是把常用工作變成「可重複的流程」：</p>
+<ul>
+  <li><strong>建立專案（Projects）</strong>：把同一業務的對話與檔案放在一起，Claude 會記得脈絡。</li>
+  <li><strong>上傳檔案</strong>：直接丟法規條文、會議紀錄、國外文獻，請它摘要或比較。</li>
+  <li><strong>建立範本</strong>：把寫得好的提示存下來，下次換主題直接套用。</li>
+</ul>
+
+<h2>五、避免常見錯誤 <span class="time">20–25 分鐘</span></h2>
+<ul>
+  <li><span class="good">✔</span> 指令具體明確：「比較美、日、澳三國 EMT 訓練時數」。</li>
+  <li><span class="good">✔</span> 附上範例與格式要求。</li>
+  <li><span class="bad">✘</span> 模糊提問：「幫我寫一下那個東西」。</li>
+  <li><span class="bad">✘</span> 不給背景：Claude 不知道你的機關、對象與目的。</li>
+  <li><span class="bad">✘</span> 一次塞太多要求：拆成兩、三輪對話，逐步修正效果更好。</li>
+</ul>
+<p>口訣：<strong>先講清楚 → 看初稿 → 具體指出要改哪裡 → 反覆修到滿意。</strong></p>
+
+<h2>六、實際上手 <span class="time">25–30 分鐘</span></h2>
+<p>現在挑一件手上的真實業務試做，例如：</p>
+<ol>
+  <li>貼一份會議紀錄，要求「整理成 300 字摘要與待辦清單」。</li>
+  <li>請它草擬一份簽稿初稿，再逐段修改。</li>
+  <li>丟一篇英文 EMS 文獻，要求「以繁體中文摘要重點並列出可供政策參考之處」。</li>
+</ol>
+<p>做完一輪，你就掌握了核心用法。之後只需持續累積好用的提示範本，能力會隨使用逐日提升。</p>
+
+<footer>
+  <span>資料來源：Learn Claude in 30 Minutes（重製為繁體中文版）</span>
+  <span>第 1 頁，共 1 頁</span>
+</footer>
+
+</div>
+</body>
+</html>

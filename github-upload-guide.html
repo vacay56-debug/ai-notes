@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub 上傳標準步驟｜新手完整版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBFAF8;
+    --ink:#17191C;
+    --muted:#6B7280;
+    --line:#E4E1DA;
+    --git:#F05033;        /* git orange */
+    --git-soft:#FDEEE9;
+    --node-ring:#F05033;
+    --code-bg:#1B1F24;
+    --code-fg:#E6EDF3;
+    --code-dim:#8B949E;
+    --code-str:#7EE787;
+    --code-cmt:#768390;
+    --code-kw:#FF9492;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Noto Sans TC",system-ui,-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;}
+
+  .wrap{max-width:840px;margin:0 auto;padding:0 24px;}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    padding:72px 0 40px;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:"JetBrains Mono",monospace;
+    font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--git);font-weight:700;margin-bottom:18px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{
+    content:"";width:9px;height:9px;border-radius:50%;
+    background:var(--git);box-shadow:0 0 0 4px var(--git-soft);
+  }
+  h1{
+    font-size:clamp(32px,6vw,52px);
+    font-weight:900;line-height:1.12;margin:0 0 16px;letter-spacing:-.01em;
+  }
+  h1 .sub{color:var(--muted);font-weight:500;font-size:.5em;display:block;margin-top:10px;letter-spacing:0;}
+  .lede{font-size:17px;color:var(--muted);max-width:60ch;margin:0;}
+  .prompt{
+    margin-top:26px;font-family:"JetBrains Mono",monospace;font-size:13px;
+    color:var(--code-dim);
+  }
+  .prompt span{color:var(--git);}
+
+  /* ---------- TIMELINE ---------- */
+  main{padding:8px 0 40px;}
+  .commit{
+    position:relative;
+    display:grid;
+    grid-template-columns:48px 1fr;
+    column-gap:22px;
+  }
+  .rail{position:relative;}
+  /* vertical line */
+  .commit::before{
+    content:"";position:absolute;left:23px;top:0;bottom:0;width:2px;
+    background:var(--line);
+  }
+  .commit:last-child::before{bottom:auto;height:36px;}
+  .node{
+    position:relative;z-index:2;margin-top:30px;
+    width:48px;height:48px;border-radius:50%;
+    background:var(--paper);border:2px solid var(--node-ring);
+    display:flex;align-items:center;justify-content:center;
+    font-family:"JetBrains Mono",monospace;font-weight:700;font-size:15px;color:var(--git);
+  }
+  .content{padding:30px 0 34px;min-width:0;}
+  .hash{
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.05em;
+    color:var(--muted);text-transform:uppercase;margin-bottom:6px;
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  }
+  .tag{
+    background:var(--git-soft);color:var(--git);border-radius:999px;
+    padding:2px 10px;font-weight:700;font-size:10.5px;letter-spacing:.06em;
+  }
+  h2{font-size:24px;font-weight:900;margin:0 0 4px;letter-spacing:-.01em;}
+  .content > p{margin:6px 0 16px;color:var(--muted);font-size:15px;}
+
+  /* step list */
+  ol.steps{list-style:none;counter-reset:s;margin:0;padding:0;}
+  ol.steps li{
+    counter-increment:s;position:relative;padding:6px 0 6px 34px;font-size:15.5px;
+  }
+  ol.steps li::before{
+    content:counter(s);position:absolute;left:0;top:6px;
+    font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700;
+    width:22px;height:22px;border-radius:6px;background:#F0EDE6;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;line-height:1;
+  }
+  kbd{
+    font-family:"JetBrains Mono",monospace;font-size:12.5px;font-weight:600;
+    background:#fff;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;
+    padding:1px 7px;color:var(--ink);white-space:nowrap;
+  }
+  .inline-code{
+    font-family:"JetBrains Mono",monospace;font-size:13px;
+    background:#F0EDE6;padding:1px 6px;border-radius:5px;color:#B8341F;
+  }
+
+  /* code block */
+  .code{
+    position:relative;background:var(--code-bg);border-radius:12px;
+    margin:14px 0;overflow:hidden;border:1px solid #2A2F36;
+  }
+  .code-top{
+    display:flex;align-items:center;gap:8px;
+    padding:9px 14px;background:#161A1F;border-bottom:1px solid #2A2F36;
+  }
+  .dot{width:11px;height:11px;border-radius:50%;}
+  .dot.r{background:#FF5F56;} .dot.y{background:#FFBD2E;} .dot.g{background:#27C93F;}
+  .code-title{margin-left:6px;font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--code-dim);}
+  .copy{
+    margin-left:auto;background:#242A31;color:var(--code-fg);border:1px solid #333B44;
+    font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:600;
+    padding:4px 12px;border-radius:7px;cursor:pointer;transition:.18s;
+  }
+  .copy:hover{background:var(--git);border-color:var(--git);color:#fff;}
+  .copy.done{background:#27C93F;border-color:#27C93F;color:#062b0f;}
+  pre{margin:0;padding:16px 18px;overflow-x:auto;}
+  pre code{
+    font-family:"JetBrains Mono",monospace;font-size:13.5px;line-height:1.85;color:var(--code-fg);
+    display:block;white-space:pre;
+  }
+  .c-cmt{color:var(--code-cmt);} .c-kw{color:var(--code-kw);} .c-str{color:var(--code-str);}
+
+  .callout{
+    display:flex;gap:12px;background:var(--git-soft);border-left:3px solid var(--git);
+    border-radius:0 10px 10px 0;padding:14px 16px;margin:16px 0;font-size:14.5px;
+  }
+  .callout b{color:#B8341F;}
+  .callout .ico{font-weight:900;color:var(--git);flex-shrink:0;}
+
+  /* table */
+  .tablecard{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:6px;}
+  table{width:100%;border-collapse:collapse;font-size:14.5px;}
+  thead th{
+    background:#F3F0E9;text-align:left;padding:12px 16px;font-weight:700;font-size:13px;
+    letter-spacing:.02em;
+  }
+  tbody td{padding:13px 16px;border-top:1px solid var(--line);vertical-align:top;}
+  tbody td:first-child{font-weight:700;width:38%;}
+  tbody tr:hover{background:#FBF8F2;}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:34px 0 60px;}
+  .footnote{
+    background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;
+    font-size:14.5px;color:var(--ink);
+  }
+  .footnote strong{color:var(--git);}
+  .metaline{
+    margin-top:22px;font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted);
+    display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  }
+  .metaline .b{color:var(--git);}
+
+  a{color:#B8341F;text-decoration:none;border-bottom:1px solid rgba(240,80,51,.3);}
+  a:hover{border-bottom-color:var(--git);}
+
+  /* reveal */
+  .commit,.footnote{opacity:0;transform:translateY(14px);}
+  .revealed{opacity:1;transform:none;transition:opacity .5s ease,transform .5s ease;}
+  @media (prefers-reduced-motion:reduce){
+    .commit,.footnote{opacity:1;transform:none;}
+    html{scroll-behavior:auto;}
+  }
+
+  @media(max-width:560px){
+    .commit{grid-template-columns:36px 1fr;column-gap:14px;}
+    .commit::before{left:17px;}
+    .node{width:36px;height:36px;font-size:13px;margin-top:32px;}
+    ol.steps li{padding-left:30px;}
+    tbody td:first-child{width:auto;}
+    header.hero{padding:48px 0 32px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">git&nbsp;·&nbsp;新手上傳指南</div>
+    <h1>GitHub 上傳標準步驟
+      <span class="sub">從註冊到 push，一條時間軸走完</span>
+    </h1>
+    <p class="lede">依提交順序排列的完整流程。事前準備只做一次，之後每次更新三行指令搞定。網頁上傳與指令上傳兩種方法並列，先求快、再求穩。</p>
+    <div class="prompt mono"><span>$</span> git log --oneline --graph</div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 00 -->
+  <section class="commit">
+    <div class="rail"><div class="node">00</div></div>
+    <div class="content">
+      <div class="hash mono">a1f9c02 <span class="tag">只需一次</span></div>
+      <h2>事前準備</h2>
+      <p>建立帳號與遠端儲存庫（Repository），作為所有檔案的存放位置。</p>
+      <ol class="steps">
+        <li>前往 <a href="https://github.com" target="_blank" rel="noopener">github.com</a> 註冊帳號。</li>
+        <li>點右上角 <kbd>＋</kbd> → <kbd>New repository</kbd>。</li>
+        <li>填 Repository name（例：<span class="inline-code">my-project</span>），選 <kbd>Public</kbd> 或 <kbd>Private</kbd>。</li>
+        <li>勾選 <kbd>Add a README file</kbd>，按 <kbd>Create repository</kbd>。</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- A -->
+  <section class="commit">
+    <div class="rail"><div class="node">A</div></div>
+    <div class="content">
+      <div class="hash mono">3b7e18d <span class="tag">最簡單 · 免安裝</span></div>
+      <h2>方法 A：網頁直接上傳</h2>
+      <p>適合檔案不多、不想碰指令的新手。全程在瀏覽器完成。</p>
+      <ol class="steps">
+        <li>進入你的儲存庫頁面。</li>
+        <li>點 <kbd>Add file</kbd> → <kbd>Upload files</kbd>。</li>
+        <li>把檔案／資料夾<b>拖曳</b>進上傳區。</li>
+        <li>下方填寫變更說明（Commit message，例：<span class="inline-code">首次上傳</span>）。</li>
+        <li>按 <kbd>Commit changes</kbd>。</li>
+      </ol>
+      <div class="callout"><span class="ico">✓</span><div>完成，網頁即可看到檔案。熟悉後再進入方法 B 做正式版本管理。</div></div>
+    </div>
+  </section>
+
+  <!-- B -->
+  <section class="commit">
+    <div class="rail"><div class="node">B</div></div>
+    <div class="content">
+      <div class="hash mono">9d4a5f1 <span class="tag">正式做法 · 可長期維護</span></div>
+      <h2>方法 B：Git 指令上傳</h2>
+      <p>正式的版本控制流程，適合長期維護的專案。</p>
+
+      <p style="font-weight:700;color:var(--ink);margin:20px 0 0;">① 安裝 Git</p>
+      <p style="margin-top:4px;">下載安裝：<a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git-scm.com/downloads</a></p>
+
+      <p style="font-weight:700;color:var(--ink);margin:18px 0 0;">② 首次設定身分（只需一次）</p>
+      <div class="code">
+        <div class="code-top"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title mono">terminal — 設定身分</span><button class="copy mono" onclick="cp(this)">複製</button></div>
+<pre><code><span class="c-kw">git</span> config --global user.name <span class="c-str">"你的名字"</span>
+<span class="c-kw">git</span> config --global user.email <span class="c-str">"你的Email"</span></code></pre>
+      </div>
+
+      <p style="font-weight:700;color:var(--ink);margin:18px 0 0;">③ 上傳專案（在專案資料夾內執行）</p>
+      <div class="code">
+        <div class="code-top"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title mono">terminal — 首次上傳</span><button class="copy mono" onclick="cp(this)">複製</button></div>
+<pre><code><span class="c-kw">git</span> init                          <span class="c-cmt"># 初始化 Git</span>
+<span class="c-kw">git</span> add .                         <span class="c-cmt"># 加入所有檔案</span>
+<span class="c-kw">git</span> commit -m <span class="c-str">"首次上傳"</span>           <span class="c-cmt"># 建立版本紀錄</span>
+<span class="c-kw">git</span> branch -M main                <span class="c-cmt"># 命名主分支</span>
+<span class="c-kw">git</span> remote add origin https://github.com/帳號/儲存庫名.git
+<span class="c-kw">git</span> push -u origin main           <span class="c-cmt"># 推送到 GitHub</span></code></pre>
+      </div>
+      <div class="callout"><span class="ico">!</span><div>第一次 push 會要求登入驗證，請使用 <b>Personal Access Token</b>，而非密碼。</div></div>
+
+      <p style="font-weight:700;color:var(--ink);margin:18px 0 0;">④ 之後每次更新（三行搞定）</p>
+      <div class="code">
+        <div class="code-top"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="code-title mono">terminal — 日常更新</span><button class="copy mono" onclick="cp(this)">複製</button></div>
+<pre><code><span class="c-kw">git</span> add .
+<span class="c-kw">git</span> commit -m <span class="c-str">"更新說明"</span>
+<span class="c-kw">git</span> push</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- FIX -->
+  <section class="commit">
+    <div class="rail"><div class="node">✕</div></div>
+    <div class="content">
+      <div class="hash mono">f0c33ab <span class="tag">疑難排解</span></div>
+      <h2>常見卡關處理</h2>
+      <p>遇到錯誤先對照下表，多數狀況一步即可解。</p>
+      <div class="tablecard">
+        <table>
+          <thead><tr><th>問題</th><th>解法</th></tr></thead>
+          <tbody>
+            <tr><td>push 要密碼但一直失敗</td><td>用 <b>Token</b> 代替密碼：Settings → Developer settings → Personal access tokens</td></tr>
+            <tr><td><span class="inline-code">remote origin already exists</span></td><td>先 <span class="inline-code">git remote remove origin</span> 再重新加入</td></tr>
+            <tr><td>檔案太大（&gt;100MB）</td><td>GitHub 不接受，改用 Git LFS 或先壓縮</td></tr>
+            <tr><td>想忽略某些檔案</td><td>建立 <span class="inline-code">.gitignore</span>，寫入不上傳的檔名</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <div class="footnote">
+    <strong>新手建議 →</strong> 先用 <b>方法 A（網頁上傳）</b>快速上手，熟悉後再學 <b>方法 B（Git 指令）</b>做正式版本管理。需要的話，可另外產一份 <span class="inline-code">.gitignore</span> 範本或 Personal Access Token 申請步驟。
+  </div>
+  <div class="metaline mono">
+    <span class="b">●</span> HEAD -&gt; main <span>·</span> clean working tree <span>·</span> ready to push
+  </div>
+</footer>
+
+<script>
+  function cp(btn){
+    const code=btn.closest('.code').querySelector('code');
+    const text=code.innerText;
+    navigator.clipboard.writeText(text).then(()=>{
+      const old=btn.textContent;
+      btn.textContent='已複製 ✓';btn.classList.add('done');
+      setTimeout(()=>{btn.textContent=old;btn.classList.remove('done');},1600);
+    }).catch(()=>{btn.textContent='複製失敗';});
+  }
+  // scroll reveal
+  const io=new IntersectionObserver((es)=>{
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('revealed');io.unobserve(e.target);}});
+  },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.commit,.footnote').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

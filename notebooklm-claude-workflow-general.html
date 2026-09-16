@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NotebookLM × Claude 研究工作流完全指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F7F5;
+  --ink:#16232E;
+  --ink-soft:#4A5866;
+  --nblm:#2456A6;
+  --nblm-soft:#E8EEF9;
+  --claude:#C8431C;
+  --claude-soft:#FBEDE7;
+  --verify:#1E7A54;
+  --verify-soft:#E6F2EC;
+  --line:#D8DDD9;
+  --card:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Noto Sans TC',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.75;
+  font-size:16px;
+}
+.wrap{max-width:880px;margin:0 auto;padding:0 24px;}
+
+/* ---------- Hero ---------- */
+header{
+  border-bottom:3px solid var(--ink);
+  padding:64px 0 48px;
+}
+.eyebrow{
+  font-size:13px;letter-spacing:.22em;font-weight:700;
+  color:var(--ink-soft);text-transform:uppercase;margin-bottom:20px;
+}
+h1{
+  font-family:'Noto Serif TC',serif;font-weight:900;
+  font-size:clamp(30px,5.5vw,48px);line-height:1.3;margin-bottom:24px;
+}
+h1 .b{color:var(--nblm);}
+h1 .o{color:var(--claude);}
+.golden{
+  display:grid;grid-template-columns:1fr 1fr;gap:0;
+  border:2px solid var(--ink);margin-top:32px;
+}
+.golden > div{padding:20px 24px;}
+.golden .g-nblm{background:var(--nblm-soft);border-right:2px solid var(--ink);}
+.golden .g-claude{background:var(--claude-soft);}
+.golden .g-label{font-size:12px;letter-spacing:.18em;font-weight:700;margin-bottom:6px;}
+.g-nblm .g-label{color:var(--nblm);}
+.g-claude .g-label{color:var(--claude);}
+.golden p{font-family:'Noto Serif TC',serif;font-weight:600;font-size:19px;line-height:1.5;}
+.hero-note{margin-top:20px;color:var(--ink-soft);font-size:15px;max-width:640px;}
+
+/* ---------- Sections ---------- */
+section{padding:56px 0 8px;}
+h2{
+  font-family:'Noto Serif TC',serif;font-weight:900;
+  font-size:26px;margin-bottom:8px;
+}
+.sec-sub{color:var(--ink-soft);margin-bottom:28px;font-size:15px;}
+
+/* ---------- 分工表 ---------- */
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;font-size:15px;}
+th{font-size:13px;letter-spacing:.1em;font-weight:700;}
+th.t-nblm{color:var(--nblm);background:var(--nblm-soft);}
+th.t-claude{color:var(--claude);background:var(--claude-soft);}
+td.dim{color:var(--ink-soft);width:22%;font-weight:500;}
+
+/* ---------- Step rail ---------- */
+.step{
+  display:grid;grid-template-columns:56px 1fr;gap:0;
+  margin-bottom:40px;
+}
+.rail{position:relative;}
+.rail::before{
+  content:'';position:absolute;left:26px;top:56px;bottom:-40px;width:2px;
+  background:var(--line);
+}
+.step:last-of-type .rail::before{display:none;}
+.dot{
+  width:52px;height:52px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Noto Serif TC',serif;font-weight:900;font-size:20px;color:#fff;
+}
+.dot.d-nblm{background:var(--nblm);}
+.dot.d-claude{background:var(--claude);}
+.dot.d-verify{background:var(--verify);}
+.step-body{padding-left:20px;}
+.tool-badge{
+  display:inline-block;font-size:12px;font-weight:700;letter-spacing:.12em;
+  padding:3px 10px;border-radius:3px;margin-bottom:8px;
+}
+.tb-nblm{background:var(--nblm-soft);color:var(--nblm);}
+.tb-claude{background:var(--claude-soft);color:var(--claude);}
+.tb-verify{background:var(--verify-soft);color:var(--verify);}
+h3{font-family:'Noto Serif TC',serif;font-weight:900;font-size:21px;margin-bottom:10px;}
+.step-body p{margin-bottom:12px;font-size:15.5px;}
+.step-body ul{margin:0 0 14px 20px;font-size:15px;}
+.step-body li{margin-bottom:5px;}
+
+/* ---------- Prompt cards ---------- */
+.prompt{
+  background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ink);
+  margin:16px 0 20px;
+}
+.prompt.p-nblm{border-left-color:var(--nblm);}
+.prompt.p-claude{border-left-color:var(--claude);}
+.prompt.p-verify{border-left-color:var(--verify);}
+.prompt-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 14px;border-bottom:1px solid var(--line);
+  font-size:12.5px;font-weight:700;letter-spacing:.08em;color:var(--ink-soft);
+}
+.copy-btn{
+  font-family:'Noto Sans TC',sans-serif;font-size:12px;font-weight:700;
+  border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);
+  padding:3px 12px;border-radius:3px;cursor:pointer;
+}
+.copy-btn:hover{border-color:var(--ink);color:var(--ink);}
+.copy-btn:focus-visible{outline:2px solid var(--nblm);outline-offset:2px;}
+.prompt pre{
+  font-family:'JetBrains Mono','Noto Sans TC',monospace;
+  font-size:13.5px;line-height:1.8;padding:14px 16px;
+  white-space:pre-wrap;word-break:break-word;color:var(--ink);
+}
+
+/* ---------- 實戰案例 ---------- */
+.case{
+  border:2px solid var(--ink);background:var(--card);
+  padding:28px;margin-top:8px;
+}
+.case-tag{
+  font-size:12px;letter-spacing:.18em;font-weight:700;color:#fff;
+  background:var(--ink);display:inline-block;padding:4px 12px;margin-bottom:16px;
+}
+.case h3{font-size:22px;}
+.case .flow{
+  display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 22px;font-size:13px;font-weight:700;
+}
+.flow span{padding:5px 12px;border-radius:3px;}
+.flow .f-nblm{background:var(--nblm-soft);color:var(--nblm);}
+.flow .f-claude{background:var(--claude-soft);color:var(--claude);}
+.flow .f-verify{background:var(--verify-soft);color:var(--verify);}
+.flow .arrow{color:var(--ink-soft);padding:5px 0;}
+.case h4{font-size:16px;font-weight:700;margin:22px 0 8px;}
+.case h4 .num{
+  display:inline-flex;width:24px;height:24px;border-radius:50%;color:#fff;
+  align-items:center;justify-content:center;font-size:13px;margin-right:8px;
+  vertical-align:-4px;
+}
+.n-nblm{background:var(--nblm);}
+.n-claude{background:var(--claude);}
+.n-verify{background:var(--verify);}
+.case p{font-size:15px;margin-bottom:8px;}
+.case ul{margin:0 0 8px 20px;font-size:14.5px;}
+
+/* ---------- 常見錯誤 ---------- */
+.dont-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;}
+.dont,.do{background:var(--card);border:1px solid var(--line);padding:20px 22px;}
+.dont{border-top:4px solid var(--claude);}
+.do{border-top:4px solid var(--verify);}
+.dont h4,.do h4{font-size:15px;font-weight:700;margin-bottom:10px;}
+.dont h4{color:var(--claude);}
+.do h4{color:var(--verify);}
+.dont ul,.do ul{margin-left:18px;font-size:14.5px;}
+.dont li,.do li{margin-bottom:8px;}
+
+footer{
+  margin-top:64px;border-top:3px solid var(--ink);
+  padding:28px 0 56px;color:var(--ink-soft);font-size:14px;
+}
+
+@media (max-width:640px){
+  .golden{grid-template-columns:1fr;}
+  .golden .g-nblm{border-right:none;border-bottom:2px solid var(--ink);}
+  .dont-grid{grid-template-columns:1fr;}
+  .step{grid-template-columns:44px 1fr;}
+  .dot{width:40px;height:40px;font-size:16px;}
+  .rail::before{left:20px;top:44px;}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">研究工作流完全指南</div>
+    <h1><span class="b">NotebookLM</span> 負責研究，<span class="o">Claude</span> 負責思考</h1>
+    <div class="golden">
+      <div class="g-nblm">
+        <div class="g-label">NOTEBOOKLM ─ 研究記憶體</div>
+        <p>只讀你上傳的來源，逐字引用、附出處、不捏造。</p>
+      </div>
+      <div class="g-claude">
+        <div class="g-label">CLAUDE ─ 思考引擎</div>
+        <p>推理、批判、重組結構，寫出可直接使用的成品。</p>
+      </div>
+    </div>
+    <p class="hero-note">黃金法則：<strong>不要叫 Claude 做研究，叫 NotebookLM 做研究；然後叫 Claude 思考。</strong>兩個工具各守一段，成品才會同時「有憑有據」且「論述有力」。</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>壹、為什麼要分工</h2>
+    <p class="sec-sub">兩個工具的底層設計不同，強項互補、弱點互補。</p>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th class="t-nblm">NotebookLM</th>
+          <th class="t-claude">Claude</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="dim">核心角色</td>
+          <td>來源封閉式問答：只依據上傳文件回答</td>
+          <td>開放式推理：分析、批判、改寫、產出</td>
+        </tr>
+        <tr>
+          <td class="dim">強項</td>
+          <td>逐條引用、保留出處、跨文件找關聯、不虛構事實</td>
+          <td>找論證漏洞、補足觀點、強化結構、寫出成品文件</td>
+        </tr>
+        <tr>
+          <td class="dim">弱點</td>
+          <td>不會深度推理，回答受限於來源品質</td>
+          <td>單靠記憶回答時可能產生幻覺（hallucination）、引註不可靠</td>
+        </tr>
+        <tr>
+          <td class="dim">在流程中的位置</td>
+          <td>第 1 步（研究彙整）、第 3 步（事實查核）</td>
+          <td>第 2 步（深度思考）、第 4 步（撰寫定稿）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>貳、四步驟工作流</h2>
+    <p class="sec-sub">藍色步驟在 NotebookLM 執行，橘色步驟在 Claude 執行，綠色步驟兩者交叉驗證。</p>
+
+    <!-- STEP 1 -->
+    <div class="step">
+      <div class="rail"><div class="dot d-nblm">1</div></div>
+      <div class="step-body">
+        <span class="tool-badge tb-nblm">在 NOTEBOOKLM 執行</span>
+        <h3>餵入來源，產出研究彙整</h3>
+        <p>把最可靠的來源上傳到同一個筆記本：PDF 報告、書籍章節、研究論文、產業報告、會議紀錄、簡報檔、網頁連結。NotebookLM 會讀完每一份來源、找出跨文件關聯，並且<strong>只根據上傳內容回答</strong>，每句話都附引註。</p>
+        <ul>
+          <li>來源品質決定產出上限：優先選擇原始文獻、官方報告、權威出版品</li>
+          <li>單一筆記本聚焦單一主題，避免主題混雜稀釋回答品質</li>
+        </ul>
+        <div class="prompt p-nblm">
+          <div class="prompt-head">範例提問（貼到 NotebookLM 對話框）<button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>請根據我上傳的所有來源，彙整以下內容並逐項附上出處：
+一、各來源提到的核心策略或主要論點有哪些？
+二、不同來源之間的觀點差異或矛盾之處。
+三、來源中提及的關鍵數據與成效證據。
+請以條列式輸出，每一項標明引用的文件名稱與頁碼。</pre>
+        </div>
+        <p><strong>產出：</strong>一份乾淨、有出處的「研究彙整」，作為下一步的原料。</p>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+      <div class="rail"><div class="dot d-claude">2</div></div>
+      <div class="step-body">
+        <span class="tool-badge tb-claude">在 CLAUDE 執行</span>
+        <h3>貼給 Claude，進行深度思考</h3>
+        <p>將 NotebookLM 的彙整全文貼給 Claude，但<strong>不是叫它重寫，而是叫它「思考」</strong>：找出論證弱點、挑戰假設、補足缺漏視角、思考來源以外的意涵與應用。</p>
+        <div class="prompt p-claude">
+          <div class="prompt-head">範例提問（貼到 Claude 對話框）<button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>以下是我用 NotebookLM 整理的研究彙整（附於文末）。
+請協助我深化這份內容：
+一、指出彙整中論證最薄弱的三個環節。
+二、挑戰其中的隱含假設。
+三、補足彙整中缺漏的視角（如成本效益、執行可行性、不同利害關係人的觀點）。
+四、若要據此做出決策，提出三個可行方案並分析各自的利弊。
+
+【研究彙整貼於此】</pre>
+        </div>
+        <p><strong>產出：</strong>更強的論證結構與更深的洞察。此時內容可能混入 Claude 自行推論的敘述，因此必須進入第 3 步。</p>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+      <div class="rail"><div class="dot d-verify">3</div></div>
+      <div class="step-body">
+        <span class="tool-badge tb-verify">CLAUDE → NOTEBOOKLM 交叉驗證</span>
+        <h3>逐項事實查核</h3>
+        <p>先請 Claude 標出「哪些陳述需要驗證」，再把這些陳述逐條丟回 NotebookLM，確認來源中是否真有此依據。<strong>有出處的留下，沒出處的刪除或改寫為「本文推論」。</strong></p>
+        <div class="prompt p-verify">
+          <div class="prompt-head">範例提問 A（先問 Claude）<button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>請將你上一則回覆中的所有「事實性陳述」（數據、統計、引述、具體事件）逐條列出，
+並區分為：一、需要回到原始來源驗證的陳述；二、屬於你的推論或建議、不需驗證的陳述。</pre>
+        </div>
+        <div class="prompt p-verify">
+          <div class="prompt-head">範例提問 B（再問 NotebookLM）<button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>請逐條檢核以下陳述是否有我上傳來源的依據。
+每條回覆「有依據（附文件名稱與頁碼）」或「來源中查無此陳述」：
+1. 陳述一……
+2. 陳述二……
+3. ……</pre>
+        </div>
+        <p><strong>此步驟防止：</strong>幻覺、假引註、無依據論述——這三者正是正式文件最不能出現的錯誤。</p>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+      <div class="rail"><div class="dot d-claude">4</div></div>
+      <div class="step-body">
+        <span class="tool-badge tb-claude">在 CLAUDE 執行</span>
+        <h3>撰寫最終版本</h3>
+        <p>以「驗證過的內容」為唯一素材，請 Claude 產出最終文件：報告、企劃書、文章、簡報大綱、電子報、社群貼文。此時指令要<strong>明確給定格式、篇幅與語氣</strong>。</p>
+        <div class="prompt p-claude">
+          <div class="prompt-head">範例提問（貼到 Claude 對話框）<button class="copy-btn" onclick="cp(this)">複製</button></div>
+          <pre>以下內容已完成事實查核，請據以撰寫一份正式報告。
+要求：
+一、結構分為：摘要、背景、分析、建議四節。
+二、繁體中文，語氣精簡專業。
+三、引述來源內容時，保留來源文件名稱。
+四、「建議」一節提出三個方案並敘明優先建議與理由。
+
+【已驗證內容貼於此】</pre>
+        </div>
+        <p><strong>產出：</strong>有依據、有論述、可直接使用的定稿。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>參、完整實戰範例</h2>
+    <p class="sec-sub">以一個通用情境走完整條流程。</p>
+    <div class="case">
+      <span class="case-tag">案例</span>
+      <h3>撰寫「新制度導入評估報告」：比較多國做法後提出建議方案</h3>
+      <div class="flow">
+        <span class="f-nblm">① NotebookLM 彙整</span><span class="arrow">→</span>
+        <span class="f-claude">② Claude 思考</span><span class="arrow">→</span>
+        <span class="f-verify">③ 交叉查核</span><span class="arrow">→</span>
+        <span class="f-claude">④ Claude 定稿</span>
+      </div>
+
+      <h4><span class="num n-nblm">1</span>建立筆記本、上傳來源</h4>
+      <ul>
+        <li>國際組織發布的制度指引與白皮書</li>
+        <li>各國官方報告與相關研究論文</li>
+        <li>現行制度規範文件</li>
+        <li>內部歷次討論會議紀錄</li>
+      </ul>
+      <p>提問：「請彙整各來源中不同國家做法的差異、適用對象、資源需求與成效證據，並比對現行制度的缺口，逐項附出處。」</p>
+
+      <h4><span class="num n-claude">2</span>貼給 Claude 深化</h4>
+      <p>提問：「請檢視這份缺口分析：一、哪些缺口最急迫、哪些可分期處理？二、若要導入新制度，人力、教材、經費、規範授權四個面向各有什麼前置條件？三、提出分年推動的三個方案。」</p>
+
+      <h4><span class="num n-verify">3</span>回 NotebookLM 查核</h4>
+      <p>將 Claude 引用的數據、他國做法描述、成效證據逐條回丟 NotebookLM 驗證；查無依據者刪除，或明確標示為推論。</p>
+
+      <h4><span class="num n-claude">4</span>產出定稿</h4>
+      <p>請 Claude 依指定架構撰寫評估報告，建議段列三個方案；另可接續指令「將本報告改寫為 10 頁簡報大綱，每頁列標題與三個要點」，一料多用，同步產出報告與簡報兩種成品。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>肆、常見錯誤與正確做法</h2>
+    <div class="dont-grid">
+      <div class="dont">
+        <h4>✕ 不要這樣做</h4>
+        <ul>
+          <li>直接問 Claude 做研究——沒有來源支撐，數據與引註可能是幻覺。</li>
+          <li>把 NotebookLM 當寫作工具——它的產出偏彙整體，不適合直接當成品。</li>
+          <li>跳過第 3 步查核就定稿——正式文件引用錯誤數據的風險遠大於省下的時間。</li>
+          <li>一個筆記本塞入所有文件——主題混雜會稀釋回答品質。</li>
+        </ul>
+      </div>
+      <div class="do">
+        <h4>✓ 正確做法</h4>
+        <ul>
+          <li>研究問題一律先餵來源、問 NotebookLM，拿到附出處的彙整再往下走。</li>
+          <li>Claude 的指令聚焦「思考動詞」：挑戰、補足、比較、研提方案、改寫定稿。</li>
+          <li>事實性陳述逐條回源驗證，查無依據者刪除或標示為推論。</li>
+          <li>依主題分設筆記本，一個主題一個筆記本。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    工作流原則：來源研究 → NotebookLM 彙整｜深度思考與定稿 → Claude｜事實查核 → 兩者交叉驗證。<br>
+    敏感、機密或含個人資料之文件，上傳任何 AI 工具前請先確認所屬組織之資訊安全規範。
+  </div>
+</footer>
+
+<script>
+function cp(btn){
+  const pre=btn.closest('.prompt').querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(()=>{
+    const t=btn.textContent;btn.textContent='已複製';
+    setTimeout(()=>{btn.textContent=t;},1500);
+  });
+}
+</script>
+</body>
+</html>

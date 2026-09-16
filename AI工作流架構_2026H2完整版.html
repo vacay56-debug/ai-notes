@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 工作流架構完整規劃 · 2026 下半年版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F4F6;
+  --panel:#FFFFFF;
+  --ink:#17242C;
+  --muted:#5B6B75;
+  --line:#D8DEE3;
+  --blue:#24549E;
+  --blue-soft:#E8EEF7;
+  --teal:#0D8268;
+  --teal-soft:#E4F2EE;
+  --signal:#C6431F;
+  --signal-soft:#FBEAE3;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:48px 48px;background-attachment:fixed}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px 96px}
+
+/* ── 文件頭 ── */
+header{padding:64px 0 40px;border-bottom:3px solid var(--ink)}
+.doc-meta{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.08em;display:flex;flex-wrap:wrap;gap:8px 24px;margin-bottom:20px}
+.doc-meta b{color:var(--blue);font-weight:600}
+h1{font-size:clamp(30px,5.4vw,46px);font-weight:900;line-height:1.25;letter-spacing:.01em}
+h1 .em{color:var(--blue)}
+.thesis{margin-top:20px;font-size:17px;max-width:44em}
+.thesis strong{background:linear-gradient(transparent 62%,#FFE9A8 62%);font-weight:700}
+.formula{margin-top:28px;display:flex;flex-wrap:wrap;align-items:stretch;gap:0;border:2px solid var(--ink);background:var(--panel)}
+.formula .cell{flex:1 1 150px;padding:14px 16px;border-right:2px solid var(--ink)}
+.formula .cell:last-child{border-right:none}
+.formula .en{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.1em}
+.formula .zh{font-size:20px;font-weight:900;margin-top:2px}
+.formula .cell:nth-child(1) .zh{color:var(--teal)}
+.formula .cell:nth-child(2) .zh{color:var(--blue)}
+.formula .cell:nth-child(3) .zh{color:var(--signal)}
+.formula .cell:nth-child(4) .zh{color:var(--ink)}
+
+/* ── 目錄 ── */
+nav{margin:36px 0 0;background:var(--panel);border:1px solid var(--line);padding:20px 24px}
+nav .nav-title{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--muted);margin-bottom:10px}
+nav ol{list-style:none;columns:2;column-gap:32px}
+nav li{margin:5px 0;break-inside:avoid}
+nav a{color:var(--ink);text-decoration:none;font-size:14.5px;border-bottom:1px dotted var(--line)}
+nav a:hover,nav a:focus-visible{color:var(--blue);border-bottom-color:var(--blue)}
+nav a .n{font-family:var(--mono);font-size:12px;color:var(--blue);margin-right:8px}
+@media(max-width:640px){nav ol{columns:1}}
+
+/* ── 章節 ── */
+section{margin-top:64px}
+.sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:24px}
+.sec-head .no{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--blue);letter-spacing:.06em}
+h2{font-size:24px;font-weight:900;letter-spacing:.02em}
+h3{font-size:17px;font-weight:700;margin:28px 0 10px;color:var(--ink)}
+p{margin:10px 0;max-width:46em}
+p.lead{font-size:16.5px}
+.note{font-size:14px;color:var(--muted);border-left:3px solid var(--line);padding-left:14px;margin:16px 0;max-width:44em}
+strong{font-weight:700}
+
+/* ── 表格 ── */
+table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--ink);margin:16px 0;font-size:14.5px}
+th{background:var(--ink);color:#fff;text-align:left;padding:10px 12px;font-weight:700;letter-spacing:.04em;white-space:nowrap}
+td{padding:10px 12px;border-top:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:#F8FAFB}
+td .tag{font-family:var(--mono);font-size:11.5px;color:var(--blue);display:block;letter-spacing:.05em}
+td b{font-weight:700}
+.tbl-scroll{overflow-x:auto}
+
+/* ── 五層架構圖 ── */
+.stack{display:flex;flex-direction:column;gap:0;border:2px solid var(--ink);background:var(--panel);margin:20px 0}
+.layer{display:grid;grid-template-columns:180px 1fr;border-bottom:2px solid var(--ink)}
+.layer:last-child{border-bottom:none}
+.layer .lname{padding:16px 18px;border-right:2px solid var(--ink);display:flex;flex-direction:column;justify-content:center}
+.layer .lname .en{font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.08em}
+.layer .lname .zh{font-size:17px;font-weight:900}
+.layer .lbody{padding:14px 18px;font-size:14.5px;color:var(--ink)}
+.layer .lbody .q{display:block;font-size:12.5px;color:var(--muted);margin-top:4px}
+.layer[data-c="k"] .lname{background:var(--teal-soft)}.layer[data-c="k"] .zh{color:var(--teal)}
+.layer[data-c="t"] .lname{background:#F4F1E6}
+.layer[data-c="o"] .lname{background:var(--blue-soft)}.layer[data-c="o"] .zh{color:var(--blue)}
+.layer[data-c="l"] .lname{background:var(--signal-soft)}.layer[data-c="l"] .zh{color:var(--signal)}
+.layer[data-c="e"] .lname{background:#ECECF2}
+@media(max-width:600px){.layer{grid-template-columns:1fr}.layer .lname{border-right:none;border-bottom:1px solid var(--line)}}
+
+/* ── 核心循環流程圖（本頁招牌）── */
+.flow{position:relative;margin:28px 0;padding-left:64px}
+.flow .rail{position:absolute;left:20px;top:34px;bottom:150px;width:2px;background:var(--signal)}
+.flow .rail::before{content:'';position:absolute;top:-8px;left:-5px;border:6px solid transparent;border-bottom:9px solid var(--signal)}
+.rail-label{position:absolute;left:-4px;top:42%;transform:rotate(180deg);writing-mode:vertical-rl;font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--signal);background:var(--bg);padding:8px 0}
+.fnode{position:relative;background:var(--panel);border:2px solid var(--ink);padding:14px 18px;max-width:560px}
+.fnode+.fnode,.fnode+.fbranch,.fbranch+.fnode{margin-top:34px}
+.fnode::after{content:'';position:absolute;left:38px;bottom:-30px;height:26px;width:2px;background:var(--ink)}
+.fnode::before{content:'';position:absolute;left:33px;bottom:-32px;border:6px solid transparent;border-top:9px solid var(--ink);z-index:1}
+.fnode.last::after,.fnode.last::before{display:none}
+.fnode .fno{font-family:var(--mono);font-size:11.5px;color:var(--blue);letter-spacing:.1em}
+.fnode .ft{font-size:16.5px;font-weight:900;margin-top:1px}
+.fnode .fd{font-size:13.5px;color:var(--muted);margin-top:3px;line-height:1.6}
+.fnode.prep{border-color:var(--teal)}
+.fnode.prep .fno{color:var(--teal)}
+.fnode.sink{border-color:var(--blue);background:var(--blue-soft)}
+.fnode.sink .fno{color:var(--blue)}
+.fbranch{position:relative;max-width:560px;background:var(--panel);border:2px dashed var(--ink);padding:14px 18px}
+.fbranch::after{content:'';position:absolute;left:38px;bottom:-30px;height:26px;width:2px;background:var(--ink)}
+.fbranch::before{content:'';position:absolute;left:33px;bottom:-32px;border:6px solid transparent;border-top:9px solid var(--ink);z-index:1}
+.fbranch .ft{font-size:16.5px;font-weight:900}
+.fbranch .paths{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+.fbranch .path{flex:1 1 200px;padding:9px 12px;font-size:13px;line-height:1.55;border-left:4px solid}
+.fbranch .path.no{border-color:var(--signal);background:var(--signal-soft)}
+.fbranch .path.yes{border-color:var(--teal);background:var(--teal-soft)}
+.fbranch .path b{font-family:var(--mono);font-size:12px;letter-spacing:.08em;display:block;margin-bottom:2px}
+.fbranch .path.no b{color:var(--signal)}
+.fbranch .path.yes b{color:var(--teal)}
+@media(max-width:520px){.flow{padding-left:40px}.flow .rail{left:10px}.rail-label{display:none}}
+
+/* ── 三段摘要 ── */
+.phase3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+.phase3 .ph{background:var(--panel);border:1px solid var(--ink);border-top:6px solid var(--blue);padding:14px 16px}
+.phase3 .ph:nth-child(1){border-top-color:var(--teal)}
+.phase3 .ph:nth-child(3){border-top-color:var(--signal)}
+.phase3 .ph .pt{font-weight:900;font-size:16px}
+.phase3 .ph .pn{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.12em}
+.phase3 .ph ul{list-style:none;margin-top:8px;font-size:13.5px}
+.phase3 .ph li{padding:3px 0;border-bottom:1px dotted var(--line)}
+.phase3 .ph li:last-child{border-bottom:none}
+@media(max-width:640px){.phase3{grid-template-columns:1fr}}
+
+/* ── checklist ── */
+.check{list-style:none;margin:12px 0;max-width:46em}
+.check li{background:var(--panel);border:1px solid var(--line);padding:9px 14px 9px 40px;position:relative;margin-bottom:6px;font-size:14.5px}
+.check li::before{content:'✓';position:absolute;left:14px;top:8px;font-family:var(--mono);font-weight:600;color:var(--teal)}
+
+/* ── 一句話結語 ── */
+.final{margin-top:72px;border:3px solid var(--ink);background:var(--ink);color:#fff;padding:32px 28px;text-align:center}
+.final .fl{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:#9FB6CC;margin-bottom:10px}
+.final .fs{font-size:clamp(18px,3.4vw,24px);font-weight:900;line-height:1.6}
+.final .fs em{font-style:normal;color:#FFD666}
+footer{margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.06em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+@media print{
+  body{background:#fff}
+  nav{display:none}
+  section{break-inside:avoid-page}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="doc-meta">
+    <span>文件編號 <b>AIWF-2026-H2</b></span>
+    <span>版本 <b>v2.0 完整版</b></span>
+    <span>性質 <b>架構規劃 / 落地指引</b></span>
+    <span>語言 <b>繁體中文（臺灣）</b></span>
+  </div>
+  <h1>AI 工作流架構完整規劃<br><span class="em">從單次回答，到持續運作的系統</span></h1>
+  <p class="thesis">2026 下半年的核心轉變：AI 應用重心已從<strong>提示工程（Prompt Engineering）</strong>移向<strong>系統設計（System Design）</strong>。競爭力不在「問得好」，而在能否建立一套可檢查、可重跑、可累積的工作系統。</p>
+  <div class="formula" role="img" aria-label="四要素公式：Knowledge 知識、Tools 工具、Loop 循環、Eval 評估">
+    <div class="cell"><div class="en">KNOWLEDGE</div><div class="zh">知識</div></div>
+    <div class="cell"><div class="en">TOOLS</div><div class="zh">工具</div></div>
+    <div class="cell"><div class="en">LOOP</div><div class="zh">循環</div></div>
+    <div class="cell"><div class="en">EVAL</div><div class="zh">評估</div></div>
+  </div>
+</header>
+
+<nav aria-label="目錄">
+  <div class="nav-title">CONTENTS · 目錄</div>
+  <ol>
+    <li><a href="#s1"><span class="n">§01</span>核心結論</a></li>
+    <li><a href="#s2"><span class="n">§02</span>趨勢背景：五大方向</a></li>
+    <li><a href="#s3"><span class="n">§03</span>系統架構：五層模型</a></li>
+    <li><a href="#s4"><span class="n">§04</span>核心流程圖（含循環）</a></li>
+    <li><a href="#s5"><span class="n">§05</span>知識庫設計</a></li>
+    <li><a href="#s6"><span class="n">§06</span>Loop 與 Eval 設計</a></li>
+    <li><a href="#s7"><span class="n">§07</span>Agent 角色分工</a></li>
+    <li><a href="#s8"><span class="n">§08</span>工具層選型原則</a></li>
+    <li><a href="#s9"><span class="n">§09</span>三類落地場景</a></li>
+    <li><a href="#s10"><span class="n">§10</span>四步驟啟動指引</a></li>
+    <li><a href="#s11"><span class="n">§11</span>名詞對照表</a></li>
+  </ol>
+</nav>
+
+<!-- §01 -->
+<section id="s1">
+  <div class="sec-head"><span class="no">§01</span><h2>核心結論</h2></div>
+  <p class="lead"><strong>結論先行：</strong>建立可持續運作的 AI 系統，需同時具備四項要素——結構化的<strong>知識（Knowledge）</strong>、可實際執行的<strong>工具（Tools）</strong>、執行後必經檢查修正的<strong>循環（Loop）</strong>、以及可量化判斷成果的<strong>評估（Eval）</strong>。四者缺一，系統即退化為「一次性問答工具」。</p>
+  <table>
+    <thead><tr><th style="width:22%">面向</th><th>2026 上半年</th><th>2026 下半年</th></tr></thead>
+    <tbody>
+      <tr><td><b>核心問題</b></td><td>怎麼寫好 Prompt？</td><td>怎麼打造持續工作的 AI 系統？</td></tr>
+      <tr><td><b>互動模式</b></td><td>單次問答，答完即結束</td><td>執行→檢查→修正→再執行→評估</td></tr>
+      <tr><td><b>資料來源</b></td><td>模型自行搜尋、隨機取用</td><td>結構化知識庫作為固定上下文</td></tr>
+      <tr><td><b>品質保證</b></td><td>人工逐次判斷「好像可以」</td><td>明確標準（checklist）逐項驗證</td></tr>
+      <tr><td><b>競爭力來源</b></td><td>會問問題的人</td><td>會設計系統的人</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- §02 -->
+<section id="s2">
+  <div class="sec-head"><span class="no">§02</span><h2>趨勢背景：五大方向</h2></div>
+  <p>以下五個方向為近期 AI 領域的共同觀察，構成本架構的立論基礎。</p>
+  <div class="tbl-scroll"><table>
+    <thead><tr><th style="width:26%">方向</th><th style="width:40%">重點內容</th><th>對工作流的意義</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag">01 / AGENT</span><b>Agent 進入工作模式</b></td><td>智慧代理（Agent）不再只是聊天，而是如一人公司般分工執行任務：人負責決策，Agent 各司其職。</td><td>設計重點從「單一對話」轉為「組織與流程設計」。</td></tr>
+      <tr><td><span class="tag">02 / LOOP</span><b>Prompt → Loop 工程</b></td><td>單次輸出不再可靠，重點是建立「執行→檢查→修正→再執行→評估」的持續流程。</td><td>系統穩定性取決於循環設計，而非模型本身。</td></tr>
+      <tr><td><span class="tag">03 / KNOWLEDGE</span><b>知識庫比模型重要</b></td><td>不讓 AI 亂找資料，而是預先建立索引（Index）、主題地圖（Map of Content, MOC）、名詞表（Glossary）與知識圖譜。</td><td>知識庫成為 AI 的長期記憶與決策依據。</td></tr>
+      <tr><td><span class="tag">04 / MEDIA</span><b>AI 影音工程化</b></td><td>鏡頭、分鏡、節奏、動畫、轉場全面模組化、程式化（如 Remotion 等工具）。</td><td>內容生產越來越像軟體開發，可版本控管、可複用。</td></tr>
+      <tr><td><span class="tag">05 / ECOSYSTEM</span><b>生態系與工作流成熟</b></td><td>以 Claude 生態為例：官方提示詞庫、模型上下文協定（Model Context Protocol, MCP）、Skill、Cowork 等標準化組件陸續到位。</td><td>AI 從單一工具升級為整個專案流程的一部分。</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- §03 -->
+<section id="s3">
+  <div class="sec-head"><span class="no">§03</span><h2>系統架構：五層模型</h2></div>
+  <p>整套系統由下而上分為五層。下三層提供「能力」，上兩層提供「品質」；多數系統失敗的原因，是只建了前三層，缺少 Loop 與 Eval。</p>
+  <div class="stack">
+    <div class="layer" data-c="e">
+      <div class="lname"><span class="en">LAYER 5 · EVAL</span><span class="zh">評估層</span></div>
+      <div class="lbody">以明確標準判斷成果是否可用：正確、完整、符合風格、可直接交付、是否需人工介入。<span class="q">回答的問題：這個結果「過關」了嗎？</span></div>
+    </div>
+    <div class="layer" data-c="l">
+      <div class="lname"><span class="en">LAYER 4 · LOOP</span><span class="zh">循環層</span></div>
+      <div class="lbody">任務不是做一次就結束：執行 → 檢查 → 修正 → 再執行 → 再評估，直到通過標準。<span class="q">回答的問題：沒過關時，系統會自己修嗎？</span></div>
+    </div>
+    <div class="layer" data-c="o">
+      <div class="lname"><span class="en">LAYER 3 · TOOL</span><span class="zh">工具層</span></div>
+      <div class="lbody">讓 AI 能實際做事：搜尋、文件整理、表格處理、排程、發佈、圖片與影片生成。<span class="q">回答的問題：AI 有沒有「手」可以執行？</span></div>
+    </div>
+    <div class="layer" data-c="t">
+      <div class="lname"><span class="en">LAYER 2 · TASK</span><span class="zh">任務層</span></div>
+      <div class="lbody">把工作切成明確任務：整理資料、生成草稿、彙整重點、製作內容、產出決策建議。<span class="q">回答的問題：目標被拆成可檢查的步驟了嗎？</span></div>
+    </div>
+    <div class="layer" data-c="k">
+      <div class="lname"><span class="en">LAYER 1 · KNOWLEDGE</span><span class="zh">知識層</span></div>
+      <div class="lbody">存放知識庫、文件、筆記、案例與規則。目的不是「存很多」，而是給 AI 固定可查的上下文。<span class="q">回答的問題：AI 知道去哪裡找對的答案嗎？</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- §04 -->
+<section id="s4">
+  <div class="sec-head"><span class="no">§04</span><h2>核心流程圖：從目標到沉澱</h2></div>
+  <p>完整流程共十一步，分為「準備、執行、沉澱」三段。左側紅色迴路即 Loop 的本體：<strong>評估未通過時，流程不會結束，而是回到修正節點重跑</strong>，直到通過為止。</p>
+
+  <div class="flow">
+    <div class="rail" aria-hidden="true"></div>
+    <div class="rail-label">未通過 · 回到修正重跑</div>
+
+    <div class="fnode prep"><div class="fno">STEP 01 · 準備</div><div class="ft">目標／任務定義</div><div class="fd">明確定義要完成什麼，不是只丟一句「幫我整理」。目標越清楚，後續流程越穩定。</div></div>
+    <div class="fnode prep"><div class="fno">STEP 02 · 準備</div><div class="ft">讀取知識庫 Knowledge</div><div class="fd">AI 先讀取預先整理的筆記、案例、規則、名詞表，以固定上下文取代亂猜。</div></div>
+    <div class="fnode prep"><div class="fno">STEP 03 · 準備</div><div class="ft">拆解任務 Task Split</div><div class="fd">把大任務切成小步驟（蒐集→摘要→改寫→驗證→輸出），每一步都能單獨檢查與定位問題。</div></div>
+    <div class="fnode prep"><div class="fno">STEP 04 · 準備</div><div class="ft">選擇工具 Tools</div><div class="fd">依任務決定使用的工具：搜尋、表格、文件、排程、發佈或生成工具。</div></div>
+    <div class="fnode"><div class="fno">STEP 05 · 執行</div><div class="ft">執行工作（Loop 第 1 次）</div><div class="fd">產出第一輪結果。這不是終點，而是循環的起點——實務上很少一次就完美。</div></div>
+
+    <div class="fbranch">
+      <div class="fno" style="font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.1em">STEP 06 · 評估</div>
+      <div class="ft">檢查結果 Eval：是否通過標準？</div>
+      <div class="paths">
+        <div class="path no"><b>否 → STEP 07–08</b>修正輸出／補資料／調整工具，再執行一輪，回到本節點重新評估。</div>
+        <div class="path yes"><b>是 → STEP 09</b>結果達到可交付標準，向下進入交付與沉澱階段。</div>
+      </div>
+    </div>
+
+    <div class="fnode"><div class="fno">STEP 07 · 循環</div><div class="ft">修正輸出／補資料／調整工具</div><div class="fd">未通過時回頭處理：補資料、改提示、換工具、補規則，必要時重新拆解任務。</div></div>
+    <div class="fnode"><div class="fno">STEP 08 · 循環</div><div class="ft">再執行 Loop</div><div class="fd">修正後重跑一輪，回到 STEP 06 再次評估。這就是循環工程（Loop Engineering）的本體，讓系統越跑越穩。</div></div>
+    <div class="fnode sink"><div class="fno">STEP 09 · 沉澱</div><div class="ft">交付成果</div><div class="fd">通過 Eval 後正式交付。輸出不只是答案，而是可直接使用的成果：文件、報告、內容稿或決策建議。</div></div>
+    <div class="fnode sink"><div class="fno">STEP 10 · 沉澱</div><div class="ft">回存知識庫／記錄案例／更新規則</div><div class="fd">把本次有效內容存回知識庫，AI 下次不再從零開始，而是帶著經驗工作。</div></div>
+    <div class="fnode sink last"><div class="fno">STEP 11 · 沉澱</div><div class="ft">下次任務沿用並優化</div><div class="fd">類似任務直接沿用本流程；系統因案例累積而越來越準——這是「持續工作的 AI 系統」真正的價值。</div></div>
+  </div>
+
+  <h3>三段式摘要</h3>
+  <div class="phase3">
+    <div class="ph"><div class="pn">PHASE A · STEP 01–04</div><div class="pt">前段：準備</div><ul><li>目標定義</li><li>知識庫讀取</li><li>任務拆解</li><li>工具選擇</li></ul></div>
+    <div class="ph"><div class="pn">PHASE B · STEP 05–08</div><div class="pt">中段：執行</div><ul><li>第一次執行</li><li>標準檢查</li><li>修正調整</li><li>重跑驗證</li></ul></div>
+    <div class="ph"><div class="pn">PHASE C · STEP 09–11</div><div class="pt">後段：沉澱</div><ul><li>成果交付</li><li>回存知識</li><li>更新規則</li><li>累積案例</li></ul></div>
+  </div>
+  <p class="note">一行速記：目標 → 知識 → 拆解 → 工具 → 執行 → 評估 → 修正 → 再執行 → 交付 → 沉澱。</p>
+</section>
+
+<!-- §05 -->
+<section id="s5">
+  <div class="sec-head"><span class="no">§05</span><h2>知識庫設計</h2></div>
+  <p><strong>結論：</strong>知識庫是 AI 的長期記憶，原則是「不存資料，存可用的知識」。建議建立以下六類結構：</p>
+  <table>
+    <thead><tr><th style="width:30%">組件</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td><b>索引（Index）</b></td><td>所有文件的統一入口，AI 查找的起點。</td></tr>
+      <tr><td><b>主題地圖（Map of Content, MOC）</b></td><td>依主題分類與導航，建立文件間的關聯結構。</td></tr>
+      <tr><td><b>名詞表（Glossary）</b></td><td>統一名詞定義，避免同一概念多種說法造成混亂。</td></tr>
+      <tr><td><b>案例庫（Case Library）</b></td><td>保存實際案例與成功範本，供比對與複用。</td></tr>
+      <tr><td><b>決策紀錄（Decision Log）</b></td><td>記錄過去的決定與理由，供後續一致性判斷。</td></tr>
+      <tr><td><b>規則（Rules）</b></td><td>工作規則、風格規範與限制條件，作為 Eval 的判準來源。</td></tr>
+    </tbody>
+  </table>
+  <h3>每份資料的四個檢核問題</h3>
+  <ul class="check">
+    <li>這是什麼？（定義清楚）</li>
+    <li>跟什麼有關？（建立關聯）</li>
+    <li>可以怎麼用？（標明用途）</li>
+    <li>什麼情況不能用？（標明限制）</li>
+  </ul>
+</section>
+
+<!-- §06 -->
+<section id="s6">
+  <div class="sec-head"><span class="no">§06</span><h2>Loop 與 Eval 設計</h2></div>
+  <p><strong>結論：</strong>Loop 是系統能否穩定工作的核心；Eval 是把「好像可以」變成「有標準可判斷」的機制。兩者的落地方式是——<strong>每個任務都配一份 checklist</strong>。</p>
+  <table>
+    <thead><tr><th style="width:30%">檢查點</th><th>判斷內容</th><th style="width:22%">未通過的處置</th></tr></thead>
+    <tbody>
+      <tr><td><b>正確性</b></td><td>事實、數據、引用是否正確；有無錯誤與捏造。</td><td>補資料、查證來源</td></tr>
+      <tr><td><b>完整性</b></td><td>是否涵蓋所有必要重點，有無缺漏。</td><td>重拆任務、補段落</td></tr>
+      <tr><td><b>格式</b></td><td>結構、版式、標點是否符合規範。</td><td>調整規則、重排版</td></tr>
+      <tr><td><b>風格</b></td><td>語氣、用詞是否符合設定（如繁體中文、品牌語氣）。</td><td>強化風格規則</td></tr>
+      <tr><td><b>可交付性</b></td><td>是否可直接使用，不需再大幅改寫。</td><td>再跑一輪 Loop</td></tr>
+      <tr><td><b>人工介入</b></td><td>是否觸及需人工批准的事項（決策、對外、敏感）。</td><td>送交人工審核</td></tr>
+    </tbody>
+  </table>
+  <h3>checklist 範例（內容產出任務）</h3>
+  <ul class="check">
+    <li>是否使用繁體中文（臺灣慣用語）</li>
+    <li>是否有清楚結論，且結論先行</li>
+    <li>內容是否可執行、可直接交付</li>
+    <li>是否有引用來源，且來源可查證</li>
+    <li>是否符合既定風格與格式規範</li>
+  </ul>
+</section>
+
+<!-- §07 -->
+<section id="s7">
+  <div class="sec-head"><span class="no">§07</span><h2>Agent 角色分工（一人公司模式）</h2></div>
+  <p><strong>結論：</strong>個人使用者最實用的分工，是把自己定位為決策者，其餘工作交由五種角色的 Agent 分工完成。<strong>人只做兩件事：給目標、驗收成果。</strong></p>
+  <table>
+    <thead><tr><th style="width:26%">角色</th><th>職責</th><th style="width:24%">對應架構層</th></tr></thead>
+    <tbody>
+      <tr><td><b>CEO Agent</b></td><td>負責決策，定義目標與優先順序。</td><td>任務層（目標定義）</td></tr>
+      <tr><td><b>Research Agent</b></td><td>找資料、整理背景、彙整重點。</td><td>知識層</td></tr>
+      <tr><td><b>Writing Agent</b></td><td>撰寫草稿、改寫、摘要。</td><td>任務層（生成）</td></tr>
+      <tr><td><b>Operator Agent</b></td><td>執行工具操作與流程串接。</td><td>工具層</td></tr>
+      <tr><td><b>QA Agent</b></td><td>檢查錯誤、依標準評分、判斷是否重跑。</td><td>循環層＋評估層</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- §08 -->
+<section id="s8">
+  <div class="sec-head"><span class="no">§08</span><h2>工具層選型原則</h2></div>
+  <p><strong>結論：</strong>工具不是越多越好；每個工具都必須有明確位置，知道它在流程中的角色。建議依以下優先順序建置：</p>
+  <table>
+    <thead><tr><th style="width:12%">順位</th><th style="width:26%">工具類型</th><th>在流程中的角色</th></tr></thead>
+    <tbody>
+      <tr><td><b>1</b></td><td><b>知識管理工具</b></td><td>存放筆記、文件、索引——支撐知識層（如 Obsidian、Notion、NotebookLM）。</td></tr>
+      <tr><td><b>2</b></td><td><b>自動化工具</b></td><td>串接流程、搬運資料——支撐循環層的自動重跑。</td></tr>
+      <tr><td><b>3</b></td><td><b>內容生成工具</b></td><td>寫作、製圖、影音產出——支撐任務層的生成步驟。</td></tr>
+      <tr><td><b>4</b></td><td><b>評估工具</b></td><td>檢查品質、記錄結果——支撐評估層的標準化判斷。</td></tr>
+      <tr><td><b>5</b></td><td><b>協作工具</b></td><td>交接、審核、發布——支撐交付與人工介入節點。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- §09 -->
+<section id="s9">
+  <div class="sec-head"><span class="no">§09</span><h2>三類落地場景</h2></div>
+  <p>同一套架構可套用於三種工作流版本，差別只在任務層的內容不同。</p>
+  <table>
+    <thead><tr><th style="width:28%">版本</th><th>適用範圍</th></tr></thead>
+    <tbody>
+      <tr><td><b>A · 個人知識工作流</b></td><td>學習、筆記、研究、文章整理、內容生產。</td></tr>
+      <tr><td><b>B · 專案工作流</b></td><td>企劃、行銷、簡報、專案管理、客戶交付。</td></tr>
+      <tr><td><b>C · 內容生產工作流</b></td><td>部落格、社群貼文、影音腳本、短影音、知識產品。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- §10 -->
+<section id="s10">
+  <div class="sec-head"><span class="no">§10</span><h2>四步驟啟動指引（可直接照做）</h2></div>
+  <table>
+    <thead><tr><th style="width:16%">步驟</th><th style="width:26%">動作</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><b>第一步</b></td><td><b>選一個每日重複任務</b></td><td>例如整理文章、寫摘要、做會議紀錄、產出社群內容。從高頻任務開始，回報最快。</td></tr>
+      <tr><td><b>第二步</b></td><td><b>拆成四欄</b></td><td>輸入是什麼／AI 做什麼／人類審什麼／交付到哪裡。四欄拆清楚，流程即成形。</td></tr>
+      <tr><td><b>第三步</b></td><td><b>加上評估標準</b></td><td>五項基準：正確、完整、可讀、可用、可交付。逐項打勾，未通過即重跑。</td></tr>
+      <tr><td><b>第四步</b></td><td><b>成功案例回存知識庫</b></td><td>每次執行後保存有效範本與規則更新，讓系統越跑越強。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- §11 -->
+<section id="s11">
+  <div class="sec-head"><span class="no">§11</span><h2>名詞對照表</h2></div>
+  <table>
+    <thead><tr><th style="width:34%">名詞</th><th>定義</th></tr></thead>
+    <tbody>
+      <tr><td><b>提示工程（Prompt Engineering）</b></td><td>透過設計輸入指令提升單次輸出品質的方法。</td></tr>
+      <tr><td><b>循環工程（Loop Engineering）</b></td><td>建立「執行→檢查→修正→再執行→評估」流程，以循環而非單次輸出保證品質。</td></tr>
+      <tr><td><b>智慧代理（Agent）</b></td><td>能自主拆解任務、調用工具並完成工作的 AI 執行單元。</td></tr>
+      <tr><td><b>評估（Evaluation, Eval）</b></td><td>以明確標準判斷 AI 產出是否可用的機制。</td></tr>
+      <tr><td><b>主題地圖（Map of Content, MOC）</b></td><td>知識庫中依主題彙整關聯文件的導航頁面。</td></tr>
+      <tr><td><b>模型上下文協定（Model Context Protocol, MCP）</b></td><td>讓 AI 模型與外部工具、資料源標準化連接的開放協定。</td></tr>
+      <tr><td><b>Skill</b></td><td>Claude 生態中封裝特定任務知識與流程的可重用模組，一種任務對應一個 Skill。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="final">
+  <div class="fl">ONE-LINE CONCLUSION</div>
+  <div class="fs">讓 AI 從「回答問題的工具」，變成<em>「能持續工作的系統」</em>。<br>競爭力，屬於會設計系統的人。</div>
+</div>
+
+<footer>
+  <span>AIWF-2026-H2 · v2.0</span>
+  <span>KNOWLEDGE + TOOLS + LOOP + EVAL</span>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 進入教室的政策選擇：紐約市禁令與臺灣揭露制的比較分析</title>
+<style>
+  :root{
+    --paper:#EAEDEC;
+    --sheet:#FBFCFB;
+    --ink:#15211F;
+    --ink-soft:#4A5856;
+    --rule:#C3CCCA;
+    --teal:#2E5B5A;
+    --ochre:#8A6520;
+    --ochre-bg:#F4EFE3;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Heiti TC","Microsoft JhengHei",system-ui,sans-serif;
+    font-size:16.5px;
+    line-height:1.85;
+    letter-spacing:.01em;
+  }
+  .sheet{
+    max-width:44rem;
+    margin:0 auto;
+    background:var(--sheet);
+    padding:3.2rem 2.6rem 4rem;
+    border-left:1px solid var(--rule);
+    border-right:1px solid var(--rule);
+  }
+  .wrap{max-width:36em}
+
+  /* 開場 */
+  .masthead{border-bottom:2px solid var(--ink);padding-bottom:1.4rem;margin-bottom:2.2rem}
+  .kicker{font-size:.8rem;color:var(--ink-soft);letter-spacing:.08em;margin:0 0 .9rem}
+  h1{
+    font-family:"Noto Serif TC","Source Han Serif TC","Songti TC","PMingLiU",serif;
+    font-weight:700;
+    font-size:1.95rem;
+    line-height:1.45;
+    margin:0 0 .8rem;
+    letter-spacing:.01em;
+  }
+  .standfirst{margin:0;color:var(--ink-soft);font-size:1rem;line-height:1.9}
+
+  /* 兩種工具對照（開場圖示） */
+  .instruments{
+    display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;
+    gap:0;margin:2.4rem 0 2.8rem;border:1px solid var(--rule);
+  }
+  .instrument{padding:1.1rem 1.2rem}
+  .instrument:last-child{border-left:1px solid var(--rule)}
+  .instrument h3{
+    font-family:"Noto Serif TC","Songti TC",serif;
+    font-size:1.05rem;margin:0 0 .35rem;font-weight:700;
+  }
+  .instrument p{margin:0;font-size:.88rem;color:var(--ink-soft);line-height:1.7}
+  .versus{
+    display:flex;align-items:center;justify-content:center;
+    width:2.6rem;background:var(--ink);color:var(--sheet);
+    font-family:"Noto Serif TC","Songti TC",serif;font-size:.95rem;
+  }
+
+  /* 章節 */
+  section{margin-top:3rem}
+  h2{
+    font-family:"Noto Serif TC","Source Han Serif TC","Songti TC","PMingLiU",serif;
+    font-size:1.28rem;font-weight:700;line-height:1.6;
+    margin:0 0 1.1rem;padding-bottom:.5rem;
+    border-bottom:1px solid var(--rule);
+  }
+  h2 .num{color:var(--teal);margin-inline-end:.45em}
+  h3{
+    font-size:1rem;font-weight:700;margin:1.9rem 0 .6rem;color:var(--teal);
+  }
+  p{margin:0 0 1rem}
+  ul,ol{margin:0 0 1.1rem;padding-inline-start:1.4rem}
+  li{margin-bottom:.5rem}
+  strong{font-weight:700}
+  .en{font-size:.92em;color:var(--ink-soft)}
+
+  /* 註記塊 */
+  .note{
+    border-left:3px solid var(--ochre);
+    background:var(--ochre-bg);
+    padding:.95rem 1.1rem;
+    margin:1.4rem 0;
+    font-size:.9rem;line-height:1.8;
+  }
+  .note b{color:var(--ochre)}
+  .note p:last-child{margin-bottom:0}
+
+  /* 表格 */
+  .table-scroll{overflow-x:auto;margin:1.3rem 0}
+  table{border-collapse:collapse;width:100%;font-size:.88rem;line-height:1.7;min-width:32rem}
+  th,td{border-bottom:1px solid var(--rule);padding:.62rem .7rem;text-align:left;vertical-align:top}
+  thead th{border-bottom:1.5px solid var(--ink);font-weight:700;background:transparent}
+  tbody th{font-weight:700;width:8.5rem;color:var(--teal)}
+  caption{caption-side:top;text-align:left;font-size:.82rem;color:var(--ink-soft);padding-bottom:.5rem}
+
+  /* 核對清單 */
+  .check{list-style:none;padding:0;margin:1.2rem 0}
+  .check li{
+    border-top:1px solid var(--rule);padding:.85rem 0 .85rem 0;margin:0;
+    display:grid;grid-template-columns:4.6rem 1fr;gap:.9rem;align-items:start;
+  }
+  .check li:last-child{border-bottom:1px solid var(--rule)}
+  .tag{
+    font-size:.74rem;line-height:1.5;padding:.15rem 0;text-align:center;
+    border:1px solid currentColor;border-radius:2px;
+  }
+  .t-ok{color:var(--teal)}
+  .t-fix{color:var(--ochre)}
+  .t-open{color:#7A5F6B}
+  .check .body{font-size:.9rem;line-height:1.75}
+  .check .body em{font-style:normal;color:var(--ink-soft)}
+
+  /* 來源 */
+  .sources{margin-top:3.4rem;border-top:2px solid var(--ink);padding-top:1.2rem;font-size:.82rem;color:var(--ink-soft)}
+  .sources ol{padding-inline-start:1.3rem}
+  .sources a{color:var(--teal);word-break:break-all}
+  .foot{margin-top:2.2rem;font-size:.78rem;color:var(--ink-soft);line-height:1.8}
+
+  @media (max-width:640px){
+    body{font-size:16px}
+    .sheet{padding:2.2rem 1.15rem 3rem;border:none}
+    h1{font-size:1.55rem}
+    .instruments{grid-template-columns:1fr}
+    .instrument:last-child{border-left:none;border-top:1px solid var(--rule)}
+    .versus{width:auto;padding:.25rem;font-size:.85rem}
+    .check li{grid-template-columns:1fr;gap:.35rem}
+    .tag{justify-self:start;padding:.1rem .6rem}
+  }
+  @media print{
+    body{background:#fff;font-size:11pt}
+    .sheet{border:none;padding:0;max-width:none}
+    .note{background:none}
+    a{color:inherit;text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header class="masthead wrap">
+  <p class="kicker">政策分析札記　2026.09.05</p>
+  <h1>AI 進入教室的政策選擇<br>紐約市禁令與臺灣揭露制的比較</h1>
+  <p class="standfirst">同一個問題——生成式人工智慧（Generative Artificial Intelligence, GenAI）會不會妨礙未成年人發展思考能力——兩個政府選了幾乎相反的管制工具。本文先核對流傳文本的事實，再拆解兩種工具各自的成立條件、成本落點與可驗證性。</p>
+</header>
+
+<div class="instruments wrap">
+  <div class="instrument">
+    <h3>紐約市：事前禁止</h3>
+    <p>在裝置與採購層次直接封鎖，責任落在學校與教育局，一年期落日後檢討。</p>
+  </div>
+  <div class="versus">對照</div>
+  <div class="instrument">
+    <h3>臺灣：事後揭露</h3>
+    <p>以指引與引註規範要求使用者誠實標註，責任落在師生個人，無固定檢討期程。</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+<section>
+<h2><span class="num">壹</span>事實核對</h2>
+<p>流傳文本大體方向正確，但有數處時間、對象與證據性質的偏差，會影響政策判讀。</p>
+
+<ul class="check">
+  <li>
+    <span class="tag t-fix">須修正</span>
+    <span class="body"><b>宣布時點與適用學年。</b>市長辦公室新聞稿為 9 月 2 日發布，教育局 9 月 3 日拍板；政策適用於 <b>2026–2027 學年</b>，開學日 9 月 10 日，幾無緩衝期。文本寫成「昨日 9 月 3 號宣布」並不精確。</span>
+  </li>
+  <li>
+    <span class="tag t-ok">相符</span>
+    <span class="body"><b>適用對象。</b>2-K（兩歲幼兒班）至八年級，約 60 萬名學生，占紐約市公校學生總數約三分之二；為全美最大學區。陪伴型聊天機器人各年級全面禁用。</span>
+  </li>
+  <li>
+    <span class="tag t-ok">相符</span>
+    <span class="body"><b>教學軟體。</b>逾 38 個原經核准教育項目中的 AI 功能將被停用；ChatGPT、Claude 等服務於校內裝置封鎖。</span>
+  </li>
+  <li>
+    <span class="tag t-open">文本未提</span>
+    <span class="body"><b>例外清單。</b>經核准的教學課程（如程式設計）、身心障礙學生與英語學習者的輔助科技、電子書、機器人課程、電腦化測驗均不在禁令內。<em>此清單是理解本案的關鍵，見第陸節。</em></span>
+  </li>
+  <li>
+    <span class="tag t-open">文本未提</span>
+    <span class="body"><b>對教師的限制。</b>教師仍可用 AI 備課與處理部分行政，但<b>不得</b>用 AI 批改作業、處理危機事件，或決定學生升學與畢業。這是把 AI 排除於高利害裁量之外，性質與學生端禁令不同。</span>
+  </li>
+  <li>
+    <span class="tag t-fix">須查證</span>
+    <span class="body"><b>高中試點規模。</b>報導確認為 5 個受監督試點，數學平台 Edia 每週上限 20 分鐘、語文工具 Quill 每週上限 15 分鐘，並每年開設兩次 AI 素養課程。「最多五萬名學生」一數未見於所檢索之報導，宜回查市府原始新聞稿。</span>
+  </li>
+  <li>
+    <span class="tag t-fix">須修正</span>
+    <span class="body"><b>MIT 研究時間。</b>該研究預印本發表於 <b>2025 年 6 月</b>，非「今年稍早」。受試者為 18 至 39 歲成人，非兒童。</span>
+  </li>
+</ul>
+</section>
+
+<section>
+<h2><span class="num">貳</span>MIT 研究能與不能支持什麼</h2>
+<p>文本引用的是麻省理工學院媒體實驗室 Kosmyna 等人的〈Your Brain on ChatGPT〉。該研究把 54 名波士頓地區大學受試者分為大型語言模型（Large Language Model, LLM）組、搜尋引擎組與純自力組，以腦電圖（Electroencephalography, EEG）記錄四個月內的命題作文歷程。</p>
+
+<h3>研究發現</h3>
+<ul>
+  <li>LLM 組在神經連結、記憶回憶與文本所有權感三項指標上一致偏低，用詞同質化，部分受試者直接複製貼上。</li>
+  <li>第四場交叉測試中，原 LLM 組改為自力寫作（LLM-to-Brain），神經參與度未回復至基準；原自力組改用 LLM（Brain-to-LLM）則展現較高的記憶回憶與前額葉活化。</li>
+  <li>作者將此現象命名為「認知負債」（cognitive debt）：短期省下的心力，以長期批判探究能力為代價。</li>
+</ul>
+
+<div class="note">
+  <p><b>證據強度的四項限制</b></p>
+  <p>一、該文為 arXiv 預印本，<b>未經同儕審查</b>，作者本人聲明結論屬初步。二、樣本 54 人，第四場僅 18 人完成，且全部來自單一地理區的少數大學。三、僅測試 ChatGPT，僅測試計時命題作文一種任務。四、<b>受試者是成人</b>，研究並未包含幼兒園至八年級兒童，因此無法直接推導出「兒童應禁用」的結論。研究團隊亦公開要求媒體避免使用「變笨」「腦部損傷」等描述。</p>
+</div>
+
+<p>更常被略過的是它的反向意涵：Brain-to-LLM 組表現較佳，指向<b>使用時序</b>而非使用與否才是關鍵——先讓大腦與材料深度接觸，之後導入工具，可能不損反益。若這項發現成立，對應的政策工具其實是「延後導入」與「課程序列設計」，而非一刀切禁令。紐約市選擇以年齡分層落實延後導入，在邏輯上與此相容；但這是政策推論，不是研究結論。</p>
+</section>
+
+<section>
+<h2><span class="num">參</span>兩種管制工具的結構差異</h2>
+<div class="table-scroll">
+<table>
+  <caption>就管制設計而言，兩者的差別不在寬嚴，而在責任落點與可查核性。</caption>
+  <thead>
+    <tr><th style="width:8.5rem">面向</th><th>紐約市：事前禁止</th><th>臺灣：事後揭露</th></tr>
+  </thead>
+  <tbody>
+    <tr><th>管制時點</th><td>行為發生前，於裝置與採購端阻斷</td><td>行為發生後，於作業與檔案端申報</td></tr>
+    <tr><th>責任落點</th><td>教育局與學校（機構）</td><td>學生與授課教師（個人）</td></tr>
+    <tr><th>可查核性</th><td>校內裝置可技術強制，查核成本低</td><td>幾無可靠鑑別工具，實質仰賴自律</td></tr>
+    <tr><th>涵蓋範圍</th><td>僅及於校內；校外與自有裝置無法管</td><td>形式上及於所有繳交物，但無查核則等同自願</td></tr>
+    <tr><th>公平性風險</th><td>校內一致，但校外落差隨家庭資源擴大</td><td>誠實申報者相對吃虧，形成逆向誘因</td></tr>
+    <tr><th>可逆性</th><td>設一年落日，明定重新檢討</td><td>指引可滾動修正，但無固定評估期程</td></tr>
+    <tr><th>主要成本</th><td>放棄工具效益、採購沉沒成本、教師工作負荷</td><td>學術誠信爭議、評量效度下降</td></tr>
+  </tbody>
+</table>
+</div>
+<p>兩者不是互斥選項。禁令處理的是「低年級是否應接觸」，揭露制處理的是「已可接觸者如何交代」。紐約市對高中生實際上同時採用兩者：限時試點加上素養課程，等於在放行的同時附加揭露與教學條件。</p>
+</section>
+
+<section>
+<h2><span class="num">肆</span>臺灣現況：不只是一張聲明書</h2>
+<p>將臺灣的做法概括為「一張聲明書」低估了現行架構。目前至少包含四個層次：</p>
+<ul>
+  <li><b>公務端</b>：行政院及所屬機關（構）使用生成式 AI 參考指引，公立學校得準用。</li>
+  <li><b>教學通則</b>：中小學數位教學指引 3.0 版，訂有應用生成式 AI 輔助教學之說明；另有中小學使用生成式 AI 注意事項（教師、行政人員及家長版）。</li>
+  <li><b>高中評量與學習歷程</b>：教育部 113 年 12 月 13 日臺教授國部字第 1135406551 號函，分教師指引、學生指引、師生共同注意事項三部分。其中要求教師於課程與評量實施前，明確宣告該課採四種模式中的何者：學生先寫再由 AI 修改、AI 產生架構再由學生撰寫、學生擬架構再由 AI 產生內容後修改，或不得使用。</li>
+  <li><b>學生素養教材</b>：114 年 12 月發布國小版《我和AI一起學》與國高中版《駕馭AI，洞察未來：數位公民的必修課》。</li>
+</ul>
+<p>真正的落差不在文件密度，而在三處：<b>年齡分層</b>未如紐約市明確劃線；<b>強制力</b>停留在指引位階，未進入評量或校規的裁罰結構；<b>成效評估</b>沒有指定的資料蒐集、比較基準與檢討時點。文本說「沒有人負責一年後回來檢查結果」，這一點的批評方向成立。</p>
+</section>
+
+<section>
+<h2><span class="num">伍</span>國際座標</h2>
+<p>紐約市不是孤例，但屬於光譜的嚴格端。</p>
+<ul>
+  <li><b>聯合國教科文組織（UNESCO）</b>2023 年《生成式 AI 教育與研究指引》建議獨立使用生成式 AI 平台的年齡下限為 13 歲，並指出歐盟《一般資料保護規則》（GDPR）門檻為 16 歲，另呼籲各國停止倚賴自我申報式的年齡驗證。</li>
+  <li><b>阿拉伯聯合大公國</b>2026 年課堂 AI 使用手冊，禁止 13 歲以下或七年級以下學生使用生成式 AI，並全面禁止用於正式考試。</li>
+  <li>另有報導指出中國大陸、法國、日本亦採年齡或情境分層，惟本文所據為二手中文報導，原始文件未經查核，僅供方向參考。</li>
+</ul>
+<p>可觀察的共通點是：多數管制以<b>年齡</b>與<b>任務類型</b>（尤其考試與評量）為切分軸，而非以工具是否先進為判準。紐約市的特殊之處在於連陪伴型聊天機器人一併全年級禁止，這一項的立論基礎是兒少心理健康，與認知發展是兩條不同的論證線。</p>
+</section>
+
+<section>
+<h2><span class="num">陸</span>三個被略過的爭點</h2>
+
+<h3>一、校內禁令管不到家庭作業</h3>
+<p>紐約市教育局局長已明言政策重點之一是限制 AI 用於家庭作業，並需加強理解校外使用情形。這等於承認禁令的實際效力邊界止於校門。若校外使用不變，禁令改變的可能只是使用場所與可見度，而非使用總量；同時，能在家取得工具與指導的學生與不能的學生之間，差距反而可能擴大。</p>
+
+<h3>二、這不是對照實驗</h3>
+<p>文本形容紐約市在做「全市規模的對照實驗」。就研究設計而言並非如此：政策全市同時實施，沒有隨機分派，也沒有未受政策影響的對照組。一年後可得到的是前後趨勢與跨學區比較，難以排除同期其他因素（教材更換、師資流動、校外使用行為改變）的干擾。若要產生可用的因果證據，須在設計階段就納入分階段導入或指定比較學區，這是政策設計問題，不是事後分析能補救的。</p>
+
+<h3>三、例外清單透露的立場</h3>
+<p>紐約市保留了身心障礙學生與英語學習者的輔助科技、程式課程與電腦化測驗。這等於承認同一類技術在特定用途下具正面價值，禁令針對的是<b>取代思考歷程的用法</b>，而非技術本身。這使得「全面禁用」的通俗描述略微誇大，也讓一年後的檢討必須回答一個更細的問題：哪些用法有害、哪些無害、界線畫在哪裡。</p>
+</section>
+
+<section>
+<h2><span class="num">柒</span>一年後應該看什麼</h2>
+<p>若要判斷紐約市這一年的結果，以下指標比「學生變聰明或變笨」更可觀察，也更適合作為他國參考的判準：</p>
+<ol>
+  <li>教師端的實施成本與規避行為：封鎖是否被繞過、教師是否需額外投入時間重設作業。</li>
+  <li>校內外使用落差，以及該落差與家庭社經背景的相關性。</li>
+  <li>寫作與閱讀評量的縱貫資料，需與政策實施前至少兩年的基準比較。</li>
+  <li>高中試點的實際使用時數、學生解題說明品質與學習表現。</li>
+  <li>政策外溢：其他學區是否跟進、業者是否調整未成年人產品設計。</li>
+  <li>家長與教師團體的態度變化——本案由家長連署推動，其態度本身是政策存續的變數。</li>
+</ol>
+</section>
+
+<section>
+<h2><span class="num">捌</span>可移轉的政策設計原則</h2>
+<p>跳出教育領域，本案例呈現的是一組通用的管制設計取捨，對任何面臨新技術導入的主管機關都適用：</p>
+<ul>
+  <li><b>可查核性決定工具選擇。</b>當違規行為無法可靠鑑別時，揭露制的實質效力接近自願規範。若仍要採揭露制，必須同時建立抽查、申報格式與不實申報的效果，否則制度只有宣示功能。</li>
+  <li><b>風險不可逆性決定嚴格度。</b>對象年齡越小、影響越可能不可逆，越傾向事前限制；反之則傾向事後究責。年齡分層之所以成為國際共通做法，原因在此。</li>
+  <li><b>落日條款加評估設計，是把爭議政策變成可學習政策的關鍵。</b>紐約市的一年期限與檢討機制，價值不亞於禁令內容本身——但前提是評估方法在實施前就已設定。</li>
+  <li><b>例外清單是政策誠實度的指標。</b>一份寫得出具體例外的禁令，通常意味著主管機關已辨識出風險來源；寫不出例外的全面禁令，往往還停留在對技術整體的疑慮階段。</li>
+</ul>
+<p>回到原文本的提問：臺灣賭的是不是學生的自律？較準確的說法是，臺灣目前把制度成本配置在使用者端而非機構端，而這個配置只有在兩個條件成立時才穩固——使用者具備判斷力，以及不誠實申報有實際成本。前者對高中以上或許成立，對國中以下缺乏證據；後者目前並不成立。這兩點，才是可以進一步討論的政策缺口。</p>
+</section>
+
+<div class="sources">
+<p><b>資料來源</b>（檢索日期 2026 年 9 月 5 日）</p>
+<ol>
+  <li>世界新聞網，〈紐約公校新規 八年級以下禁用AI、電子裝置也收緊〉，2026.09.03。<a href="https://www.worldjournal.com/wj/story/121382/9732154">worldjournal.com</a></li>
+  <li>星島日報，〈紐約市新學年擬禁公立學校中三以下學生用AI〉，2026.09.02。<a href="https://www.singtaousa.com/2026/09/02/news/usa/new-york-city-plans-to-ban-public-school-students-below-the-third-grade-from-using-ai-in-the-new-school-year/">singtaousa.com</a></li>
+  <li>商傳媒／蕃新聞，〈紐約市八年級以下禁用AI 專家：恐影響全美教育政策〉，2026.09.04（含 Edia、Quill 時數與螢幕時間規定）。</li>
+  <li>動區動趨，〈紐約宣布 60 萬高中以下學生禁止使用 AI 一年〉，2026.09.03。</li>
+  <li>Kosmyna, N. 等，〈Your Brain on ChatGPT: Accumulation of Cognitive Debt when Using an AI Assistant for Essay Writing Task〉，arXiv:2506.08872，2025（預印本，未經同儕審查）。MIT Media Lab 專案頁與 FAQ 載有作者自述之研究限制。<a href="https://www.media.mit.edu/projects/your-brain-on-chatgpt/overview/">media.mit.edu</a></li>
+  <li>教育部，〈高級中等學校學生學習評量及學習歷程檔案使用「生成式人工智慧」注意事項〉，113 年 12 月 13 日臺教授國部字第 1135406551 號函。</li>
+  <li>教育部，中小學生成式 AI 學習應用手冊《我和AI一起學》《駕馭AI，洞察未來：數位公民的必修課》，114 年 12 月 19 日臺教資（一）字第 1142704097 號函。</li>
+  <li>行政院，〈行政院及所屬機關（構）使用生成式 AI 參考指引〉。</li>
+  <li>UNESCO,《Guidance for generative AI in education and research》, 2023。<a href="https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research">unesco.org</a></li>
+  <li>Gulf News, “UAE sets strict new rules on generative AI in schools, banning use for under-13s”。</li>
+</ol>
+<p class="foot">體例說明：本文對流傳文本的核對，以上開公開報導與官方文件為準；標示「須查證」者表示所檢索之來源未能佐證，非指其為錯誤。紐約市政策細節以市府原始新聞稿與教育局函令為最終依據，本文所據為新聞報導轉述。</p>
+</div>
+
+</div>
+</div>
+</body>
+</html>

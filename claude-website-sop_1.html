@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用 Claude 打造網站｜9 步驟工作流程 SOP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0F1319;
+    --bg-alt:#141A22;
+    --panel:#1B222C;
+    --panel-2:#171D26;
+    --border:#2A3340;
+    --terminal:#0C1015;
+    --text:#ECE7DC;
+    --text-dim:#9AA3B0;
+    --text-faint:#5C6675;
+
+    --p1:#7C9CF0;   /* Phase 1 — 檔案準備 */
+    --p1-soft:rgba(124,156,240,0.12);
+    --p2:#C79EF0;   /* Phase 2 — 建置 */
+    --p2-soft:rgba(199,158,240,0.12);
+    --p3:#F2AD5C;   /* Phase 3 — 修飾 */
+    --p3-soft:rgba(242,173,92,0.12);
+    --ok:#6FCF97;   /* 上線完成 */
+    --ok-soft:rgba(111,207,151,0.12);
+    --paste:#5FD1C4; /* 貼上指令標記色 */
+
+    --serif-en:'Space Grotesk', sans-serif;
+    --sans-tc:'Noto Sans TC', sans-serif;
+    --mono:'JetBrains Mono', monospace;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans-tc);
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{background:var(--paste); color:#0C1015;}
+
+  a{color:var(--paste);}
+
+  .wrap{max-width:880px; margin:0 auto; padding:0 24px;}
+
+  /* ---------- top meta bar ---------- */
+  .metabar{
+    border-bottom:1px solid var(--border);
+    background:var(--bg-alt);
+  }
+  .metabar .wrap{
+    display:flex; flex-wrap:wrap; gap:8px 20px; align-items:center;
+    padding-top:14px; padding-bottom:14px;
+    font-family:var(--mono); font-size:12px; color:var(--text-faint);
+    letter-spacing:.03em;
+  }
+  .metabar b{color:var(--text-dim); font-weight:500;}
+  .metabar .dot{color:var(--border);}
+
+  /* ---------- hero ---------- */
+  .hero{padding:72px 0 56px; border-bottom:1px solid var(--border);}
+  .hero .eyebrow{
+    font-family:var(--mono); font-size:12.5px; color:var(--paste);
+    letter-spacing:.14em; text-transform:uppercase; margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .hero .eyebrow::before{content:'●'; font-size:9px;}
+  h1{
+    font-family:var(--sans-tc); font-weight:900; color:var(--text);
+    font-size:clamp(32px,5vw,50px); line-height:1.28; letter-spacing:-.01em;
+    margin-bottom:20px;
+  }
+  h1 span{color:var(--paste);}
+  .hero .lede{
+    font-size:16.5px; color:var(--text-dim); max-width:620px; margin-bottom:36px;
+  }
+
+  /* terminal mock in hero */
+  .term{
+    background:var(--terminal); border:1px solid var(--border); border-radius:10px;
+    overflow:hidden; box-shadow:0 20px 50px -20px rgba(0,0,0,.6);
+  }
+  .term-bar{
+    display:flex; align-items:center; gap:8px; padding:11px 14px;
+    background:var(--panel-2); border-bottom:1px solid var(--border);
+  }
+  .term-bar .tl{width:10px;height:10px;border-radius:50%; background:#3A4552;}
+  .term-bar span.fname{
+    margin-left:8px; font-family:var(--mono); font-size:12px; color:var(--text-faint);
+  }
+  .term-body{padding:20px 22px; font-family:var(--mono); font-size:13.5px; color:var(--text-dim);}
+  .term-body .ln{margin-bottom:8px;}
+  .term-body .prompt{color:var(--paste);}
+  .term-body .out{color:var(--text-faint);}
+  .term-body .cursor{
+    display:inline-block; width:7px; height:14px; background:var(--paste);
+    vertical-align:middle; margin-left:2px; animation:blink 1s steps(1) infinite;
+  }
+  @media (prefers-reduced-motion:reduce){.term-body .cursor{animation:none;}}
+  @keyframes blink{50%{opacity:0;}}
+
+  /* ---------- section titles ---------- */
+  .section-title{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--text-faint); margin-bottom:6px;
+  }
+  h2{
+    font-family:var(--sans-tc); font-weight:700; font-size:24px; color:var(--text);
+    margin-bottom:10px;
+  }
+  .section-lede{color:var(--text-dim); font-size:14.5px; max-width:600px; margin-bottom:32px;}
+
+  /* ---------- three files ---------- */
+  .files{padding:56px 0 48px; border-bottom:1px solid var(--border);}
+  .file-tabs{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  .file-card{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:20px;
+    border-top:3px solid var(--f-color, var(--paste));
+  }
+  .file-card .fname{
+    font-family:var(--mono); font-size:13px; font-weight:600; color:var(--f-color, var(--paste));
+    display:flex; align-items:center; gap:7px; margin-bottom:10px;
+  }
+  .file-card .fname::before{content:'▸';}
+  .file-card p{font-size:13.5px; color:var(--text-dim);}
+  .file-card:nth-child(1){--f-color:var(--p1);}
+  .file-card:nth-child(2){--f-color:var(--p2);}
+  .file-card:nth-child(3){--f-color:var(--p3);}
+
+  /* ---------- phases & timeline ---------- */
+  .phase{padding:56px 0 8px;}
+  .phase-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:6px;
+  }
+  .phase-tag{
+    font-family:var(--mono); font-size:11.5px; font-weight:600; letter-spacing:.1em;
+    padding:4px 10px; border-radius:100px; text-transform:uppercase;
+  }
+  .phase[data-phase="1"] .phase-tag{color:var(--p1); background:var(--p1-soft); border:1px solid rgba(124,156,240,.35);}
+  .phase[data-phase="2"] .phase-tag{color:var(--p2); background:var(--p2-soft); border:1px solid rgba(199,158,240,.35);}
+  .phase[data-phase="3"] .phase-tag{color:var(--p3); background:var(--p3-soft); border:1px solid rgba(242,173,92,.35);}
+
+  .timeline{position:relative; margin-top:32px;}
+  .timeline::before{
+    content:''; position:absolute; left:23px; top:4px; bottom:4px; width:2px;
+    background:var(--tl-color, var(--border));
+  }
+  .phase[data-phase="1"] .timeline::before{background:linear-gradient(var(--p1), var(--p1));}
+  .phase[data-phase="2"] .timeline::before{background:linear-gradient(var(--p2), var(--p2));}
+  .phase[data-phase="3"] .timeline::before{background:linear-gradient(var(--p3), var(--p3));}
+
+  .step{
+    display:grid; grid-template-columns:48px 1fr; gap:20px;
+    margin-bottom:36px; position:relative;
+  }
+  .node{display:flex; justify-content:center;}
+  .node-circle{
+    width:48px; height:48px; border-radius:50%; background:var(--panel-2);
+    border:2px solid var(--n-color, var(--border));
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-weight:600; font-size:16px; color:var(--n-color, var(--text));
+    position:relative; z-index:2;
+  }
+  .phase[data-phase="1"] .node-circle{--n-color:var(--p1);}
+  .phase[data-phase="2"] .node-circle{--n-color:var(--p2);}
+  .phase[data-phase="3"] .node-circle{--n-color:var(--p3);}
+
+  .step-card{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:22px 24px;
+  }
+  .step-card h3{
+    font-family:var(--sans-tc); font-size:17.5px; font-weight:700; color:var(--text);
+    margin-bottom:8px;
+  }
+  .step-card .desc{font-size:14.5px; color:var(--text-dim); margin-bottom:16px;}
+
+  .paste-block{
+    background:var(--terminal); border:1px solid var(--border); border-radius:8px; overflow:hidden;
+  }
+  .paste-block .pb-bar{
+    display:flex; align-items:center; gap:8px; padding:8px 12px;
+    background:var(--panel-2); border-bottom:1px solid var(--border);
+    font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--paste);
+  }
+  .paste-block .pb-bar::before{content:'↑'; font-weight:700;}
+  .paste-block .pb-body{
+    padding:14px 16px; font-family:var(--mono); font-size:13px; line-height:1.85; color:var(--text);
+  }
+  .example-lines{display:flex; flex-direction:column; gap:8px;}
+  .example-lines span{
+    font-family:var(--mono); font-size:13px; color:var(--text-dim);
+    background:var(--panel-2); border:1px solid var(--border); border-radius:6px; padding:8px 12px;
+  }
+  .note-inline{
+    font-size:13.5px; color:var(--text-faint); border-left:2px solid var(--border); padding-left:12px; margin-top:14px;
+  }
+
+  /* ---------- ship step ---------- */
+  .ship{padding:16px 0 72px;}
+  .ship .step{grid-template-columns:48px 1fr;}
+  .ship .node-circle{--n-color:var(--ok); background:var(--ok-soft); font-size:20px;}
+  .ship .step-card{
+    border-color:rgba(111,207,151,.4);
+    box-shadow:0 0 0 1px rgba(111,207,151,.08), 0 20px 40px -28px rgba(111,207,151,.35);
+  }
+  .ship .step-card h3{color:var(--ok);}
+  .ship .timeline::before{display:none;}
+
+  code.inline{
+    font-family:var(--mono); font-size:.92em; background:var(--panel-2);
+    border:1px solid var(--border); padding:1px 6px; border-radius:5px; color:var(--paste);
+  }
+
+  footer{
+    border-top:1px solid var(--border); padding:32px 0 48px;
+    font-size:13px; color:var(--text-faint);
+  }
+  footer a{color:var(--text-dim);}
+
+  @media (max-width:640px){
+    .file-tabs{grid-template-columns:1fr;}
+    .hero{padding:52px 0 40px;}
+    h1{font-size:30px;}
+    .step, .ship .step{grid-template-columns:36px 1fr; gap:12px;}
+    .node-circle{width:36px; height:36px; font-size:13px;}
+    .timeline::before{left:17px;}
+    .step-card{padding:18px;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="metabar">
+    <div class="wrap">
+      <span><b>SOP</b> · 用 Claude 打造網站</span>
+      <span class="dot">·</span>
+      <span>版本 v1.0</span>
+      <span class="dot">·</span>
+      <span>資料整理來源：charliehills.substack.com</span>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Claude Code Workflow · 9 Steps</div>
+      <h1>用 <span>Claude</span> 打造網站的<br>標準作業程序</h1>
+      <p class="lede">一套用來消除「AI 既視感」的 9 步驟工作流程。核心概念是讓三份 Markdown 檔案——事實、文案、風格——分別把關，讓 Claude 在每個階段都依據明確依據建置，而不是憑空生成。</p>
+
+      <div class="term">
+        <div class="term-bar">
+          <div class="tl" style="background:#E5555A"></div>
+          <div class="tl" style="background:#E8B44A"></div>
+          <div class="tl" style="background:#4CB56A"></div>
+          <span class="fname">terminal</span>
+        </div>
+        <div class="term-body">
+          <div class="ln"><span class="prompt">$</span> claude <span class="out">/model</span></div>
+          <div class="ln out">→ 已選擇 Fable 5</div>
+          <div class="ln"><span class="prompt">$</span> 讀取 CONTEXT.md、COPY.md、DESIGN.md ...</div>
+          <div class="ln out">→ 依三份檔案建置頁面，逐頁截圖並自我審查</div>
+          <div class="ln"><span class="prompt">$</span> <span class="cursor"></span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="files">
+    <div class="wrap">
+      <div class="section-title">貫穿全流程</div>
+      <h2>三份檔案，決定整個建置結果</h2>
+      <p class="section-lede">每個步驟都只做一件事：把資訊寫進對的檔案。Claude 之後的每一次產出，都回頭依據這三份檔案檢核。</p>
+      <div class="file-tabs">
+        <div class="file-card">
+          <div class="fname">CONTEXT.md</div>
+          <p>網站建置所依據的事實資料——公司背景、產品內容、目標客群等，不容 Claude 自行想像。</p>
+        </div>
+        <div class="file-card">
+          <div class="fname">COPY.md</div>
+          <p>網站上的每一句文字：每個標題、每個段落、title 標籤、meta 描述，以及各頁的 SEO 地圖。</p>
+        </div>
+        <div class="file-card">
+          <div class="fname">DESIGN.md</div>
+          <p>視覺風格規範：色彩、字型與元件系統，決定網站最終呈現的樣貌。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PHASE 1 ================= -->
+  <section class="phase" data-phase="1">
+    <div class="wrap">
+      <div class="phase-head"><span class="phase-tag">Phase 1 · 檔案準備</span></div>
+      <h2>THE FILES</h2>
+      <p class="section-lede">在寫任何一行程式碼之前，先把「事實」與「文案」確立下來，並逐字取得核准。</p>
+
+      <div class="timeline">
+
+        <div class="step">
+          <div class="node"><div class="node-circle">1</div></div>
+          <div class="step-card">
+            <h3>撰寫事實檔案</h3>
+            <p class="desc">Claude Chat 透過過往數月的對話已經對你有一定了解。下載它草擬出的檔案，放進專案資料夾，並修正其中不正確之處。</p>
+            <div class="paste-block">
+              <div class="pb-bar">貼上這段 · Claude Chat</div>
+              <div class="pb-body">不要假設這個網站與我有關。請建立一份 CONTEXT.md，保存建置此網站所依據的事實。一次只問我一個問題，等我確認後再問下一題。不要憑空捏造任何內容。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="node"><div class="node-circle">2</div></div>
+          <div class="step-card">
+            <h3>讓 Claude 訪談你</h3>
+            <p class="desc">建立一個資料夾，在該處開啟終端機，輸入 <code class="inline">claude</code>，並以 <code class="inline">/model</code> 指令選擇 Fable 5。之後由你負責回答問題，草擬文字則交給 Claude。</p>
+            <div class="paste-block">
+              <div class="pb-bar">貼上這段</div>
+              <div class="pb-body">請閱讀 CONTEXT.md。先提出網站的頁面架構建議，再逐頁訪談我，只詢問資料缺漏之處，以及每個頁面應鎖定的目標排序。將所有文案草擬至 COPY.md。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="node"><div class="node-circle">3</div></div>
+          <div class="step-card">
+            <h3>任何程式碼產生前，先核准每一字句</h3>
+            <p class="desc">告訴 Claude 需要修改的地方，它會直接編輯檔案。在任何程式碼被寫出之前，COPY.md 中的每一字句都必須先經過你的核准。</p>
+            <p class="note-inline">COPY.md 應保存：每個標題、每個段落、title 標籤、meta 描述，以及每個頁面的 SEO 地圖。</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PHASE 2 ================= -->
+  <section class="phase" data-phase="2">
+    <div class="wrap">
+      <div class="phase-head"><span class="phase-tag">Phase 2 · 建置</span></div>
+      <h2>THE BUILD</h2>
+      <p class="section-lede">三份檔案就緒後，才開始真正動手建置，並且每一步都要求 Claude 自我驗證。</p>
+
+      <div class="timeline">
+
+        <div class="step">
+          <div class="node"><div class="node-circle">4</div></div>
+          <div class="step-card">
+            <h3>融合品牌風格與喜愛的網站</h3>
+            <p class="desc">從 Refero Styles 下載約五個你喜歡的網站的 DESIGN.md，連同你的品牌素材一起拖曳進 Claude Code。</p>
+            <div class="paste-block">
+              <div class="pb-bar">貼上這段</div>
+              <div class="pb-body">請將這些檔案合併成一份 DESIGN.md。色彩與字型由我的品牌決定；版面配置與整體氛圍則參考這些範例。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="node"><div class="node-circle">5</div></div>
+          <div class="step-card">
+            <h3>建置後立即驗證</h3>
+            <p class="desc">Claude 依據三份檔案進行建置，接著為每個頁面截圖，並在你載入網站之前先自行審查輸出結果。</p>
+            <div class="paste-block">
+              <div class="pb-bar">貼上這段</div>
+              <div class="pb-body">請閱讀 DESIGN.md，並使用你的前端設計技能。依照 COPY.md 的文案逐字建置網站，絕不可自行捏造標誌或數據。為每個頁面截圖，對照 DESIGN.md 進行審查，並修正未通過的項目。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="node"><div class="node-circle">6</div></div>
+          <div class="step-card">
+            <h3>加入功能元件</h3>
+            <p class="desc">像 21st.dev 這類元件庫，會在每個元件下方附上可直接複製貼上的提示詞。Claude 會保留其中的工程邏輯，並移除多餘的部分。</p>
+            <div class="paste-block">
+              <div class="pb-bar">21st.dev · 加入 CLAUDE.md（若尚未建立則新增）</div>
+              <div class="pb-body">貼上的元件屬於結構性素材：它們提供骨架，DESIGN.md 提供外觀，COPY.md 提供文字內容。</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PHASE 3 ================= -->
+  <section class="phase" data-phase="3">
+    <div class="wrap">
+      <div class="phase-head"><span class="phase-tag">Phase 3 · 修飾</span></div>
+      <h2>THE POLISH</h2>
+      <p class="section-lede">最後一哩路：把網站從「堪用」修到「有質感」。</p>
+
+      <div class="timeline">
+
+        <div class="step">
+          <div class="node"><div class="node-circle">7</div></div>
+          <div class="step-card">
+            <h3>Higgsfield 主視覺影片</h3>
+            <p class="desc">將完成的影片拖入 Claude Code，下指令「將此設為主視覺背景」，它會自動把 23MB 的檔案壓縮至 2.3MB。</p>
+            <div class="paste-block">
+              <div class="pb-bar">貼上這段 · Higgsfield</div>
+              <div class="pb-body">GPT Image 2：建立一張水粉畫風格的圖像，呈現優美風景與深藍色天空。接著以 Kling 3.0 轉為影片：畫面主體維持不動，僅背景場景緩慢流動。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="node"><div class="node-circle">8</div></div>
+          <div class="step-card">
+            <h3>大量反覆修改</h3>
+            <p class="desc">以自然語言持續反覆修改，多半透過語音輸入：說出問題所在、觀察變化、再說出下一項修改。難以描述的問題，直接截圖說明。</p>
+            <div class="example-lines">
+              <span>「把按鈕往上移。」</span>
+              <span>「把卡片加寬一點。」</span>
+              <span>「這個區塊感覺太擠了，加一點留白。」</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="node"><div class="node-circle">9</div></div>
+          <div class="step-card">
+            <h3>品味把關</h3>
+            <p class="desc">常見問題是同時執行五種環境動畫效果。解法：每個版面只採用一套動態系統。搭配 taste-skill 或 Impeccable 技能安裝效果更佳——貼上任一 repo 連結，並說「安裝這個技能」。</p>
+            <div class="paste-block">
+              <div class="pb-bar">貼上這段 · 上線前使用</div>
+              <div class="pb-body">如果讓品味評論家來看，他會怎麼說？</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SHIP ================= -->
+  <section class="ship">
+    <div class="wrap">
+      <div class="timeline">
+        <div class="step">
+          <div class="node"><div class="node-circle">✓</div></div>
+          <div class="step-card">
+            <h3>使用 Vercel 部署上線</h3>
+            <p class="desc" style="margin-bottom:0;">準備好網站上線，並使用 Vercel CLI 進行部署。32 秒內即可完成，除既有的 Claude 方案外，無需額外付費。範例成果：<code class="inline">charliehills.ai</code>。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      流程整理自 Charlie Hills 於 charliehills.substack.com 發布之圖解教學，內容經翻譯與重新編排為 SOP 格式。實際套用時，可依專案規模調整各步驟的深度與反覆次數。
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face{
+    font-family:'Oswald';
+    src:url('fonts/Oswald.ttf') format('truetype');
+    font-weight:200 700;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:2600px;height:1015px;background:#F4F3EF;overflow:hidden;}
+  .stage{position:relative;width:2600px;height:1015px;background:#F4F3EF;}
+  svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+  .cjk-black{font-family:'Noto Sans CJK TC';font-weight:900;}
+  .cjk-bold{font-family:'Noto Sans CJK TC';font-weight:700;}
+  .osw{font-family:'Oswald';font-weight:600;}
+  .osw-it{font-family:'Oswald';font-weight:500;font-style:italic;}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- ============ BACKGROUND ============ -->
+  <svg viewBox="0 0 2600 1015" preserveAspectRatio="none">
+    <defs>
+      <radialGradient id="ringFade" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#2E7FB8" stop-opacity="0.15"/>
+        <stop offset="100%" stop-color="#2E7FB8" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="mapFade" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2E6FA6" stop-opacity="0"/>
+        <stop offset="35%" stop-color="#2E6FA6" stop-opacity="0.08"/>
+        <stop offset="100%" stop-color="#2E6FA6" stop-opacity="0.20"/>
+      </linearGradient>
+    </defs>
+
+    <g stroke="#8FB6D6" stroke-width="1.6" fill="none" opacity="0.55">
+      <circle cx="2440" cy="440" r="120"/>
+      <circle cx="2440" cy="440" r="190"/>
+      <circle cx="2440" cy="440" r="260"/>
+      <circle cx="2440" cy="440" r="330"/>
+    </g>
+    <circle cx="2440" cy="440" r="330" fill="url(#ringFade)"/>
+
+    <g stroke="#9DBEDA" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.8">
+      <path d="M40,42 H210 L250,82 V150"/>
+      <path d="M40,86 H150 L182,118 V150"/>
+      <path d="M40,130 H110"/>
+    </g>
+    <g fill="#7FA8CC" opacity="0.9">
+      <circle cx="40" cy="42" r="6"/><circle cx="250" cy="150" r="6"/>
+      <circle cx="40" cy="86" r="6"/><circle cx="182" cy="150" r="6"/>
+      <circle cx="40" cy="130" r="6"/><circle cx="110" cy="130" r="6"/>
+    </g>
+
+    <g stroke="#7FA1C4" stroke-width="1.3" opacity="0.30" fill="none">
+      <path d="M0,610 L420,520 L780,650 L1180,530 L1560,660 L1980,520 L2600,630"/>
+      <path d="M420,520 L780,830 M780,650 L1180,830 M1180,530 L1560,830 M1560,660 L1980,830"/>
+      <path d="M0,830 L2600,830"/>
+    </g>
+    <g fill="#6E97BE" opacity="0.5">
+      <circle cx="420" cy="520" r="4.5"/><circle cx="780" cy="650" r="4.5"/>
+      <circle cx="1180" cy="530" r="4.5"/><circle cx="1560" cy="660" r="4.5"/>
+      <circle cx="1980" cy="520" r="4.5"/>
+    </g>
+
+    <g fill="#5C89B4" opacity="0.15">
+      <path d="M120,1015 C160,940 260,912 340,940 C300,968 320,1000 380,1005 C420,968 500,948 560,975 C520,998 560,1015 620,1015 Z"/>
+      <path d="M680,1015 C720,958 800,922 880,948 C920,918 1000,922 1030,958 C1080,940 1150,948 1170,985 C1200,958 1260,962 1280,1005 C1240,1012 1240,1015 1260,1015 Z"/>
+      <path d="M1360,1015 C1400,965 1480,938 1560,962 C1610,935 1690,945 1720,980 C1770,962 1840,970 1870,1010 Z"/>
+      <path d="M1960,1015 C1990,975 2060,950 2130,970 C2180,948 2260,960 2290,1000 C2340,980 2420,990 2450,1015 Z"/>
+    </g>
+    <rect x="0" y="800" width="2600" height="215" fill="url(#mapFade)"/>
+  </svg>
+
+  <!-- ============ FOREGROUND ============ -->
+  <svg viewBox="0 0 2600 1015">
+    <defs>
+      <path id="pulseLine" d="M0,0 H30 L41,-24 L56,26 L71,-12 L82,0 H115" fill="none" stroke="#E30016" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <g id="starOfLife">
+        <path d="M-14.9,-30.6 L-12.5,-64.8 L0.0,-118.0 L12.5,-64.8 L14.9,-30.6 Z
+                 M19.0,-28.2 L49.9,-43.2 L102.2,-59.0 L62.4,-21.6 L33.9,-2.4 Z
+                 M33.9,2.4 L62.4,21.6 L102.2,59.0 L49.9,43.2 L19.0,28.2 Z
+                 M14.9,30.6 L12.5,64.8 L0.0,118.0 L-12.5,64.8 L-14.9,30.6 Z
+                 M-19.0,28.2 L-49.9,43.2 L-102.2,59.0 L-62.4,21.6 L-33.9,2.4 Z
+                 M-33.9,-2.4 L-62.4,-21.6 L-102.2,-59.0 L-49.9,-43.2 L-19.0,-28.2 Z"
+              fill="#1D80C4"/>
+        <circle r="38" fill="#F4F3EF" stroke="#1D80C4" stroke-width="6"/>
+        <g stroke="#0E3A5C" stroke-width="6" fill="none" stroke-linecap="round">
+          <line x1="0" y1="-24" x2="0" y2="24"/>
+          <path d="M-14,-16 C-3,-8 -3,-1 -14,7 C-3,14 -3,20 -13,26" fill="none"/>
+        </g>
+      </g>
+      <g id="medCross">
+        <path d="M-13,-38 H13 V-13 H38 V13 H13 V38 H-13 V13 H-38 V-13 H-13 Z" fill="#E30016"/>
+      </g>
+    </defs>
+
+    <!-- ===== left icon cluster ===== -->
+    <use href="#starOfLife" transform="translate(210,300)"/>
+
+    <g transform="translate(400,178)">
+      <rect x="0" y="-14" width="84" height="16" rx="8" fill="#106096"/>
+      <circle cx="42" cy="24" r="30" fill="#1D80C4"/>
+      <circle cx="42" cy="98" r="9" fill="#E30016"/>
+      <path d="M6,210 C6,120 20,78 42,78 C64,78 78,120 78,210 Z" fill="#1D80C4"/>
+      <rect x="6" y="176" width="72" height="18" rx="6" fill="#F2CC1F"/>
+    </g>
+
+    <!-- ===== 救護 / AMBULANCE ===== -->
+    <text x="520" y="345" class="cjk-black" font-size="215" fill="#1D80C4">救護</text>
+    <use href="#pulseLine" transform="translate(600,168) scale(1.55)"/>
+    <text x="520" y="440" class="osw" font-size="68" letter-spacing="4" fill="#1D80C4">AMBULANCE</text>
+
+    <!-- ===== intersection X + tagline ===== -->
+    <g transform="translate(1080,300)">
+      <g fill="#F2CC1F">
+        <path d="M-92,-92 L-38,-92 L2,-52 L-13,-37 L-52,-37 L-92,-37 Z"/>
+        <path d="M92,-92 L38,-92 L-2,-52 L13,-37 L52,-37 L92,-37 Z"/>
+        <path d="M-92,92 L-38,92 L2,52 L-13,37 L-52,37 L-92,37 Z"/>
+        <path d="M92,92 L38,92 L-2,52 L13,37 L52,37 L92,37 Z"/>
+      </g>
+      <text x="0" y="-155" text-anchor="middle" class="cjk-bold" font-size="44" fill="#0E3A5C">救在當下</text>
+      <use href="#pulseLine" transform="translate(-58,-115) scale(0.6)"/>
+      <text x="0" y="175" text-anchor="middle" class="osw-it" font-size="27" letter-spacing="1" fill="#0E3A5C">Act Now. Save Lives.</text>
+    </g>
+
+    <!-- ===== 執法 / LAW ENFORCEMENT ===== -->
+    <text x="1220" y="345" class="cjk-black" font-size="215" fill="#1D80C4">執法</text>
+    <use href="#medCross" transform="translate(1790,95) scale(1.05)"/>
+    <text x="1220" y="465" class="osw" font-size="68" letter-spacing="4" fill="#1D80C4">LAW</text>
+    <text x="1220" y="540" class="osw" font-size="68" letter-spacing="4" fill="#1D80C4">ENFORCEMENT</text>
+
+    <!-- ===== ambulance icon ===== -->
+    <g transform="translate(1970,270)">
+      <g stroke="#8FB6D6" stroke-width="7" stroke-linecap="round" opacity="0.7">
+        <line x1="-70" y1="-6" x2="-20" y2="-6"/>
+        <line x1="-78" y1="18" x2="-24" y2="18"/>
+        <line x1="-70" y1="42" x2="-20" y2="42"/>
+      </g>
+      <path d="M0,20 L0,-30 L45,-30 L80,10 L80,20 Z" fill="#106096"/>
+      <rect x="80" y="-70" width="180" height="90" rx="10" fill="#1D80C4"/>
+      <rect x="14" y="-24" width="26" height="24" rx="3" fill="#DCEBFA"/>
+      <rect x="150" y="-58" width="60" height="60" rx="8" fill="#F7F9FC"/>
+      <path d="M164,-40 H180 V-56 H196 V-40 H212 V-24 H196 V-8 H180 V-24 H164 Z" fill="#E30016"/>
+      <rect x="88" y="-96" width="60" height="20" rx="5" fill="#F2CC1F"/>
+      <rect x="88" y="-96" width="30" height="20" rx="5" fill="#E30016"/>
+      <circle cx="45" cy="30" r="24" fill="#0E3A5C"/><circle cx="45" cy="30" r="10" fill="#7FA8CC"/>
+      <circle cx="205" cy="30" r="24" fill="#0E3A5C"/><circle cx="205" cy="30" r="10" fill="#7FA8CC"/>
+      <path d="M262,-46 L320,-10 L262,26 Z" fill="#1D80C4"/>
+    </g>
+
+    <!-- ===== badge / pill row ===== -->
+    <g transform="translate(1300,680)">
+      <rect x="-820" y="-40" width="1640" height="80" rx="40" fill="#E85416"/>
+      <text x="-680" y="14" text-anchor="middle" class="cjk-bold" font-size="42" fill="#FFFFFF">CIT跨域整合與專業實務國際研討會</text>
+      <circle cx="-30" cy="0" r="48" fill="#1D80C4"/>
+      <text x="-30" y="16" text-anchor="middle" class="cjk-bold" font-size="38" fill="#FFFFFF">暨</text>
+      <text x="330" y="14" text-anchor="middle" class="cjk-bold" font-size="42" fill="#FFFFFF">績優救護人員頒獎典禮</text>
+    </g>
+
+  </svg>
+</div>
+</body>
+</html>

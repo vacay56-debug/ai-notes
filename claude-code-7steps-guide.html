@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用 Claude Code 打造網站的 7 個步驟｜完整導讀與實戰指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F4F1;
+    --panel:#FBFBF9;
+    --panel-2:#EAECE6;
+    --ink:#15212C;
+    --ink-2:#3C4A56;
+    --ink-3:#6B7680;
+    --line:#CBD1C9;
+    --line-strong:#AAB2A8;
+    --signal:#CE3826;
+    --signal-ink:#8F2115;
+    --signal-tint:#F7E6E2;
+    --grid:rgba(21,33,44,.045);
+    --maxw:940px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:26px 26px;
+    color:var(--ink);
+    font-family:"Noto Sans TC","Inter",sans-serif;
+    font-size:17px;
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px;}
+  .mono{font-family:"IBM Plex Mono","Noto Sans TC",monospace;}
+
+  /* ---------- header ---------- */
+  header{padding:64px 0 40px;border-bottom:2px solid var(--ink);}
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--signal-ink);font-weight:500;
+    display:flex;align-items:center;gap:12px;margin-bottom:22px;
+  }
+  .eyebrow::before{content:"";width:34px;height:2px;background:var(--signal);display:inline-block;}
+  h1{
+    font-family:"Space Grotesk","Noto Sans TC",sans-serif;
+    font-weight:700;font-size:clamp(30px,6vw,52px);line-height:1.08;
+    letter-spacing:-.01em;margin:0 0 18px;
+  }
+  h1 .cc{color:var(--signal);}
+  .lede{font-size:clamp(16px,2.4vw,19px);color:var(--ink-2);max-width:640px;margin:0;}
+  .meta{
+    margin-top:28px;display:flex;flex-wrap:wrap;gap:10px 8px;
+  }
+  .tag{
+    font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.04em;
+    border:1px solid var(--line-strong);border-radius:2px;padding:4px 9px;color:var(--ink-2);
+    background:var(--panel);
+  }
+
+  /* ---------- section shell ---------- */
+  section{padding:44px 0;border-bottom:1px solid var(--line);}
+  .kicker{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink-3);margin-bottom:10px;
+  }
+  h2{
+    font-family:"Space Grotesk","Noto Sans TC",sans-serif;font-weight:700;
+    font-size:clamp(22px,3.6vw,28px);letter-spacing:-.01em;margin:0 0 8px;line-height:1.2;
+  }
+  h2 .en{color:var(--ink-3);font-weight:500;font-size:.66em;letter-spacing:0;}
+  p{margin:0 0 14px;}
+  a{color:var(--signal-ink);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px;}
+  a:hover{color:var(--signal);}
+
+  /* ---------- prereq card ---------- */
+  .callout{
+    background:var(--panel);border:1px solid var(--line-strong);border-left:3px solid var(--signal);
+    border-radius:3px;padding:22px 24px;margin:8px 0 4px;
+  }
+  .callout h3{margin:0 0 12px;font-size:16px;font-weight:700;}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:15px;}
+  .kv dt{color:var(--ink-3);font-family:"IBM Plex Mono",monospace;font-size:13px;white-space:nowrap;padding-top:2px;}
+  .kv dd{margin:0;color:var(--ink);}
+
+  /* ---------- terminal / prompt block ---------- */
+  .cmd{
+    background:#111A22;color:#E7ECE9;border-radius:5px;overflow:hidden;
+    margin:16px 0;border:1px solid #26333d;
+  }
+  .cmd .bar{
+    background:#1B2831;padding:8px 14px;font-family:"IBM Plex Mono",monospace;
+    font-size:11.5px;letter-spacing:.08em;color:#9BB0A8;display:flex;align-items:center;gap:8px;
+    border-bottom:1px solid #26333d;
+  }
+  .cmd .bar::before{content:"";width:9px;height:9px;border-radius:50%;background:#CE3826;box-shadow:16px 0 0 #E0A93B,32px 0 0 #5FA773;}
+  .cmd .bar span{margin-left:44px;}
+  .cmd pre{
+    margin:0;padding:16px 16px;overflow-x:auto;
+    font-family:"IBM Plex Mono","Noto Sans TC",monospace;font-size:13.5px;line-height:1.7;
+    color:#E7ECE9;white-space:pre-wrap;word-break:break-word;
+  }
+  .cmd .p{color:#6DBF9B;user-select:none;}
+  .cmd .c{color:#7C8A93;}
+
+  /* ---------- step layout ---------- */
+  .step{display:grid;grid-template-columns:74px 1fr;gap:0 22px;}
+  .num{
+    font-family:"Space Grotesk",sans-serif;font-weight:700;
+    font-size:clamp(40px,8vw,58px);line-height:.9;color:var(--signal);
+    position:relative;
+  }
+  .num small{display:block;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:400;
+    letter-spacing:.14em;color:var(--ink-3);margin-top:8px;}
+  .step-body{min-width:0;}
+  .lesson{
+    display:inline-block;background:var(--signal-tint);color:var(--signal-ink);
+    font-size:13.5px;font-weight:700;border-radius:2px;padding:3px 10px;margin:2px 0 14px;
+    border:1px solid #E6C3BC;
+  }
+  h4{font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--ink);
+     display:flex;align-items:center;gap:9px;}
+  h4::before{content:"";width:6px;height:6px;background:var(--signal);transform:rotate(45deg);display:inline-block;}
+
+  /* ---------- tables ---------- */
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;background:var(--panel);}
+  caption{caption-side:top;text-align:left;font-family:"IBM Plex Mono",monospace;font-size:12px;
+    color:var(--ink-3);letter-spacing:.06em;padding-bottom:8px;}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top;}
+  th{background:var(--panel-2);font-weight:700;font-size:13px;white-space:nowrap;color:var(--ink-2);}
+  td .mono{font-size:13px;color:var(--signal-ink);}
+
+  ul.check{list-style:none;padding:0;margin:12px 0;}
+  ul.check li{position:relative;padding:5px 0 5px 26px;border-bottom:1px dashed var(--line);font-size:15px;}
+  ul.check li:last-child{border-bottom:none;}
+  ul.check li::before{content:"▸";position:absolute;left:4px;color:var(--signal);font-size:14px;top:5px;}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px;}
+  .chip{font-family:"IBM Plex Mono",monospace;font-size:12px;background:var(--panel-2);
+    border:1px solid var(--line);border-radius:2px;padding:4px 9px;color:var(--ink-2);}
+
+  /* ---------- pitfalls / bottom ---------- */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;}
+  .box{background:var(--panel);border:1px solid var(--line-strong);border-radius:3px;padding:18px 20px;}
+  .box h4{margin-top:0;}
+  .box p{font-size:14.5px;color:var(--ink-2);margin:0;}
+
+  .final{
+    background:var(--ink);color:#EFF2EE;border-radius:4px;padding:34px 30px;margin:8px 0 0;
+    text-align:center;
+  }
+  .final .q{font-family:"Space Grotesk","Noto Sans TC",sans-serif;font-weight:600;
+    font-size:clamp(20px,4vw,28px);line-height:1.3;margin:0 0 10px;}
+  .final .q em{color:#F0907F;font-style:normal;}
+  .final p{color:#AEBAB2;font-size:15px;margin:0;}
+
+  footer{padding:34px 0 60px;font-size:13px;color:var(--ink-3);}
+  footer p{margin:0 0 6px;}
+  .rule-note{border-top:1px solid var(--line);padding-top:18px;}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:640px){
+    body{font-size:16px;}
+    .step{grid-template-columns:1fr;gap:0;}
+    .num{font-size:44px;margin-bottom:4px;}
+    .num small{display:inline-block;margin:0 0 0 10px;}
+    .grid2{grid-template-columns:1fr;}
+    .kv{grid-template-columns:1fr;gap:2px 0;}
+    .kv dt{padding-top:10px;}
+    th,td{padding:8px 9px;font-size:13.5px;}
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease;}
+    .reveal.in{opacity:1;transform:none;}
+  }
+  :focus-visible{outline:2px solid var(--signal);outline-offset:3px;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">實戰導讀手冊 · GUIDE / 07 STEPS</div>
+    <h1>用 <span class="cc">Claude Code</span> 打造網站的<br>7 個步驟</h1>
+    <p class="lede">一套從規劃、建置到上線的工作流程。核心心法只有一句：<strong>你負責願景，Claude 負責寫程式。</strong>本手冊逐步拆解原圖，並以一個貫穿全程的政府網站範例帶你實作。</p>
+    <div class="meta">
+      <span class="tag">繁體中文導讀</span>
+      <span class="tag">附範例專案</span>
+      <span class="tag">技術細節已對照官方文件</span>
+      <span class="tag mono">2026 版</span>
+    </div>
+  </header>
+
+  <!-- INTRO -->
+  <section class="reveal">
+    <div class="kicker">先搞懂 · What is Claude Code</div>
+    <h2>它不是聊天機器人，是「會動手的程式代理」</h2>
+    <p>Claude Code 是 Anthropic 推出的<strong>終端機原生 AI 程式設計代理（terminal-native coding agent）</strong>。它跟你平常用的瀏覽器版 Claude（claude.ai）最大的差異是：它直接在你電腦的終端機裡執行，能<strong>讀取整個專案資料夾、直接建立與修改檔案、執行指令</strong>，而不只是回覆文字。你可以把它想成一位坐在你終端機裡的資深工程師。</p>
+    <p>與你先前用「單檔 HTML 工具（如 ROSC 模擬器）」的經驗相比，這是從<strong>「一個檔案」升級到「一整個專案」</strong>的工作方式——這正是為什麼需要一套流程來駕馭它。</p>
+
+    <div class="callout">
+      <h3>開始之前（前置作業）</h3>
+      <dl class="kv">
+        <dt>方案需求</dt><dd>需 Pro／Max／Team／Enterprise 訂閱，或 Console（API）帳號。<strong>免費方案無法使用</strong>。</dd>
+        <dt>執行環境</dt><dd>macOS、Windows、Linux 皆可，於終端機或桌面版 App 執行。</dd>
+        <dt>安全機制</dt><dd>每次修改檔案或執行指令前，都會先徵求你同意（權限確認）。</dd>
+        <dt>官方文件</dt><dd><a href="https://docs.claude.com/en/docs/claude-code/overview">docs.claude.com/en/docs/claude-code</a></dd>
+      </dl>
+      <div class="cmd">
+        <div class="bar"><span>安裝與啟動（官方推薦：原生安裝程式，免裝 Node.js）</span></div>
+        <pre><span class="c"># macOS / Linux</span>
+curl -fsSL https://claude.ai/install.sh | bash
+
+<span class="c"># Windows（PowerShell）</span>
+irm https://claude.ai/install.ps1 | iex
+
+<span class="c"># 進到你的專案資料夾，首次啟動會開瀏覽器登入</span>
+<span class="p">$</span> cd my-project
+<span class="p">$</span> claude</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- RUNNING EXAMPLE -->
+  <section class="reveal">
+    <div class="kicker">貫穿範例 · The Running Example</div>
+    <h2>我們要一起打造：「EMT 換證與繼續教育資訊網」</h2>
+    <p>為了讓 7 個步驟不只是抽象概念，以下每一步都會套用同一個範例——一個對外的公開資訊網站，讓全國救護技術員（Emergency Medical Technician, EMT）查詢換證規定、繼續教育課程與時數。這個情境貼近你的實際業務，也方便把政策規劃的思維直接對映到網站建置流程。</p>
+    <div class="chips">
+      <span class="chip">對象：EMT-1 / EMT-2 / EMT-P</span>
+      <span class="chip">目標：自助查詢、降低洽詢話務</span>
+      <span class="chip">性質：政府對外資訊網</span>
+    </div>
+  </section>
+
+  <!-- STEP 1 -->
+  <section class="reveal">
+    <div class="step">
+      <div class="num">1<small>STEP</small></div>
+      <div class="step-body">
+        <h2>從明確目標開始 <span class="en">Start With a Clear Goal</span></h2>
+        <div class="lesson">明確的目標，會引導後續每一個決策</div>
+        <p>在寫任何一行程式之前，先把「這個網站要達成什麼」想清楚。目標模糊，AI 的產出就會發散——因為 AI 不會、也不該替你決定業務目標。</p>
+        <h4>先回答這四個問句</h4>
+        <table>
+          <caption>PROJECT GOAL · 四問句 × 範例</caption>
+          <tr><th>關鍵問句</th><th>範例：EMT 換證資訊網</th></tr>
+          <tr><td>這個業務在做什麼？</td><td>提供全國 EMT 換證規定與繼續教育課程資訊</td></tr>
+          <tr><td>網站給誰用？</td><td>全國 EMT、各縣市消防局承辦人</td></tr>
+          <tr><td>主要目標是什麼？</td><td>讓 EMT 自助查詢換證期限與時數，降低電話洽詢量</td></tr>
+          <tr><td>希望訪客做什麼（CTA）？</td><td>「查詢我的換證期限」／「報名繼續教育課程」</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="reveal">
+    <div class="step">
+      <div class="num">2<small>STEP</small></div>
+      <div class="step-body">
+        <h2>撰寫詳細需求簡報 <span class="en">Create a Detailed Brief</span></h2>
+        <div class="lesson">上下文越完整，來回修改越少</div>
+        <p>把步驟 1 的目標展開成一份「需求簡報（brief）」交給 Claude Code。這份 brief 就是你給工程師的委辦說明——內容越具體，重工越少。</p>
+        <h4>一份 brief 要涵蓋六件事</h4>
+        <table>
+          <caption>PROJECT BRIEF · 範例內容</caption>
+          <tr><th>項目</th><th>範例內容</th></tr>
+          <tr><td>業務概述</td><td>消防署救護科提供之 EMT 換證與繼續教育查詢服務</td></tr>
+          <tr><td>目標對象</td><td>EMT-1／EMT-2／EMT-P，年齡與數位程度不一，需高易讀性</td></tr>
+          <tr><td>品牌調性</td><td>專業、可信、政府識別；沉穩不花俏</td></tr>
+          <tr><td>需要的頁面</td><td>首頁、換證規定、課程查詢、時數說明、常見問答</td></tr>
+          <tr><td>關鍵功能</td><td>時數計算、課程篩選（分級／地區）、期限提醒</td></tr>
+          <tr><td>主要 CTA</td><td>查詢換證期限、報名課程</td></tr>
+        </table>
+        <p><strong>進階技巧：</strong>把這份 brief（連同你的繁中／公文格式偏好）寫成一個 <span class="mono">CLAUDE.md</span> 檔案放在專案根目錄。Claude Code 每次啟動都會自動讀取它，等於一次設定、每次生效。官方建議控制在 200 行以內，並讓每條指令「可驗證」。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="reveal">
+    <div class="step">
+      <div class="num">3<small>STEP</small></div>
+      <div class="step-body">
+        <h2>提供參考網站 <span class="en">Share Reference Websites</span></h2>
+        <div class="lesson">給方向，而不是讓 AI 用猜的</div>
+        <p>文字很難描述「好看」。與其反覆用形容詞，不如直接給幾個參考網站，並指出你要它學哪些面向。這能大幅減少視覺上的來回。</p>
+        <h4>從六個維度指定方向</h4>
+        <div class="chips">
+          <span class="chip">版面 Layout</span><span class="chip">字體 Typography</span><span class="chip">色彩 Colors</span>
+          <span class="chip">間距 Spacing</span><span class="chip">導覽 Navigation</span><span class="chip">動效 Animations</span>
+        </div>
+        <div class="cmd">
+          <div class="bar"><span>對 Claude Code 下的指示（範例）</span></div>
+          <pre>參考 gov.uk 與 NHS 111 的資訊架構：<span class="c"></span>
+・版面要乾淨、單欄為主、大字級
+・色彩沿用政府識別色，文字對比需符合無障礙 (WCAG AA)
+・導覽固定在頂部，不要輪播與花俏動畫
+・字體以易讀的無襯線為主</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="reveal">
+    <div class="step">
+      <div class="num">4<small>STEP</small></div>
+      <div class="step-body">
+        <h2>動手前先規劃 <span class="en">Plan Before You Build</span></h2>
+        <div class="lesson">規劃勝過除錯</div>
+        <p>在開始寫程式前，先定好架構與技術棧。善用 Claude Code 的<strong>計畫模式（Plan Mode）</strong>——它會先提出一份實作計畫，你確認（或要求修改）後才動工，就像正式施工前先審圖。</p>
+        <h4>要先規劃的六件事</h4>
+        <ul class="check">
+          <li>網站架構（site architecture）</li>
+          <li>頁面層級（page hierarchy）</li>
+          <li>導覽結構（navigation）</li>
+          <li>元件清單（component list）</li>
+          <li>技術棧（tech stack）</li>
+          <li>實作路線圖（implementation roadmap）</li>
+        </ul>
+        <h4>技術棧：原圖建議 vs. 依需求調整</h4>
+        <table>
+          <caption>TECH STACK</caption>
+          <tr><th>層面</th><th>原圖建議</th><th>本範例的務實選擇</th></tr>
+          <tr><td>框架</td><td class="mono">Next.js</td><td>純資訊網若無登入，靜態頁即可</td></tr>
+          <tr><td>樣式</td><td class="mono">Tailwind CSS</td><td>可沿用</td></tr>
+          <tr><td>語言</td><td class="mono">TypeScript</td><td>可沿用</td></tr>
+          <tr><td>資料庫</td><td class="mono">PostgreSQL</td><td>若不需帳號系統可省略</td></tr>
+        </table>
+        <p><strong>重點：</strong>技術棧要服務目標，不是越多越好。像這種對外靜態資訊網，用輕量方案 + GitHub Pages（你已熟悉）反而更好維護。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 5 -->
+  <section class="reveal">
+    <div class="step">
+      <div class="num">5<small>STEP</small></div>
+      <div class="step-body">
+        <h2>建置、測試、改進 <span class="en">Build, Test &amp; Improve</span></h2>
+        <div class="lesson">小步快跑，逐次迭代</div>
+        <p>不要一次要它「把整個網站做完」。改成一頁一頁、一個功能一個功能地做，每做完一段就在瀏覽器實際檢視，再繼續下一段。這樣出錯時範圍小、好回頭。</p>
+        <div class="chips">
+          <span class="chip">響應式版面</span><span class="chip">可重用元件</span><span class="chip">表單</span>
+          <span class="chip">身分驗證</span><span class="chip">API</span><span class="chip">SEO</span><span class="chip">無障礙</span>
+        </div>
+        <div class="cmd">
+          <div class="bar"><span>迭代式指令（一段一段下）</span></div>
+          <pre><span class="p">›</span> 先做首頁：頂部導覽 + 主標 + 兩個 CTA 按鈕，響應式。
+<span class="c">（檢視瀏覽器結果，滿意後再繼續）</span>
+
+<span class="p">›</span> 接著做「課程查詢」頁：可依 EMT 分級與地區篩選的清單。
+
+<span class="p">›</span> 課程清單抽成可重用元件，讓常見問答頁也能用。</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 6 -->
+  <section class="reveal">
+    <div class="step">
+      <div class="num">6<small>STEP</small></div>
+      <div class="step-body">
+        <h2>專業地部署 <span class="en">Deploy Like a Professional</span></h2>
+        <div class="lesson">上線，收集回饋，再改進</div>
+        <p>上線不是終點。部署前逐項檢查，上線後蒐集使用者回饋，再滾動修正。</p>
+        <h4>上線前檢查清單</h4>
+        <ul class="check">
+          <li>行動裝置響應（手機 / 平板正常顯示）</li>
+          <li>頁面速度（用 Lighthouse 檢測，目標 90 分以上）</li>
+          <li>表單可正常送出</li>
+          <li>沒有失連連結（broken links）</li>
+          <li>SEO metadata（標題、描述完整）</li>
+          <li>無障礙（鍵盤操作、對比、替代文字）</li>
+          <li>內容正確性（法規時數、日期無誤）</li>
+        </ul>
+        <p><strong>範例：</strong>可請 Claude Code 直接產出可部署的靜態檔，推送到 <strong>GitHub Pages</strong>（你先前已操作過），或交付機關內部主機。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 7 -->
+  <section class="reveal">
+    <div class="step">
+      <div class="num">7<small>STEP</small></div>
+      <div class="step-body">
+        <h2>最重要的一課 <span class="en">The Biggest Lesson</span></h2>
+        <div class="lesson">Claude 寫程式，你提供願景</div>
+        <p>回頭看，網站做得好不好，關鍵幾乎不在「AI 會不會寫程式」，而在<strong>你有沒有把前面幾步做扎實</strong>：明確目標、詳細需求、參考設計、穩固架構、迭代改進。</p>
+        <table>
+          <caption>這套邏輯，跟你寫政策其實一樣</caption>
+          <tr><th>建網站</th><th>你熟悉的政策規劃</th></tr>
+          <tr><td>明確目標</td><td>先定政策目標</td></tr>
+          <tr><td>詳細需求</td><td>完整需求盤點</td></tr>
+          <tr><td>參考設計</td><td>參考國際做法</td></tr>
+          <tr><td>穩固架構</td><td>制度架構設計</td></tr>
+          <tr><td>迭代改進</td><td>滾動檢討修正</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEARNING PATH -->
+  <section class="reveal">
+    <div class="kicker">給你的學習路徑 · Learning Path</div>
+    <h2>從你現在的位置，5 步接軌 Claude Code</h2>
+    <ul class="check">
+      <li><strong>用既有經驗當起點</strong>：你已會做單檔 HTML 工具，觀念上只差「多檔專案管理」。</li>
+      <li><strong>先拿小專案練手</strong>：例如把現有的 ROSC 模擬器搬進 Claude Code 做一次小重構，感受它讀取整個資料夾的能力。</li>
+      <li><strong>建立 CLAUDE.md</strong>：把繁中（臺灣用語）、公文三段式、術語格式等偏好寫進去，讓它每次都遵守。</li>
+      <li><strong>練習 Plan Mode</strong>：任何較大任務都先讓它出計畫、你審過再執行。</li>
+      <li><strong>部署到 GitHub Pages</strong>：把成品上線，完成一次完整循環。</li>
+    </ul>
+  </section>
+
+  <!-- PITFALLS -->
+  <section class="reveal">
+    <div class="kicker">誠實提醒 · Common Pitfalls</div>
+    <h2>三個值得先知道的注意事項</h2>
+    <div class="grid2">
+      <div class="box">
+        <h4>需求模糊會空轉</h4>
+        <p>面對不清楚的任務，代理容易反覆嘗試或自行「腦補」需求。步驟 1–2 做扎實，是省時的關鍵。</p>
+      </div>
+      <div class="box">
+        <h4>它能存取你的檔案系統</h4>
+        <p>Claude Code 會直接改真實檔案。重要或不可逆的動作，務必逐項確認再放行；敏感專案先確認機關的 AI 使用規範。</p>
+      </div>
+      <div class="box">
+        <h4>用量有滾動上限</h4>
+        <p>訂閱額度以數小時為單位滾動計算，且與 claude.ai 共用。上午聊很多，下午的 Claude Code 額度會相應變少。</p>
+      </div>
+      <div class="box">
+        <h4>技術棧不是越多越好</h4>
+        <p>原圖的 Next.js＋資料庫適合有登入的動態網站；純資訊網用輕量方案更省維護成本。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL -->
+  <section class="reveal" style="border-bottom:none;">
+    <div class="final">
+      <p class="q">「Claude 寫程式，<em>你提供願景。</em>」</p>
+      <p>把政策規劃的嚴謹，用在提需求上——這就是用好 Claude Code 的全部祕訣。</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="rule-note">
+      <p><strong>資料說明：</strong>本手冊架構取自第三方流程圖（來源標示 AIPlanetX.com）之七步概念；其中 Claude Code 的安裝方式、方案需求等技術細節，已對照 Anthropic 官方文件（2026 年）更新，與原圖略有出入之處以官方為準。</p>
+      <p>範例專案「EMT 換證與繼續教育資訊網」為教學示意，非實際上線服務。</p>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  (function(){
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: no-preference)').matches){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+      },{threshold:.12});
+      document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+    }
+  })();
+</script>
+</body>
+</html>

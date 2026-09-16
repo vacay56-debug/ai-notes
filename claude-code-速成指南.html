@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code 速成指南｜公務文書工作者版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAFAF8;
+    --ink:#1B2A41;
+    --red:#C8372D;
+    --blue:#2C5F8A;
+    --line:#E3E1DC;
+    --soft:#F1F0EC;
+    --mono:'JetBrains Mono', ui-monospace, Consolas, monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Noto Sans TC', "Microsoft JhengHei", sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.85;
+    font-size:16px;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:0 28px 96px;}
+
+  /* ── 封面 ── */
+  header{
+    border-bottom:3px double var(--ink);
+    padding:72px 0 40px;
+    margin-bottom:56px;
+    position:relative;
+  }
+  .doc-no{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.12em;
+    color:var(--blue);
+    margin-bottom:20px;
+  }
+  h1{
+    font-family:'Noto Serif TC', serif;
+    font-weight:900;
+    font-size:clamp(34px,6vw,52px);
+    line-height:1.25;
+    letter-spacing:.02em;
+  }
+  h1 .accent{color:var(--red);}
+  .subtitle{
+    margin-top:18px;
+    font-size:17px;
+    color:#4A5568;
+    max-width:640px;
+  }
+  .meta{
+    margin-top:28px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px 24px;
+    font-size:13.5px;
+    color:#5A6472;
+  }
+  .meta span::before{content:"■";color:var(--red);font-size:8px;vertical-align:2px;margin-right:7px;}
+
+  /* ── 目錄 ── */
+  nav.toc{
+    background:var(--soft);
+    border-left:4px solid var(--red);
+    padding:24px 28px;
+    margin-bottom:64px;
+    font-size:15px;
+  }
+  nav.toc strong{font-family:'Noto Serif TC',serif;display:block;margin-bottom:10px;letter-spacing:.15em;}
+  nav.toc ol{list-style:none;columns:2;gap:32px;}
+  nav.toc li{margin:5px 0;break-inside:avoid;}
+  nav.toc a{color:var(--ink);text-decoration:none;border-bottom:1px dotted #B8B4AC;}
+  nav.toc a:hover{color:var(--red);border-bottom-color:var(--red);}
+  nav.toc .num{font-family:'Noto Serif TC',serif;color:var(--red);margin-right:8px;}
+
+  /* ── 章節（公文式國字編號） ── */
+  section{margin-bottom:80px;}
+  .sec-head{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:12px;
+    margin-bottom:28px;
+  }
+  .sec-head .zh-num{
+    font-family:'Noto Serif TC',serif;
+    font-weight:900;
+    font-size:15px;
+    color:#fff;
+    background:var(--red);
+    padding:3px 12px;
+    letter-spacing:.2em;
+    white-space:nowrap;
+  }
+  .sec-head h2{
+    font-family:'Noto Serif TC',serif;
+    font-weight:900;
+    font-size:clamp(22px,3.5vw,28px);
+    letter-spacing:.03em;
+  }
+  h3{
+    font-family:'Noto Serif TC',serif;
+    font-weight:700;
+    font-size:18px;
+    margin:32px 0 12px;
+    color:var(--blue);
+  }
+  p{margin-bottom:14px;}
+  strong{font-weight:700;}
+  em{font-style:normal;background:linear-gradient(transparent 62%, #F5D9D6 62%);}
+
+  /* ── 表格 ── */
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:18px 0 26px;
+    font-size:14.5px;
+    line-height:1.7;
+  }
+  th{
+    background:var(--ink);
+    color:#fff;
+    font-weight:500;
+    text-align:left;
+    padding:10px 14px;
+    letter-spacing:.05em;
+  }
+  td{
+    padding:11px 14px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  tr:nth-child(even) td{background:#F6F5F2;}
+  td .tag{
+    display:inline-block;
+    font-family:var(--mono);
+    font-size:11.5px;
+    background:#EAF0F5;
+    color:var(--blue);
+    padding:1px 8px;
+    border-radius:2px;
+    white-space:nowrap;
+  }
+
+  /* ── 指令區塊 ── */
+  pre{
+    background:var(--ink);
+    color:#E8EDF3;
+    font-family:var(--mono);
+    font-size:13.5px;
+    line-height:1.75;
+    padding:18px 22px;
+    overflow-x:auto;
+    margin:14px 0 22px;
+    border-left:4px solid var(--red);
+  }
+  pre .cmt{color:#8DA3BC;}
+  code{
+    font-family:var(--mono);
+    font-size:.88em;
+    background:#EDEBE6;
+    padding:1px 6px;
+    border-radius:2px;
+  }
+  pre code{background:none;padding:0;}
+
+  /* ── 卡片與提示 ── */
+  .card{
+    border:1px solid var(--line);
+    border-top:3px solid var(--blue);
+    background:#fff;
+    padding:22px 26px;
+    margin:20px 0;
+  }
+  .card.red{border-top-color:var(--red);}
+  .card h4{
+    font-family:'Noto Serif TC',serif;
+    font-size:16px;
+    margin-bottom:8px;
+  }
+  .card .meta-line{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--blue);
+    margin-bottom:10px;
+    letter-spacing:.05em;
+  }
+  ul,ol{margin:0 0 16px 26px;}
+  li{margin:7px 0;}
+  li::marker{color:var(--red);}
+
+  .note{
+    background:#FDF4F3;
+    border-left:4px solid var(--red);
+    padding:14px 20px;
+    font-size:14.5px;
+    margin:18px 0;
+  }
+  .note::before{
+    content:"注意";
+    font-family:'Noto Serif TC',serif;
+    font-weight:700;
+    color:var(--red);
+    margin-right:10px;
+  }
+
+  /* ── 週次時間軸 ── */
+  .week-row{
+    display:grid;
+    grid-template-columns:88px 1fr;
+    gap:0 20px;
+    border-bottom:1px solid var(--line);
+    padding:14px 0;
+    font-size:14.5px;
+  }
+  .week-row .wk{
+    font-family:'Noto Serif TC',serif;
+    font-weight:700;
+    color:var(--red);
+    white-space:nowrap;
+  }
+  .week-row .chk{color:#5A6472;font-size:13.5px;margin-top:2px;}
+  .week-row .chk::before{content:"檢核｜";color:var(--blue);font-weight:500;}
+
+  footer{
+    margin-top:80px;
+    border-top:3px double var(--ink);
+    padding-top:24px;
+    font-size:13px;
+    color:#6B7280;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  @media(max-width:640px){
+    nav.toc ol{columns:1;}
+    .week-row{grid-template-columns:1fr;}
+    .wrap{padding:0 18px 72px;}
+  }
+  @media(prefers-reduced-motion:no-preference){
+    section{animation:fadein .5s ease both;}
+    @keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="doc-no">學習卷宗｜CC-2026-01｜個人參考資料</div>
+  <h1>Claude Code <span class="accent">速成指南</span><br>公務文書工作者版</h1>
+  <p class="subtitle">為非工程背景的政策幕僚設計：不學程式，直接把 Claude Code 變成你的「批次文書處理助理」。環境以 Windows／PowerShell 為準。</p>
+  <div class="meta">
+    <span>對象：初學者（零程式基礎）</span>
+    <span>環境：Windows 11＋PowerShell</span>
+    <span>核心應用：公文、報告、批次文件處理</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <strong>目 錄</strong>
+  <ol>
+    <li><span class="num">壹</span><a href="#s1">核心概念</a></li>
+    <li><span class="num">貳</span><a href="#s2">80/20 關鍵</a></li>
+    <li><span class="num">參</span><a href="#s3">7 天速成計畫</a></li>
+    <li><span class="num">肆</span><a href="#s4">三個實作練習</a></li>
+    <li><span class="num">伍</span><a href="#s5">常見錯誤與避免方法</a></li>
+    <li><span class="num">陸</span><a href="#s6">精簡資源推薦</a></li>
+    <li><span class="num">柒</span><a href="#s7">每天 1 小時×12 週策略</a></li>
+    <li><span class="num">捌</span><a href="#s8">實際應用案例（台灣情境）</a></li>
+  </ol>
+</nav>
+
+<!-- 壹 -->
+<section id="s1">
+  <div class="sec-head"><span class="zh-num">壹</span><h2>核心概念（白話說明）</h2></div>
+  <p>Claude Code 是一個在<strong>終端機（PowerShell）裡工作的 AI 助理</strong>：你用中文描述任務，它直接<em>讀取、修改、建立你電腦裡的檔案</em>，不需要你複製貼上。它與網頁版 Claude 最大的差別是「動手」——網頁版產生內容給你搬運，Claude Code 直接在資料夾裡完成工作。它每次要動檔案前都會<strong>先徵求你的同意</strong>，這個「先問再做」機制就是它的安全底線。對文書工作者而言，它的本質是：<em>一位能一次處理 50 份檔案、且聽得懂公文格式的數位科員</em>。</p>
+</section>
+
+<!-- 貳 -->
+<section id="s2">
+  <div class="sec-head"><span class="zh-num">貳</span><h2>80/20 關鍵（最重要的 20%）</h2></div>
+  <table>
+    <tr><th style="width:180px">關鍵技能</th><th>為什麼是槓桿點</th><th style="width:150px">可量化指標</th></tr>
+    <tr>
+      <td><strong>1. 專用資料夾工作法</strong></td>
+      <td>永遠在一個專屬資料夾（如 <span class="tag">C:\claude-work</span>）內啟動 <code>claude</code>。範圍清楚＝安全、快、不誤傷其他檔案。</td>
+      <td>每次任務都在專用資料夾內完成</td>
+    </tr>
+    <tr>
+      <td><strong>2. 用中文下明確指令</strong></td>
+      <td>不用學指令語法，關鍵是像交辦業務一樣說清楚：「做什麼、對哪些檔案、輸出成什麼格式」。</td>
+      <td>一次指令完成率 ≥ 70%</td>
+    </tr>
+    <tr>
+      <td><strong>3. CLAUDE.md 常設指示</strong></td>
+      <td>把「一律繁體中文、公文三段式、臺灣用語」寫進 CLAUDE.md，每次開啟自動生效，不必重複交代。</td>
+      <td>建立 1 份個人化 CLAUDE.md</td>
+    </tr>
+    <tr>
+      <td><strong>4. 批次處理思維</strong></td>
+      <td>單份文件用網頁版就好；Claude Code 的價值在「一個指令處理一整個資料夾」——改格式、抽摘要、統一用語。</td>
+      <td>完成 1 次 10 份以上批次任務</td>
+    </tr>
+    <tr>
+      <td><strong>5. 權限審核習慣</strong></td>
+      <td>看懂它每次「請求許可」的內容再按同意；重要原始檔先備份。這是唯一必須養成的紀律。</td>
+      <td>0 次誤刪、誤改原始檔</td>
+    </tr>
+    <tr>
+      <td><strong>6. /init 與斜線指令</strong></td>
+      <td>進入後輸入 <code>/init</code> 自動產生 CLAUDE.md 草稿；<code>/help</code> 看功能、<code>/resume</code> 接續上次對話。三個指令就夠用。</td>
+      <td>熟用 3 個斜線指令</td>
+    </tr>
+  </table>
+</section>
+
+<!-- 參 -->
+<section id="s3">
+  <div class="sec-head"><span class="zh-num">參</span><h2>7 天速成計畫</h2></div>
+
+  <div class="card">
+    <h4>第 1 天｜安裝與第一次啟動</h4>
+    <div class="meta-line">預估 45–60 分鐘｜成果：成功啟動 claude 並完成登入</div>
+    <ol>
+      <li>開啟 PowerShell（建議以系統管理員身分），執行官方原生安裝：</li>
+    </ol>
+    <pre><span class="cmt"># Windows PowerShell 原生安裝（免 Node.js）</span>
+irm https://claude.ai/install.ps1 | iex
+
+<span class="cmt"># 關閉並重開終端機後驗證</span>
+claude --version
+claude doctor   <span class="cmt"># 自動診斷安裝與設定狀態</span></pre>
+    <ul>
+      <li>建議加裝 <strong>Git for Windows</strong>（git-scm.com），讓 Claude Code 使用功能較完整的 Bash 工具。</li>
+      <li>建立專用資料夾 <code>C:\claude-work</code>，進入後輸入 <code>claude</code>，依畫面提示用瀏覽器登入帳號（需 Pro 以上訂閱或 Console 帳號）。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>第 2 天｜認識「先問再做」與基本對話</h4>
+    <div class="meta-line">預估 30–45 分鐘｜成果：完成第一次「請它建檔、改檔」的完整循環</div>
+    <ul>
+      <li>在專用資料夾放 2–3 份不重要的 Word 或文字檔，請它「列出這個資料夾有哪些檔案並各用一句話說明內容」。</li>
+      <li>請它「建立一份 test.md，內容是本科三項業務職掌」，觀察它如何請求許可、你如何核准。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>第 3 天｜建立你的 CLAUDE.md</h4>
+    <div class="meta-line">預估 45 分鐘｜成果：一份個人化常設指示檔</div>
+    <ul>
+      <li>在資料夾內輸入 <code>/init</code> 產生草稿，再請它加入你的規則：一律繁體中文（臺灣用語）、公文三段式（主旨／說明／辦法）、英文術語首次出現採「中文（英文全稱，縮寫）」格式。</li>
+      <li>測試：請它寫一段任意說明文字，確認規則自動生效。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>第 4 天｜第一次批次處理</h4>
+    <div class="meta-line">預估 60 分鐘｜成果：一個指令處理 5 份以上檔案</div>
+    <ul>
+      <li>放入 5–10 份非機敏的舊文件（去識別化練習稿即可），下指令：「閱讀資料夾內全部檔案，各產出 100 字摘要，彙整成一份 summary.md」。</li>
+      <li>再試進階版：「把所有檔案中的『緊急救護技術員』統一為『救護技術員（Emergency Medical Technician, EMT）』」。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>第 5 天｜格式轉換與文件產製</h4>
+    <div class="meta-line">預估 60 分鐘｜成果：從雜亂素材產出一份格式正確的文件</div>
+    <ul>
+      <li>把一份會議逐字稿或雜記丟進資料夾，請它「整理成會議紀錄：時間、出席、決議事項、待辦分工」。</li>
+      <li>練習「多檔合一」：把 3 份分散的補充資料整併成單一份報告草稿。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>第 6 天｜修正與迭代能力</h4>
+    <div class="meta-line">預估 45 分鐘｜成果：學會用追問把 70 分成品改到 90 分</div>
+    <ul>
+      <li>針對第 5 天的產出連續下 3 輪修正指令：「第二段太冗，壓縮到一半」「補上法規依據段」「語氣改為對上級陳報」。</li>
+      <li>練習 <code>/resume</code>：關掉終端機後重開，接續昨天的工作脈絡。</li>
+    </ul>
+  </div>
+
+  <div class="card red">
+    <h4>第 7 天｜完成第一個小專案</h4>
+    <div class="meta-line">預估 60–90 分鐘｜成果：一套可重複使用的「個人文書工作流」</div>
+    <ul>
+      <li>綜合演練：建立 <code>C:\claude-work\週報</code> 資料夾，放入本週素材，一個指令產出「本週業務週報」草稿。</li>
+      <li>把成功的指令句寫進 CLAUDE.md 或另存為「指令範本.md」，之後每週重複使用——這就是你的第一個自動化資產。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 肆 -->
+<section id="s4">
+  <div class="sec-head"><span class="zh-num">肆</span><h2>三個實作練習（由淺入深）</h2></div>
+
+  <div class="card">
+    <h4>練習一（淺）｜資料夾整理員</h4>
+    <div class="meta-line">工具：PowerShell＋Claude Code｜預估 30 分鐘</div>
+    <p><strong>目標：</strong>體驗「AI 直接操作檔案」的核心價值。</p>
+    <ul>
+      <li>準備一個混雜 15–20 份檔案的資料夾（簡報、公文稿、照片皆可）。</li>
+      <li>指令重點：「依檔案性質建立子資料夾分類歸檔，並產出一份 index.md 清單，註明每份檔案的主題與日期」。</li>
+      <li>成功標準：分類正確率你能接受、清單可直接當卷宗目錄用。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4>練習二（中）｜批次摘要與用語統一</h4>
+    <div class="meta-line">工具：Claude Code＋10 份去識別化文件｜預估 60 分鐘</div>
+    <p><strong>目標：</strong>建立「一對多」批次處理能力。</p>
+    <ul>
+      <li>放入 10 份文件（如歷年計畫書節錄、研習講義）。</li>
+      <li>步驟重點：先請它「掃描全部檔案，列出用語不一致之處」→ 核可後「統一修正並逐檔記錄修改處」→ 最後「產出總表：檔名、主旨、關鍵修改」。</li>
+      <li>成功標準：修改紀錄可追溯，總表可直接貼進簽稿附件。</li>
+    </ul>
+  </div>
+
+  <div class="card red">
+    <h4>練習三（深・可展示作品）｜EMS 政策知識庫</h4>
+    <div class="meta-line">工具：Claude Code＋主題文件 20 份以上｜預估 2–3 小時（可分次）</div>
+    <p><strong>目標：</strong>產出一份可對外展示、可持續維護的成果。</p>
+    <ul>
+      <li>蒐集單一主題（例如 TECC 訓練體系）的公開資料：法規條文、課程綱要、國際文獻摘要、歷次會議結論。</li>
+      <li>請 Claude Code 建立知識庫結構：<code>01-法規依據／02-課程與師資／03-國際比較／04-推動歷程</code>，逐區產出彙整文件，最後生成一份 <strong>HTML 總覽頁</strong>（含目錄、各節摘要、資料清單）。</li>
+      <li>成功標準：同仁打開 HTML 頁 3 分鐘內能掌握該政策全貌——這就是可放進業務交接或簡報的「作品」。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 伍 -->
+<section id="s5">
+  <div class="sec-head"><span class="zh-num">伍</span><h2>常見錯誤與避免方法</h2></div>
+  <table>
+    <tr><th style="width:260px">常見錯誤</th><th>修正方法</th></tr>
+    <tr><td><strong>1. 在桌面或整顆 C 槽啟動</strong>——範圍太大，又慢又危險。</td><td>永遠 <code>cd</code> 進專用工作資料夾再輸入 <code>claude</code>；一個專案一個資料夾。</td></tr>
+    <tr><td><strong>2. 指令太模糊</strong>——「幫我整理一下」讓 AI 只能猜。</td><td>套公式：「對【哪些檔案】做【什麼動作】，輸出成【什麼格式】」。像寫辦法段一樣具體。</td></tr>
+    <tr><td><strong>3. 不看許可內容就全部同意</strong>——等於放棄唯一的安全閥。</td><td>批次任務前先備份原始檔；許可視窗至少確認「它要動哪個檔、做什麼事」。</td></tr>
+    <tr><td><strong>4. 安裝後找不到 claude 指令</strong>——PATH 未生效是 Windows 最常見卡關。</td><td>先<strong>重開終端機</strong>；仍失敗則執行 <code>claude doctor</code>，或依提示把 <code>%USERPROFILE%\.local\bin</code> 加入使用者 PATH。</td></tr>
+    <tr><td><strong>5. 把機敏公文直接餵入練習</strong>——學習期風險不必要。</td><td>練習一律用去識別化、公開或自製樣稿；正式導入前先確認機關資安規範。</td></tr>
+  </table>
+</section>
+
+<!-- 陸 -->
+<section id="s6">
+  <div class="sec-head"><span class="zh-num">陸</span><h2>精簡資源推薦（台灣友善）</h2></div>
+  <table>
+    <tr><th style="width:250px">資源</th><th>推薦理由</th></tr>
+    <tr><td><strong>官方文件</strong><br><span class="tag">docs.claude.com → Claude Code</span></td><td>最權威、更新最快；快速入門（Quickstart）頁面即含 Windows 安裝與疑難排解，遇到問題先查這裡。</td></tr>
+    <tr><td><strong>Anthropic 官方 YouTube</strong></td><td>官方示範影片直接看操作畫面，適合完全新手建立「它長什麼樣、怎麼互動」的直覺。</td></tr>
+    <tr><td><strong>GitHub：anthropics/claude-code</strong></td><td>官方程式庫的 Issues 區是全球疑難雜症資料庫，Windows／PATH 問題幾乎都能搜到解法。</td></tr>
+    <tr><td><strong>保哥（Will 保哥）技術頻道與部落格</strong></td><td>台灣最活躍的繁中技術教學者之一，Claude Code 與 AI 工具教學多、以 Windows 環境示範，對公部門使用者親切。</td></tr>
+    <tr><td><strong>Anthropic 官方 Discord 社群</strong></td><td>發問回覆快、可看到大量真實使用情境；英文為主，但貼錯誤訊息截圖即可獲協助。</td></tr>
+  </table>
+</section>
+
+<!-- 柒 -->
+<section id="s7">
+  <div class="sec-head"><span class="zh-num">柒</span><h2>每天 1 小時 × 12 週優化策略</h2></div>
+  <p>原則：<em>前 4 週建能力、中 4 週接業務、後 4 週建資產</em>。每週最後一天的 1 小時固定做檢核與筆記。</p>
+
+  <div class="week-row"><div class="wk">第 1 週</div><div>安裝、登入、專用資料夾、基本對話。<div class="chk">claude doctor 全綠、完成 3 次建檔／改檔循環。</div></div></div>
+  <div class="week-row"><div class="wk">第 2 週</div><div>CLAUDE.md 個人化＋斜線指令熟練。<div class="chk">任意產出自動符合繁中公文風格。</div></div></div>
+  <div class="week-row"><div class="wk">第 3 週</div><div>批次處理入門（練習一、二的前半）。<div class="chk">單指令處理 5 份檔案成功。</div></div></div>
+  <div class="week-row"><div class="wk">第 4 週</div><div>格式轉換與多輪修正。<div class="chk">能用 3 輪追問把草稿改到可用。</div></div></div>
+  <div class="week-row"><div class="wk">第 5–6 週</div><div>導入第一項真實業務（去機敏化）：週報或會議紀錄自動化。<div class="chk">實際節省時間 ≥ 每週 1 小時。</div></div></div>
+  <div class="week-row"><div class="wk">第 7–8 週</div><div>導入第二項業務：歷年文件彙整或用語總校。<div class="chk">完成 1 次 20 份以上批次任務。</div></div></div>
+  <div class="week-row"><div class="wk">第 9–10 週</div><div>建置練習三的政策知識庫（分次進行）。<div class="chk">HTML 總覽頁初版完成。</div></div></div>
+  <div class="week-row"><div class="wk">第 11 週</div><div>整理「個人指令範本庫」：把 12 週來成功的指令句分類存檔。<div class="chk">範本 ≥ 10 條，任一條可直接複用。</div></div></div>
+  <div class="week-row"><div class="wk">第 12 週</div><div>成果總結：向同仁展示知識庫與工作流，蒐集回饋、規劃下一階段。<div class="chk">完成 1 場 15 分鐘內部分享。</div></div></div>
+</section>
+
+<!-- 捌 -->
+<section id="s8">
+  <div class="sec-head"><span class="zh-num">捌</span><h2>實際應用案例（台灣情境）</h2></div>
+  <div class="card red">
+    <h4>案例｜出國考察報告的資料整併</h4>
+    <p><strong>場景：</strong>赴日考察救護制度返國後，手上有 20 份零散素材——每日筆記、機構簡介、拍攝的簡報照片文字檔、交流會議紀錄，須於兩週內繳交出國報告。<strong>做法：</strong>將全部素材放入 <code>C:\claude-work\出國報告</code>，請 Claude Code 先產出「素材總表」，再依「行程紀要／制度觀察／與我國比較／建議事項」四章逐章彙整草稿，最後統一用語與格式。<strong>可衡量成果：</strong>初稿產出時間由約 3 個工作天縮短至半天，用語一致性一次到位，承辦人只需專注在「建議事項」的政策判斷——把時間花在機器做不到的事情上。</p>
+  </div>
+</section>
+
+<footer>
+  <span>Claude Code 速成指南｜公務文書工作者版</span>
+  <span>2026.07｜個人學習參考資料</span>
+</footer>
+
+</div>
+</body>
+</html>
