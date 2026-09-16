@@ -2,7 +2,15 @@
 
 Claude、AI 工程、EMS 業務與行政工作法的自用 HTML 文件集，共 69 份。
 
-**線上瀏覽：** https://vacay56-debug.github.io/ai-notes/
+**線上瀏覽 / 安裝 App：** https://vacay56-debug.github.io/ai-notes/
+
+這是一個 PWA，可以裝成 App 使用：
+
+- **iPhone / iPad（Safari）**：開啟網址 → 點下方「分享」→「加入主畫面」
+- **Android（Chrome）**：開啟網址 → 頁面上方會出現「安裝 App」按鈕，或用選單「安裝應用程式」
+- **Windows / Mac（Chrome、Edge）**：網址列右側的安裝圖示
+
+裝完會有獨立圖示、無網址列，全部 69 份文件已預先下載，**離線也能看**。
 
 ## 分類
 
@@ -18,7 +26,17 @@ Claude、AI 工程、EMS 業務與行政工作法的自用 HTML 文件集，共 
 
 ## 使用方式
 
-每份文件都是獨立的單檔 HTML，可直接用瀏覽器開啟，或從 [`index.html`](index.html) 的索引頁點選；索引頁上方有關鍵字篩選框。
+每份文件都是獨立的單檔 HTML，可直接用瀏覽器開啟，或從 [`index.html`](index.html) 的索引頁點選；索引頁上方有關鍵字篩選框。以 App 模式開啟時，每份文件左下角會出現「← 索引」快速返回鈕。
+
+## 維護
+
+新增或刪除 HTML 之後，在專案根目錄執行：
+
+```
+python tools/build.py
+```
+
+會重新產生索引頁、`manifest.webmanifest` 與 `sw.js` 的離線快取清單，並替新文件補上 App 導覽列。分類歸屬寫在 `tools/build.py` 最上方的 `CATS`；未列入分類的新檔會自動歸到最後一類。圖示如需重做，執行 `python tools/gen_icons.py`（需要 Pillow）。
 
 ## 說明
 

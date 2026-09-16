@@ -169,6 +169,9 @@ footer{padding:22px 0 46px;font-family:var(--mono);font-size:11px;color:var(--mu
   .section{break-inside:avoid}
 }
 </style>
+<!-- pwa-head -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 </head>
 <body>
 
@@ -533,6 +536,26 @@ footer{padding:22px 0 46px;font-family:var(--mono);font-size:11px;color:var(--mu
   window.addEventListener('scroll', paint, {passive:true});
   window.addEventListener('resize', paint);
 })();
+</script>
+<!-- pwa-nav -->
+<style>
+  #pwa-nav { display:none; }
+  @media all and (display-mode: standalone) { #pwa-nav { display:block; } }
+  #pwa-nav.on { display:block; }
+  #pwa-nav a {
+    position:fixed; left:14px; z-index:99999;
+    bottom:calc(14px + env(safe-area-inset-bottom));
+    display:flex; align-items:center; gap:6px;
+    padding:10px 16px; border-radius:24px;
+    background:#b4530a; color:#fff; text-decoration:none;
+    font:500 14px/1 -apple-system,"Segoe UI","Noto Sans TC","PingFang TC",sans-serif;
+    box-shadow:0 4px 14px rgba(0,0,0,.28); -webkit-tap-highlight-color:transparent;
+  }
+  #pwa-nav a:active { transform:scale(.96); }
+</style>
+<div id="pwa-nav"><a href="./index.html">&#8592; 索引</a></div>
+<script>
+  if (window.navigator.standalone) document.getElementById('pwa-nav').classList.add('on');
 </script>
 </body>
 </html>

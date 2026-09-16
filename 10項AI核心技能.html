@@ -67,6 +67,9 @@ footer{margin-top:28px;color:var(--muted);font-size:12.5px;display:flex;justify-
 @media (max-width:540px){.grid{grid-template-columns:1fr}header{grid-template-columns:1fr}.count{display:none}.wrap{padding:24px 14px 40px}}
 @media print{body{background:#fff}.grid{grid-template-columns:repeat(5,1fr);gap:8px}.card{break-inside:avoid;border:1px solid var(--line)}}
 </style>
+<!-- pwa-head -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 </head>
 <body>
 <div class="wrap">
@@ -187,5 +190,25 @@ footer{margin-top:28px;color:var(--muted);font-size:12.5px;display:flex;justify-
 </footer>
 
 </div>
+<!-- pwa-nav -->
+<style>
+  #pwa-nav { display:none; }
+  @media all and (display-mode: standalone) { #pwa-nav { display:block; } }
+  #pwa-nav.on { display:block; }
+  #pwa-nav a {
+    position:fixed; left:14px; z-index:99999;
+    bottom:calc(14px + env(safe-area-inset-bottom));
+    display:flex; align-items:center; gap:6px;
+    padding:10px 16px; border-radius:24px;
+    background:#b4530a; color:#fff; text-decoration:none;
+    font:500 14px/1 -apple-system,"Segoe UI","Noto Sans TC","PingFang TC",sans-serif;
+    box-shadow:0 4px 14px rgba(0,0,0,.28); -webkit-tap-highlight-color:transparent;
+  }
+  #pwa-nav a:active { transform:scale(.96); }
+</style>
+<div id="pwa-nav"><a href="./index.html">&#8592; 索引</a></div>
+<script>
+  if (window.navigator.standalone) document.getElementById('pwa-nav').classList.add('on');
+</script>
 </body>
 </html>

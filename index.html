@@ -2,8 +2,17 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AI 筆記庫｜索引</title>
+<meta name="description" content="Claude、AI 工程、EMS 業務與行政工作法的文件集，共 69 份，可離線閱讀。">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#b4530a">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AI 筆記">
+<meta name="mobile-web-app-capable" content="yes">
 <style>
   :root {
     --bg:#f7f7f5; --card:#fff; --fg:#1f1f1d; --muted:#6b6b66;
@@ -21,7 +30,10 @@
     font-family:-apple-system,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
     line-height:1.65; -webkit-font-smoothing:antialiased;
   }
-  .wrap { max-width:1080px; margin:0 auto; padding:48px 16px 80px; }
+  .wrap {
+    max-width:1080px; margin:0 auto;
+    padding:calc(40px + env(safe-area-inset-top)) 16px calc(64px + env(safe-area-inset-bottom));
+  }
   h1 { font-size:clamp(26px,5vw,38px); margin:0 0 8px; letter-spacing:-.02em; }
   .lead { color:var(--muted); margin:0 0 20px; font-size:15px; }
   .lead b { color:var(--accent); font-weight:600; }
@@ -44,6 +56,22 @@
   .s { display:block; font-size:12.5px; color:var(--muted); margin-top:1px; }
   .cat.hide, .item.hide { display:none; }
   footer { margin-top:48px; font-size:13px; color:var(--muted); text-align:center; }
+
+  /* 安裝提示 / 離線狀態 */
+  .bar {
+    display:none; align-items:center; gap:12px; flex-wrap:wrap;
+    margin:0 0 18px; padding:12px 16px; border-radius:12px;
+    background:var(--accent-soft); border:1px solid var(--line); font-size:14px;
+  }
+  .bar.on { display:flex; }
+  .bar p { margin:0; flex:1 1 220px; }
+  .bar button {
+    font:inherit; font-weight:600; cursor:pointer; padding:8px 16px;
+    border:0; border-radius:8px; background:var(--accent); color:#fff;
+  }
+  .bar .ghost { background:transparent; color:var(--muted); font-weight:500; padding:8px 10px; }
+  #offline { background:transparent; }
+  #offline.on { display:flex; }
 </style>
 </head>
 <body>
@@ -51,6 +79,12 @@
   <header>
     <h1>AI 筆記庫</h1>
     <p class="lead">Claude、AI 工程、EMS 業務與行政工作法的自用文件集，共 <b>69</b> 份。更新於 2026-09-16。</p>
+    <div class="bar" id="offline"><p>目前離線，顯示的是已下載的離線版本。</p></div>
+    <div class="bar" id="install">
+      <p id="install-msg"></p>
+      <button id="install-go" hidden>安裝 App</button>
+      <button id="install-no" class="ghost">不用了</button>
+    </div>
     <input id="q" type="search" placeholder="輸入關鍵字篩選，例如 Claude、SOP、救護⋯⋯" autocomplete="off">
   </header>
   <main class="grid">
@@ -462,9 +496,10 @@
       </ul>
     </section>
   </main>
-  <footer>以 Claude Code 整理 · GitHub Pages 靜態託管</footer>
+  <footer>以 Claude Code 整理 · GitHub Pages 靜態託管 · 可安裝離線使用</footer>
 </div>
 <script>
+  // --- 篩選 ---
   var q = document.getElementById('q');
   q.addEventListener('input', function () {
     var v = q.value.trim().toLowerCase();
@@ -478,6 +513,64 @@
       c.classList.toggle('hide', n === 0);
     });
   });
+
+  // --- Service worker ---
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    });
+  }
+
+  // --- 安裝提示 ---
+  var bar = document.getElementById('install');
+  var msg = document.getElementById('install-msg');
+  var go = document.getElementById('install-go');
+  var no = document.getElementById('install-no');
+  var deferred = null;
+
+  var standalone = window.matchMedia('(display-mode: standalone)').matches ||
+                   window.navigator.standalone === true;
+  var dismissed = false;
+  try { dismissed = localStorage.getItem('install-dismissed') === '1'; } catch (e) {}
+
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  function show() { if (!standalone && !dismissed) bar.classList.add('on'); }
+
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    deferred = e;
+    msg.textContent = '把這份筆記庫裝成 App，開啟更快，離線也能看。';
+    go.hidden = false;
+    show();
+  });
+
+  if (isIOS) {
+    msg.textContent = '想裝成 App：點下方「分享」→「加入主畫面」，即可離線閱讀。';
+    go.hidden = true;
+    show();
+  }
+
+  go.addEventListener('click', function () {
+    if (!deferred) return;
+    deferred.prompt();
+    deferred.userChoice.finally(function () { deferred = null; bar.classList.remove('on'); });
+  });
+
+  no.addEventListener('click', function () {
+    bar.classList.remove('on');
+    try { localStorage.setItem('install-dismissed', '1'); } catch (e) {}
+  });
+
+  window.addEventListener('appinstalled', function () { bar.classList.remove('on'); });
+
+  // --- 離線狀態 ---
+  var off = document.getElementById('offline');
+  function net() { off.classList.toggle('on', !navigator.onLine); }
+  window.addEventListener('online', net);
+  window.addEventListener('offline', net);
+  net();
 </script>
 </body>
 </html>
