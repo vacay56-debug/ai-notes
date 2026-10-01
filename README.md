@@ -1,6 +1,6 @@
 # AI 筆記庫
 
-Claude、AI 工程、EMS 業務與行政工作法的自用 HTML 文件集，共 69 份。
+Claude、AI 工程、EMS 業務與行政工作法的自用 HTML 文件集，共 86 份。
 
 **線上瀏覽 / 安裝 App：** https://vacay56-debug.github.io/ai-notes/
 
@@ -10,7 +10,7 @@ Claude、AI 工程、EMS 業務與行政工作法的自用 HTML 文件集，共 
 - **Android（Chrome）**：開啟網址 → 頁面上方會出現「安裝 App」按鈕，或用選單「安裝應用程式」
 - **Windows / Mac（Chrome、Edge）**：網址列右側的安裝圖示
 
-裝完會有獨立圖示、無網址列，全部 69 份文件已預先下載，**離線也能看**。
+裝完會有獨立圖示、無網址列，全部 86 份文件已預先下載，**離線也能看**。
 
 ## 分類
 

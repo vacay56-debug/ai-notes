@@ -24,7 +24,10 @@ CATS = [
    "Claude功能完整指南.html","claude-4-modes.html","claude-six-levels.html",
    "claude-ecosystem-reference.html","claude-mastery-climb.html",
    "claude-fable5-提示詞完全指南.html","claude-project-skills-cowork-指南.html",
-   "claude-skills-評估.html","claude-voice-workflow.html"]),
+   "claude-skills-評估.html","claude-voice-workflow.html",
+   "Claude 完整使用指南｜公務強化版.html","Claude 桌面版新手設定教學.html",
+   "Claude 桌面版介面設定教學.html","Claude 13 門免費課程與認證｜完整學習指南.html",
+   "Claude 問題解決提示詞 20 式｜繁中實務版.html"]),
  ("Claude Code 與開發流程", "用 Claude Code 建網站、做 Agent、跑 Cowork", [
    "claude-code-速成指南.html","claude-code-7steps-guide.html","claude-code-架構藍圖.html",
    "claude-website-sop.html","claude-design-速成指南.html","ai-agent-sop.html",
@@ -32,7 +35,8 @@ CATS = [
  ("AI 工程架構與自動化", "提示／脈絡／框架三層工程、工作流與自動化系統", [
    "AI工作流架構_2026H2完整版.html","三層AI工程架構教學.html","llm-engineering-framework.html",
    "ai-automation-fundamentals.html","AI模型架構詳解.html","AI迴圈工作法_救護科應用.html",
-   "n8n-whisper-guide.html","second-brain-ai-system.html"]),
+   "n8n-whisper-guide.html","second-brain-ai-system.html",
+   "AI 工程 18 個常用詞｜救護業務對照版.html","生產級 AI 系統的 9 個核心概念.html"]),
  ("AI 技能盤點與學習路線", "該學什麼、怎麼排順序，以及不靠 AI 的那一面", [
    "2026-ai-skills-learning-guide.html","ai-skills-2026.html","10項AI核心技能.html",
    "ai-skills-top10.html","AI精熟十級學習路線圖.html","351每日共學_20260815_AI時代解決問題.html",
@@ -41,17 +45,21 @@ CATS = [
    "五大AI系統選用引導手冊.html","四大AI協作SOP對照表.html","Gemini功能應用手冊.html",
    "gemini-7day-guide.html","NotebookLM提示詞應用指引.html",
    "notebooklm-claude-workflow-general.html","notebooklm-workflow-nfa.html",
-   "excel-copilot-guide.html","sheets-canvas.html"]),
+   "excel-copilot-guide.html","sheets-canvas.html",
+   "ChatGPT 50 項應用情境.html","工作場域AI工具選用指南.html","最新AI工具地圖｜圖解導讀.html"]),
  ("救護科 EMS 業務", "救護安全、臨床指引、國際研修與科內 AI 應用", [
    "SAFER救護安全手冊_線上閱讀版.html","SAFER救護安全手冊_重點整理.html",
    "CPG_A0810_重大創傷指引_繁中詳解_v2.html","CPG_A0810_重大創傷指引_繁中詳解.html",
    "HSEEP_圖卡內容查證報告.html","赴澳洲研修交流_完整攻略.html",
    "index_v2.1_判定式報告版.html","nfa-claude-prompts.html",
-   "救護科-claude-應用實戰手冊.html","專案指示_Project_Instructions.html"]),
+   "救護科-claude-應用實戰手冊.html","專案指示_Project_Instructions.html",
+   "救護政策參謀｜AI Agent 建置藍圖.html","救護數據統計 20 詞：定義、公式與 EMS 應用.html",
+   "簡報 AI 提示詞實戰手冊｜緊急救護科版.html"]),
  ("工作方法與行政效率", "行政流程、管理方法、自我提升與行動裝置技巧", [
    "行政工作流的底層邏輯.html","管理常用12種高效工作方法.html","九項自我提升策略.html",
    "academic-seven-layers.html","world-top10-laws.html","HR績效分析自動化流程SOP.html",
-   "iphone-scan-sop.html","iphone-long-screenshot.html","banner.html"]),
+   "iphone-scan-sop.html","iphone-long-screenshot.html","banner.html",
+   "主管12項核心能力培養手冊.html","策略力圖解：6 項思考與影響能力.html","關鍵維護績效指標解析.html"]),
 ]
 
 ICONS = ["icons/icon-192.png", "icons/icon-512.png", "icons/maskable-192.png",

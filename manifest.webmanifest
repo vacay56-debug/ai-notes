@@ -1,7 +1,7 @@
 {
   "name": "AI 筆記庫",
   "short_name": "AI 筆記",
-  "description": "Claude、AI 工程、EMS 業務與行政工作法的文件集，共 69 份，可離線閱讀。",
+  "description": "Claude、AI 工程、EMS 業務與行政工作法的文件集，共 86 份，可離線閱讀。",
   "lang": "zh-Hant",
   "dir": "ltr",
   "start_url": "./index.html",

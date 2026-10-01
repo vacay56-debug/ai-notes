@@ -86,6 +86,9 @@ blockquote p:last-child{margin:0;color:var(--muted);font-size:.92rem}
 footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted)}
 @media (max-width:560px){header{padding-top:32px}section.cat{padding-left:14px}}
 </style>
+<!-- pwa-head -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 </head>
 <body>
 <div class="wrap">
@@ -217,5 +220,25 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-si
 
 <footer>資料來源：Sifu Yik〈Latest AI Tools〉資訊圖表。工具名稱、版本與價格均依原圖轉述，部分名稱（如 GPT Image 2.5 Sunburst、DeepSeek Harness）未經官方資料查證。</footer>
 </div>
+<!-- pwa-nav -->
+<style>
+  #pwa-nav { display:none; }
+  @media all and (display-mode: standalone) { #pwa-nav { display:block; } }
+  #pwa-nav.on { display:block; }
+  #pwa-nav a {
+    position:fixed; left:14px; z-index:99999;
+    bottom:calc(14px + env(safe-area-inset-bottom));
+    display:flex; align-items:center; gap:6px;
+    padding:10px 16px; border-radius:24px;
+    background:#b4530a; color:#fff; text-decoration:none;
+    font:500 14px/1 -apple-system,"Segoe UI","Noto Sans TC","PingFang TC",sans-serif;
+    box-shadow:0 4px 14px rgba(0,0,0,.28); -webkit-tap-highlight-color:transparent;
+  }
+  #pwa-nav a:active { transform:scale(.96); }
+</style>
+<div id="pwa-nav"><a href="./index.html">&#8592; 索引</a></div>
+<script>
+  if (window.navigator.standalone) document.getElementById('pwa-nav').classList.add('on');
+</script>
 </body>
 </html>

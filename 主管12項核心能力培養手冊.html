@@ -115,6 +115,9 @@ td:first-child{white-space:nowrap;font-weight:700}
 
 footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;border-top:1px solid var(--rule)}
 </style>
+<!-- pwa-head -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 </head>
 <body>
 <div class="wrap">
@@ -365,6 +368,26 @@ const P=[
 ["第11週","策略思考／適應力","完成業務SWOT與三情境推演，備妥備案","策略一頁摘要"],
 ["第12週","當責／總回顧","設定下一季OKR，重新完成自評","OKR表與自評對照"]];
 document.getElementById("planBody").innerHTML=P.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("");
+</script>
+<!-- pwa-nav -->
+<style>
+  #pwa-nav { display:none; }
+  @media all and (display-mode: standalone) { #pwa-nav { display:block; } }
+  #pwa-nav.on { display:block; }
+  #pwa-nav a {
+    position:fixed; left:14px; z-index:99999;
+    bottom:calc(14px + env(safe-area-inset-bottom));
+    display:flex; align-items:center; gap:6px;
+    padding:10px 16px; border-radius:24px;
+    background:#b4530a; color:#fff; text-decoration:none;
+    font:500 14px/1 -apple-system,"Segoe UI","Noto Sans TC","PingFang TC",sans-serif;
+    box-shadow:0 4px 14px rgba(0,0,0,.28); -webkit-tap-highlight-color:transparent;
+  }
+  #pwa-nav a:active { transform:scale(.96); }
+</style>
+<div id="pwa-nav"><a href="./index.html">&#8592; 索引</a></div>
+<script>
+  if (window.navigator.standalone) document.getElementById('pwa-nav').classList.add('on');
 </script>
 </body>
 </html>

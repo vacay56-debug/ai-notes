@@ -86,6 +86,9 @@ h2 small{display:block;font-family:"Noto Sans TC",sans-serif;font-weight:400;fon
 .obs li{margin-bottom:8px}
 footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--rule);font-size:13px;color:var(--sub)}
 </style>
+<!-- pwa-head -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 </head>
 <body>
 <div class="wrap">
@@ -211,5 +214,25 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--rule);font-si
 
 <footer>整理：內政部消防署救災救護組緊急救護科｜原圖來源：Chief AI Leader</footer>
 </div>
+<!-- pwa-nav -->
+<style>
+  #pwa-nav { display:none; }
+  @media all and (display-mode: standalone) { #pwa-nav { display:block; } }
+  #pwa-nav.on { display:block; }
+  #pwa-nav a {
+    position:fixed; left:14px; z-index:99999;
+    bottom:calc(14px + env(safe-area-inset-bottom));
+    display:flex; align-items:center; gap:6px;
+    padding:10px 16px; border-radius:24px;
+    background:#b4530a; color:#fff; text-decoration:none;
+    font:500 14px/1 -apple-system,"Segoe UI","Noto Sans TC","PingFang TC",sans-serif;
+    box-shadow:0 4px 14px rgba(0,0,0,.28); -webkit-tap-highlight-color:transparent;
+  }
+  #pwa-nav a:active { transform:scale(.96); }
+</style>
+<div id="pwa-nav"><a href="./index.html">&#8592; 索引</a></div>
+<script>
+  if (window.navigator.standalone) document.getElementById('pwa-nav').classList.add('on');
+</script>
 </body>
 </html>
