@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>簡報 AI 提示詞實戰手冊｜緊急救護科版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F8FA; --surface:#FFFFFF; --ink:#14213D; --muted:#5B6B7F; --line:#D9DEE5;
+  --red:#B3261E; --red-soft:#FBEDEC; --amber:#9A6B00; --amber-soft:#FFF4D6; --navy-soft:#E8EDF5;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1624; --surface:#172033; --ink:#E6EAF1; --muted:#9AA8BB; --line:#2A3650;
+    --red:#F07167; --red-soft:#3A1F24; --amber:#F2C14E; --amber-soft:#342B14; --navy-soft:#1F2B44;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1624; --surface:#172033; --ink:#E6EAF1; --muted:#9AA8BB; --line:#2A3650;
+  --red:#F07167; --red-soft:#3A1F24; --amber:#F2C14E; --amber-soft:#342B14; --navy-soft:#1F2B44;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;font-size:16px;line-height:1.75}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:"Noto Serif TC","Songti TC",serif;line-height:1.3;margin:0}
+a{color:var(--red)}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+
+/* hero */
+.hero{padding:56px 0 36px;border-bottom:1px solid var(--line)}
+.hero .unit{color:var(--muted);font-size:14px;margin-bottom:14px}
+.hero h1{font-size:clamp(30px,6vw,54px);font-weight:900;letter-spacing:.01em}
+.hero p.lead{max-width:44em;color:var(--muted);margin:16px 0 28px}
+.shift{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch}
+.shift div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.shift .after{border:2px solid var(--red)}
+.shift b{display:block;font-size:14px;color:var(--muted);font-weight:500;margin-bottom:4px}
+.shift .after b{color:var(--red)}
+.shift .arrow{display:flex;align-items:center;font-size:28px;color:var(--red);border:0;background:none;padding:0}
+@media (max-width:640px){.shift{grid-template-columns:1fr}.shift .arrow{justify-content:center;transform:rotate(90deg);height:24px}}
+
+section{padding:44px 0;border-bottom:1px solid var(--line)}
+section h2{font-size:clamp(22px,3.6vw,30px);margin-bottom:8px}
+section .sub{color:var(--muted);margin:0 0 22px;max-width:46em}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:15px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--navy-soft);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+
+/* formula */
+.formula{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.formula div{padding:16px;border-right:1px solid var(--line)}
+.formula div:last-child{border-right:0}
+.formula strong{display:block;font-family:"Noto Serif TC",serif;font-size:20px;color:var(--red)}
+.formula span{font-size:14px;color:var(--muted)}
+@media (max-width:720px){.formula{grid-template-columns:1fr 1fr}.formula div{border-bottom:1px solid var(--line)}}
+
+/* prompt block */
+.prompt{position:relative;background:var(--bg);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:14px 16px 14px 16px;margin:12px 0;white-space:pre-wrap;font-size:15px;line-height:1.8}
+.copy{font:inherit;font-size:13px;font-weight:700;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 12px;cursor:pointer}
+.copy:hover{border-color:var(--red);color:var(--red)}
+.copy.done{background:var(--red);color:#fff;border-color:var(--red)}
+.ph{background:var(--amber-soft);color:var(--amber);border-radius:3px;padding:0 3px;font-weight:700}
+
+/* workflow */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;counter-reset:st}
+.flow button{font:inherit;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;cursor:pointer;color:var(--ink)}
+.flow button[aria-pressed="true"]{border:2px solid var(--red);background:var(--red-soft)}
+.flow .n{font-family:"Noto Serif TC",serif;font-weight:900;font-size:22px;color:var(--red);line-height:1}
+.flow .t{display:block;font-weight:700;margin-top:6px}
+.flow .d{display:block;font-size:13px;color:var(--muted)}
+.flow .all{grid-column:1/-1;text-align:center;padding:10px}
+@media (max-width:760px){.flow{grid-template-columns:1fr 1fr}}
+
+/* cards */
+.cards{display:grid;gap:16px;margin-top:22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.card.new{border-color:var(--amber)}
+.card header{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;justify-content:space-between}
+.card h3{font-size:20px}
+.card h3 .no{color:var(--red);margin-right:8px}
+.card.new h3 .no{color:var(--amber)}
+.tag{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:1px 10px;white-space:nowrap}
+.card .why{color:var(--muted);margin:6px 0 0;font-size:15px}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:14px;margin-top:4px}
+.meta div{background:var(--navy-soft);border-radius:8px;padding:10px 12px}
+.meta b{display:block;margin-bottom:2px}
+@media (max-width:640px){.meta{grid-template-columns:1fr}}
+.card[hidden]{display:none}
+
+/* checklist */
+.check{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.check label{display:flex;gap:10px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 14px;cursor:pointer}
+.check input{margin-top:6px;accent-color:var(--red);width:18px;height:18px;flex:none}
+.progress{font-weight:700;color:var(--red);margin-bottom:12px}
+.warn{background:var(--red-soft);border-radius:10px;padding:18px 20px}
+.warn ul{margin:8px 0 0;padding-left:1.2em}
+footer{padding:30px 0 50px;color:var(--muted);font-size:14px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+ <div class="wrap">
+  <div class="unit">內政部消防署 救災救護組 緊急救護科｜內部工作參考</div>
+  <h1>簡報 AI 提示詞實戰手冊</h1>
+  <p class="lead">將原版 15 則通用提示詞，改寫為符合政府簡報情境的結構化指令，並新增 5 則機關專用提示詞、工具分工與資安檢核。所有提示詞可直接複製，替換黃色欄位即可使用。</p>
+  <div class="shift">
+   <div><b>原版</b>一句話指令：「為［主題］建立簡報大綱」。缺對象、缺目標、缺限制，產出品質全憑 AI 猜測。</div>
+   <div class="arrow" aria-hidden="true">→</div>
+   <div class="after"><b>強化版</b>五要素結構：角色、情境、任務、限制、格式。產出可預測、可檢核、可直接放入簽陳附件。</div>
+  </div>
+ </div>
+</header>
+
+<main class="wrap">
+
+<section id="diagnose">
+ <h2>原版提示詞的五個缺口</h2>
+ <p class="sub">原圖提示詞適合一般商業情境，套用於公部門政策簡報時，常出現以下問題。</p>
+ <div class="tbl"><table>
+  <thead><tr><th>缺口</th><th>造成的問題</th><th>強化做法</th></tr></thead>
+  <tbody>
+   <tr><td>未指定對象</td><td>同一內容對長官、議員、國際來賓皆用相同寫法</td><td>明定決策型／協調型／國際型／備詢型</td></tr>
+   <tr><td>未指定目標</td><td>簡報只「介紹」，沒有要對方做的決定</td><td>寫明「希望對象核定／配合／理解什麼」</td></tr>
+   <tr><td>未設限制</td><td>條列過長、口語、英文術語未翻譯</td><td>每頁 3–5 點、每點 ≤15 字、術語首次中英並列</td></tr>
+   <tr><td>未定格式</td><td>輸出難以直接貼入 PowerPoint 或 Gamma</td><td>指定表格欄位或逐頁結構</td></tr>
+   <tr><td>未要求查核</td><td>AI 自行補數據、編造法條</td><td>要求標示來源、區分事實與推論、列出待確認事項</td></tr>
+  </tbody>
+ </table></div>
+</section>
+
+<section id="formula">
+ <h2>萬用框架：五要素</h2>
+ <p class="sub">每則提示詞都依此結構撰寫。熟悉後可只保留任務與限制，其餘寫入 Claude 專案指令或 NotebookLM 筆記本說明中，避免重複輸入。</p>
+ <div class="formula">
+  <div><strong>角色</strong><span>AI 以什麼身分回答</span></div>
+  <div><strong>情境</strong><span>對象、場合、目標</span></div>
+  <div><strong>任務</strong><span>具體要產出什麼</span></div>
+  <div><strong>限制</strong><span>字數、頁數、禁止事項</span></div>
+  <div><strong>格式</strong><span>表格欄位或頁面結構</span></div>
+ </div>
+ <div class="prompt" id="p-base">【角色】你是內政部消防署緊急救護科的政策簡報顧問，熟悉到院前緊急救護（Emergency Medical Services, EMS）制度、政府預算與跨機關協調。
+【情境】簡報對象：<span class="ph">長官／跨機關／國際／立法院</span>；場合：<span class="ph">署務會報／協調會／研討會</span>；目標：<span class="ph">希望對象核定或理解的事項</span>。
+【任務】<span class="ph">具體任務</span>。
+【限制】使用繁體中文（臺灣慣用語）；英文術語首次出現採「中文（英文全稱，縮寫）」；每頁標題為結論句；每頁 3–5 點、每點不超過 15 字；不得自行補充數據或法條，不確定處列入「待確認事項」。
+【格式】<span class="ph">表格欄位或逐頁結構</span>。</div>
+ <button class="copy" data-target="p-base">複製框架</button>
+</section>
+
+<section id="prompts">
+ <h2>20 則強化提示詞</h2>
+ <p class="sub">依簡報製作流程分為五階段。點選階段可篩選；紅色編號為原版強化，黃色編號為新增機關專用。</p>
+ <div class="flow" role="group" aria-label="依階段篩選">
+  <button data-stage="1" aria-pressed="false"><span class="n">1</span><span class="t">規劃架構</span><span class="d">大綱、轉換、摘要</span></button>
+  <button data-stage="2" aria-pressed="false"><span class="n">2</span><span class="t">撰寫內容</span><span class="d">精修、數據、比較</span></button>
+  <button data-stage="3" aria-pressed="false"><span class="n">3</span><span class="t">視覺設計</span><span class="d">封面、版面、圖示</span></button>
+  <button data-stage="4" aria-pressed="false"><span class="n">4</span><span class="t">上台準備</span><span class="d">備註、總結、提問</span></button>
+  <button data-stage="5" aria-pressed="false"><span class="n">5</span><span class="t">調整查核</span><span class="d">對象、雙語、查核</span></button>
+  <button class="all" data-stage="all" aria-pressed="true">顯示全部 20 則</button>
+ </div>
+ <div class="cards" id="cards"></div>
+</section>
+
+<section id="tools">
+ <h2>工具分工建議</h2>
+ <p class="sub">單一工具無法完成全部流程。建議依階段組合使用，避免在 Gamma 裡修內容、在 Claude 裡調版面。</p>
+ <div class="tbl"><table>
+  <thead><tr><th>工具</th><th>最適用途</th><th>對應提示詞</th><th>注意事項</th></tr></thead>
+  <tbody>
+   <tr><td>NotebookLM</td><td>多份法規、計畫書、考察資料彙整，答案可追溯原文</td><td>7、19、20</td><td>以來源文件為限，適合事實查核</td></tr>
+   <tr><td>Claude</td><td>架構規劃、內容改寫、備詢預擬、雙語轉換</td><td>1–3、6–11、13、15–18</td><td>可建立專案並放入常用指令與署內範本</td></tr>
+   <tr><td>Gamma</td><td>大綱定稿後快速產生視覺成品</td><td>4、5、12</td><td>貼入已定稿大綱，避免在 Gamma 內重寫內容</td></tr>
+   <tr><td>PowerPoint Copilot／設計工具</td><td>套用署內母片、版面微調、最終輸出</td><td>5、14</td><td>正式場合以署內母片為準</td></tr>
+  </tbody>
+ </table></div>
+ <p class="sub" style="margin-top:16px">建議流程：NotebookLM 彙整資料 → Claude 產出大綱與內容 → 人工查核 → Gamma 或 PowerPoint 製作視覺 → Claude 產出講者備註與提問預擬。</p>
+</section>
+
+<section id="security">
+ <h2>資安與合規提醒</h2>
+ <div class="warn">
+  <strong>使用生成式 AI 前，請依行政院及所屬機關使用生成式 AI 參考指引辦理。</strong>
+  <ul>
+   <li>機密、密件公文、未公開預算數、招標底價及評選資料，不得輸入外部 AI 服務。</li>
+   <li>個人資料（病患紀錄、救護紀錄表、人員名冊）須去識別化後始得使用。</li>
+   <li>AI 產出之數據、法條條次、機關名稱，一律人工核對後始得使用。</li>
+   <li>AI 生成圖片與圖示用於對外簡報時，確認授權條件；避免使用寫實傷患影像。</li>
+   <li>重要簡報可於備註或簽陳中註明 AI 輔助範圍，並由承辦人負最終確認責任。</li>
+  </ul>
+ </div>
+</section>
+
+<section id="checklist">
+ <h2>簡報完成前檢核清單</h2>
+ <p class="progress" id="progress">已完成 0／10</p>
+ <ul class="check" id="check"></ul>
+</section>
+
+</main>
+<footer><div class="wrap">緊急救護科內部工作參考｜提示詞可依業務需求自行修改</div></footer>
+
+<script>
+const P = [
+ {n:1,s:1,t:"建立簡報大綱",w:"從一句話主題，產出邏輯完整、標題即結論的逐頁架構。",
+  p:`你是消防署緊急救護科的政策簡報顧問。
+請為「【主題】」建立【頁數】頁簡報大綱。
+對象：【長官／跨機關／國際／立法院】
+目標：【希望對象核定或理解的事項】
+限制：
+1. 依「背景 → 問題 → 對策 → 執行 → 效益 → 結論」邏輯排序
+2. 每頁標題須為結論句，不得使用「現況」「說明」等名詞標題
+3. 每頁 3–5 點，每點不超過 15 字
+輸出表格：頁次｜標題（結論句）｜重點｜建議圖表｜講者備註`,
+  e:"主題：TECC 師資認證制度建置；對象：署長；目標：核定 115 年試辦。",
+  k:"標題寫成「TECC 師資缺口達 40%」，優於「師資現況」。"},
+ {n:2,s:1,t:"筆記轉簡報",w:"將會議紀錄、考察筆記或簽稿轉為簡報，不失原意、不加料。",
+  p:`以下是【會議紀錄／考察筆記／研究資料】。請轉為簡報：
+1. 萃取核心訊息，歸納為不超過【N】個主題，每主題一頁
+2. 刪除重複與口語內容；數據、法規條次、機關全銜保留原文
+3. 原文未提及的內容不得自行補充
+4. 無法判斷或前後矛盾處，列於最後「待確認事項」
+輸出：逐頁標題＋重點條列＋對應原文段落
+【貼上內容】`,
+  e:"貼上澳洲院前輸血考察筆記，轉為 8 頁考察成果簡報。",
+  k:"「對應原文段落」欄位可大幅縮短人工核對時間。"},
+ {n:3,s:2,t:"精修投影片文字",w:"把冗長公文語句改為簡報語言，並保留專業精準度。",
+  p:`請改寫下列投影片文字，對象為【對象】。
+原則：刪除贅字、以動詞開頭、改為主動語態；專有名詞與數字不得更動。
+請提供三個版本：
+A. 精簡版（30 字內，適合標題或大字報）
+B. 標準版（3–5 點條列）
+C. 口語版（講者可直接唸出）
+最後列出你刪除或合併了哪些內容。
+【貼上文字】`,
+  e:"將預算說明書中「計畫緣起」一段，改寫為一頁投影片。",
+  k:"要求列出刪除內容，可避免 AI 默默刪掉關鍵條件。"},
+ {n:4,s:3,t:"設計封面頁",w:"產生符合機關正式場合的封面標題與版面配置。",
+  p:`請為「【主題】」簡報設計封面，場合為【場合】。
+提供三組標題方案：
+1. 政策型（強調制度與依據）
+2. 成果型（強調數據與成效）
+3. 願景型（強調未來方向）
+每組包含：主標題（16 字內）、副標題（25 字內）、英文對照（國際場合使用）
+另建議：機關標誌位置、日期格式（中華民國 115 年 X 月 X 日）、單位署名方式、主視覺意象`,
+  e:"主題：院前輸血與區域急救網絡國際研討會開幕簡報。",
+  k:"正式場合以署內母片為準，AI 只負責文字與意象建議。"},
+ {n:5,s:3,t:"規劃版面配置",w:"依每頁內容類型，指定最適版型與視覺規範。",
+  p:`以下為簡報大綱。請逐頁判斷內容類型（數據／流程／比較／時序／概念／分工），並建議版型。
+視覺規範：
+- 主色與輔色各 1 個，提供色碼，須符合政府簡報莊重風格
+- 字型：思源黑體或微軟正黑體；內文不小於 24pt
+- 每頁留白至少 30%
+輸出表格：頁次｜內容類型｜建議版型｜視覺元素｜避免事項
+【貼上大綱】`,
+  e:"搭配第 1 則產出的大綱使用。",
+  k:"此表可直接作為 Gamma 或設計人員的製作說明。"},
+ {n:6,s:2,t:"製作數據頁",w:"將統計數據轉為有結論的圖表，並檢查數據是否足以支撐論點。",
+  p:`以下為【數據名稱】，資料期間【期間】，來源【來源】。
+請：
+1. 判斷最適圖表類型（長條／折線／圓餅／地圖），並說明理由
+2. 以數據結論作為頁面標題
+3. 指出最值得強調的 1 個數據點
+4. 若數據有缺漏、異常值，或不足以支持結論，請明確指出
+5. 頁尾註明資料來源與期間
+【貼上數據】`,
+  e:"各直轄市、縣（市）到院前心肺功能停止（Out-of-Hospital Cardiac Arrest, OHCA）存活出院率。",
+  k:"第 4 點是關鍵：先讓 AI 挑毛病，比被長官挑毛病好。"},
+ {n:7,s:1,t:"長文件摘要成簡報",w:"將計畫書、法規草案或研究報告濃縮為簡報，且每點可回溯原文。",
+  p:`請將上傳的【計畫書／法規修正草案／研究報告】濃縮為【N】頁簡報。
+要求：
+1. 每頁註明對應原文頁碼或條次
+2. 區分「原文事實」與「歸納推論」，推論須標示
+3. 文件中所有數字另列一張核對表：數字｜意義｜原文位置
+4. 原文未涵蓋的背景說明，不得自行補充`,
+  e:"《救護技術員管理辦法》修正草案條文對照表，濃縮為 6 頁修法說明簡報。",
+  k:"建議於 NotebookLM 執行，引用可直接點回原文。"},
+ {n:8,s:4,t:"撰寫講者備註",w:"產出可直接上台使用、時間可控的逐頁講稿。",
+  p:`請為以下簡報撰寫講者備註，總時長【X】分鐘，講者為【職稱】。
+每頁包含：
+- 開場句（1 句）
+- 說明重點（3 點，口語化）
+- 轉場句（銜接下一頁）
+- 預估秒數
+- 此頁可能被提問的問題及建議回應（1–2 題）
+語氣：【正式／專業但親切】
+【貼上簡報內容】`,
+  e:"科長於跨機關協調會報告，總時長 10 分鐘。",
+  k:"秒數加總應等於總時長，可請 AI 自行校正。"},
+ {n:9,s:1,t:"專業內容通俗化",w:"將醫療與戰術救護術語，轉為非醫療背景對象能理解的語言。",
+  p:`請將以下專業內容，改寫給【議員／民眾／媒體／非醫療背景主管】理解。
+要求：
+1. 每個概念用一個生活化類比說明
+2. 全篇只保留 1 個核心專業術語，並附白話解釋
+3. 不使用英文縮寫
+4. 產出 3 頁簡報：這是什麼／為什麼重要／對民眾的好處
+【貼上內容】`,
+  e:"說明延長傷患照護（Prolonged Casualty Care, PCC）為何是韌性國家的重要能力。",
+  k:"通俗化不等於不精準，改寫後請回頭核對醫療正確性。"},
+ {n:10,s:2,t:"製作時程頁",w:"呈現計畫期程、里程碑、分工與預算年度對應。",
+  p:`請為「【計畫名稱】」製作時程頁。
+期程：【起訖年度】，以民國年及季度標示。
+內容須包含：
+1. 主要里程碑（每年不超過 3 個）
+2. 各項工作的主辦與協辦機關
+3. 對應預算年度
+4. 關鍵路徑與主要風險點（如採購期程、跨機關核定）
+輸出：甘特圖文字結構＋一句話結論標題
+【貼上計畫內容】`,
+  e:"韌性國家醫療整備計畫：訓練、裝備採購、演練三條工作線。",
+  k:"政府計畫常卡在採購與核定，務必讓 AI 標出風險點。"},
+ {n:11,s:2,t:"製作比較頁",w:"以明確維度比較方案或制度，並提出建議方案。",
+  p:`請比較【方案 A】與【方案 B】（可增至 C）。
+比較維度：法源依據、經費需求、訓練時數、執行可行性、風險、國際實務
+輸出：
+1. 比較表（維度｜A｜B）
+2. 建議方案與 3 點理由
+3. 建議方案的主要限制與因應措施
+立場須中立，資料不足處標示「待查證」。`,
+  e:"戰術緊急傷患救護（Tactical Emergency Casualty Care, TECC）與戰術戰傷救護（Tactical Combat Casualty Care, TCCC）適用情境比較。",
+  k:"決策型簡報中，建議方案放在比較表之前。"},
+ {n:12,s:3,t:"建議圖示與視覺元素",w:"為每頁挑選風格一致、授權安全的圖示。",
+  p:`請為以下簡報逐頁建議圖示或視覺元素。
+要求：
+1. 全份風格一致（線條或填色擇一）
+2. 每個圖示提供中英文搜尋關鍵字
+3. 說明圖示代表的意義
+4. 避免血腥、寫實傷口或可辨識個人的影像
+輸出表格：頁次｜圖示描述｜搜尋關鍵字（中／英）｜代表意義
+【貼上大綱】`,
+  e:"救護×執法 CIT 研討會簡報：危機介入、協作、現場安全。",
+  k:"優先使用 PowerPoint 內建圖示庫，授權問題最少。"},
+ {n:13,s:4,t:"製作總結頁",w:"以三件事加一個行動項目收尾，讓對象知道下一步。",
+  p:`請根據以下簡報內容製作總結頁。
+格式：
+- 三個核心結論（每點 15 字內）
+- 一個明確行動項目：做什麼、誰主辦、何時完成
+若為決策型簡報，請以「擬請核示事項」呈現，採條列並可直接轉入簽陳擬辦欄。
+【貼上簡報內容】`,
+  e:"向署長報告氰化物解毒劑部署機制，請求核定三年期採購。",
+  k:"總結頁與簽陳擬辦內容一致，長官閱簽時不會有落差。"},
+ {n:14,s:3,t:"檢視與改善設計",w:"以評分方式找出投影片最需要修正的地方。",
+  p:`請檢視上傳的投影片截圖，依五個面向評分（1–5 分）：
+1. 訊息清晰度（3 秒內能否看懂重點）
+2. 視覺層級
+3. 文字密度
+4. 色彩對比與可讀性（含投影環境）
+5. 全份一致性
+輸出：評分表＋最優先改善的 3 項，每項附具體做法。`,
+  e:"上傳國際研討會簡報初稿 5 頁截圖。",
+  k:"可在正式預演前做一次，改善項目逐一修正。"},
+ {n:15,s:5,t:"依對象調整簡報",w:"同一份內容，依不同對象重新調整重點與語氣。",
+  p:`請將以下簡報改寫給【新對象】使用。
+對象特性參考：
+- 長官：結論先行，重數據與決策事項
+- 跨機關：重分工、期程與各機關待辦
+- 國際：中英對照，重制度特色
+- 立法院：重法源、經費與成效
+- 民眾：重易懂與切身性
+輸出：調整後大綱＋變更摘要表（原內容｜調整後｜調整理由）
+【貼上簡報內容】`,
+  e:"將署內決策簡報，改為衛生福利部與各縣市消防局協調會版本。",
+  k:"變更摘要表方便同時維護多個版本。"},
+ {n:16,s:1,t:"30 秒決策摘要頁",w:"長官可能只看一頁，這頁要能獨立成立。",nw:1,
+  p:`請將以下內容濃縮為一頁「決策摘要」，須能在 30 秒內讀完。
+結構：
+- 背景（1 句）
+- 問題（2 點，附關鍵數據）
+- 建議（3 點，含經費與期程）
+- 請核示事項（1 句）
+全頁不超過 120 字。
+【貼上內容】`,
+  e:"放在簡報第 2 頁，或作為簽陳附件首頁。",k:"此頁寫好，整份簡報的邏輯通常也就清楚了。"},
+ {n:17,s:4,t:"提問與備詢預擬",w:"事先模擬長官、委員或媒體可能的尖銳提問。",nw:1,
+  p:`你是【立法委員／審計人員／媒體記者／上級長官】，請針對以下簡報提出 10 個最可能的質詢或提問，由易至難排序。
+每題附：
+1. 提問意圖
+2. 建議回應要點（3 點內）
+3. 需事先準備的佐證資料
+請特別著重：經費效益、執行進度落後、跨機關權責、國際比較。
+【貼上簡報內容】`,
+  e:"預算審查前，模擬委員對 TECC 訓練經費的質詢。",k:"建議換 2–3 種角色各跑一次，涵蓋面較完整。"},
+ {n:18,s:5,t:"中英雙語國際簡報",w:"用於 AIT 交流、國際研討會及外賓簡報。",nw:1,
+  p:`請將以下中文簡報轉為中英雙語版本。
+要求：
+1. 英文採美式用語，符合國際 EMS 學術與實務慣例
+2. 臺灣特有制度（如 EMT-1／EMT-2／EMT-P 分級、消防機關辦理救護）需加註簡短說明
+3. 另產出「術語對照表」：中文｜英文｜說明
+4. 標示可能造成外賓誤解的用語並提出替代寫法
+【貼上簡報內容】`,
+  e:"與 AIT 合作之 CIT 國際研討會開場簡報。",k:"術語對照表可累積成科內共用詞庫。"},
+ {n:19,s:5,t:"事實查核",w:"簡報送出前的最後一道關卡。",nw:1,
+  p:`請逐條檢查以下簡報，列出所有需人工核對的項目：
+1. 數字與統計（含單位、期間）
+2. 法規名稱與條次
+3. 機關全銜與職稱
+4. 英文術語與縮寫
+5. 年度與日期（民國／西元一致性）
+輸出表格：頁次｜項目｜內容｜風險等級（高／中／低）｜建議核對來源
+不需修改內容，只需標示。
+【貼上簡報內容】`,
+  e:"送出前搭配原始資料於 NotebookLM 執行，交叉比對。",k:"AI 只負責「找出要查的地方」，查證仍由承辦人完成。"},
+ {n:20,s:1,t:"簽陳轉簡報",w:"將三段式簽稿直接轉為報告簡報，兩者內容一致。",nw:1,
+  p:`以下為簽稿（主旨、說明、擬辦）。請轉為【N】頁長官報告簡報：
+- 主旨 → 封面副標與摘要頁
+- 說明 → 背景、現況、分析各頁
+- 擬辦 → 建議方案與請核示事項頁
+原文數據與法規依據不得更動；說明段落中的附件，標示建議放置頁次。
+【貼上簽稿】`,
+  e:"115 年度各縣市採購執行計畫簽稿，轉為署務會報簡報。",k:"反向亦可：先完成簡報，再請 AI 轉為簽稿三段式。"}
+];
+const stageName={1:"規劃架構",2:"撰寫內容",3:"視覺設計",4:"上台準備",5:"調整查核"};
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const mark=s=>esc(s).replace(/【([^】]+)】/g,'<span class="ph">【$1】</span>');
+const box=document.getElementById("cards");
+box.innerHTML=P.map(x=>`
+<article class="card${x.nw?" new":""}" data-stage="${x.s}">
+ <header><h3><span class="no">${String(x.n).padStart(2,"0")}</span>${x.t}</h3>
+ <span class="tag">${stageName[x.s]}${x.nw?"｜新增":""}</span></header>
+ <p class="why">${x.w}</p>
+ <div class="prompt" id="p${x.n}">${mark(x.p)}</div>
+ <button class="copy" data-target="p${x.n}">複製提示詞</button>
+ <div class="meta" style="margin-top:14px">
+  <div><b>填入範例</b>${esc(x.e)}</div>
+  <div><b>使用要點</b>${esc(x.k)}</div>
+ </div>
+</article>`).join("");
+
+document.addEventListener("click",async e=>{
+ const b=e.target.closest(".copy"); if(!b)return;
+ const txt=document.getElementById(b.dataset.target).innerText;
+ try{await navigator.clipboard.writeText(txt)}catch(_){
+  const t=document.createElement("textarea");t.value=txt;document.body.appendChild(t);t.select();
+  try{document.execCommand("copy")}catch(__){}t.remove();
+ }
+ const o=b.textContent;b.textContent="已複製";b.classList.add("done");
+ setTimeout(()=>{b.textContent=o;b.classList.remove("done")},1400);
+});
+
+document.querySelectorAll(".flow button").forEach(btn=>btn.addEventListener("click",()=>{
+ const st=btn.dataset.stage;
+ document.querySelectorAll(".flow button").forEach(b=>b.setAttribute("aria-pressed",b===btn));
+ document.querySelectorAll(".card").forEach(c=>c.hidden=!(st==="all"||c.dataset.stage===st));
+}));
+
+const items=["每頁標題皆為結論句","第 2 頁有 30 秒決策摘要","每頁條列不超過 5 點","英文術語首次出現已中英並列","所有數據已標示來源與期間","法規條次與機關全銜已人工核對","未含機密、底價或個人資料","總結頁與簽陳擬辦內容一致","講者備註秒數符合總時長","已完成提問預擬並備妥佐證資料"];
+const KEY="nfa-ppt-check";let saved=[];
+try{saved=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(_){saved=[]}
+const ul=document.getElementById("check");
+ul.innerHTML=items.map((t,i)=>`<li><label><input type="checkbox" data-i="${i}" ${saved.includes(i)?"checked":""}><span>${t}</span></label></li>`).join("");
+const upd=()=>{const c=[...ul.querySelectorAll("input:checked")].map(x=>+x.dataset.i);
+ document.getElementById("progress").textContent=`已完成 ${c.length}／${items.length}`;
+ try{localStorage.setItem(KEY,JSON.stringify(c))}catch(_){}};
+ul.addEventListener("change",upd);upd();
+</script>
+</body>
+</html>

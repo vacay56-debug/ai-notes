@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>關鍵維護績效指標解析｜Key Maintenance KPIs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Source+Serif+4:ital,opsz,wght@1,8..60,400;1,8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF1F3; --sheet:#FFFFFF; --ink:#1B2A3A; --muted:#5B6B7A; --rule:#CBD3DA;
+  --tag:#E0A100; --tag-soft:#FFF4D1; --red:#C23B22; --red-soft:#FBE9E5; --teal:#2F7F7A; --teal-soft:#E2F1EF;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#141B22; --sheet:#1C252E; --ink:#E4EAF0; --muted:#98A6B3; --rule:#33404C;
+    --tag:#F0B72F; --tag-soft:#3A3016; --red:#FF7A63; --red-soft:#3D221D; --teal:#5FC0B8; --teal-soft:#1B3533;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141B22; --sheet:#1C252E; --ink:#E4EAF0; --muted:#98A6B3; --rule:#33404C;
+  --tag:#F0B72F; --tag-soft:#3A3016; --red:#FF7A63; --red-soft:#3D221D; --teal:#5FC0B8; --teal-soft:#1B3533;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.75;font-size:16px}
+.wrap{max-width:960px;margin:0 auto;padding:2rem 1.25rem 4rem}
+h1{font-weight:900;font-size:clamp(1.8rem,5vw,2.8rem);line-height:1.25;margin:0 0 .75rem;letter-spacing:.02em}
+h1 small{display:block;font-family:"Source Serif 4",Georgia,serif;font-style:italic;font-weight:400;font-size:.5em;color:var(--muted);letter-spacing:0;margin-top:.35rem}
+h2{font-size:1.35rem;font-weight:900;margin:3rem 0 1rem;padding-left:.75rem;border-left:6px solid var(--tag)}
+h3{font-size:1.05rem;margin:0}
+p{margin:.5rem 0 1rem;max-width:68ch}
+.lede{font-size:1.05rem;color:var(--muted)}
+.m{font-family:"Source Serif 4",Georgia,serif;font-style:italic}
+
+/* summary */
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.5rem 0}
+.summary div{background:var(--sheet);padding:1rem 1.1rem}
+.summary b{display:block;font-size:1.6rem;font-weight:900;line-height:1.2}
+.summary span{color:var(--muted);font-size:.9rem}
+
+/* KPI groups */
+.group{margin:1.5rem 0 2rem}
+.group-head{display:flex;gap:.75rem;align-items:baseline;flex-wrap:wrap;margin-bottom:.6rem}
+.group-head h3{font-size:1.1rem}
+.group-head p{margin:0;color:var(--muted);font-size:.92rem}
+.kpi{background:var(--sheet);border:1px solid var(--rule);border-left:4px solid var(--teal);padding:1rem 1.1rem;margin-bottom:.6rem;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:.5rem 1.5rem}
+.kpi.warn{border-left-color:var(--red)}
+.kpi-name{font-weight:700}
+.kpi-name .en{display:block;font-weight:400;color:var(--muted);font-size:.85rem}
+.dir{display:inline-block;font-size:.8rem;padding:.05rem .5rem;border-radius:3px;margin-top:.35rem;background:var(--teal-soft);color:var(--teal);font-weight:700}
+.dir.down{background:var(--tag-soft);color:var(--ink)}
+.formula{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-family:"Source Serif 4",Georgia,serif;font-style:italic;font-size:1rem}
+.frac{display:inline-flex;flex-direction:column;text-align:center}
+.frac span:first-child{border-bottom:1.5px solid currentColor;padding:0 .3rem .1rem}
+.frac span:last-child{padding:.1rem .3rem 0}
+.kpi .def{grid-column:1/-1;font-size:.93rem;margin:0}
+.kpi .note{grid-column:1/-1;font-size:.88rem;color:var(--muted);margin:0}
+.fix{grid-column:1/-1;font-size:.88rem;background:var(--red-soft);color:var(--ink);padding:.45rem .7rem;border-radius:3px;margin:0}
+.fix b{color:var(--red)}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--rule);background:var(--sheet)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:.92rem}
+th,td{text-align:left;padding:.65rem .8rem;border-bottom:1px solid var(--rule);vertical-align:top}
+th{background:var(--paper);font-weight:700}
+tr:last-child td{border-bottom:0}
+td.bad{color:var(--red);font-weight:700;white-space:nowrap}
+
+/* calculator */
+.calc{background:var(--sheet);border:2px solid var(--ink);padding:1.25rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem;align-items:end}
+.calc label{display:block;font-weight:700;font-size:.92rem;margin-bottom:.35rem}
+.calc input{width:100%;font:inherit;font-size:1.1rem;padding:.5rem .6rem;border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:3px}
+.calc input:focus-visible{outline:3px solid var(--tag);outline-offset:1px}
+.out{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;border-top:1px dashed var(--rule);padding-top:1rem}
+.out b{display:block;font-size:2rem;font-weight:900;line-height:1.1}
+.out span{font-size:.88rem;color:var(--muted)}
+
+ol.steps{padding-left:1.4rem;max-width:72ch}
+ol.steps li{margin-bottom:.75rem}
+footer{margin-top:3rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--rule);padding-top:1rem}
+
+@media (max-width:640px){
+  .kpi{grid-template-columns:1fr}
+  .wrap{padding:1.25rem 1rem 3rem}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<h1>關鍵維護績效指標解析
+<small>Key Maintenance KPIs — structure, errata, and EMS application</small></h1>
+<p class="lede">原圖列出 9 項設備維護績效指標（Key Performance Indicator, KPI）。以下依功能重新分群、校正原圖文字與定義錯誤，並對照救護車隊及救護器材之維護管理應用。</p>
+
+<div class="summary">
+  <div><b>9 項</b><span>原圖指標數</span></div>
+  <div><b>4 群</b><span>可靠度、計畫執行、成本、資源</span></div>
+  <div><b>6 項</b><span>定義或文字有誤，需勘誤後再引用</span></div>
+  <div><b>1 項</b><span>關鍵缺漏：設備妥善率（Availability）</span></div>
+</div>
+
+<h2>一、指標分群與正確定義</h2>
+
+<div class="group">
+  <div class="group-head"><h3>可靠度指標</h3><p>衡量設備「多久壞一次、壞了多久修好」，屬結果型（落後）指標。</p></div>
+
+  <div class="kpi">
+    <div class="kpi-name">故障頻率<span class="en">Breakdown Frequency, BF</span><span class="dir down">越低越好</span></div>
+    <div class="formula">BF = <span class="frac"><span>故障次數</span><span>統計期間</span></span></div>
+    <p class="def">單位期間內之故障次數。跨單位比較時應再除以設備數量（例：每百輛救護車每月故障次數），否則車隊規模大者必然數值較高。</p>
+  </div>
+
+  <div class="kpi">
+    <div class="kpi-name">平均修復時間<span class="en">Mean Time to Repair, MTTR</span><span class="dir down">越低越好</span></div>
+    <div class="formula">MTTR = <span class="frac"><span>維修停機總時數</span><span>維修次數</span></span></div>
+    <p class="def">故障設備恢復可用狀態所需之平均時間，反映維修能量、備品及流程效率。</p>
+    <p class="fix"><b>勘誤：</b>原圖說明「repair a failed」語句不完整，應為 repair a failed asset；分母 Number of Repair 應為 Number of Repairs。</p>
+  </div>
+
+  <div class="kpi">
+    <div class="kpi-name">平均故障間隔<span class="en">Mean Time Between Failures, MTBF</span><span class="dir">越高越好</span></div>
+    <div class="formula">MTBF = <span class="frac"><span>總運作時數</span><span>故障次數</span></span></div>
+    <p class="def">兩次故障間之平均正常運作時間，反映設備本身可靠度及預防保養成效。</p>
+  </div>
+</div>
+
+<div class="group">
+  <div class="group-head"><h3>計畫執行指標</h3><p>衡量維護工作是否「按計畫、主動」執行，屬過程型（領先）指標。</p></div>
+
+  <div class="kpi">
+    <div class="kpi-name">預防保養達成率<span class="en">Preventive Maintenance Compliance, PM%</span><span class="dir">越高越好</span></div>
+    <div class="formula">PM% = <span class="frac"><span>如期完成之預防保養件數</span><span>排定預防保養總件數</span></span> × 100</div>
+    <p class="def">僅計算預防保養（PM）工作。業界常以 90% 以上為目標，「如期」須明定容許寬限期（例：排定日 ±10%週期）。</p>
+  </div>
+
+  <div class="kpi warn">
+    <div class="kpi-name">計畫性維護比率<span class="en">Planned Maintenance Ratio, PMR%</span><span class="dir">越高越好</span></div>
+    <div class="formula">PMR% = <span class="frac"><span>計畫性維護時數</span><span>維護總時數</span></span> × 100</div>
+    <p class="def">計畫性維護時數占全部維護時數之比例，反映「主動保養」與「被動搶修」之結構。業界常引用 80% 以上為成熟水準。</p>
+    <p class="fix"><b>勘誤：</b>原圖說明「hours that.」語句中斷，應為 Percentage of total maintenance hours that are planned。</p>
+  </div>
+
+  <div class="kpi warn">
+    <div class="kpi-name">排程達成率<span class="en">Schedule Compliance, SC%</span><span class="dir">越高越好</span></div>
+    <div class="formula">SC% = <span class="frac"><span>依排程完成之維護工作件數</span><span>排定維護工作總件數</span></span> × 100</div>
+    <p class="def">涵蓋所有已排程工作（含預防保養及已規劃之矯正維修），範圍大於 PM%。</p>
+    <p class="fix"><b>勘誤：</b>原圖說明「maintenance hours speduced unit」為誤植（疑複製自成本指標），與公式不符；公式 shedule 應為 schedule。另說明寫「hours」而公式以「tasks」計，計量單位應統一。</p>
+  </div>
+
+  <div class="kpi warn">
+    <div class="kpi-name">維護積壓率<span class="en">Maintenance Backlog, MB%</span><span class="dir down">越低越好</span></div>
+    <div class="formula">MB% = <span class="frac"><span>待執行維護工時</span><span>可用維護總工時</span></span> × 100</div>
+    <p class="def">尚未完成之維護工作量相對於維修能量之比例。實務上更常以「週」表示：積壓工時 ÷ 每週可用工時，一般以 2–4 週為合理區間；過低代表人力閒置，過高代表能量不足。</p>
+    <p class="fix"><b>勘誤：</b>原圖說明「total time dlanced」無法辨識；公式 maintenence 應為 maintenance。</p>
+  </div>
+</div>
+
+<div class="group">
+  <div class="group-head"><h3>成本指標</h3><p>衡量維護投入之經濟效益，連結預算編列。</p></div>
+
+  <div class="kpi warn">
+    <div class="kpi-name">單位維護成本<span class="en">Maintenance Cost per Unit</span><span class="dir down">越低越好（需搭配妥善率）</span></div>
+    <div class="formula">Cost per Unit = <span class="frac"><span>維護總成本</span><span>總產出單位數</span></span></div>
+    <p class="def">每一產出單位所分攤之維護成本。救護業務無「產品」，宜改以每公里、每出勤趟次或每車年計算。</p>
+    <p class="fix"><b>勘誤：</b>原圖說明「Percentage of total maintenance hours produced unit」錯誤：本指標為金額比值，非百分比，亦與工時無關。</p>
+    <p class="note">單獨壓低成本可能以犧牲保養頻率為代價，應與 MTBF、妥善率併同判讀。</p>
+  </div>
+</div>
+
+<div class="group">
+  <div class="group-head"><h3>資源指標</h3><p>衡量維修所需備品之供應保障。</p></div>
+
+  <div class="kpi warn">
+    <div class="kpi-name">備品可用率<span class="en">Spare Parts Availability, SPA%</span><span class="dir">越高越好</span></div>
+    <div class="formula">SPA% = <span class="frac"><span>備品可即時供應之時間</span><span>需要備品之總時間</span></span> × 100</div>
+    <p class="def">原圖以「時間」計算，資料不易蒐集。實務較常採「需求滿足率（Fill Rate）」：由庫存即時滿足之領料次數 ÷ 總領料次數 × 100。</p>
+    <p class="fix"><b>勘誤：</b>immediaty 應為 immediately；「Time spare are available」文法錯誤，應為 Time spare parts are available。</p>
+  </div>
+</div>
+
+<h2>二、原圖問題總覽</h2>
+<div class="tbl">
+<table>
+<thead><tr><th>指標</th><th>問題類型</th><th>說明</th></tr></thead>
+<tbody>
+<tr><td>Cost per Unit</td><td class="bad">定義錯誤</td><td>說明文字描述為工時百分比，與公式（金額 ÷ 產出）矛盾。</td></tr>
+<tr><td>Schedule Compliance</td><td class="bad">定義錯誤</td><td>說明文字誤植，且工時（hours）與件數（tasks）混用。</td></tr>
+<tr><td>Maintenance Backlog</td><td class="bad">文字錯誤</td><td>說明無法辨識，公式拼字錯誤。</td></tr>
+<tr><td>Planned Maintenance Ratio</td><td class="bad">語句不全</td><td>說明中斷，缺少 are planned。</td></tr>
+<tr><td>MTTR</td><td class="bad">語句不全</td><td>缺少受詞 asset；Repair 應為複數。</td></tr>
+<tr><td>Spare Parts Availability</td><td class="bad">拼字／文法</td><td>immediaty、spare are 等錯誤；計算基礎不易實作。</td></tr>
+<tr><td>PM% 與 SC%</td><td>範圍重疊</td><td>兩者公式結構相同，須明確界定 SC% 涵蓋範圍大於 PM%，避免重複統計。</td></tr>
+<tr><td>整體</td><td>缺漏指標</td><td>未列出設備妥善率（Availability），而此為 MTBF 與 MTTR 之綜合結果，最具決策意義。</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>三、關鍵補充：設備妥善率</h2>
+<p>MTBF 與 MTTR 單獨呈現時難以判讀，合併後即得固有妥善率（Inherent Availability），可直接回答「設備有多少比例時間可以執勤」。</p>
+<p class="formula" style="margin:1rem 0 1.25rem">Availability = <span class="frac"><span>MTBF</span><span>MTBF + MTTR</span></span> × 100%</p>
+
+<div class="calc" aria-live="polite">
+  <div><label for="mtbf">MTBF（小時）</label><input id="mtbf" type="number" min="1" step="1" value="720" inputmode="decimal"></div>
+  <div><label for="mttr">MTTR（小時）</label><input id="mttr" type="number" min="0" step="0.5" value="24" inputmode="decimal"></div>
+  <div><label for="fleet">設備數量（輛／台）</label><input id="fleet" type="number" min="1" step="1" value="50" inputmode="numeric"></div>
+  <div class="out">
+    <div><b id="avail">—</b><span>固有妥善率</span></div>
+    <div><b id="down">—</b><span>每台年停機時數（以 8,760 小時計）</span></div>
+    <div><b id="idle">—</b><span>任一時點平均不可用數量</span></div>
+  </div>
+</div>
+<p class="note" style="color:var(--muted);font-size:.88rem;margin-top:.6rem">試算僅計故障維修停機，未含預防保養停機；如需納入，應改用運作妥善率（Operational Availability）。</p>
+
+<h2>四、救護業務應用對照</h2>
+<div class="tbl">
+<table>
+<thead><tr><th>原指標</th><th>救護車隊應用</th><th>救護器材應用（AED、自動心肺復甦機、呼吸器、監視器）</th></tr></thead>
+<tbody>
+<tr><td>PM%</td><td>定期保養（里程／月份）如期完成率</td><td>原廠建議之定期校正、電池與耗材更換如期完成率</td></tr>
+<tr><td>BF</td><td>每百輛每月拋錨或出勤中故障次數</td><td>每百台每季自檢失敗或現場故障次數</td></tr>
+<tr><td>MTTR</td><td>送修至恢復執勤之平均時數</td><td>送修至歸建之平均日數（含原廠送修）</td></tr>
+<tr><td>MTBF</td><td>兩次非計畫送修間平均運作時數</td><td>兩次故障間平均使用期間</td></tr>
+<tr><td>Cost per Unit</td><td>每公里或每車年維護成本</td><td>每台年維護及耗材成本</td></tr>
+<tr><td>PMR%</td><td>計畫性保養工時占總維修工時比</td><td>定期校正占全部維修作業比</td></tr>
+<tr><td>MB%</td><td>待修車輛工作量（週）</td><td>待校正、待送修器材積壓量</td></tr>
+<tr><td>SPA%</td><td>常用零件（輪胎、電瓶）即時供應率</td><td>電極貼片、電池、管路等耗材即時供應率</td></tr>
+<tr><td>Availability（補充）</td><td>救護車妥善率，可連結勤務涵蓋能量</td><td>關鍵器材妥善率，可作為汰換年限評估依據</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>五、導入建議</h2>
+<ol class="steps">
+  <li><strong>精簡核心指標。</strong>全國層級建議以妥善率、PM%、MTTR、單位維護成本 4 項為核心，其餘指標由各消防機關內部管理使用，避免填報負擔。</li>
+  <li><strong>先統一資料定義。</strong>明定「故障」「停機起訖時點」「如期」「維護成本科目」等操作型定義，否則各縣市數據無法比較。</li>
+  <li><strong>連結預算與採購。</strong>MTBF 與單位維護成本可作為車輛及器材汰換年限、共同供應契約保固條款與維護勞務採購規格之量化依據。</li>
+  <li><strong>避免單一指標導向。</strong>成本與可靠度指標應成對呈現，防止以延後保養換取短期成本下降。</li>
+</ol>
+
+<footer>資料來源：使用者提供之「Key Maintenance KPIs」資訊圖（原作者不詳）。業界參考值係一般設備維護管理常見引用數值，實際目標應依機關設備特性與歷史數據訂定。</footer>
+</main>
+
+<script>
+(function(){
+  var f=function(n){return n.toLocaleString('zh-TW',{maximumFractionDigits:1})};
+  function calc(){
+    var b=parseFloat(document.getElementById('mtbf').value),
+        r=parseFloat(document.getElementById('mttr').value),
+        n=parseFloat(document.getElementById('fleet').value);
+    var A=document.getElementById('avail'),D=document.getElementById('down'),I=document.getElementById('idle');
+    if(!(b>0)||!(r>=0)){A.textContent=D.textContent=I.textContent='—';return;}
+    var a=b/(b+r);
+    A.textContent=(a*100).toFixed(2)+'%';
+    D.textContent=f(8760*(1-a))+' 小時';
+    I.textContent=(n>0)?f(n*(1-a))+' 台':'—';
+  }
+  ['mtbf','mttr','fleet'].forEach(function(id){document.getElementById(id).addEventListener('input',calc)});
+  calc();
+})();
+</script>
+</body>
+</html>

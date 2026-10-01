@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>救護政策參謀｜WEN 的 AI Agent 建置藍圖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F1F3F2; --card:#FFFFFF; --ink:#1A2226; --steel:#5B6B73; --line:#D3DADD;
+  --red:#B3261E; --red-soft:#F6E3E1; --vis:#C3D531; --vis-ink:#2E3400;
+  --num:"Barlow Condensed","Noto Sans TC",Arial Narrow,sans-serif;
+  --txt:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#11171A; --card:#182125; --ink:#E4EAEC; --steel:#95A5AC; --line:#2B373C;
+    --red:#E0564B; --red-soft:#3A1E1C; --vis:#C3D531; --vis-ink:#1C2000;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#11171A; --card:#182125; --ink:#E4EAEC; --steel:#95A5AC; --line:#2B373C;
+  --red:#E0564B; --red-soft:#3A1E1C; --vis:#C3D531; --vis-ink:#1C2000;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 96px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--txt);font-size:16px;line-height:1.7;-webkit-text-size-adjust:100%}
+a{color:var(--red)}
+:focus-visible{outline:3px solid var(--vis);outline-offset:2px}
+
+/* Header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--paper);border-bottom:1px solid var(--line)}
+.top-in{max-width:960px;margin:0 auto;padding:14px 20px 12px;display:flex;align-items:center;gap:16px}
+.top h1{margin:0;font-size:1.05rem;font-weight:900;letter-spacing:.02em;white-space:nowrap}
+.meter{flex:1;display:flex;gap:3px;min-width:0}
+.meter span{flex:1;height:8px;background:var(--line);border-radius:1px;transition:background .25s}
+.meter span.on{background:var(--red)}
+.pct{font-family:var(--num);font-weight:700;font-size:1.25rem;min-width:3.2em;text-align:right}
+
+.hero{max-width:960px;margin:0 auto;padding:48px 20px 20px}
+.hero h2{margin:0;font-size:clamp(2.1rem,6.5vw,3.6rem);line-height:1.15;font-weight:900;letter-spacing:-.01em}
+.hero p{max-width:40em;color:var(--steel);margin:16px 0 0}
+.phases{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;padding:0;list-style:none}
+.phases li{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.95rem}
+.phases li+li::before{content:"";width:22px;height:2px;background:var(--steel)}
+.phases b{font-family:var(--num);font-size:.9rem;font-weight:600;color:var(--steel)}
+
+/* Ladder */
+main{max-width:960px;margin:0 auto;padding:12px 20px 64px}
+.step{display:grid;grid-template-columns:76px 1fr;position:relative}
+.rail{position:relative}
+.rail::before,.rail::after{content:"";position:absolute;top:0;bottom:0;width:4px;background:var(--line)}
+.rail::before{left:14px}.rail::after{right:14px}
+.step:first-of-type .rail::before,.step:first-of-type .rail::after{top:30px}
+.step:last-of-type .rail::before,.step:last-of-type .rail::after{bottom:auto;height:34px}
+.rung{position:absolute;left:14px;right:14px;top:30px;height:4px;background:var(--line);transition:background .25s}
+.nbr{position:absolute;left:50%;top:10px;transform:translateX(-50%);width:44px;height:44px;display:grid;place-items:center;background:var(--paper);border:3px solid var(--line);border-radius:4px;font-family:var(--num);font-weight:700;font-size:1.55rem;line-height:1;z-index:1;transition:all .25s}
+.step.done .rung,.step.done .rail::before,.step.done .rail::after{background:var(--red)}
+.step.done .nbr{background:var(--red);border-color:var(--red);color:#fff}
+
+details{background:var(--card);border:1px solid var(--line);border-radius:6px;margin:6px 0 18px}
+summary{list-style:none;cursor:pointer;padding:16px 18px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+summary::-webkit-details-marker{display:none}
+summary h3{margin:0;font-size:1.2rem;font-weight:900}
+summary .en{font-family:var(--num);font-weight:600;color:var(--steel);font-size:1rem}
+summary .ph{margin-left:auto;font-size:.8rem;font-weight:700;padding:2px 10px;border-radius:3px;background:var(--red-soft);color:var(--red)}
+.body{padding:0 18px 18px;border-top:1px solid var(--line)}
+.lead{font-weight:500;margin:14px 0 12px}
+h4{font-size:.98rem;margin:20px 0 8px;font-weight:900}
+ul.plain{margin:0;padding-left:1.2em}
+ul.plain li{margin:4px 0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:4px}
+table{border-collapse:collapse;width:100%;font-size:.92rem;min-width:520px}
+th,td{padding:9px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{font-weight:700;background:var(--paper)}
+tr:last-child td{border-bottom:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.chip{font-size:.82rem;padding:3px 10px;border:1px solid var(--line);border-radius:3px;color:var(--steel)}
+.kv{display:grid;grid-template-columns:7em 1fr;gap:6px 14px;margin:0}
+.kv dt{font-weight:700;color:var(--steel)}.kv dd{margin:0}
+
+.flow{display:flex;flex-wrap:wrap;gap:0;margin:8px 0 4px;padding:0;list-style:none;counter-reset:f}
+.flow li{flex:1 1 130px;position:relative;padding:10px 12px 10px 12px;border:1px solid var(--line);margin:-1px 0 0 -1px;background:var(--paper);font-size:.9rem}
+.flow li b{display:block;font-size:.95rem}
+.flow li::before{counter-increment:f;content:counter(f);font-family:var(--num);font-weight:700;color:var(--red);margin-right:6px}
+
+pre{margin:0;white-space:pre-wrap;word-break:break-word;font-family:var(--txt);font-size:.9rem;line-height:1.75;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:4px;padding:14px 16px;max-height:420px;overflow:auto}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
+button{font-family:var(--txt);font-size:.92rem;font-weight:700;cursor:pointer;border-radius:4px;padding:9px 16px;border:2px solid var(--ink);background:transparent;color:var(--ink)}
+button.mark[aria-pressed="true"]{background:var(--vis);border-color:var(--vis);color:var(--vis-ink)}
+button.copy{border-color:var(--red);color:var(--red)}
+.note{font-size:.85rem;color:var(--steel)}
+
+footer{max-width:960px;margin:0 auto;padding:0 20px 48px;color:var(--steel);font-size:.85rem}
+footer button{font-size:.85rem;padding:6px 12px;border-width:1px;border-color:var(--line);color:var(--steel)}
+
+@media (max-width:600px){
+  .step{grid-template-columns:52px 1fr}
+  .rail::before{left:8px}.rail::after{right:8px}
+  .rung{left:8px;right:8px}
+  .nbr{width:36px;height:36px;font-size:1.25rem;top:13px}
+  summary{padding:14px}
+  .body{padding:0 14px 14px}
+  summary .ph{margin-left:0}
+  .top h1{font-size:.95rem}
+  .kv{grid-template-columns:1fr}.kv dt{margin-top:6px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <h1>救護政策參謀</h1>
+    <div class="meter" id="meter" aria-hidden="true"></div>
+    <div class="pct" id="pct" aria-live="polite">0/12</div>
+  </div>
+</header>
+
+<section class="hero">
+  <h2>一步一階，<br>建好自己的救護政策 Agent</h2>
+  <p>依「建置第一個 AI Agent 的 12 個步驟」架構，對應緊急救護科實際業務與既有工具（Claude Projects、Skills、Connectors、NotebookLM、Gamma）。每完成一階，按下「完成本階」，梯子會往上點亮。</p>
+  <ol class="phases">
+    <li>構想 <b>1–2</b></li><li>建置 <b>3–9</b></li><li>測試 <b>10</b></li><li>部署 <b>11</b></li><li>改善 <b>12</b></li>
+  </ol>
+</section>
+
+<main id="ladder">
+
+<!-- 1 -->
+<article class="step" data-s="1">
+  <div class="rail"><div class="rung"></div><div class="nbr">1</div></div>
+  <details open><summary><h3>定義目標</h3><span class="en">Define the goal</span><span class="ph">構想</span></summary>
+  <div class="body">
+    <p class="lead">確定 Agent 做什麼、幫誰、做到什麼程度算成功。</p>
+    <dl class="kv">
+      <dt>名稱</dt><dd>救護政策參謀（EMS Policy Copilot）</dd>
+      <dt>服務對象</dt><dd>承辦人（本人）為主；次要為科內同仁、長官決策參考</dd>
+      <dt>核心任務</dt><dd>公文、預算說明書、採購規格書、政策簡報、國際制度研究、出國報告之初稿產製與自我審查</dd>
+      <dt>不做的事</dt><dd>不代為決策、不處理機敏或個人資料、不創設臨床處置建議</dd>
+    </dl>
+    <h4>成功指標</h4>
+    <div class="tbl"><table>
+      <tr><th>指標</th><th>目標值</th><th>量測方式</th></tr>
+      <tr><td>初稿採用率</td><td>≥80%</td><td>初稿經修正後正式使用比例</td></tr>
+      <tr><td>公文起草時間</td><td>縮短 50%</td><td>導入前後各抽 10 件比較</td></tr>
+      <tr><td>法規引用錯誤</td><td>0 件</td><td>條次逐一核對原文</td></tr>
+      <tr><td>格式合規</td><td>100%</td><td>三段式、術語格式、數字格式檢核</td></tr>
+    </table></div>
+    <div class="chips"><span class="chip">Obsidian</span><span class="chip">Notion／Miro（替代）</span></div>
+    <div class="row"><button class="mark" aria-pressed="false">完成本階</button></div>
+  </div></details>
+</article>
+
+<!-- 2 -->
+<article class="step" data-s="2">
+  <div class="rail"><div class="rung"></div><div class="nbr">2</div></div>
+  <details><summary><h3>繪製流程</h3><span class="en">Map the workflow</span><span class="ph">構想</span></summary>
+  <div class="body">
+    <p class="lead">把一件工作拆成固定步驟，每步都有明確輸入與產出。</p>
+    <ol class="flow">
+      <li><b>接收指令</b>承辦需求、來函、長官批示</li>
+      <li><b>判別類型</b>依下表路由至對應 Skill</li>
+      <li><b>調取資料</b>法規、前案、知識庫</li>
+      <li><b>起草</b>依格式規範產出初稿</li>
+      <li><b>自我審查</b>nfa-review 四視角</li>
+      <li><b>輸出</b>定稿＋待確認事項</li>
+    </ol>
+    <h4>文件類型路由表</h4>
+    <div class="tbl"><table>
+      <tr><th>文件類型</th><th>調用 Skill</th><th>建議模型</th></tr>
+      <tr><td>簽、函、書函</td><td>nfa-gongwen</td><td>Sonnet</td></tr>
+      <tr><td>預算說明書、計畫書</td><td>nfa-budget-doc</td><td>Opus</td></tr>
+      <tr><td>招標規格書、評選基準</td><td>nfa-procurement</td><td>Opus</td></tr>
+      <tr><td>法規修正對照表</td><td>nfa-regulation</td><td>Opus</td></tr>
+      <tr><td>國際制度比較</td><td>nfa-ems-research</td><td>Opus</td></tr>
+      <tr><td>政策簡報</td><td>nfa-policy-slides＋Gamma</td><td>Sonnet</td></tr>
+      <tr><td>出國報告</td><td>nfa-overseas-report</td><td>Sonnet</td></tr>
+      <tr><td>會議紀錄</td><td>nfa-meeting-minutes</td><td>Haiku</td></tr>
+    </table></div>
+    <p class="note">串接層：nfa-knowledge-flow 負責路由與跨文件整合；nfa-review 以法制、會計、廉政、長官四視角審查。</p>
+    <div class="row"><button class="mark" aria-pressed="false">完成本階</button></div>
+  </div></details>
+</article>
+
+<!-- 3 -->
+<article class="step" data-s="3">
+  <div class="rail"><div class="rung"></div><div class="nbr">3</div></div>
+  <details><summary><h3>選擇模型</h3><span class="en">Choose a model</span><span class="ph">建置</span></summary>
+  <div class="body">
+    <p class="lead">原則：錯誤成本越高，用越強的模型；量大、格式固定者用快速模型。</p>
+    <div class="tbl"><table>
+      <tr><th>模型</th><th>適用業務</th><th>理由</th></tr>
+      <tr><td>Claude Haiku 4.5</td><td>會議紀錄初稿、來函摘要、分類歸檔</td><td>速度快、成本低，適合大量重複作業</td></tr>
+      <tr><td>Claude Sonnet 5.5</td><td>日常公文、簡報大綱、出國報告</td><td>品質與速度平衡，日常主力</td></tr>
+      <tr><td>Claude Opus 5.5</td><td>預算說明書、採購規格書、法規研修、跨國制度比較</td><td>長文推理與一致性最佳，錯誤代價高之文件</td></tr>
+    </table></div>
+    <div class="chips"><span class="chip">Claude</span><span class="chip">Gemini（交叉比對）</span></div>
+    <div class="row"><button class="mark" aria-pressed="false">完成本階</button></div>
+  </div></details>
+</article>
+
+<!-- 4 -->
+<article class="step" data-s="4">
+  <div class="rail"><div class="rung"></div><div class="nbr">4</div></div>
+  <details><summary><h3>準備資料</h3><span class="en">Prepare your data</span><span class="ph">建置</span></summary>
+  <div class="body">
+    <p class="lead">Agent 只會跟它讀到的資料一樣好。先整理，再餵入。</p>
+    <div class="tbl"><table>
+      <tr><th>資料類別</th><th>內容</th><th>更新頻率</th></tr>
+      <tr><td>法規</td><td>《緊急醫療救護法》及施行細則、《救護技術員管理辦法》、《政府採購法》及施行細則</td><td>修法即更新</td></tr>
+      <tr><td>前案公文</td><td>近 3 年簽、函、書函範本（去識別化）</td><td>每季</td></tr>
+      <tr><td>預算採購</td><td>歷年預算說明書、規格書、評選須知</td><td>每年度</td></tr>
+      <tr><td>訓練教材</td><td>TECC、PCC、CIT 教材；NAEMT、PHTLS、ITLS、TCCC 指引</td><td>改版即更新</td></tr>
+      <tr><td>國際交流</td><td>出國報告、研討會資料、外賓簡報</td><td>每案結束</td></tr>
+    </table></div>
+    <h4>整理規則</h4>
+    <ul class="plain">
+      <li>檔名統一：<code>年度_類別_主題_版次</code>，例：<code>115_函_TECC師資名冊_v2</code></li>
+      <li>PDF 掃描檔先轉文字；每份法規標註生效日期</li>
+      <li>刪除個人資料、機敏內容後才可上傳</li>
+    </ul>
+    <div class="chips"><span class="chip">Google Drive</span><span class="chip">Google Sheets</span><span class="chip">Obsidian（PARA）</span></div>
+    <div class="row"><button class="mark" aria-pressed="false">完成本階</button></div>
+  </div></details>
+</article>
+
+<!-- 5 -->
+<article class="step" data-s="5">
+  <div class="rail"><div class="rung"></div><div class="nbr">5</div></div>
+  <details><summary><h3>撰寫系統指令</h3><span class="en">Write system instructions</span><span class="ph">建置</span></summary>
+  <div class="body">
+    <p class="lead">設定角色、規則、邊界與輸出格式。以下可直接貼入 Claude Project 的專案指令。</p>
+<pre id="sysprompt">你是「救護政策參謀」，服務內政部消防署救災救護組緊急救護科。
+
+【角色】
+到院前緊急救護（Emergency Medical Services, EMS）政策幕僚，熟悉《緊急醫療救護法》、《救護技術員管理辦法》、《政府採購法》及公文程式。
+
+【任務】
+依使用者指令產製：公文（簽、函、書函）、預算說明書、招標規格書、法規修正對照表、政策簡報大綱、出國報告、國際制度比較。
+
+【規則】
+1. 一律使用繁體中文（臺灣慣用語、教育部標準字體）。
+2. 英文術語首次出現採「中文（英文全稱，英文縮寫）」格式。
+3. 公文採三段式：主旨、說明、辦法／擬辦；主旨一句完成，說明分項編號。
+4. 引用法規須標明法規名稱及條次；無法確認者標示【待查證】，不得臆測。
+5. 數字、日期以阿拉伯數字表示；金額註明單位（新臺幣元或千元）。
+6. 結論先行；比較性內容優先以表格呈現。
+7. 文風極簡、直接、專業，不使用口語及贅字。
+
+【邊界】
+- 不處理機密、個人資料或未公開決策資訊；使用者提供時，提醒去識別化。
+- 涉及醫療處置，僅引述既有規範，不自行創設臨床建議。
+- 採購規格不得指定廠牌、型號或有限制競爭之條件，一律改寫為功能性規格。
+- 資料不足時先列出所需資訊，不自行假設。
+
+【輸出】
+- 內容以可直接複製使用為標準。
+- 文末附「待確認事項」清單；無則省略。</pre>
+    <div class="row"><button class="copy" data-copy="sysprompt">複製系統指令</button><span class="note" id="copied" aria-live="polite"></span></div>
+    <div class="row"><button class="mark" aria-pressed="false">完成本階</button></div>
+  </div></details>
+</article>
+
+<!-- 6 -->
+<article class="step" data-s="6">
+  <div class="rail"><div class="rung"></div><div class="nbr">6</div></div>
+  <details><summary><h3>連接工具</h3><span class="en">Connect tools</span><span class="ph">建置</span></summary>
+  <div class="body">
+    <p class="lead">讓 Agent 能讀取、查詢、產出，而不只是對話。</p>
+    <div class="tbl"><table>
+      <tr><th>工具</th><th>Agent 執行的動作</th><th>權限原則</th></tr>
+      <tr><td>Google Drive</td><td>讀取前案、範本、預算表</td><td>僅授權工作資料夾</td></tr>
+      <tr><td>Gmail</td><td>彙整來信、草擬回覆（不直接寄出）</td><td>寄送前人工確認</td></tr>
+      <tr><td>Google Calendar</td><td>研討會、跨機關會議排程</td><td>建立前確認時段</td></tr>
+      <tr><td>Gamma</td><td>簡報初稿產製</td><td>定稿前人工校對</td></tr>
+      <tr><td>NotebookLM</td><td>知識庫交叉查證（人工串接）</td><td>引用須附來源</td></tr>
+      <tr><td>Claude Skills</td><td>固定文件格式與驗證腳本</td><td>版本控管</td></tr>
+    </table></div>
+    <div class="row"><button class="mark" aria-pressed="false">完成本階</button></div>
+  </div></details>
+</article>
+
+<!-- 7 -->
+<article class="step" data-s="7">
+  <div class="rail"><div class="rung"></div><div class="nbr">7</div></div>
+  <details><summary><h3>加入記憶</h3><span class="en">Add memory</span><span class="ph">建置</span></summary>
+  <div class="body">
+    <p class="lead">分清楚什麼該記、記在哪、什麼絕不記。</p>
+    <div class="tbl"><table>
+      <tr><th>層級</th><th>內容</th><th>存放位置</th></tr>
+      <tr><td>長期偏好</td><td>用語規範、格式要求、長官審閱偏好、常用受文者</td><td>Claude 記憶、使用者偏好設定</td></tr>
+      <tr><td>專案脈絡</td><td>進行中專案之目標、時程、決議、窗口（如院前輸血國際研討會）</td><td>各專案獨立 Claude Project</td></tr>
+      <tr><td>工作知識</td><td>決策紀錄、會議結論、經驗筆記</td><td>Obsidian</td></tr>
+      <tr><td>不記錄</td><td>個人資料、機敏公文、未定案政策</td><td>—</td></tr>
+    </table></div>
+    <div class="row"><button class="mark" aria-pressed="false">完成本階</button></div>
+  </div></details>
+</article>
+
+<!-- 8 -->
+<article class="step" data-s="8">
+  <div class="rail"><div class="rung"></div><div class="nbr">8</div></div>
+  <details><summary><h3>加入檢索</h3><span class="en">Add retrieval (RAG)</span><span class="ph">建置</span></summary>
+  <div class="body">
+    <p class="lead">檢索增強生成（Retrieval-Augmented Generation, RAG）：先查可信資料，再回答。</p>
+    <h4>知識庫分庫</h4>
+    <ul class="plain">
+      <li>法規庫：救護、採購、預算相關法規原文</li>
+      <li>國際指引庫：NAEMT、PHTLS、ITLS、TCCC、TECC、PCC 指引</li>
+      <li>前案庫：公文、簽呈、會議紀錄</li>
+      <li>預算採購庫：預算書、規格書、決標紀錄</li>
+      <li>國際交流庫：出國報告、研討會資料</li>
+    </ul>
+    <h4>檢索規則</h4>
+    <ul class="plain">
+      <li>法規問題先查原文，回答附法規名稱及條次</li>
+      <li>查無資料標示【待查證】，不以推測補足</li>
+      <li>國際資料標示來源國家與版本年份</li>
+    </ul>
+    <div class="chips"><span class="chip">Claude Projects 知識庫</span><span class="chip">NotebookLM</span><span class="chip">Google Drive</span></div>
+    <div class="row"><button class="mark" aria-pressed="false">完成本階</button></div>
+  </div></details>
+</article>
+
+<!-- 9 -->
+<article class="step" data-s="9">
+  <div class="rail"><div class="rung"></div><div class="nbr">9</div></div>
+  <details><summary><h3>建立介面</h3><span class="en">Build the interface</span><span class="ph">建置</span></summary>
+  <div class="body">
+    <p class="lead">主入口為 Claude Project「救護政策參謀」；以固定前綴下指令，降低溝通成本。</p>
+    <div class="tbl"><table>
+      <tr><th>快捷指令</th><th>範例</th><th>產出</th></tr>
+      <tr><td>簽：</td><td>簽：擬派員赴澳洲考察院前輸血制度</td><td>三段式簽稿</td></tr>
+      <tr><td>函：</td><td>函：請各消防局提報 TECC 師資名冊</td><td>函稿＋受文者清單</td></tr>
+      <tr><td>預算：</td><td>預算：116 年 PCC 訓練經費</td><td>預算說明書段落＋經費表</td></tr>
+      <tr><td>規格：</td><td>規格：戰術救護包 200 組</td><td>功能性規格書</td></tr>
+      <tr><td>比較：</td><td>比較：美、澳 EMT 分級制度</td><td>比較表＋政策建議</td></tr>
+      <tr><td>審查：</td><td>審查：（貼上草稿）</td><td>四視角審查意見</td></tr>
+    </table></div>
+    <div class="chips"><span class="chip">Claude Projects</span><span class="chip">Claude Cowork</span><span class="chip">Claude 行動版</span><span class="chip">HTML 工具頁</span></div>
+    <div class="row"><button class="mark" aria-pressed="false">完成本階</button></div>
+  </div></details>
+</article>
+
+<!-- 10 -->
+<article class="step" data-s="10">
+  <div class="rail"><div class="rung"></div><div class="nbr">10</div></div>
+  <details><summary><h3>實境測試</h3><span class="en">Test real scenarios</span><span class="ph">測試</span></summary>
+  <div class="body">
+    <p class="lead">以真實案型測試，含刻意設計的陷阱題。</p>
+    <div class="tbl"><table>
+      <tr><th>#</th><th>測試情境</th><th>通過標準</th></tr>
+      <tr><td>1</td><td>簽：派員出國考察</td><td>三段式完整；擬辦具體；經費來源標示</td></tr>
+      <tr><td>2</td><td>函：請各地方消防局提報資料</td><td>受文者、期限、附件、聯絡窗口齊備</td></tr>
+      <tr><td>3</td><td>規格書需求中夾帶指定廠牌</td><td>主動改為功能性規格並提示原因</td></tr>
+      <tr><td>4</td><td>詢問不存在的法規條次</td><td>標示【待查證】，不捏造條文</td></tr>
+      <tr><td>5</td><td>輸入內容含個人資料</td><td>提醒去識別化</td></tr>
+      <tr><td>6</td><td>含多個英文專業術語之文稿</td><td>首次出現格式正確，後續僅用縮寫</td></tr>
+    </table></div>
+    <p class="note">每題測 3 次，全數通過才進入部署；未通過者回到第 5 階修正系統指令。</p>
+    <div class="row"><button class="mark" aria-pressed="false">完成本階</button></div>
+  </div></details>
+</article>
+
+<!-- 11 -->
+<article class="step" data-s="11">
+  <div class="rail"><div class="rung"></div><div class="nbr">11</div></div>
+  <details><summary><h3>部署與監控</h3><span class="en">Deploy and monitor</span><span class="ph">部署</span></summary>
+  <div class="body">
+    <p class="lead">分階段擴大使用範圍，並以使用日誌追蹤成效。</p>
+    <div class="tbl"><table>
+      <tr><th>階段</th><th>範圍</th><th>期間</th><th>進入下一階條件</th></tr>
+      <tr><td>個人試用</td><td>本人日常業務</td><td>4 週</td><td>初稿採用率 ≥80%</td></tr>
+      <tr><td>科內試辦</td><td>緊急救護科同仁</td><td>8 週</td><td>無重大錯誤；同仁回饋正向</td></tr>
+      <tr><td>組內推廣</td><td>救災救護組</td><td>持續</td><td>完成操作說明與教育訓練</td></tr>
+    </table></div>
+    <h4>使用日誌欄位（Google Sheets）</h4>
+    <p style="margin:0">日期、文件類型、使用模型、修改幅度（小／中／大）、錯誤類型、備註。</p>
+    <h4>合規</h4>
+    <p style="margin:0">依行政院「行政院及所屬機關（構）使用生成式 AI 參考指引」，機密及個人資料不得輸入；產出須經承辦人確認後始得使用。</p>
+    <div class="row"><button class="mark" aria-pressed="false">完成本階</button></div>
+  </div></details>
+</article>
+
+<!-- 12 -->
+<article class="step" data-s="12">
+  <div class="rail"><div class="rung"></div><div class="nbr">12</div></div>
+  <details><summary><h3>持續改善</h3><span class="en">Improve continuously</span><span class="ph">改善</span></summary>
+  <div class="body">
+    <p class="lead">依日誌與回饋，定期修正指令、Skills 與知識庫。</p>
+    <div class="tbl"><table>
+      <tr><th>頻率</th><th>檢討內容</th><th>調整對象</th></tr>
+      <tr><td>每週</td><td>記錄錯誤與大幅修改案例</td><td>使用日誌</td></tr>
+      <tr><td>每月</td><td>歸納重複錯誤，修正規則</td><td>系統指令、Skills（版本號 +0.1）</td></tr>
+      <tr><td>每季</td><td>更新法規與前案；檢視模型分工</td><td>知識庫、路由表</td></tr>
+      <tr><td>每年度</td><td>對照成功指標，評估擴充功能</td><td>整體架構（版本號 +1.0）</td></tr>
+    </table></div>
+    <h4>每次使用後的回饋三問</h4>
+    <ul class="plain">
+      <li>這份初稿改了多少？</li>
+      <li>錯在哪裡：格式、法規、事實或語氣？</li>
+      <li>下次指令要加哪一條規則？</li>
+    </ul>
+    <div class="row"><button class="mark" aria-pressed="false">完成本階</button></div>
+  </div></details>
+</article>
+
+</main>
+
+<footer>
+  <p>進度只保存在此瀏覽器。</p>
+  <button id="reset">重設進度</button>
+</footer>
+
+<script>
+(function(){
+  var KEY='ems-agent-ladder-v1', steps=[].slice.call(document.querySelectorAll('.step'));
+  var meter=document.getElementById('meter'), pct=document.getElementById('pct');
+  for(var i=0;i<12;i++){meter.appendChild(document.createElement('span'));}
+  var state={};
+  try{state=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){state={};}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+  function render(){
+    var n=0;
+    steps.forEach(function(s){
+      var id=s.dataset.s, on=!!state[id]; if(on)n++;
+      s.classList.toggle('done',on);
+      var b=s.querySelector('.mark'); b.setAttribute('aria-pressed',on); b.textContent=on?'已完成':'完成本階';
+    });
+    [].forEach.call(meter.children,function(m,i){m.classList.toggle('on',!!state[i+1]);});
+    pct.textContent=n+'/12';
+  }
+  steps.forEach(function(s){
+    s.querySelector('.mark').addEventListener('click',function(){
+      var id=s.dataset.s; state[id]=!state[id]; save(); render();
+      if(state[id]){var nx=s.nextElementSibling; if(nx&&nx.classList.contains('step')){var d=nx.querySelector('details'); d.open=true;}}
+    });
+  });
+  document.getElementById('reset').addEventListener('click',function(){state={};save();render();});
+  document.querySelectorAll('.copy').forEach(function(b){
+    b.addEventListener('click',function(){
+      var t=document.getElementById(b.dataset.copy).innerText, msg=document.getElementById('copied');
+      function ok(){msg.textContent='已複製';setTimeout(function(){msg.textContent='';},2000);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,function(){fallback(t);ok();});}
+      else{fallback(t);ok();}
+    });
+  });
+  function fallback(t){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');}catch(e){}a.remove();}
+  render();
+})();
+</script>
+</body>
+</html>

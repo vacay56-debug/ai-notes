@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Claude 13 門免費課程與認證｜完整學習指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Inter:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#F4F6F9; --paper:#FFFFFF; --ink:#132033; --ink2:#4A5870; --line:#D8DEE8;
+  --navy:#16305C; --blue:#2F5BEA;
+  --basic:#B86A00; --basic-bg:#FFF3E0;
+  --dev:#23724A; --dev-bg:#E6F4EC;
+  --edu:#6247AA; --edu-bg:#EFEBFA;
+  --biz:#0E6F8C; --biz-bg:#E3F3F8;
+  --cloud:#44546B; --cloud-bg:#EAEEF3;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1624; --paper:#172133; --ink:#E7ECF4; --ink2:#A6B2C6; --line:#2A3850;
+    --navy:#9DB8F2; --blue:#7FA2FF;
+    --basic:#F2B25C; --basic-bg:#3A2A12;
+    --dev:#6FCF97; --dev-bg:#15301F;
+    --edu:#B7A4F0; --edu-bg:#271F42;
+    --biz:#6CC7E0; --biz-bg:#12303A;
+    --cloud:#B3C0D3; --cloud-bg:#222D3F;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1624; --paper:#172133; --ink:#E7ECF4; --ink2:#A6B2C6; --line:#2A3850;
+  --navy:#9DB8F2; --blue:#7FA2FF;
+  --basic:#F2B25C; --basic-bg:#3A2A12; --dev:#6FCF97; --dev-bg:#15301F;
+  --edu:#B7A4F0; --edu-bg:#271F42; --biz:#6CC7E0; --biz-bg:#12303A;
+  --cloud:#B3C0D3; --cloud-bg:#222D3F;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  font-size:16px;line-height:1.75;}
+a{color:var(--blue)}
+a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* hero */
+header.hero{padding:48px 0 28px;border-bottom:1px solid var(--line)}
+.hero-grid{display:grid;grid-template-columns:auto 1fr;gap:8px 24px;align-items:center}
+.big13{font-family:Inter,sans-serif;font-weight:900;font-size:clamp(96px,20vw,180px);line-height:.85;color:var(--navy);letter-spacing:-.06em}
+.hero h1{margin:0;font-size:clamp(26px,5vw,44px);font-weight:900;line-height:1.25;color:var(--ink)}
+.hero .sub{margin:10px 0 0;color:var(--ink2);max-width:40em}
+.facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:26px;font-size:15px;color:var(--ink2)}
+.facts b{display:block;font-family:Inter,"Noto Sans TC",sans-serif;font-size:24px;color:var(--ink)}
+
+section{padding:40px 0 8px}
+h2{font-size:26px;margin:0 0 6px;font-weight:900}
+.lead{color:var(--ink2);margin:0 0 20px;max-width:46em}
+
+/* overview table */
+.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:15px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--bg);font-weight:700;color:var(--ink2)}
+tr:last-child td{border-bottom:0}
+.tag{display:inline-block;font-size:13px;font-weight:700;padding:1px 10px;border-radius:99px;white-space:nowrap}
+.t-basic{color:var(--basic);background:var(--basic-bg)}
+.t-dev{color:var(--dev);background:var(--dev-bg)}
+.t-edu{color:var(--edu);background:var(--edu-bg)}
+.t-biz{color:var(--biz);background:var(--biz-bg)}
+.t-cloud{color:var(--cloud);background:var(--cloud-bg)}
+
+/* filter */
+.filter{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:10px 0;z-index:5}
+.filter button{font:inherit;font-size:15px;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:6px 14px;border-radius:99px;cursor:pointer}
+.filter button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--paper)}
+.progress{margin-left:auto;font-size:14px;color:var(--ink2);align-self:center}
+
+/* course */
+.course{background:var(--paper);border:1px solid var(--line);border-left:6px solid var(--c);border-radius:10px;margin-bottom:14px}
+.course[data-track="basic"]{--c:var(--basic)}
+.course[data-track="dev"]{--c:var(--dev)}
+.course[data-track="edu"]{--c:var(--edu)}
+.course[data-track="biz"]{--c:var(--biz)}
+.course[data-track="cloud"]{--c:var(--cloud)}
+.course summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:48px 1fr auto;gap:4px 14px;align-items:center;padding:16px 18px}
+.course summary::-webkit-details-marker{display:none}
+.num{font-family:Inter,sans-serif;font-weight:900;font-size:28px;color:var(--c);line-height:1}
+.ttl{font-weight:900;font-size:19px;line-height:1.35}
+.ttl small{display:block;font-family:Inter,sans-serif;font-weight:500;font-size:13px;color:var(--ink2)}
+.meta{text-align:right;font-size:14px;color:var(--ink2);white-space:nowrap}
+.meta .tag{margin-top:4px}
+.chev{transition:transform .2s}
+.course[open] .chev{transform:rotate(90deg)}
+.body{padding:0 18px 18px 80px}
+.body h3{font-size:15px;margin:16px 0 4px;color:var(--c)}
+.body p,.body ul{margin:0}
+.body ul{padding-left:1.2em}
+.body li{margin:2px 0}
+.apply{background:var(--bg);border-radius:8px;padding:12px 14px;margin-top:14px}
+.apply h3{margin-top:0}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:14px}
+.go{display:inline-block;background:var(--navy);color:var(--paper);text-decoration:none;padding:7px 16px;border-radius:6px;font-weight:700;font-size:15px}
+.done{display:flex;align-items:center;gap:6px;font-size:15px;color:var(--ink2);cursor:pointer}
+.done input{width:18px;height:18px}
+.course.is-done .ttl{text-decoration:line-through;text-decoration-color:var(--c)}
+
+/* paths */
+.paths{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.path{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.path h3{margin:0 0 4px;font-size:18px}
+.path p{margin:0 0 10px;color:var(--ink2);font-size:15px}
+.steps{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:14px}
+.steps span{background:var(--bg);border:1px solid var(--line);padding:2px 10px;border-radius:6px;font-weight:700}
+.steps i{font-style:normal;color:var(--ink2)}
+
+/* 4D */
+.fourd{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.fourd div{background:var(--paper);padding:16px}
+.fourd b{display:block;font-size:22px;font-weight:900;color:var(--navy)}
+.fourd em{font-style:normal;font-family:Inter,sans-serif;font-size:13px;color:var(--ink2)}
+.fourd p{margin:6px 0 0;font-size:15px}
+
+ol.how{padding-left:1.3em;margin:0}
+ol.how li{margin:6px 0}
+.note{border-left:4px solid var(--blue);background:var(--paper);padding:12px 16px;border-radius:0 8px 8px 0;font-size:15px;color:var(--ink2)}
+footer{padding:40px 0 56px;color:var(--ink2);font-size:14px}
+
+@media (max-width:640px){
+  .hero-grid{grid-template-columns:1fr}
+  .course summary{grid-template-columns:36px 1fr;padding:14px}
+  .meta{grid-column:2;text-align:left}
+  .chev{display:none}
+  .body{padding:0 14px 16px 14px}
+  .progress{margin-left:0;width:100%}
+}
+@media (prefers-reduced-motion:reduce){.chev{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="big13" aria-hidden="true">13</div>
+      <div>
+        <h1>Claude 免費課程與認證<br>完整學習指南</h1>
+        <p class="sub">Anthropic 學院（Anthropic Academy）於 Skilljar 平台提供之官方自學課程。本指南逐門說明課程定位、學習重點、學完產出，並對應消防救護業務之應用情境與建議學習路徑。</p>
+      </div>
+    </div>
+    <div class="facts">
+      <div><b>免費</b>僅需電子郵件註冊</div>
+      <div><b>約 24 小時</b>第 1–11 門合計時數</div>
+      <div><b>結業證書</b>完成後可取得並連結 LinkedIn</div>
+      <div><b>5 類</b>基礎｜開發者｜教育者｜商業｜雲端</div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="overview">
+  <h2>課程總覽</h2>
+  <p class="lead">依圖卡原始編號排列。時長為官方標示之影音與課程估計時間，實作練習另計。</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>#</th><th>課程</th><th>一句話定位</th><th>時長</th><th>類別</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Claude 101</td><td>日常使用者的 AI 入門</td><td>1:00</td><td><span class="tag t-basic">基礎</span></td></tr>
+        <tr><td>2</td><td>AI 應用力：框架與基礎</td><td>有效使用 AI 的 4D 核心框架</td><td>1:10</td><td><span class="tag t-basic">基礎</span></td></tr>
+        <tr><td>3</td><td>Agent 技能入門</td><td>AI 代理如何思考、規劃與行動</td><td>1:30</td><td><span class="tag t-dev">開發者</span></td></tr>
+        <tr><td>4</td><td>使用 Claude API 建構應用</td><td>把 Claude 整合進應用程式</td><td>8:10</td><td><span class="tag t-dev">開發者</span></td></tr>
+        <tr><td>5</td><td>Claude Code 實戰</td><td>以 Claude Code 加速軟體開發</td><td>1:50</td><td><span class="tag t-dev">開發者</span></td></tr>
+        <tr><td>6</td><td>MCP 入門</td><td>將 Claude 連接工具、資料與系統</td><td>2:10</td><td><span class="tag t-dev">開發者</span></td></tr>
+        <tr><td>7</td><td>MCP：進階主題</td><td>進階 MCP 整合與工作流程</td><td>2:00</td><td><span class="tag t-dev">開發者</span></td></tr>
+        <tr><td>8</td><td>學生的 AI 應用力</td><td>用 AI 更聰明、更快速地學習</td><td>1:25</td><td><span class="tag t-edu">教育者</span></td></tr>
+        <tr><td>9</td><td>教育者的 AI 應用力</td><td>現代教學所需的實用 AI 技能</td><td>1:25</td><td><span class="tag t-edu">教育者</span></td></tr>
+        <tr><td>10</td><td>AI 應用力教學</td><td>把 AI 素養帶進課堂</td><td>1:30</td><td><span class="tag t-edu">教育者</span></td></tr>
+        <tr><td>11</td><td>中小企業的 AI 應用力</td><td>以 AI 節省時間、拓展業務</td><td>1:45</td><td><span class="tag t-biz">商業</span></td></tr>
+        <tr><td>12</td><td>Claude 搭配 Amazon Bedrock</td><td>於 AWS 環境部署 Claude</td><td>—</td><td><span class="tag t-cloud">開發者加碼</span></td></tr>
+        <tr><td>13</td><td>Claude 搭配 Google Cloud Vertex AI</td><td>於 Google Cloud 環境部署 Claude</td><td>—</td><td><span class="tag t-cloud">開發者加碼</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="fourd">
+  <h2>先掌握核心：4D 應用力框架</h2>
+  <p class="lead">第 2、8、9、10、11 門課程共用之核心框架。理解此框架，後續各門「AI 應用力」系列課程即可快速吸收。</p>
+  <div class="fourd">
+    <div><b>委派</b><em>Delegation</em><p>判斷哪些工作交給 AI、哪些由人主導，以及人機如何分工。</p></div>
+    <div><b>描述</b><em>Description</em><p>清楚說明目標、脈絡、格式與限制，讓 AI 產出符合需求。</p></div>
+    <div><b>辨識</b><em>Discernment</em><p>評估 AI 產出之正確性、完整性與偏誤，不盲目採信。</p></div>
+    <div><b>盡責</b><em>Diligence</em><p>對 AI 協作成果負最終責任，兼顧資安、倫理與透明揭露。</p></div>
+  </div>
+</section>
+
+<section id="courses">
+  <h2>逐門詳解</h2>
+  <p class="lead">點選課程展開內容。勾選「已完成」可在本頁記錄個人進度（僅儲存於本機瀏覽器）。</p>
+
+  <div class="filter" role="group" aria-label="依類別篩選">
+    <button type="button" data-f="all" aria-pressed="true">全部</button>
+    <button type="button" data-f="basic" aria-pressed="false">基礎</button>
+    <button type="button" data-f="dev" aria-pressed="false">開發者</button>
+    <button type="button" data-f="edu" aria-pressed="false">教育者</button>
+    <button type="button" data-f="biz" aria-pressed="false">商業</button>
+    <button type="button" data-f="cloud" aria-pressed="false">雲端加碼</button>
+    <span class="progress" id="progress" aria-live="polite"></span>
+  </div>
+
+  <div id="list">
+
+  <details class="course" data-track="basic" data-id="1">
+    <summary><span class="num">1</span><span class="ttl">Claude 101<small>Claude 101</small></span><span class="meta">1 小時 00 分<br><span class="tag t-basic">基礎</span></span></summary>
+    <div class="body">
+      <h3>課程定位</h3>
+      <p>給所有日常使用者的第一門課。學習如何將 Claude 用於一般工作任務，熟悉核心功能，並了解後續進階學習資源。</p>
+      <h3>學習重點</h3>
+      <ul>
+        <li>Claude 介面操作：對話、上傳檔案、專案（Projects）與知識庫。</li>
+        <li>撰寫有效提示詞：明確目標、提供背景、指定輸出格式。</li>
+        <li>常見工作情境：摘要、改寫、資料整理、草擬文件。</li>
+        <li>產出物（Artifacts）、網頁搜尋等功能運用。</li>
+        <li>認識 Claude 的限制與查證習慣。</li>
+      </ul>
+      <h3>學完產出</h3>
+      <p>能以 Claude 穩定完成日常文書與資訊整理工作。</p>
+      <div class="apply"><h3>救護業務應用</h3>
+        <p>建立「公文草擬」「會議紀錄摘要」專案，上傳《緊急醫療救護法》及相關辦法作為知識庫，快速檢索條文並草擬簽稿。</p></div>
+      <div class="row"><a class="go" href="https://anthropic.skilljar.com/claude-101" target="_blank" rel="noopener">前往課程</a><label class="done"><input type="checkbox"> 已完成</label></div>
+    </div>
+  </details>
+
+  <details class="course" data-track="basic" data-id="2">
+    <summary><span class="num">2</span><span class="ttl">AI 應用力：框架與基礎<small>AI Fluency: Framework &amp; Foundations</small></span><span class="meta">1 小時 10 分<br><span class="tag t-basic">基礎</span></span></summary>
+    <div class="body">
+      <h3>課程定位</h3>
+      <p>不限特定工具，建立與 AI 有效、有效率、合乎倫理且安全協作的思維模式。整個 AI 應用力系列之核心課程。</p>
+      <h3>學習重點</h3>
+      <ul>
+        <li>4D 框架：委派、描述、辨識、盡責。</li>
+        <li>生成式 AI 運作原理、能力邊界與常見錯誤（如幻覺）。</li>
+        <li>三種人機協作模式：自動化、增強、代理。</li>
+        <li>課程含多段影音與測驗，完成後取得證書。</li>
+      </ul>
+      <h3>學完產出</h3>
+      <p>具備判斷「何時用 AI、如何用、如何驗證」之系統性框架。</p>
+      <div class="apply"><h3>救護業務應用</h3>
+        <p>作為機關內部 AI 使用規範之理論基礎；「辨識」與「盡責」可直接轉化為政策文件、統計數據引用前之查核流程。</p></div>
+      <div class="row"><a class="go" href="https://anthropic.skilljar.com/ai-fluency-framework-foundations" target="_blank" rel="noopener">前往課程</a><label class="done"><input type="checkbox"> 已完成</label></div>
+    </div>
+  </details>
+
+  <details class="course" data-track="dev" data-id="3">
+    <summary><span class="num">3</span><span class="ttl">Agent 技能入門<small>Introduction to Agent Skills</small></span><span class="meta">1 小時 30 分<br><span class="tag t-dev">開發者</span></span></summary>
+    <div class="body">
+      <h3>課程定位</h3>
+      <p>理解 AI 代理（Agent）如何思考、規劃與行動，並學習以技能（Skills）封裝可重複使用之工作方法。</p>
+      <h3>學習重點</h3>
+      <ul>
+        <li>技能的結構：SKILL.md 說明檔、參考資料、腳本。</li>
+        <li>技能的觸發機制與描述撰寫。</li>
+        <li>將團隊慣例、格式規範、作業流程轉為技能。</li>
+        <li>技能於 Claude、Claude Code 及 API 之共用方式。</li>
+      </ul>
+      <h3>學完產出</h3>
+      <p>能自行撰寫技能，使 Claude 每次都依相同標準執行特定任務。</p>
+      <div class="apply"><h3>救護業務應用</h3>
+        <p>將公文三段式格式、預算說明書架構、採購規格書範本封裝為技能，確保產出一致符合機關體例。</p></div>
+      <div class="row"><a class="go" href="https://anthropic.skilljar.com/introduction-to-agent-skills" target="_blank" rel="noopener">前往課程</a><label class="done"><input type="checkbox"> 已完成</label></div>
+    </div>
+  </details>
+
+  <details class="course" data-track="dev" data-id="4">
+    <summary><span class="num">4</span><span class="ttl">使用 Claude API 建構應用<small>Building with the Claude API</small></span><span class="meta">8 小時 10 分<br><span class="tag t-dev">開發者</span></span></summary>
+    <div class="body">
+      <h3>課程定位</h3>
+      <p>系列中最完整、時數最長之課程。全面涵蓋透過應用程式介面（Application Programming Interface, API）使用 Anthropic 模型之各面向。</p>
+      <h3>學習重點</h3>
+      <ul>
+        <li>API 基礎：訊息格式、多輪對話、系統提示詞、參數控制。</li>
+        <li>提示詞工程與評估（Evaluation）：如何量化測試輸出品質。</li>
+        <li>工具使用（Tool Use）：讓 Claude 呼叫外部函式。</li>
+        <li>檢索增強生成（Retrieval-Augmented Generation, RAG）：以自有文件回答問題。</li>
+        <li>進階功能：延伸思考、圖片與 PDF 輸入、引用、提示快取。</li>
+        <li>MCP 與代理工作流程概論。</li>
+      </ul>
+      <h3>先備條件</h3>
+      <p>建議具備 Python 基礎。</p>
+      <h3>學完產出</h3>
+      <p>能開發整合 Claude 之應用程式或內部工具。</p>
+      <div class="apply"><h3>救護業務應用</h3>
+        <p>建置救護法規問答系統（RAG）、救護紀錄表文字自動分類、教材題庫自動生成等內部工具之技術基礎。</p></div>
+      <div class="row"><a class="go" href="https://anthropic.skilljar.com/claude-with-the-anthropic-api" target="_blank" rel="noopener">前往課程</a><label class="done"><input type="checkbox"> 已完成</label></div>
+    </div>
+  </details>
+
+  <details class="course" data-track="dev" data-id="5">
+    <summary><span class="num">5</span><span class="ttl">Claude Code 實戰<small>Claude Code in Action</small></span><span class="meta">1 小時 50 分<br><span class="tag t-dev">開發者</span></span></summary>
+    <div class="body">
+      <h3>課程定位</h3>
+      <p>將 Claude Code 整合進開發工作流程，學習操控、設定、自動化與驗證長時間的代理式開發作業。</p>
+      <h3>學習重點</h3>
+      <ul>
+        <li>Claude Code 運作方式：讀取專案、規劃、修改檔案、執行指令。</li>
+        <li>專案記憶檔（CLAUDE.md）與脈絡管理。</li>
+        <li>自訂指令、掛鉤（Hooks）與 MCP 伺服器擴充。</li>
+        <li>與 GitHub 整合、程式碼審查與自動化。</li>
+      </ul>
+      <h3>學完產出</h3>
+      <p>能以 Claude Code 從零建立或維護小型軟體專案。</p>
+      <div class="apply"><h3>救護業務應用</h3>
+        <p>開發 HTML 訓練模擬器、檢傷分類練習工具、採購執行進度儀表板等單機網頁工具，並以 GitHub 版本控管。</p></div>
+      <div class="row"><a class="go" href="https://anthropic.skilljar.com/claude-code-in-action" target="_blank" rel="noopener">前往課程</a><label class="done"><input type="checkbox"> 已完成</label></div>
+    </div>
+  </details>
+
+  <details class="course" data-track="dev" data-id="6">
+    <summary><span class="num">6</span><span class="ttl">模型上下文協定入門<small>Introduction to Model Context Protocol (MCP)</small></span><span class="meta">2 小時 10 分<br><span class="tag t-dev">開發者</span></span></summary>
+    <div class="body">
+      <h3>課程定位</h3>
+      <p>模型上下文協定（Model Context Protocol, MCP）是連接 AI 與外部工具、資料、系統之開放標準。本課程以 Python 從零實作 MCP 伺服器與用戶端。</p>
+      <h3>學習重點</h3>
+      <ul>
+        <li>MCP 架構：主機、用戶端、伺服器之角色分工。</li>
+        <li>三大核心元件：工具（Tools）、資源（Resources）、提示（Prompts）。</li>
+        <li>以 Python SDK 建立 MCP 伺服器並測試。</li>
+        <li>將 MCP 伺服器接入 Claude。</li>
+      </ul>
+      <h3>學完產出</h3>
+      <p>能讓 Claude 直接存取指定資料庫、檔案系統或內部服務。</p>
+      <div class="apply"><h3>救護業務應用</h3>
+        <p>將救護統計資料、EMT 證照名冊、訓練開班紀錄等以 MCP 接入，使 Claude 可直接查詢並產製分析報告（須先評估資安與個資規範）。</p></div>
+      <div class="row"><a class="go" href="https://anthropic.skilljar.com/introduction-to-model-context-protocol" target="_blank" rel="noopener">前往課程</a><label class="done"><input type="checkbox"> 已完成</label></div>
+    </div>
+  </details>
+
+  <details class="course" data-track="dev" data-id="7">
+    <summary><span class="num">7</span><span class="ttl">MCP：進階主題<small>Model Context Protocol: Advanced Topics</small></span><span class="meta">2 小時 00 分<br><span class="tag t-dev">開發者</span></span></summary>
+    <div class="body">
+      <h3>課程定位</h3>
+      <p>接續第 6 門，聚焦正式環境（Production）之 MCP 伺服器開發模式。</p>
+      <h3>學習重點</h3>
+      <ul>
+        <li>取樣（Sampling）：伺服器反向請求模型生成內容。</li>
+        <li>通知（Notifications）與進度回報。</li>
+        <li>根目錄（Roots）與檔案系統存取控管。</li>
+        <li>傳輸機制：標準輸入輸出（stdio）與可串流 HTTP。</li>
+      </ul>
+      <h3>先備條件</h3>
+      <p>須先完成第 6 門。</p>
+      <div class="apply"><h3>救護業務應用</h3>
+        <p>跨單位資料整合之架構規劃參考，例如消防局與衛生局系統間之安全資料介接。</p></div>
+      <div class="row"><a class="go" href="https://anthropic.skilljar.com/model-context-protocol-advanced-topics" target="_blank" rel="noopener">前往課程</a><label class="done"><input type="checkbox"> 已完成</label></div>
+    </div>
+  </details>
+
+  <details class="course" data-track="edu" data-id="8">
+    <summary><span class="num">8</span><span class="ttl">學生的 AI 應用力<small>AI Fluency for Students</small></span><span class="meta">1 小時 25 分<br><span class="tag t-edu">教育者</span></span></summary>
+    <div class="body">
+      <h3>課程定位</h3>
+      <p>協助學習者以負責任的方式運用 AI，提升學習成效、職涯規劃與學術表現。</p>
+      <h3>學習重點</h3>
+      <ul>
+        <li>以 AI 作為學習夥伴，而非代寫工具。</li>
+        <li>用 AI 解釋概念、出題自我測驗、整理筆記。</li>
+        <li>學術誠信與 AI 使用揭露。</li>
+        <li>AI 輔助職涯探索與技能規劃。</li>
+      </ul>
+      <div class="apply"><h3>救護業務應用</h3>
+        <p>可作為 EMT 受訓學員之 AI 學習指引範本，引導學員以 AI 複習解剖生理、藥物學與情境演練，同時避免抄襲。</p></div>
+      <div class="row"><a class="go" href="https://anthropic.skilljar.com/ai-fluency-for-students" target="_blank" rel="noopener">前往課程</a><label class="done"><input type="checkbox"> 已完成</label></div>
+    </div>
+  </details>
+
+  <details class="course" data-track="edu" data-id="9">
+    <summary><span class="num">9</span><span class="ttl">教育者的 AI 應用力<small>AI Fluency for Educators</small></span><span class="meta">1 小時 25 分<br><span class="tag t-edu">教育者</span></span></summary>
+    <div class="body">
+      <h3>課程定位</h3>
+      <p>協助教師、教學設計人員與教育主管，將 AI 應用力融入個人教學實務與機構策略。</p>
+      <h3>學習重點</h3>
+      <ul>
+        <li>以 AI 協助課程設計、教案撰寫、評量規劃。</li>
+        <li>調整作業與評量方式以因應 AI 時代。</li>
+        <li>機構層級之 AI 導入策略與政策。</li>
+      </ul>
+      <div class="apply"><h3>救護業務應用</h3>
+        <p>適用於訓練體系規劃：以 AI 協助 TECC、PCC、CIT 教材編修、情境案例撰寫及測驗題庫擴充；亦可納入師資培訓內容。</p></div>
+      <div class="row"><a class="go" href="https://anthropic.skilljar.com/ai-fluency-for-educators" target="_blank" rel="noopener">前往課程</a><label class="done"><input type="checkbox"> 已完成</label></div>
+    </div>
+  </details>
+
+  <details class="course" data-track="edu" data-id="10">
+    <summary><span class="num">10</span><span class="ttl">AI 應用力教學<small>Teaching AI Fluency</small></span><span class="meta">1 小時 30 分<br><span class="tag t-edu">教育者</span></span></summary>
+    <div class="body">
+      <h3>課程定位</h3>
+      <p>培訓「教別人使用 AI」的講師，學習如何在課堂或工作坊中傳授 AI 應用力。</p>
+      <h3>學習重點</h3>
+      <ul>
+        <li>4D 框架之教學設計與課堂活動。</li>
+        <li>工作坊規劃、教材運用與學習評估。</li>
+        <li>引導學員建立負責任的 AI 使用習慣。</li>
+      </ul>
+      <div class="apply"><h3>救護業務應用</h3>
+        <p>規劃機關內部或各消防局之 AI 應用研習課程，培養種子講師，擴散行政效率提升成果。</p></div>
+      <div class="row"><a class="go" href="https://anthropic.skilljar.com/teaching-ai-fluency" target="_blank" rel="noopener">前往課程</a><label class="done"><input type="checkbox"> 已完成</label></div>
+    </div>
+  </details>
+
+  <details class="course" data-track="biz" data-id="11">
+    <summary><span class="num">11</span><span class="ttl">中小企業的 AI 應用力<small>AI Fluency for Small Businesses</small></span><span class="meta">1 小時 45 分<br><span class="tag t-biz">商業</span></span></summary>
+    <div class="body">
+      <h3>課程定位</h3>
+      <p>協助資源有限之組織，以 AI 節省時間、提升營運效率並拓展業務。</p>
+      <h3>學習重點</h3>
+      <ul>
+        <li>找出適合 AI 化之重複性工作。</li>
+        <li>行銷文案、客戶溝通、營運文件之 AI 協作。</li>
+        <li>小規模導入、評估成效與擴大應用。</li>
+      </ul>
+      <div class="apply"><h3>救護業務應用</h3>
+        <p>「小團隊、資源有限」之導入思維與科室業務高度相似，可參考其工作盤點方法，找出科內可 AI 化之例行作業。</p></div>
+      <div class="row"><a class="go" href="https://anthropic.skilljar.com/" target="_blank" rel="noopener">前往課程目錄</a><label class="done"><input type="checkbox"> 已完成</label></div>
+    </div>
+  </details>
+
+  <details class="course" data-track="cloud" data-id="12">
+    <summary><span class="num">12</span><span class="ttl">Claude 搭配 Amazon Bedrock<small>Claude with Amazon Bedrock</small></span><span class="meta">開發者加碼<br><span class="tag t-cloud">雲端</span></span></summary>
+    <div class="body">
+      <h3>課程定位</h3>
+      <p>於亞馬遜雲端服務（Amazon Web Services, AWS）之 Bedrock 平台使用 Claude 的完整課程。</p>
+      <h3>學習重點</h3>
+      <ul>
+        <li>Bedrock 環境設定、權限與模型存取。</li>
+        <li>提示詞、工具使用、RAG、代理等功能於 Bedrock 上之實作。</li>
+        <li>雲端部署之安全與治理考量。</li>
+      </ul>
+      <div class="apply"><h3>救護業務應用</h3>
+        <p>若未來評估於政府雲或委外系統導入生成式 AI，可作為規格書技術需求撰寫之參考。</p></div>
+      <div class="row"><a class="go" href="https://anthropic.skilljar.com/claude-in-amazon-bedrock" target="_blank" rel="noopener">前往課程</a><label class="done"><input type="checkbox"> 已完成</label></div>
+    </div>
+  </details>
+
+  <details class="course" data-track="cloud" data-id="13">
+    <summary><span class="num">13</span><span class="ttl">Claude 搭配 Google Cloud Vertex AI<small>Claude with Google Cloud's Vertex AI</small></span><span class="meta">開發者加碼<br><span class="tag t-cloud">雲端</span></span></summary>
+    <div class="body">
+      <h3>課程定位</h3>
+      <p>於 Google Cloud 之 Vertex AI 平台使用 Claude，從設定到上線之完整流程。</p>
+      <h3>學習重點</h3>
+      <ul>
+        <li>Vertex AI 專案設定與 Claude 模型啟用。</li>
+        <li>API 呼叫、工具使用與 RAG 實作。</li>
+        <li>與 Google Cloud 既有服務整合。</li>
+      </ul>
+      <div class="apply"><h3>救護業務應用</h3>
+        <p>與第 12 門互為對照，可比較不同雲端平台之部署方式、成本結構與資料治理，作為採購評選參考。</p></div>
+      <div class="row"><a class="go" href="https://anthropic.skilljar.com/claude-with-google-vertex" target="_blank" rel="noopener">前往課程</a><label class="done"><input type="checkbox"> 已完成</label></div>
+    </div>
+  </details>
+
+  </div>
+</section>
+
+<section id="paths">
+  <h2>建議學習路徑</h2>
+  <p class="lead">依工作目標選擇，不必 13 門全修。</p>
+  <div class="paths">
+    <div class="path"><h3>行政效率提升</h3><p>公文、簡報、報告產製。約 4 小時。</p>
+      <div class="steps"><span>1</span><i>›</i><span>2</span><i>›</i><span>3</span><i>›</i><span>11</span></div></div>
+    <div class="path"><h3>教材與師資培育</h3><p>訓練體系、教材編修、講師培訓。約 5.5 小時。</p>
+      <div class="steps"><span>2</span><i>›</i><span>9</span><i>›</i><span>10</span><i>›</i><span>8</span></div></div>
+    <div class="path"><h3>自建工具開發</h3><p>網頁模擬器、自動化腳本、資料介接。約 17 小時。</p>
+      <div class="steps"><span>1</span><i>›</i><span>5</span><i>›</i><span>3</span><i>›</i><span>6</span><i>›</i><span>4</span><i>›</i><span>7</span></div></div>
+    <div class="path"><h3>系統導入規劃</h3><p>委外系統、政府雲、採購規格。</p>
+      <div class="steps"><span>2</span><i>›</i><span>4</span><i>›</i><span>12 或 13</span></div></div>
+  </div>
+</section>
+
+<section id="how">
+  <h2>報名與取得證書</h2>
+  <ol class="how">
+    <li>前往 Anthropic 學院課程目錄：<a href="https://anthropic.skilljar.com/" target="_blank" rel="noopener">anthropic.skilljar.com</a>。</li>
+    <li>以電子郵件註冊帳號（免費）。</li>
+    <li>選擇課程並點選報名，依章節觀看影音、閱讀教材、完成練習。</li>
+    <li>通過課程測驗後，系統核發結業證書，可下載或新增至 LinkedIn 個人檔案。</li>
+    <li>平台自動記錄學習進度，可隨時中斷續讀。</li>
+  </ol>
+  <h3 style="margin:22px 0 6px;font-size:18px">學習建議</h3>
+  <ul>
+    <li>邊看邊做：每學一個概念，即以實際業務（公文、簡報、教材）測試。</li>
+    <li>開發者課程程式範例以 Python 為主，零基礎者建議先完成第 5 門，由 Claude Code 協助理解程式。</li>
+    <li>課程語言為英文，可開啟瀏覽器翻譯或將講義貼入 Claude 翻譯摘要。</li>
+    <li>涉及機關資料時，應遵循機關資通安全與個人資料保護規範，不上傳機敏資料。</li>
+  </ul>
+</section>
+
+<section>
+  <p class="note">課程目錄持續擴充，目前平台已新增 Claude Code 101、Claude Platform 101、Claude Cowork 入門等課程，實際課程名稱、時長與內容以官方平台公告為準。</p>
+</section>
+
+</main>
+
+<footer class="wrap">資料來源：Anthropic 學院（Anthropic Academy）官方課程目錄及原始圖卡整理。</footer>
+
+<script>
+(function(){
+  var KEY='claude13-done';
+  var done={};
+  try{done=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){done={};}
+  var courses=[].slice.call(document.querySelectorAll('.course'));
+  var prog=document.getElementById('progress');
+  function update(){
+    var n=courses.filter(function(c){return done[c.dataset.id];}).length;
+    prog.textContent='已完成 '+n+' / '+courses.length+' 門';
+  }
+  courses.forEach(function(c){
+    var cb=c.querySelector('.done input');
+    cb.checked=!!done[c.dataset.id];
+    c.classList.toggle('is-done',cb.checked);
+    cb.addEventListener('change',function(){
+      if(cb.checked)done[c.dataset.id]=1;else delete done[c.dataset.id];
+      c.classList.toggle('is-done',cb.checked);
+      try{localStorage.setItem(KEY,JSON.stringify(done));}catch(e){}
+      update();
+    });
+  });
+  update();
+  var btns=[].slice.call(document.querySelectorAll('.filter button'));
+  btns.forEach(function(b){
+    b.addEventListener('click',function(){
+      btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+      var f=b.dataset.f;
+      courses.forEach(function(c){c.hidden=!(f==='all'||c.dataset.track===f);});
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>主管12項核心能力培養手冊</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16233A; --muted:#5A6576; --paper:#F6F7F4; --card:#FFFFFF; --rule:#D8DCE0;
+  --think:#1F6F78; --people:#A8412F; --exec:#8A6A12;
+  --think-bg:#E4F0F1; --people-bg:#F6E7E3; --exec-bg:#F4EDD9;
+  --focus:#2B59C3;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#E6E9EE; --muted:#A3ACB9; --paper:#12171F; --card:#1A212C; --rule:#2E3846;
+    --think:#6FC1C9; --people:#E58B77; --exec:#D9B75A;
+    --think-bg:#16333A; --people-bg:#3A221D; --exec-bg:#342B14; --focus:#8FB0FF;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E6E9EE; --muted:#A3ACB9; --paper:#12171F; --card:#1A212C; --rule:#2E3846;
+  --think:#6FC1C9; --people:#E58B77; --exec:#D9B75A;
+  --think-bg:#16333A; --people-bg:#3A221D; --exec-bg:#342B14; --focus:#8FB0FF;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  font-size:16px;line-height:1.75}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:"Noto Serif TC","Songti TC","PMingLiU",serif;line-height:1.3;margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+
+/* Hero */
+header.hero{padding:56px 0 36px;border-bottom:1px solid var(--rule)}
+.hero h1{font-size:clamp(34px,6vw,60px);font-weight:900;letter-spacing:.02em}
+.hero p.lead{max-width:36em;color:var(--muted);margin:18px 0 0;font-size:17px}
+.tiers{display:flex;gap:0;margin-top:30px;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--card)}
+.tiers div{flex:1;padding:14px 16px;border-right:1px solid var(--rule)}
+.tiers div:last-child{border-right:0}
+.tiers b{display:block;font-size:15px}
+.tiers span{font-size:13.5px;color:var(--muted)}
+@media (max-width:640px){.tiers{flex-direction:column}.tiers div{border-right:0;border-bottom:1px solid var(--rule)}.tiers div:last-child{border-bottom:0}}
+
+/* Section heading */
+section{padding:44px 0}
+section>h2{font-size:clamp(24px,3.4vw,32px);font-weight:900}
+section>p.sub{color:var(--muted);margin:8px 0 22px;max-width:40em}
+
+/* Domain map */
+.map{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:760px){.map{grid-template-columns:1fr}}
+.domain{border-top:5px solid var(--c);background:var(--card);padding:18px 18px 12px;border-radius:0 0 8px 8px}
+.domain h3{font-size:20px;color:var(--c)}
+.domain p{font-size:14px;color:var(--muted);margin:4px 0 12px}
+.domain ul{list-style:none;padding:0;margin:0}
+.domain li a{display:flex;justify-content:space-between;gap:8px;padding:9px 0;border-top:1px solid var(--rule);text-decoration:none}
+.domain li a:hover{color:var(--c)}
+.domain li small{color:var(--muted);font-size:12.5px}
+
+/* Skill modules */
+.skill{background:var(--card);border-left:6px solid var(--c);border-radius:4px 10px 10px 4px;margin:0 0 18px}
+.skill>summary{list-style:none;cursor:pointer;padding:20px 22px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.skill>summary::-webkit-details-marker{display:none}
+.skill .no{font-family:"Noto Serif TC",serif;font-weight:900;font-size:28px;color:var(--c);min-width:1.6em}
+.skill h3{font-size:22px}
+.skill .en{color:var(--muted);font-size:14px}
+.skill .toggle{margin-left:auto;font-size:13px;color:var(--c);border:1px solid var(--c);border-radius:99px;padding:2px 12px}
+.skill[open] .toggle::after{content:"收合"} .skill:not([open]) .toggle::after{content:"展開"}
+.body{padding:0 22px 24px 22px}
+.def{font-size:16.5px;margin:0 0 18px;padding:12px 16px;background:var(--bg);border-radius:6px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+.body h4{font-size:15px;margin:18px 0 8px;color:var(--c)}
+.body ul{margin:0;padding-left:1.2em}
+.body li{margin:4px 0}
+.ladder{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--rule);border-radius:8px;overflow:hidden;margin-top:6px}
+@media (max-width:760px){.ladder{grid-template-columns:1fr}}
+.ladder>div{padding:14px 16px;border-right:1px solid var(--rule)}
+.ladder>div:last-child{border-right:0}
+@media (max-width:760px){.ladder>div{border-right:0;border-bottom:1px solid var(--rule)}.ladder>div:last-child{border-bottom:0}}
+.ladder b{display:block;font-size:14.5px;margin-bottom:4px}
+.ladder b small{font-weight:400;color:var(--muted)}
+.ladder ul{font-size:14.5px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.tools li{font-size:13.5px;border:1px solid var(--rule);border-radius:6px;padding:4px 10px;margin:0}
+.scene{border:1px dashed var(--c);border-radius:8px;padding:12px 16px;font-size:15px}
+
+/* Assessment */
+.assess{background:var(--card);border-radius:10px;padding:20px}
+.row{display:grid;grid-template-columns:11em 1fr 2.4em;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--rule)}
+.row:last-of-type{border-bottom:0}
+.row label{font-size:15px}
+.row output{font-weight:700;text-align:right}
+input[type=range]{width:100%;accent-color:var(--c)}
+@media (max-width:520px){.row{grid-template-columns:1fr 2.4em}.row label{grid-column:1/-1}}
+.result{margin-top:16px;padding:14px 16px;border-radius:8px;background:var(--paper);font-size:15px}
+.btn{font:inherit;font-size:14px;border:1px solid var(--rule);background:transparent;color:var(--ink);padding:6px 14px;border-radius:6px;cursor:pointer;margin-top:12px}
+
+/* Plan table */
+.tablewrap{overflow-x:auto;background:var(--card);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:14.5px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:"Noto Serif TC",serif;font-size:15px}
+td:first-child{white-space:nowrap;font-weight:700}
+
+footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px;border-top:1px solid var(--rule)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <h1>主管12項核心能力<br>培養手冊</h1>
+  <p class="lead">將12項管理能力分為思考決策、人際溝通、管理執行三大面向，每項能力依基礎、進階、精熟三階設計培養路徑，搭配工具框架、公部門情境演練與行為檢核指標，可直接作為個人發展計畫（Individual Development Plan, IDP）或單位培訓教材。</p>
+  <div class="tiers" aria-label="三階培養架構">
+    <div><b>基礎｜知道</b><span>理解概念，能在指導下運用工具</span></div>
+    <div><b>進階｜做到</b><span>於日常業務穩定展現，形成習慣</span></div>
+    <div><b>精熟｜帶人</b><span>能示範、教導並建立制度化機制</span></div>
+  </div>
+</header>
+
+<section id="map">
+  <h2>能力架構</h2>
+  <p class="sub">點選能力名稱可直接跳至該模組。建議先完成下方自評，再依分數最低的三項排定優先順序。</p>
+  <div class="map" id="mapGrid"></div>
+</section>
+
+<section id="modules">
+  <h2>培養模組</h2>
+  <p class="sub">每一模組包含：定義、關鍵行為、三階培養方式、工具框架、情境演練、檢核指標。</p>
+  <div id="skillList"></div>
+</section>
+
+<section id="assess">
+  <h2>能力自評</h2>
+  <p class="sub">1分為尚未具備，5分為可教導他人。分數僅儲存於本裝置瀏覽器。</p>
+  <div class="assess" id="assessBox"></div>
+</section>
+
+<section id="plan">
+  <h2>12週培養計畫</h2>
+  <p class="sub">以每週一項主題、每四週一次回顧為節奏；可依自評結果調整順序。</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>週次</th><th>主題能力</th><th>本週行動</th><th>產出證據</th></tr></thead>
+    <tbody id="planBody"></tbody>
+  </table>
+  </div>
+</section>
+
+<section id="method">
+  <h2>培養原則</h2>
+  <div class="cols">
+    <div>
+      <h3 style="font-size:18px;margin-bottom:6px">70-20-10學習法則</h3>
+      <ul>
+        <li>70%：工作中實作——承辦專案、主持會議、處理陳情與跨機關協調。</li>
+        <li>20%：向人學習——主管回饋、同儕觀摩、導師（Mentor）對談。</li>
+        <li>10%：正式課程——公務人力發展學院課程、閱讀、研討會。</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-size:18px;margin-bottom:6px">行動後回顧（After Action Review, AAR）</h3>
+      <ul>
+        <li>預期發生什麼？</li>
+        <li>實際發生什麼？</li>
+        <li>差異原因為何？</li>
+        <li>下次維持什麼、改進什麼？</li>
+      </ul>
+      <p style="font-size:14.5px;color:var(--muted);margin:8px 0 0">每項重要任務結束後以10分鐘完成，累積為個人能力發展紀錄。</p>
+    </div>
+  </div>
+</section>
+
+<footer>資料來源：依「12 Skills Every Successful Boss Must Have」（Management Consulting Industrielle）能力項目延伸編撰培養方式。</footer>
+</div>
+
+<script>
+const D = {
+  think:{name:"思考決策",desc:"看清問題、做出判斷、預見未來",c:"var(--think)",bg:"var(--think-bg)"},
+  people:{name:"人際溝通",desc:"傳遞訊息、理解人心、凝聚團隊",c:"var(--people)",bg:"var(--people-bg)"},
+  exec:{name:"管理執行",desc:"分配責任、掌握時間、培育人才",c:"var(--exec)",bg:"var(--exec-bg)"}
+};
+const S = [
+{zh:"清楚溝通",en:"Clear Communication",d:"people",
+ def:"以對方能理解、能行動的方式傳遞訊息，確保目標、期限與標準無歧義。",
+ beh:["開場先講結論與請求","交辦事項講明目的、期限、完成標準","會後以書面確認共識"],
+ lv:[["學習結論先行（Bottom Line Up Front, BLUF）撰寫簽呈與Email","每次交辦後請對方複述重點"],
+     ["會議前發送議程與預期決議","簡報採「一頁一訊息」原則，重練3分鐘電梯簡報"],
+     ["建立單位公文與簡報寫作範本","帶領同仁進行簡報演練並給予回饋"]],
+ tools:["BLUF結論先行","金字塔原理（Pyramid Principle）","5W2H","複述確認（Read-back）"],
+ scene:"長官臨時要求3分鐘說明年度計畫執行進度：以「結論—三項重點—需裁示事項」結構口頭報告。",
+ kpi:["交辦事項重工率下降","簽呈一次核可比例","會議紀錄於24小時內發出"]},
+{zh:"決策能力",en:"Decision-Making",d:"think",
+ def:"在資訊不完整與時間壓力下，權衡選項、做出判斷並承擔結果。",
+ beh:["區分可逆與不可逆決策，採不同速度","決策前列出至少兩個方案與風險","明確宣告決定與決策依據"],
+ lv:[["每項決策寫下選項、標準與理由（決策日誌）","學習觀察—判斷—決定—行動循環（OODA Loop）"],
+     ["重大決策前執行事前驗屍（Pre-mortem）","運用決策矩陣加權評分"],
+     ["建立單位授權分層與決策權責表","定期檢討決策日誌，分析判斷偏誤"]],
+ tools:["OODA循環","決策矩陣","事前驗屍（Pre-mortem）","RAPID決策權責"],
+ scene:"預算執行率落後需調整科目：列出流用、延後採購、追加需求三方案，評估法規限制與影響後提出建議。",
+ kpi:["決策平均前置時間","決策後修正次數","決策依據紀錄完整度"]},
+{zh:"情緒智商",en:"Emotional Intelligence",d:"people",
+ def:"覺察並管理自身情緒，理解他人感受，並據以調整互動方式。",
+ beh:["壓力下先停頓再回應","能說出同仁當下的狀態與需求","批評事件而非批評人"],
+ lv:[["每日記錄一次情緒觸發事件與反應","練習「暫停6秒」再回應"],
+     ["一對一面談時運用積極傾聽與情緒標註","請信任同仁回饋自己在壓力下的表現"],
+     ["建立團隊心理安全（Psychological Safety）機制","於重大事件後主持團隊減壓與關懷"]],
+ tools:["Goleman情緒智商四象限","積極傾聽","情緒標註（Labeling）","360度回饋"],
+ scene:"同仁因承辦案件遭議員質詢而情緒低落：先肯定其付出，再共同釐清事實與後續回應。",
+ kpi:["360度回饋中「可親近性」分數","同仁主動回報問題頻率","衝突升高事件次數"]},
+{zh:"授權",en:"Delegation",d:"exec",
+ def:"將適當的任務與決策權交付給合適的人，並提供資源與支持，而非事必躬親。",
+ beh:["依能力與意願決定授權程度","授權時給予權限而不只給工作","以檢查點追蹤而非全程監控"],
+ lv:[["盤點自身工作，標示可授權項目","學習依對象成熟度調整授權層級"],
+     ["每月至少授權一項具挑戰性任務","以RACI表釐清專案角色"],
+     ["建立職務代理與知識交接制度","培養可獨立承辦主要業務的接班人選"]],
+ tools:["授權層級（Delegation Poker 7級）","RACI責任矩陣","情境領導（Situational Leadership）"],
+ scene:"研討會籌辦：將場地、講者聯繫、議程手冊分別授權，設定每週進度檢查點，自己專注於長官與外賓協調。",
+ kpi:["主管親辦事務比例下降","同仁獨立完成任務數","專案延誤原因中「等主管」比例"]},
+{zh:"問題解決",en:"Problem-Solving",d:"think",
+ def:"界定真正的問題、找出根本原因、提出可執行的解決方案並驗證成效。",
+ beh:["先界定問題再討論解法","以資料而非印象判斷原因","解法附帶驗證方式"],
+ lv:[["以5個為什麼（5 Whys）分析一件業務問題","學習魚骨圖整理原因"],
+     ["用A3報告撰寫問題分析與對策","以PDCA循環追蹤改善成效"],
+     ["帶領跨單位根本原因分析（Root Cause Analysis, RCA）","將改善成果轉為標準作業程序（SOP）"]],
+ tools:["5 Whys","魚骨圖","A3報告","PDCA循環","RCA根本原因分析"],
+ scene:"各縣市救護紀錄表填報完整率偏低：蒐集數據、分析原因（表單設計、訓練、稽核），提出對策並設定追蹤指標。",
+ kpi:["同類問題再發生率","改善方案完成率","問題分析附數據比例"]},
+{zh:"時間管理",en:"Time Management",d:"exec",
+ def:"依重要性與緊急性分配時間，保護高價值工作，避免被瑣事與干擾吞沒。",
+ beh:["每日開始前確認三件最重要的事","為重要工作預留整段時間","能拒絕或延後低價值請求"],
+ lv:[["連續兩週記錄時間使用","以艾森豪矩陣分類待辦事項"],
+     ["每週規劃，行事曆預留深度工作時段","會議設定時限與明確產出"],
+     ["建立單位年度工作行事曆與里程碑","精簡不必要的會議與報表"]],
+ tools:["艾森豪矩陣","時間區塊（Time Blocking）","每週回顧","2分鐘法則"],
+ scene:"預算編列、國際研討會、採購案同時進行：排出關鍵路徑，將預算與採購法定期限列為不可移動區塊。",
+ kpi:["重要事項準時完成率","每週深度工作時數","臨時救火事件占比"]},
+{zh:"策略思考",en:"Strategic Thinking",d:"think",
+ def:"跳脫日常事務，看見長期趨勢與整體系統，將資源投注於最具影響力之處。",
+ beh:["將任務連結至機關中長程目標","主動掃描外部趨勢與國際做法","能說明「不做什麼」"],
+ lv:[["每月閱讀一份國際政策報告或研究","以SWOT分析自己負責的業務"],
+     ["運用情境規劃（Scenario Planning）推演三種未來","以邏輯模型（Logic Model）連結投入與成果"],
+     ["主導中長程計畫規劃與績效指標設計","建立政策研究與國際比較機制"]],
+ tools:["SWOT","PESTEL","情境規劃","邏輯模型","平衡計分卡（Balanced Scorecard）"],
+ scene:"規劃未來五年到院前救護發展：盤點人口高齡化、災害韌性、國際制度趨勢，提出三項優先投資方向。",
+ kpi:["計畫目標與上位政策連結度","年度計畫中長期項目比例","提出的政策建議獲採納數"]},
+{zh:"衝突處理",en:"Conflict Resolution",d:"people",
+ def:"及早辨識分歧，聚焦利益而非立場，引導各方達成可接受的共識。",
+ beh:["及早處理而非迴避衝突","分辨立場與背後利益","以共同目標重新框定議題"],
+ lv:[["完成Thomas-Kilmann衝突模式自評","練習以「我觀察到…」陳述事實"],
+     ["運用原則式談判（Principled Negotiation）處理跨單位爭議","會前先與關鍵利害關係人個別溝通"],
+     ["擔任跨機關協調主持人","建立爭議處理與升級機制"]],
+ tools:["Thomas-Kilmann衝突模式（TKI）","原則式談判","利害關係人分析","BATNA最佳替代方案"],
+ scene:"跨部會就訓練經費分攤意見分歧：先釐清各方核心關切（預算限制、權責、績效），再提出分階段分攤方案。",
+ kpi:["衝突升級至上級處理次數","協調會議達成共識比例","合作單位關係滿意度"]},
+{zh:"激勵",en:"Motivation",d:"people",
+ def:"理解同仁的內在動機，營造意義感、成長感與歸屬感，使團隊願意投入。",
+ beh:["具體且即時地肯定貢獻","讓同仁理解工作的意義與影響","依個人動機提供發展機會"],
+ lv:[["學習自我決定論（Self-Determination Theory）三要素","每週至少具體表揚一次"],
+     ["與每位同仁討論個人職涯目標","以成果故事連結工作意義"],
+     ["建立團隊表揚與成長機制","打造有共同使命的團隊文化"]],
+ tools:["自我決定論（自主、勝任、歸屬）","具體表揚公式（行為＋影響）","職涯對談"],
+ scene:"長期承辦繁重業務的同仁出現倦怠：一對一了解其動機，調整任務組合並爭取訓練或出國交流機會。",
+ kpi:["同仁留任與請調率","主動提案數","團隊敬業度調查分數"]},
+{zh:"適應力",en:"Adaptability",d:"think",
+ def:"面對政策、組織與環境變動時，快速調整思維與做法，並帶領團隊穩定前進。",
+ beh:["視變化為資訊而非威脅","快速調整計畫並清楚說明原因","主動學習新工具與新知"],
+ lv:[["每季學習一項新工具或新方法","檢視自己面對變化的第一反應"],
+     ["為重要計畫準備備案（Plan B）","以小規模試行驗證新做法"],
+     ["帶領團隊導入變革並管理抗拒","建立持續學習與試驗文化"]],
+ tools:["Kotter變革八步驟","ADKAR變革模型","快速試行（Pilot）"],
+ scene:"年度預算遭刪減20%：48小時內重排優先順序，保留核心項目，並向團隊說明調整邏輯。",
+ kpi:["計畫變更後恢復時間","新方法導入數","團隊對變革的配合度"]},
+{zh:"當責",en:"Accountability",d:"exec",
+ def:"對結果負起完全責任，言出必行，並建立團隊互相承諾、公開追蹤的機制。",
+ beh:["承諾事項準時完成或提前告知","出錯時先承擔再分析","以可衡量指標追蹤進度"],
+ lv:[["建立個人承諾清單並每週檢視","出錯時練習「事實—影響—補救」回報"],
+     ["專案設定目標與關鍵結果（OKR）","定期公開檢視團隊進度"],
+     ["建立單位績效管考與回饋制度","以身作則形成當責文化"]],
+ tools:["OKR目標與關鍵結果","當責階梯（Steps to Accountability）","管考追蹤表"],
+ scene:"採購案因規格疏漏遭廠商異議：主動向長官報告原因與補救措施，並修正規格審查檢核表防止再發生。",
+ kpi:["承諾事項準時完成率","管考項目落後比例","問題主動通報時效"]},
+{zh:"教練與輔導",en:"Coaching & Mentoring",d:"exec",
+ def:"透過提問與回饋協助同仁自我發現與成長，並以經驗傳承培育未來人才。",
+ beh:["先問問題而非直接給答案","定期提供具體回饋","有系統地安排同仁學習機會"],
+ lv:[["學習GROW教練模型","練習SBI回饋法（情境—行為—影響）"],
+     ["每月與每位同仁進行一對一面談","為關鍵同仁擬定個人發展計畫（IDP）"],
+     ["建立單位導師制度與新進人員輔導","培養可接任主管職務的人才"]],
+ tools:["GROW模型","SBI回饋法","個人發展計畫（IDP）","強力提問清單"],
+ scene:"新進同仁首次承辦採購案：以GROW模型引導其自行規劃流程，關鍵節點提供回饋，結案後共同做AAR。",
+ kpi:["一對一面談執行率","同仁能力等級提升數","接班人選準備度"]}
+];
+
+const cOf = s => D[s.d].c, bgOf = s => D[s.d].bg;
+
+// Map
+document.getElementById("mapGrid").innerHTML = Object.entries(D).map(([k,v])=>`
+  <div class="domain" style="--c:${v.c}">
+    <h3>${v.name}</h3><p>${v.desc}</p>
+    <ul>${S.map((s,i)=>s.d===k?`<li><a href="#s${i+1}" onclick="document.getElementById('s${i+1}').open=true">${i+1}. ${s.zh}<small>${s.en}</small></a></li>`:"").join("")}</ul>
+  </div>`).join("");
+
+// Modules
+const lvName=[["基礎","知道"],["進階","做到"],["精熟","帶人"]];
+document.getElementById("skillList").innerHTML = S.map((s,i)=>`
+<details class="skill" id="s${i+1}" style="--c:${cOf(s)};--bg:${bgOf(s)}" ${i===0?"open":""}>
+  <summary><span class="no">${i+1}</span><h3>${s.zh}</h3><span class="en">${s.en}｜${D[s.d].name}</span><span class="toggle"></span></summary>
+  <div class="body">
+    <p class="def">${s.def}</p>
+    <h4>關鍵行為</h4>
+    <ul>${s.beh.map(b=>`<li>${b}</li>`).join("")}</ul>
+    <h4>三階培養方式</h4>
+    <div class="ladder">${s.lv.map((l,j)=>`<div><b>${lvName[j][0]} <small>${lvName[j][1]}</small></b><ul>${l.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("")}</div>
+    <div class="cols">
+      <div><h4>工具框架</h4><ul class="tools">${s.tools.map(t=>`<li>${t}</li>`).join("")}</ul>
+           <h4>檢核指標</h4><ul>${s.kpi.map(k=>`<li>${k}</li>`).join("")}</ul></div>
+      <div><h4>情境演練</h4><div class="scene">${s.scene}</div></div>
+    </div>
+  </div>
+</details>`).join("");
+
+// Assessment
+const KEY="boss12-scores";
+let scores; try{scores=JSON.parse(localStorage.getItem(KEY))||null}catch(e){scores=null}
+if(!Array.isArray(scores)||scores.length!==12) scores=Array(12).fill(3);
+const box=document.getElementById("assessBox");
+box.innerHTML = S.map((s,i)=>`
+  <div class="row" style="--c:${cOf(s)}">
+    <label for="r${i}">${i+1}. ${s.zh}</label>
+    <input type="range" id="r${i}" min="1" max="5" step="1" value="${scores[i]}">
+    <output id="o${i}">${scores[i]}</output>
+  </div>`).join("") + `<div class="result" id="result" aria-live="polite"></div><button class="btn" id="reset" type="button">重設分數</button>`;
+function render(){
+  const idx=[...scores.keys()].sort((a,b)=>scores[a]-scores[b]).slice(0,3);
+  const avg=(scores.reduce((a,b)=>a+b,0)/12).toFixed(1);
+  const dom=Object.entries(D).map(([k,v])=>{const arr=S.map((s,i)=>s.d===k?scores[i]:null).filter(x=>x!==null);return `${v.name} ${(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1)}`}).join("，");
+  document.getElementById("result").innerHTML=`平均 <b>${avg}</b> 分；面向平均：${dom}。<br>優先培養：${idx.map(i=>`<a href="#s${i+1}" onclick="document.getElementById('s${i+1}').open=true">${S[i].zh}</a>`).join("、")}。`;
+}
+S.forEach((_,i)=>{document.getElementById("r"+i).addEventListener("input",e=>{scores[i]=+e.target.value;document.getElementById("o"+i).textContent=scores[i];try{localStorage.setItem(KEY,JSON.stringify(scores))}catch(e){}render()})});
+document.getElementById("reset").addEventListener("click",()=>{scores=Array(12).fill(3);S.forEach((_,i)=>{document.getElementById("r"+i).value=3;document.getElementById("o"+i).textContent=3});try{localStorage.removeItem(KEY)}catch(e){}render()});
+render();
+
+// Plan
+const P=[
+["第1週","時間管理","記錄兩週時間使用，以艾森豪矩陣分類","時間紀錄表"],
+["第2週","清楚溝通","所有簽呈與Email改採BLUF結構","修改前後範例3份"],
+["第3週","授權","盤點可授權工作，選一項以RACI交付","RACI表"],
+["第4週","回顧","以AAR檢視前三週，請同仁回饋","AAR紀錄"],
+["第5週","決策能力","開始決策日誌，重大案件做事前驗屍","決策日誌"],
+["第6週","問題解決","選一項業務問題完成A3報告","A3報告1份"],
+["第7週","情緒智商","記錄情緒觸發事件，練習暫停回應","情緒日誌"],
+["第8週","回顧","邀請3位同仁進行簡易360度回饋","回饋摘要"],
+["第9週","教練與輔導／激勵","與每位同仁一對一面談，運用GROW與SBI","面談紀錄與IDP"],
+["第10週","衝突處理","針對一項跨單位議題完成利害關係人分析","分析表與協調方案"],
+["第11週","策略思考／適應力","完成業務SWOT與三情境推演，備妥備案","策略一頁摘要"],
+["第12週","當責／總回顧","設定下一季OKR，重新完成自評","OKR表與自評對照"]];
+document.getElementById("planBody").innerHTML=P.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("");
+</script>
+</body>
+</html>

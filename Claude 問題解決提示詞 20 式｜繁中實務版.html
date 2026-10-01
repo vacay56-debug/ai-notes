@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Claude 問題解決提示詞 20 式｜繁中實務版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3F5F8; --surface:#FFFFFF; --ink:#1B2538; --muted:#5B6576; --line:#D8DEE7;
+  --accent:#0E6E74; --accent-soft:#E2F1F1; --slot-bg:#FDF0D5; --slot-ink:#8A4B08;
+  --warn-bg:#FFF4E5; --warn-line:#E8A33D;
+  --c1:#0E6E74; --c2:#2F5DA8; --c3:#6A4BA0; --c4:#B23A48; --c5:#5A7A2E;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#11161F; --surface:#1A2130; --ink:#E6EAF1; --muted:#9AA4B5; --line:#2C3547;
+    --accent:#4FB8BE; --accent-soft:#16333A; --slot-bg:#3A2C12; --slot-ink:#F4C877;
+    --warn-bg:#2E2414; --warn-line:#C98A2B;
+    --c1:#4FB8BE; --c2:#7CA3E6; --c3:#A98AE0; --c4:#E77B88; --c5:#9CC266;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#11161F; --surface:#1A2130; --ink:#E6EAF1; --muted:#9AA4B5; --line:#2C3547;
+  --accent:#4FB8BE; --accent-soft:#16333A; --slot-bg:#3A2C12; --slot-ink:#F4C877;
+  --warn-bg:#2E2414; --warn-line:#C98A2B;
+  --c1:#4FB8BE; --c2:#7CA3E6; --c3:#A98AE0; --c4:#E77B88; --c5:#9CC266;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  font-size:16px;line-height:1.75}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+header.hero{padding:56px 0 28px;border-bottom:1px solid var(--line)}
+.hero h1{font-family:"Noto Serif TC","PMingLiU",serif;font-weight:900;
+  font-size:clamp(2rem,6vw,3.4rem);line-height:1.2;margin:0 0 14px;letter-spacing:.02em}
+.hero h1 small{display:block;font-size:.42em;font-weight:600;color:var(--muted);margin-top:8px;letter-spacing:.04em}
+.hero p{max-width:40em;margin:0;color:var(--muted)}
+.formula{margin:26px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.formula div{background:var(--surface);padding:14px 16px}
+.formula b{display:block;font-size:.95rem}
+.formula span{font-size:.86rem;color:var(--muted)}
+
+nav.filter{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);
+  padding:12px 0;border-bottom:1px solid var(--line)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.chip{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);
+  font:inherit;font-size:.9rem;padding:6px 14px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip:focus-visible,.copy:focus-visible,.theme:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+section.group{padding:36px 0 8px}
+.group h2{font-family:"Noto Serif TC",serif;font-weight:600;font-size:1.45rem;margin:0 0 4px;
+  padding-left:14px;border-left:5px solid var(--gc)}
+.group > p{margin:0 0 18px 19px;color:var(--muted);font-size:.93rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin-bottom:14px;
+  display:grid;grid-template-columns:64px 1fr}
+.num{font-family:"Noto Serif TC",serif;font-weight:900;font-size:1.6rem;color:var(--gc);
+  text-align:center;padding-top:16px;border-right:1px solid var(--line)}
+.body{padding:16px 18px 18px;min-width:0}
+.title{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-bottom:6px}
+.title h3{margin:0;font-size:1.08rem}
+.title .en{font-size:.82rem;color:var(--muted)}
+.use{margin:0 0 10px;font-size:.92rem;color:var(--muted)}
+.prompt{position:relative;background:var(--paper);border-radius:8px;padding:12px 14px 12px;
+  font-size:.95rem;line-height:1.85;border:1px solid var(--line)}
+.slot{background:var(--slot-bg);color:var(--slot-ink);border-radius:4px;padding:0 3px;font-weight:500;white-space:nowrap}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap}
+.ems{font-size:.88rem;color:var(--muted);margin:0;flex:1 1 320px}
+.ems b{color:var(--ink);font-weight:500}
+.copy{flex:none;font:inherit;font-size:.86rem;padding:6px 14px;border-radius:6px;cursor:pointer;
+  border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent)}
+.copy.done{background:var(--accent);color:var(--surface)}
+.note{background:var(--warn-bg);border-left:4px solid var(--warn-line);border-radius:6px;
+  padding:10px 14px;font-size:.88rem;margin:0 0 10px}
+
+.guide{padding:40px 0 20px;border-top:1px solid var(--line);margin-top:28px}
+.guide h2{font-family:"Noto Serif TC",serif;font-size:1.45rem;margin:0 0 14px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--paper);font-weight:700}
+tr:last-child td{border-bottom:0}
+.tips{margin:22px 0 0;padding-left:1.2em}
+.tips li{margin-bottom:8px}
+footer{padding:28px 0 48px;color:var(--muted);font-size:.84rem;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.theme{font:inherit;font-size:.84rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;padding:4px 12px;cursor:pointer}
+.hidden{display:none}
+@media (max-width:560px){
+  .card{grid-template-columns:44px 1fr}
+  .num{font-size:1.25rem;padding-top:16px}
+  .body{padding:14px 14px 16px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="hero wrap">
+  <h1>Claude 問題解決提示詞 20 式<small>繁體中文實務版｜依用途分類・可一鍵複製</small></h1>
+  <p>原始資料為英文資訊圖「20 Claude Prompts for Problem-Solving」。本頁將 20 組提示詞改寫為繁體中文可填寫範本，依使用情境分為五類，並附到院前緊急救護（Emergency Medical Services, EMS）政策業務之套用示例。黃底【　】處為需自行填入之欄位。</p>
+  <div class="formula" aria-label="提示詞共通結構">
+    <div><b>1　交代情境</b><span>問題、背景、目標</span></div>
+    <div><b>2　提供素材</b><span>已知事實、限制、已試方法</span></div>
+    <div><b>3　指定思考法</b><span>五個為什麼、第一原理、情境推演等</span></div>
+    <div><b>4　規定產出</b><span>方案數量、排序依據、建議結論</span></div>
+  </div>
+</header>
+
+<nav class="filter" aria-label="分類篩選">
+  <div class="wrap chips" id="chips">
+    <button class="chip" aria-pressed="true" data-f="all">全部 20 式</button>
+    <button class="chip" aria-pressed="false" data-f="g1">找出問題根源</button>
+    <button class="chip" aria-pressed="false" data-f="g2">決策與取捨</button>
+    <button class="chip" aria-pressed="false" data-f="g3">規劃與執行</button>
+    <button class="chip" aria-pressed="false" data-f="g4">風險與預判</button>
+    <button class="chip" aria-pressed="false" data-f="g5">換個角度思考</button>
+  </div>
+</nav>
+
+<main class="wrap" id="main"></main>
+
+<section class="guide wrap" aria-labelledby="g-h">
+  <h2 id="g-h">情境速查與組合用法</h2>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>當下處境</th><th>建議提示詞</th><th>組合順序</th></tr></thead>
+      <tbody>
+        <tr><td>問題反覆發生、原因不明</td><td>1 根本原因分析、15 回饋迴路診斷</td><td>1 → 15 → 11</td></tr>
+        <tr><td>兩案擇一、需向長官報告</td><td>2 決策框架、9 取捨導航、5 魔鬼代言人審查</td><td>9 → 2 → 5</td></tr>
+        <tr><td>新制度或新計畫規劃</td><td>12 第一原理拆解、16 移除限制思想實驗、4 逐步計畫建構</td><td>12 → 16 → 4 → 11</td></tr>
+        <tr><td>政策上路前風險評估</td><td>7 情境規劃、11 失效模式對應、19 二階思考</td><td>7 → 11 → 19</td></tr>
+        <tr><td>跨機關意見分歧</td><td>17 利害關係人衝突化解、8 專家視角模擬</td><td>17 → 8 → 2</td></tr>
+        <tr><td>業務量爆量、期限逼近</td><td>13 高壓下的優先排序、18 複雜度簡化</td><td>18 → 13</td></tr>
+        <tr><td>專案結束或事件後檢討</td><td>20 事後檢討、1 根本原因分析</td><td>20 → 1 → 4</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ol class="tips">
+    <li>欄位填得越具體，產出越精準：數字、期程、法規條號、既有做法都應寫明。</li>
+    <li>需要引用國外制度或數據時，另加一句「請註明資料來源，無法確認者請標示待查證」。</li>
+    <li>涉及公務機敏資料時，先去識別化（機關名稱、人名、金額可以代號取代）再輸入。</li>
+    <li>產出後可接續要求「改寫為簽稿說明段」或「整理為簡報大綱」，直接銜接公文與簡報作業。</li>
+  </ol>
+</section>
+
+<footer class="wrap">
+  <span>資料來源：資訊圖「20 Claude Prompts for Problem-Solving」，繁中改寫整理。</span>
+  <button class="theme" id="theme">切換深淺色</button>
+</footer>
+
+<script>
+const groups = [
+  {id:"g1", name:"找出問題根源", desc:"問題看得到症狀、找不到原因時使用。", color:"var(--c1)", items:[1,3,10,15]},
+  {id:"g2", name:"決策與取捨", desc:"面臨方案選擇、需說明取捨理由時使用。", color:"var(--c2)", items:[2,5,9,17]},
+  {id:"g3", name:"規劃與執行", desc:"目標已定，需要落地步驟與排序時使用。", color:"var(--c3)", items:[4,6,13,18]},
+  {id:"g4", name:"風險與預判", desc:"執行前預想失敗、執行後檢討改進時使用。", color:"var(--c4)", items:[7,11,19,20]},
+  {id:"g5", name:"換個角度思考", desc:"慣性思維卡住、需要新解法時使用。", color:"var(--c5)", items:[8,12,14,16]}
+];
+
+const P = {
+1:{zh:"根本原因分析",en:"Root Cause Analysis",use:"問題反覆出現，想找出真正根源而非處理表象。",
+ t:"我遇到的問題是：【問題描述】。發生頻率為【頻率】，約自【起始時間】開始出現。請以「五個為什麼」逐層追溯根本原因，再提出 3 個能解決根源、而非只處理症狀的方案。",
+ ems:"各縣市救護技術員（Emergency Medical Technician, EMT）複訓完訓率連續兩年未達目標。"},
+2:{zh:"決策框架",en:"Decision Framework",use:"兩案擇一，需要結構化比較並給出建議。",
+ t:"我需要在【方案 A】與【方案 B】之間做選擇。目標是【目標】。限制條件：【限制】。風險：【風險】。請比較兩案取捨、建議較佳方案，並指出哪些資訊若改變會翻轉此建議。",
+ ems:"戰術緊急傷患救護（Tactical Emergency Casualty Care, TECC）師資採中央統一培訓或委由各縣市自訓。"},
+3:{zh:"卡關問題重構",en:"Stuck Problem Reframe",use:"試過多種方法仍無進展，懷疑問題定義錯誤。",
+ t:"我在【問題】上卡關已【持續時間】。曾嘗試【已試方法】，但因【失敗原因】未能奏效。請挑戰我的假設，判斷我是否在解錯的問題，並提出 3 種重新定義問題的角度，以及各角度可導出的解法。",
+ ems:"推動救護車收費制度多年未獲共識。"},
+4:{zh:"逐步計畫建構",en:"Step-by-Step Plan Builder",use:"目標明確，需要拆成可執行的步驟與時程。",
+ note:"原圖第 4 式內文誤植為第 2 式「決策框架」文字，此處依標題「逐步計畫建構」重新撰寫。",
+ t:"我的目標是【目標】。目前現況：【現況】。可用資源：【人力／經費／工具】。完成期限：【期限】。請將目標拆解為具體步驟，標明每一步的產出、負責角色、完成時點與前後相依關係，並指出關鍵路徑及最可能卡關之處。",
+ ems:"於 6 個月內完成危機介入小組（Crisis Intervention Team, CIT）試辦縣市遴選與首期訓練。"},
+5:{zh:"魔鬼代言人審查",en:"Devil's Advocate Review",use:"決策前想先聽最強的反對意見，找出盲點。",
+ note:"原圖第 5 式內文誤植為第 2 式「決策框架」文字，此處依標題「魔鬼代言人審查」重新撰寫。",
+ t:"我打算採行【計畫或主張】，主要理由是【理由】。請扮演魔鬼代言人，提出最有力的反對論點，揭露我未言明的假設與盲點，說明在哪些情況下此計畫會失敗，最後提出可化解這些質疑的強化版本。",
+ ems:"擬修正《救護技術員管理辦法》，擴大高級救護技術員（EMT-Paramedic, EMT-P）給藥範圍。"},
+6:{zh:"限制條件求解",en:"Constraint Solver",use:"一般解法不適用於自身處境，需在限制內找可行方案。",
+ t:"我想在以下限制下達成【目標】：【限制條件】。多數解法假設【一般假設】，但這不適用於我的情況。請提出 3 個在我的限制內可行的方案，依可行性排序，並說明各方案的取捨。",
+ ems:"偏鄉消防分隊人力不足，一般假設「增聘人員」不可行，仍需提升到院前心肺復甦成功率。"},
+7:{zh:"情境規劃",en:"Scenario Planning",use:"不確定因素多，需預先準備多種應對。",
+ t:"問題：【問題】。主要未知數：【變數】。請描述最佳、最可能及最壞三種結果，分別提出對應作為，並設計一套在三種情境下都能站得住腳的策略。",
+ ems:"韌性國家醫療整備計畫明年度預算可能遭刪減 0%、20% 或 40%。"},
+8:{zh:"專家視角模擬",en:"Expert Perspective Simulation",use:"想從多個專業角度檢視問題，再整合成一個建議。",
+ t:"問題：【問題描述】。背景：【產業或情境】。請模擬【專家 1】、【專家 2】、【專家 3】分別如何界定與解決此問題，最後整合三方最有價值的見解，提出一個整合性建議。",
+ ems:"以急診醫師、消防指揮官、衛生法規學者三方視角，檢視院前輸血制度導入。"},
+9:{zh:"取捨導航",en:"Trade-off Navigator",use:"多個選項、多項考量，需要逐一比對優先順序。",
+ t:"決策事項：【決策】。優先考量（3 至 5 項）：【考量因素】。選項：【選項清單】。請將各選項與我的優先考量逐一比對，點出主要取捨與我可能犧牲的部分，再建議最符合目標的選項。",
+ ems:"年度教材採購：自行編撰、翻譯授權國際教材或委外製作，考量成本、時效、品質、智財權。"},
+10:{zh:"資訊缺口辨識",en:"Information Gap Identifier",use:"資訊不完整仍須決策，想知道該先補哪些資料。",
+ t:"問題：【問題描述】。已知事實：【已知資訊】。不確定之處：【資訊缺口】。請依影響程度排序這些缺口，說明各缺口的補足方式，並依現有資訊提出目前最佳決策。",
+ ems:"評估延長傷患照護（Prolonged Casualty Care, PCC）納入常規訓練，但缺乏國內平時需求數據。"},
+11:{zh:"失效模式對應",en:"Failure Mode Mapping",use:"方案執行中或即將上路，想事先找出可能出錯之處。",
+ t:"我正在執行【方案描述】以解決【問題】。請列出每個階段最可能的失效模式，說明各自的觸發因素、後果，以及我現在可採取的預防或減害措施，並依嚴重程度排序。",
+ ems:"全國 22 個消防機關氰化物解毒劑部署，涵蓋採購、配送、保存、效期管理與現場使用。"},
+12:{zh:"第一原理拆解",en:"First Principles Breakdown",use:"想跳脫既有做法，從根本重新設計解法。",
+ t:"問題：【問題描述】。一般做法是【常規做法】。請以第一原理思考挑戰其背後假設，從最基本的事實重新建構解法，並說明與常規做法的差異及理由。",
+ ems:"救護分級制度長期以訓練時數區分等級，改從「現場需要哪些能力」重新設計。"},
+13:{zh:"高壓下的優先排序",en:"Prioritization Under Pressure",use:"任務多、時間少，需要決定先做、委派或放棄。",
+ t:"我目前手上的任務：【任務清單】。可用時間與資源：【限制】。延誤或失敗的代價：【後果】。請排定優先順序並說明理由，指出哪些可委派或暫緩，並給我接下來【時間範圍】的行動計畫。",
+ ems:"同時進行研討會籌辦、預算編列、採購驗收與立法院質詢資料準備。"},
+14:{zh:"類比問題解決",en:"Analogy-Based Problem Solving",use:"想借鏡其他領域的成功經驗。",
+ t:"問題：【問題描述】。所屬領域：【領域】。請找出 2 至 3 個其他領域的類似挑戰，說明各自的關鍵啟示及如何套用於本問題，最後依最具說服力的類比提出最佳建議。",
+ ems:"借鏡航空業機組資源管理、核電業安全文化，改善救護現場團隊溝通失誤。"},
+15:{zh:"回饋迴路診斷",en:"Feedback Loop Diagnosis",use:"同樣的壞結果一再出現，懷疑是系統性循環。",
+ t:"我的流程一直產生【不良結果】。所屬系統：【系統描述】。已嘗試：【已試方法】。請找出造成此問題的回饋迴路，指出最關鍵的介入點，並建議如何打破循環，而非只修正結果。",
+ ems:"救護人員流動率高，導致資深人員減少、帶訓負擔加重，進而再推高流動率。"},
+16:{zh:"移除限制思想實驗",en:"Constraint Removal Thought Experiment",use:"先想像理想解，再回推現實中能做到多少。",
+ t:"問題：【問題描述】。限制條件：【限制清單】。請先描述不受任何限制下的理想解法，再依我的實際情況調整，分別說明可完全達成、可部分達成及不可行的部分。",
+ ems:"不考慮預算與法規限制，理想的全國到院前救護品質監測系統為何，再回推現行可做範圍。"},
+17:{zh:"利害關係人衝突化解",en:"Stakeholder Conflict Resolution",use:"多方立場衝突，需找出共同利益與折衷方案。",
+ t:"情況：【情況描述】。利害關係人：【關係人清單】。各方訴求：【各方期望】。衝突點：【衝突描述】。請辨識各方立場背後的真正利益，並提出最能同時滿足這些利益的方案。",
+ ems:"衛生福利部、國防部與地方消防局對戰時救護指揮權責分工意見不一。"},
+18:{zh:"複雜度簡化",en:"Complexity Reduction",use:"問題牽涉面太廣，不知從何下手。",
+ t:"問題：【問題描述】。組成要素：【要素清單】。令我感到難以掌握的部分：【描述】。請釐清哪些要素彼此相關、哪些可獨立處理，給我一個簡化模型、一個起手點，以及最佳處理順序。",
+ ems:"《緊急醫療救護法》修法涉及救護分級、醫療指導、收費、資料治理等多項議題。"},
+19:{zh:"二階思考",en:"Second-Order Thinking",use:"方案看似可行，想預見連鎖效應與副作用。",
+ t:"問題：【問題】。計畫：【行動】。預期結果：【成果】。請分析此計畫的第二層與第三層效應，標示重大風險，並提出一個保留效益但更安全的修正版本。",
+ ems:"開放 EMT-P 執行特定侵入性處置，對醫療指導人力、保險責任、訓練需求之連鎖影響。"},
+20:{zh:"事後檢討",en:"Post-Mortem for Future Prevention",use:"事情未如預期，想從中學習並防止再發。",
+ t:"失敗事件：【事件描述】。原本預期：【預期結果】。過程中的決策：【決策清單】。請找出出錯之處、被忽略的預警訊號、錯誤假設，並提出 3 至 5 項防止重演的做法。",
+ ems:"國際研討會報名人數未達預期，檢討宣傳時程、對象設定與議程設計。"}
+};
+
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const markSlots = s => esc(s).replace(/【([^】]*)】/g, '<span class="slot">【$1】</span>');
+
+const main = document.getElementById('main');
+main.innerHTML = groups.map(g => `
+  <section class="group" data-g="${g.id}" style="--gc:${g.color}" aria-labelledby="${g.id}-h">
+    <h2 id="${g.id}-h">${g.name}</h2>
+    <p>${g.desc}</p>
+    ${g.items.map(n => { const p = P[n]; return `
+    <article class="card" id="p${n}">
+      <div class="num" aria-label="第 ${n} 式">${n}</div>
+      <div class="body">
+        <div class="title"><h3>${p.zh}</h3><span class="en">${p.en}</span></div>
+        <p class="use">${p.use}</p>
+        ${p.note ? `<p class="note">${p.note}</p>` : ''}
+        <div class="prompt">${markSlots(p.t)}</div>
+        <div class="row">
+          <p class="ems"><b>EMS 套用示例：</b>${esc(p.ems)}</p>
+          <button class="copy" data-n="${n}">複製提示詞</button>
+        </div>
+      </div>
+    </article>`; }).join('')}
+  </section>`).join('');
+
+async function copyText(text){
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch(e){
+    try {
+      const ta = document.createElement('textarea'); ta.value = text;
+      ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta);
+      ta.select(); const ok = document.execCommand('copy'); ta.remove(); return ok;
+    } catch(e2){ return false; }
+  }
+}
+main.addEventListener('click', async e => {
+  const b = e.target.closest('.copy'); if(!b) return;
+  const ok = await copyText(P[b.dataset.n].t);
+  b.textContent = ok ? '已複製' : '複製失敗，請手動選取';
+  b.classList.toggle('done', ok);
+  setTimeout(() => { b.textContent = '複製提示詞'; b.classList.remove('done'); }, 1800);
+});
+
+document.getElementById('chips').addEventListener('click', e => {
+  const c = e.target.closest('.chip'); if(!c) return;
+  document.querySelectorAll('.chip').forEach(x => x.setAttribute('aria-pressed', x===c));
+  const f = c.dataset.f;
+  document.querySelectorAll('.group').forEach(s => s.classList.toggle('hidden', f!=='all' && s.dataset.g!==f));
+});
+
+const root = document.documentElement;
+try { const t = localStorage.getItem('theme'); if(t) root.dataset.theme = t; } catch(e){}
+document.getElementById('theme').addEventListener('click', () => {
+  const cur = root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  root.dataset.theme = next;
+  try { localStorage.setItem('theme', next); } catch(e){}
+});
+</script>
+</body>
+</html>

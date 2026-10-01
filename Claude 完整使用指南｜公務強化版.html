@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Claude 完整使用指南｜公務強化版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F7F9; --paper:#FFFFFF; --ink:#16233A; --muted:#5A6878; --line:#D9E0E7;
+  --teal:#0D7A78; --teal-soft:#E3F2F1; --amber:#C97F12; --amber-soft:#FBF1E0;
+  --red:#B8343B; --red-soft:#FBE9EA; --navy-soft:#E8EDF5;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1621; --paper:#172231; --ink:#E6ECF3; --muted:#9AA8B8; --line:#2A394C;
+    --teal:#4FC2BE; --teal-soft:#123433; --amber:#F0B24E; --amber-soft:#3A2B12;
+    --red:#EE7A80; --red-soft:#3A1A1D; --navy-soft:#1E2B3E;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1621; --paper:#172231; --ink:#E6ECF3; --muted:#9AA8B8; --line:#2A394C;
+  --teal:#4FC2BE; --teal-soft:#123433; --amber:#F0B24E; --amber-soft:#3A2B12;
+  --red:#EE7A80; --red-soft:#3A1A1D; --navy-soft:#1E2B3E;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased}
+a{color:var(--teal)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* Hero */
+header.hero{padding:48px 0 28px;border-bottom:1px solid var(--line)}
+.hero h1{font-size:clamp(2rem,6vw,3.4rem);font-weight:900;line-height:1.15;margin:0 0 12px;letter-spacing:.01em}
+.hero p.lead{font-size:1.08rem;color:var(--muted);max-width:44em;margin:0}
+.meta{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-size:.82rem;padding:3px 10px;border-radius:4px;background:var(--navy-soft);color:var(--ink)}
+.tag.warn{background:var(--amber-soft);color:var(--amber)}
+
+/* Nav */
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);
+  border-bottom:1px solid var(--line)}
+nav.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
+nav.toc a{flex:none;text-decoration:none;color:var(--muted);font-size:.9rem;padding:6px 12px;border-radius:4px}
+nav.toc a:hover,nav.toc a:focus-visible{background:var(--navy-soft);color:var(--ink)}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+
+/* Sections */
+section{padding:44px 0 8px}
+.sec-head{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:baseline;margin-bottom:20px}
+.sec-no{font-size:2.4rem;font-weight:900;color:var(--teal);line-height:1}
+.sec-head h2{font-size:1.55rem;margin:0;font-weight:900}
+.sec-head p{grid-column:2;margin:0;color:var(--muted);font-size:.95rem}
+
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:20px 22px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+h3{font-size:1.08rem;margin:0 0 6px;font-weight:700}
+.panel p{margin:0;color:var(--muted);font-size:.95rem}
+.panel .use{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:.9rem;color:var(--ink)}
+.panel .use b{color:var(--teal);font-weight:700}
+
+/* Tier ladder */
+.ladder{display:grid;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--paper)}
+.rung{display:grid;grid-template-columns:132px 1fr;border-top:1px solid var(--line)}
+.rung:first-child{border-top:0}
+.rung .lv{padding:16px;font-weight:900;font-size:1.02rem;display:flex;flex-direction:column;justify-content:center}
+.rung .lv small{font-weight:500;font-size:.78rem;color:var(--muted)}
+.rung .body{padding:16px 18px;border-left:1px solid var(--line)}
+.rung .body p{margin:0 0 6px;font-size:.95rem}
+.rung .body .fit{font-size:.88rem;color:var(--muted)}
+.r-myth .lv{background:var(--red-soft);color:var(--red)}
+.r-opus .lv{background:var(--amber-soft);color:var(--amber)}
+.r-son .lv{background:var(--teal-soft);color:var(--teal)}
+.r-hai .lv{background:var(--navy-soft)}
+@media (max-width:560px){.rung{grid-template-columns:1fr}.rung .body{border-left:0;border-top:1px solid var(--line)}}
+
+/* Table */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--paper)}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:.93rem}
+th,td{padding:12px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--navy-soft);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700;white-space:nowrap}
+.note{font-size:.85rem;color:var(--muted);margin:10px 2px 0}
+
+/* Prompt block */
+.prompt{position:relative;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--teal);
+  border-radius:6px;padding:18px 20px;margin-top:14px}
+.prompt pre{margin:0;white-space:pre-wrap;font-family:inherit;font-size:.92rem;line-height:1.8}
+.copy{position:absolute;top:10px;right:10px;font:inherit;font-size:.82rem;padding:4px 12px;border-radius:4px;
+  border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.copy:hover{border-color:var(--teal)}
+.tips{counter-reset:t;list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.tips li{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:14px 16px 14px 52px;position:relative}
+.tips li::before{counter-increment:t;content:counter(t);position:absolute;left:16px;top:13px;width:24px;height:24px;
+  border-radius:50%;background:var(--teal);color:var(--paper);font-weight:700;font-size:.85rem;
+  display:flex;align-items:center;justify-content:center}
+.tips b{display:block}
+.tips span{color:var(--muted);font-size:.92rem}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--paper)}
+.step{padding:16px;border-right:1px solid var(--line)}
+.step:last-child{border-right:0}
+.step .n{font-size:1.6rem;font-weight:900;color:var(--teal);line-height:1}
+.step h3{margin-top:8px;font-size:1rem}
+.step p{margin:0;font-size:.88rem;color:var(--muted)}
+@media (max-width:640px){.step{border-right:0;border-bottom:1px solid var(--line)}.step:last-child{border-bottom:0}}
+
+/* Alert */
+.alert{background:var(--red-soft);border:1px solid var(--red);border-radius:8px;padding:18px 22px}
+.alert h3{color:var(--red)}
+.alert ul{margin:6px 0 0;padding-left:1.2em}
+.alert li{margin:4px 0}
+
+footer{padding:40px 0 48px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);margin-top:48px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Claude 完整使用指南</h1>
+    <p class="lead">Anthropic 開發之人工智慧（Artificial Intelligence, AI）模型家族，透過對話介面、程式工具與辦公軟體整合，支援撰寫、程式開發、研究分析及業務執行。本版依原圖補正模型版本、增列功能細節，並對應公務情境提供可直接套用之作法。</p>
+    <div class="meta">
+      <span class="tag">資料基準：2026 年 9 月</span>
+      <span class="tag warn">方案價格請以 claude.com/pricing 為準</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="章節導覽">
+  <div class="wrap">
+    <a href="#tiers">模型層級</a><a href="#where">使用入口</a><a href="#features">核心功能</a>
+    <a href="#plans">訂閱方案</a><a href="#prompt">提示技巧</a><a href="#cases">業務應用</a>
+    <a href="#start">快速上手</a><a href="#security">資安原則</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section id="tiers">
+  <div class="sec-head"><span class="sec-no">1</span><h2>模型層級</h2><p>由上而下能力遞減、速度與成本遞增優勢。原圖「Opus 5」已更新為現行 Opus 5.5。</p></div>
+  <div class="ladder">
+    <div class="rung r-myth">
+      <div class="lv">Mythos 層級<small>Opus 之上</small></div>
+      <div class="body">
+        <p><b>Claude Mythos 5.1／Claude Fable 5.1</b>：Anthropic 能力最強之模型，兩者為同一底層模型；Fable 5.1 另於生物、資安及大型語言模型（Large Language Model, LLM）研發領域加掛安全防護，為公開提供版本。</p>
+        <p><b>Claude Mythos Preview</b>：未公開，僅限參與「玻璃翼計畫（Project Glasswing）」之受信任機構使用。</p>
+        <p class="fit">適用：極高難度推理、長鏈研究任務。</p>
+      </div>
+    </div>
+    <div class="rung r-opus">
+      <div class="lv">Opus 5.5<small>進階推理</small></div>
+      <div class="body">
+        <p>處理複雜推理、長文件交叉比對與高難度程式開發。</p>
+        <p class="fit">適用：法規修正條文對照、國際制度比較、預算架構規劃。</p>
+      </div>
+    </div>
+    <div class="rung r-son">
+      <div class="lv">Sonnet 5<small>日常預設</small></div>
+      <div class="body">
+        <p>效能與速度平衡，一般工作之預設選擇。</p>
+        <p class="fit">適用：公文草擬、簡報大綱、會議紀錄整理、採購規格初稿。</p>
+      </div>
+    </div>
+    <div class="rung r-hai">
+      <div class="lv">Haiku 4.5<small>快速輕量</small></div>
+      <div class="body">
+        <p>回應最快、成本最低，適合單純或大量重複任務。</p>
+        <p class="fit">適用：文字校對、格式轉換、大量資料分類摘要。</p>
+      </div>
+    </div>
+  </div>
+  <p class="note">API 模型字串：claude-opus-5-5、claude-sonnet-5、claude-haiku-4-5-20251001、claude-fable-5-1。</p>
+</section>
+
+<section id="where">
+  <div class="sec-head"><span class="sec-no">2</span><h2>使用入口</h2><p>原圖列 8 項，本版增列 Claude Design，共 9 項。</p></div>
+  <div class="grid g3">
+    <div class="panel"><h3>Claude.ai</h3><p>網頁、桌面及行動應用程式之對話介面。</p><div class="use"><b>情境</b>　日常問答、文件撰寫、專案知識庫。</div></div>
+    <div class="panel"><h3>Claude API／Platform</h3><p>供開發者以程式呼叫模型，建置自有系統。</p><div class="use"><b>情境</b>　內部工具、自動化流程串接。</div></div>
+    <div class="panel"><h3>Claude Code</h3><p>代理式程式開發工具，可於終端機、桌面及行動裝置操作。</p><div class="use"><b>情境</b>　HTML 訓練模擬器、資料處理腳本。</div></div>
+    <div class="panel"><h3>Claude Cowork</h3><p>供非開發者使用之代理式知識工作桌面應用程式，可調用 Chrome、Excel、PowerPoint 等工具。</p><div class="use"><b>情境</b>　跨檔案彙整、批次文件產製。</div></div>
+    <div class="panel"><h3>Claude in Chrome</h3><p>瀏覽器代理，可瀏覽、點擊及填寫表單。</p><div class="use"><b>情境</b>　國外法規網站資料蒐集。</div></div>
+    <div class="panel"><h3>Claude in Excel</h3><p>試算表代理，處理公式、資料清理及模型。</p><div class="use"><b>情境</b>　預算執行率、各縣市採購統計。</div></div>
+    <div class="panel"><h3>Claude in PowerPoint</h3><p>簡報代理，將構想轉為投影片。</p><div class="use"><b>情境</b>　長官報告、跨機關會議簡報。</div></div>
+    <div class="panel"><h3>Claude Design</h3><p>具畫布與設計工具之代理，可透過對話反覆修改視覺作品。</p><div class="use"><b>情境</b>　研討會海報、宣導圖卡。</div></div>
+    <div class="panel"><h3>Claude Tag</h3><p>以 Slack 為基礎之多人協作介面，標註 @Claude 即可委派任務。</p><div class="use"><b>情境</b>　團隊共同任務分派。</div></div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="sec-head"><span class="sec-no">3</span><h2>核心功能</h2><p>原圖 7 項，本版增列技能、風格及過往對話搜尋。</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>功能</th><th>說明</th><th>公務應用建議</th></tr></thead>
+    <tbody>
+      <tr><td>專案（Projects）</td><td>跨對話共用之工作空間，可上傳參考文件與自訂指示。</td><td>依業務分設專案，如「TECC 手冊」「年度採購計畫」，集中法規與範本。</td></tr>
+      <tr><td>記憶（Memory）</td><td>跨對話保留使用者背景與偏好。</td><td>設定職稱、業務範圍與文風，減少重複說明。</td></tr>
+      <tr><td>過往對話搜尋</td><td>檢索並引用先前對話內容。</td><td>延續前次公文或研究討論，免重貼資料。</td></tr>
+      <tr><td>網路搜尋／深度研究</td><td>即時查詢並產出附來源之研究報告。</td><td>國際 EMS 制度比較、最新政策動態蒐集。</td></tr>
+      <tr><td>連接器（MCP）</td><td>模型上下文協定（Model Context Protocol, MCP），串接外部工具與資料，如 Gmail、Google Drive、行事曆。</td><td>自雲端硬碟調閱文件、排定會議。</td></tr>
+      <tr><td>成品（Artifacts）</td><td>即時預覽程式、文件與視覺內容，可發布為連結分享。</td><td>互動式訓練工具、網頁版說明頁。</td></tr>
+      <tr><td>延伸思考（Extended thinking）</td><td>針對困難問題進行較深層推理。</td><td>法規衝突分析、制度設計利弊評估。</td></tr>
+      <tr><td>程式執行與檔案產製</td><td>直接產出可下載之 Word、Excel、PowerPoint、PDF 檔案。</td><td>預算說明書、統計表、簡報檔一次產出。</td></tr>
+      <tr><td>技能（Skills）</td><td>封裝特定工作之指示與範本，符合條件時自動套用。</td><td>建置公文、預算書、採購文件專用技能，統一格式。</td></tr>
+      <tr><td>風格（Styles）／使用者偏好</td><td>設定回覆文風、格式與語言。</td><td>固定繁體中文、臺灣用語、術語中英對照格式。</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="plans">
+  <div class="sec-head"><span class="sec-no">4</span><h2>訂閱方案</h2><p>金額為美元月費概估，實際價格與額度以官方頁面為準。</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>方案</th><th>月費（約）</th><th>重點</th><th>適用對象</th></tr></thead>
+    <tbody>
+      <tr><td>Free</td><td>0</td><td>標準額度，可用專案與成品。</td><td>試用、偶爾使用</td></tr>
+      <tr><td>Pro</td><td>20</td><td>較高額度，含 Claude Code、Cowork、深度研究。</td><td>個人日常重度使用</td></tr>
+      <tr><td>Max</td><td>100／200</td><td>分別為 Pro 之 5 倍、20 倍用量。</td><td>長時間代理任務、大量開發</td></tr>
+      <tr><td>Team</td><td>每席次計價（Standard 約 25、Premium 約 125）</td><td>共用工作空間、管理員控管、集中計費；預設不以內容訓練模型。</td><td>科室或小型團隊</td></tr>
+      <tr><td>Enterprise</td><td>客製</td><td>單一登入（Single Sign-On, SSO）、合規控管、稽核紀錄、專屬支援。</td><td>機關整體導入</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">機關導入涉及採購程序者，應依《政府採購法》及機關資通安全規定辦理，並確認資料處理條款。</p>
+</section>
+
+<section id="prompt">
+  <div class="sec-head"><span class="sec-no">5</span><h2>提示技巧</h2><p>原圖 6 項原則，本版補充具體作法與可複製範本。</p></div>
+  <ol class="tips">
+    <li><b>清楚具體</b><span>明確說明任務、對象與用途，避免「幫我寫一下」式模糊指令。</span></li>
+    <li><b>提供背景與範例</b><span>附上法規條文、前例公文或理想輸出範例，模型依樣產出準確度最高。</span></li>
+    <li><b>指定格式、語氣與長度</b><span>例如「三段式公文」「300 字內」「條列 5 點」「表格呈現」。</span></li>
+    <li><b>困難任務要求逐步推理</b><span>請模型先列分析步驟再下結論，適用法規適用性判斷與方案比較。</span></li>
+    <li><b>以標籤區隔素材</b><span>以 &lt;法規&gt;、&lt;來函&gt;、&lt;範本&gt; 等標籤包裹不同資料，降低混淆。</span></li>
+    <li><b>迭代優於重來</b><span>針對既有輸出指定修改處，如「說明第二點改為條列」，保留已確認內容。</span></li>
+  </ol>
+  <div class="prompt">
+    <button class="copy" type="button" data-target="p1">複製範本</button>
+<pre id="p1">【角色】你是內政部消防署緊急救護科業務承辦人。
+【任務】草擬函稿，發文對象為各直轄市、縣（市）消防局。
+【背景】
+&lt;來函&gt;（貼上來文或會議結論）&lt;/來函&gt;
+&lt;法規&gt;（貼上相關條文）&lt;/法規&gt;
+【格式】三段式公文：主旨、說明、辦法；主旨 60 字內，說明分點編號。
+【要求】繁體中文、臺灣公文用語；英文術語首次出現採「中文（英文全稱，縮寫）」。
+【輸出前】先列出你引用的法規依據，再產出正文。</pre>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="sec-head"><span class="sec-no">6</span><h2>業務應用對照</h2><p>原圖 7 類通用情境，對應緊急救護業務之具體作法與建議工具。</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>通用情境</th><th>救護業務對應</th><th>建議組合</th></tr></thead>
+    <tbody>
+      <tr><td>撰寫與編修</td><td>公文（簽、函、書函）、出國考察報告、新聞稿。</td><td>Sonnet 5＋專案範本＋技能</td></tr>
+      <tr><td>程式與除錯</td><td>HTML 訓練模擬器、資料清理腳本。</td><td>Claude Code＋Opus 5.5</td></tr>
+      <tr><td>研究與分析</td><td>國際 EMS 法規比較、救護技術員分級制度研究、院前輸血文獻整理。</td><td>深度研究＋延伸思考</td></tr>
+      <tr><td>試算表、簡報與文件</td><td>年度預算說明書、各縣市採購執行統計、長官報告簡報。</td><td>Claude in Excel／PowerPoint、檔案產製</td></tr>
+      <tr><td>圖表與互動工具</td><td>預算執行趨勢圖、訓練情境互動教材。</td><td>成品（Artifacts）發布</td></tr>
+      <tr><td>採購文件</td><td>招標規格書、評選基準、廠商資格條款初稿。</td><td>Opus 5.5＋採購法條文＋前案範本</td></tr>
+      <tr><td>團隊任務委派</td><td>研討會籌辦分工、跨機關協調事項追蹤。</td><td>Claude Tag、Team 方案</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="start">
+  <div class="sec-head"><span class="sec-no">7</span><h2>快速上手</h2><p>依序完成 6 步驟，建立穩定工作流。</p></div>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><h3>選擇入口</h3><p>對話用 Claude.ai；開發用 Claude Code；檔案作業用 Cowork。</p></div>
+    <div class="step"><div class="n">2</div><h3>選擇模型</h3><p>日常選 Sonnet 5，複雜分析選 Opus 5.5，大量簡單任務選 Haiku 4.5。</p></div>
+    <div class="step"><div class="n">3</div><h3>開啟所需功能</h3><p>依任務開啟搜尋、延伸思考、檔案產製或連接器。</p></div>
+    <div class="step"><div class="n">4</div><h3>建立專案</h3><p>多次延續之業務設專案，上傳法規與範本。</p></div>
+    <div class="step"><div class="n">5</div><h3>撰寫提示</h3><p>套用角色、任務、背景、格式四要素。</p></div>
+    <div class="step"><div class="n">6</div><h3>迭代修正</h3><p>逐段指定修改，確認後再請輸出最終版。</p></div>
+  </div>
+</section>
+
+<section id="security">
+  <div class="sec-head"><span class="sec-no">8</span><h2>公務使用資安原則</h2><p>原圖未列，公部門使用時應優先遵循。</p></div>
+  <div class="alert">
+    <h3>使用前確認</h3>
+    <ul>
+      <li>不輸入機密、敏感公務資料及個人資料（含病患資訊、身分證字號、聯絡方式）。</li>
+      <li>遵循所屬機關資通安全管理規定及生成式 AI 使用指引。</li>
+      <li>AI 產出內容須經承辦人查證法規條號、數據與引用來源，不得逕行發文。</li>
+      <li>涉及政策立場或對外說明之內容，依機關核稿程序辦理。</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">本頁依原始資訊圖表強化編製。產品功能與價格可能異動，請以 claude.com/pricing 及 support.claude.com 最新公告為準。</div>
+</footer>
+
+<script>
+document.querySelectorAll('.copy').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var t=document.getElementById(btn.dataset.target).innerText;
+    var done=function(){btn.textContent='已複製';setTimeout(function(){btn.textContent='複製範本'},1600)};
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(done,function(){fallback(t);done()})}else{fallback(t);done()}
+  });
+});
+function fallback(t){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(e){}a.remove()}
+</script>
+</body>
+</html>

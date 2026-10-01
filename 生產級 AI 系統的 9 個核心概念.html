@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>生產級 AI 系統的 9 個核心概念｜2026 研析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#F3F6F8; --surface:#FFFFFF; --ink:#18222D; --muted:#56636F; --line:#D5DDE3;
+  --l1:#2E5BA6; --l1-soft:#E6EDF8;
+  --l2:#16786A; --l2-soft:#E2F2EF;
+  --l3:#A5671A; --l3-soft:#F7EDDD;
+  --warn:#B23A3A;
+  --serif:"Noto Serif TC","Source Han Serif TC","PMingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#10161C; --surface:#18212A; --ink:#E6ECF1; --muted:#9AA8B4; --line:#2C3945;
+    --l1:#7FA6E8; --l1-soft:#1B2A40;
+    --l2:#5CC3B1; --l2-soft:#15302C;
+    --l3:#E0A85A; --l3-soft:#33271A;
+    --warn:#E07A7A;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10161C; --surface:#18212A; --ink:#E6ECF1; --muted:#9AA8B4; --line:#2C3945;
+  --l1:#7FA6E8; --l1-soft:#1B2A40;
+  --l2:#5CC3B1; --l2-soft:#15302C;
+  --l3:#E0A85A; --l3-soft:#33271A;
+  --warn:#E07A7A;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:1.0625rem;line-height:1.75;-webkit-text-size-adjust:100%}
+a{color:inherit;text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:3px solid var(--l1);outline-offset:3px;border-radius:4px}
+.wrap{max-width:68rem;margin:0 auto;padding:0 1.25rem}
+h1,h2,h3{font-family:var(--serif);line-height:1.3;margin:0}
+p{margin:0 0 .9em}
+ul{margin:0;padding-left:1.2em}
+li{margin:.3em 0}
+
+/* Hero */
+.hero{padding:3.5rem 0 2.5rem}
+.hero-grid{display:grid;gap:2.5rem;grid-template-columns:1fr}
+@media (min-width:900px){.hero-grid{grid-template-columns:1fr 1.05fr;align-items:center}}
+.hero h1{font-size:clamp(2rem,5.5vw,3.3rem);font-weight:900;letter-spacing:.02em}
+.hero .lede{color:var(--muted);max-width:34em;margin-top:1rem}
+.hero .meta{font-size:.9rem;color:var(--muted);margin-top:1.25rem}
+
+/* Stack diagram – the one bold element */
+.stack{display:flex;flex-direction:column;gap:0;perspective:900px}
+.stratum{position:relative;border:1.5px solid var(--c);background:var(--soft);padding:1rem 1.1rem 1.1rem;margin-top:-1.5px}
+.stratum:first-child{border-radius:14px 14px 0 0}
+.stratum:last-child{border-radius:0 0 14px 14px}
+.stratum .tier{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:.6rem}
+.stratum .tier strong{font-family:var(--serif);font-size:1.15rem;color:var(--c)}
+.stratum .tier span{font-size:.85rem;color:var(--muted)}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.chip{display:block;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.55rem .6rem;font-size:.9rem;line-height:1.35}
+.chip b{display:block;font-family:var(--serif);color:var(--c);font-size:1rem}
+.chip:hover{border-color:var(--c)}
+.l1{--c:var(--l1);--soft:var(--l1-soft)}
+.l2{--c:var(--l2);--soft:var(--l2-soft)}
+.l3{--c:var(--l3);--soft:var(--l3-soft)}
+.stack-note{font-size:.85rem;color:var(--muted);margin-top:.75rem}
+@media (max-width:520px){.chips{grid-template-columns:1fr}}
+
+/* Layer sections */
+.layer{padding:3rem 0 1rem;border-top:1px solid var(--line)}
+.layer-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1rem;margin-bottom:1.75rem}
+.layer-head h2{font-size:clamp(1.5rem,3.5vw,2.1rem);color:var(--c)}
+.layer-head p{margin:0;color:var(--muted)}
+
+.concept{display:grid;grid-template-columns:1fr;gap:.5rem 2.5rem;padding:1.75rem 0 2rem;border-bottom:1px dashed var(--line)}
+.concept:last-child{border-bottom:0}
+@media (min-width:860px){.concept{grid-template-columns:15rem 1fr}}
+.c-title .no{font-family:var(--serif);font-weight:900;font-size:2.6rem;line-height:1;color:var(--c)}
+.c-title h3{font-size:1.4rem;margin-top:.4rem}
+.c-title .en{font-size:.9rem;color:var(--muted);margin-top:.25rem}
+.c-title .take{margin-top:.9rem;font-size:.95rem;border-left:3px solid var(--c);padding-left:.75rem}
+.c-body h4{font-family:var(--sans);font-size:.95rem;font-weight:700;color:var(--c);margin:1.1rem 0 .35rem}
+.c-body h4:first-child{margin-top:0}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.9rem 1rem;margin:.6rem 0}
+.fact p:last-child,.fact ul:last-child{margin-bottom:0}
+.num{font-weight:700;color:var(--c)}
+.warn{color:var(--warn);font-weight:700}
+.src{font-size:.82rem;color:var(--muted);margin-top:.6rem}
+.src a{color:var(--muted)}
+
+/* Tables */
+.tbl{overflow-x:auto;margin:.6rem 0}
+table{border-collapse:collapse;width:100%;min-width:32rem;font-size:.92rem;background:var(--surface)}
+th,td{border:1px solid var(--line);padding:.5rem .65rem;text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:700}
+
+/* Progression */
+.progress{padding:3rem 0;border-top:1px solid var(--line)}
+.progress h2{font-size:clamp(1.5rem,3.5vw,2rem)}
+.steps{display:grid;gap:1rem;margin-top:1.5rem;grid-template-columns:1fr}
+@media (min-width:760px){.steps{grid-template-columns:repeat(3,1fr)}}
+.step{padding:1.1rem 1.2rem;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.step h3{font-size:1.15rem;margin-bottom:.4rem}
+.step p{margin:0;color:var(--muted);font-size:.95rem}
+.step.s1{border-top:4px solid var(--muted)}
+.step.s2{border-top:4px solid var(--l1)}
+.step.s3{border-top:4px solid var(--l2)}
+
+/* Gov section */
+.gov{padding:3rem 0;border-top:1px solid var(--line)}
+.gov h2{font-size:clamp(1.5rem,3.5vw,2rem);margin-bottom:.5rem}
+.gov .intro{color:var(--muted);max-width:40em}
+.checklist{list-style:none;padding:0;margin-top:1.25rem;display:grid;gap:.75rem}
+.checklist li{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.9rem 1rem;margin:0}
+.checklist b{font-family:var(--serif)}
+
+/* Sources */
+.sources{padding:2.5rem 0 3rem;border-top:1px solid var(--line);font-size:.9rem}
+.sources h2{font-size:1.3rem;margin-bottom:.75rem}
+.sources ol{padding-left:1.4em;color:var(--muted)}
+.sources li{margin:.35em 0;word-break:break-word}
+footer{padding:1.5rem 0 2.5rem;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>從對話到生產：<br>AI 系統的 9 個核心概念</h1>
+      <p class="lede">以「Chief AI Leader」資訊圖〈9 AI Concepts That Put You Ahead of 99% in 2026〉為架構，彙整 2026 年官方文件、規格與實證資料，說明正式上線的 AI 系統如何分層建構，以及每一層最容易被低估的風險。</p>
+      <p class="meta">資料彙整日期：2026 年 9 月 28 日。數據與產品功能變動快速，引用前請回到來源確認。</p>
+    </div>
+
+    <nav class="stack" aria-label="三層架構導覽">
+      <div class="stratum l1">
+        <div class="tier"><strong>第一層　代理執行層</strong><span>讓 AI 完成工作</span></div>
+        <div class="chips">
+          <a class="chip" href="#c01"><b>01</b>代理迴圈</a>
+          <a class="chip" href="#c02"><b>02</b>MCP 協定</a>
+          <a class="chip" href="#c03"><b>03</b>子代理與多代理</a>
+        </div>
+      </div>
+      <div class="stratum l2">
+        <div class="tier"><strong>第二層　控制層</strong><span>規模化營運與防護</span></div>
+        <div class="chips">
+          <a class="chip" href="#c04"><b>04</b>AI 閘道</a>
+          <a class="chip" href="#c05"><b>05</b>推論經濟學</a>
+          <a class="chip" href="#c07"><b>07</b>防護機制</a>
+        </div>
+      </div>
+      <div class="stratum l3">
+        <div class="tier"><strong>第三層　可靠性層</strong><span>量測、觀察、改進</span></div>
+        <div class="chips">
+          <a class="chip" href="#c06"><b>06</b>評測</a>
+          <a class="chip" href="#c08"><b>08</b>可觀測性</a>
+          <a class="chip" href="#c09"><b>09</b>苦澀的教訓</a>
+        </div>
+      </div>
+      <p class="stack-note">編號沿用原圖；原圖 06 與 07 位置互換，本頁依分層歸屬排列。</p>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- LAYER 1 -->
+<section class="layer l1" id="layer1">
+  <div class="wrap">
+    <div class="layer-head">
+      <h2>第一層　代理執行層（Agent Runtime）</h2>
+      <p>決定 AI 能不能「做事」，而不只是「回話」。</p>
+    </div>
+
+    <article class="concept" id="c01">
+      <div class="c-title">
+        <div class="no">01</div>
+        <h3>代理迴圈</h3>
+        <div class="en">Agentic Loops</div>
+        <p class="take">迴圈把單次模型呼叫變成代理；停止條件決定它是否可控。</p>
+      </div>
+      <div class="c-body">
+        <h4>定義</h4>
+        <p>大型語言模型（Large Language Model，LLM）依據環境回饋，反覆「規劃→執行→觀察→反思」，直到達成目標或觸發停止條件。Anthropic 目前採用的精簡定義是：LLM 在迴圈中自主使用工具。Claude Agent SDK 的標準迴圈則描述為「蒐集情境→採取行動→驗證成果→重複」。</p>
+        <h4>關鍵重點</h4>
+        <ul>
+          <li><b>停止條件</b>：完成任務即結束，但實務上須另設最大迭代次數、權杖或時間預算、品質門檻，避免無限迴圈與成本失控。</li>
+          <li><b>工作流與代理的分界</b>：工作流（Workflow）走預先定義的程式路徑，可預測、一致；代理由模型動態決定下一步，適合「目標明確但路徑無法事先寫死」的任務。</li>
+          <li><b>先求簡單</b>：Anthropic 建議先找最簡單的解法，必要時才增加複雜度，有時根本不需要代理。</li>
+        </ul>
+        <div class="fact">
+          <p><b>常見生產架構</b>：以確定性工作流包覆一個有邊界的代理，只把真正需要動態判斷的環節交給模型，其餘步驟由程式保證。</p>
+        </div>
+        <p class="src">來源：<a href="https://www.anthropic.com/engineering/building-effective-agents">Anthropic〈Building Effective AI Agents〉</a>、<a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">〈Effective context engineering for AI agents〉</a></p>
+      </div>
+    </article>
+
+    <article class="concept" id="c02">
+      <div class="c-title">
+        <div class="no">02</div>
+        <h3>模型情境協定</h3>
+        <div class="en">Model Context Protocol，MCP</div>
+        <p class="take">一個介面連接所有工具；但工具的「相關性」比「數量」重要。</p>
+      </div>
+      <div class="c-body">
+        <h4>定義</h4>
+        <p>開放協定，標準化 LLM 應用程式與外部資料來源、工具之間的連接方式，設計上參考程式語言伺服器協定（Language Server Protocol，LSP）。由 Anthropic 於 2024 年 11 月開源，常被比喻為「AI 的 USB-C」。</p>
+        <h4>2026 年現況</h4>
+        <div class="fact">
+          <ul>
+            <li><b>2026-07-28 版規格</b>：上線以來最大修訂。協定層改為無狀態（移除工作階段追蹤），可部署在一般 HTTP 基礎設施上；新增正式擴充框架、MCP Apps（由伺服器提供互動式介面）與 Tasks（長時間任務）；授權機制更貼近 OAuth 與 OpenID Connect；Roots、Sampling、Logging 列入棄用。</li>
+            <li><b>採用規模</b>：據報導 2026 年中已有 <span class="num">逾 10,000 個</span> MCP 伺服器投入正式環境，SDK 每月下載 <span class="num">逾 9,700 萬次</span>；OpenAI、Google、Microsoft、Amazon 等均已支援。</li>
+          </ul>
+        </div>
+        <h4>為何「相關性勝過數量」</h4>
+        <p>工具定義本身會占用情境視窗。Anthropic 指出，接上多個 MCP 伺服器時，工具定義可能在讀到使用者需求前就耗掉 5 萬以上權杖。改用工具搜尋（Tool Search Tool）按需載入後：</p>
+        <div class="tbl"><table>
+          <tr><th>指標</th><th>全部預載</th><th>按需搜尋</th></tr>
+          <tr><td>起始權杖消耗（50+ 工具）</td><td>約 77,000</td><td>約 8,700（降約 85%）</td></tr>
+          <tr><td>Claude Opus 4 工具選擇準確率</td><td>49%</td><td>74%</td></tr>
+        </table></div>
+        <h4>資安提醒</h4>
+        <p><span class="warn">美國國家安全局（NSA）</span>於 2026 年 6 月發布 MCP 安全設計考量，指出現行規格在安全與隱私防護上仍有不足，須靠實作端嚴謹控管；2026 年初研究人員已通報 30 餘個相關漏洞編號（CVE）。</p>
+        <p class="src">來源：<a href="https://modelcontextprotocol.io/specification/2026-07-28">MCP 規格 2026-07-28</a>、<a href="https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/">MCP 官方部落格</a>、<a href="https://en.wikipedia.org/wiki/Model_Context_Protocol">Wikipedia</a>、<a href="https://anthropic.com/engineering/advanced-tool-use">Anthropic〈Advanced tool use〉</a>、<a href="https://media.defense.gov/2026/Jun/02/2003943289/-1/-1/0/CSI_MCP_SECURITY.PDF">NSA CSI</a>、<a href="https://chatforest.com/guides/mcp-ecosystem-2026-state-of-the-standard/">ChatForest</a></p>
+      </div>
+    </article>
+
+    <article class="concept" id="c03">
+      <div class="c-title">
+        <div class="no">03</div>
+        <h3>子代理與多代理系統</h3>
+        <div class="en">Subagents &amp; Multi-Agent Systems</div>
+        <p class="take">適合深度工作；協調成本與權杖費用是瓶頸。</p>
+      </div>
+      <div class="c-body">
+        <h4>定義</h4>
+        <p>採「協調者—執行者」（Orchestrator-Worker）模式：主代理分析問題、擬定策略，將子任務分派給擁有獨立情境視窗、工具與推理迴圈的子代理平行處理，最後彙整結果。</p>
+        <h4>實證：Anthropic Research 功能</h4>
+        <div class="fact">
+          <ul>
+            <li>以 Claude Opus 4 為主代理、Claude Sonnet 4 為子代理，在內部研究評測上比單一 Opus 4 代理表現高 <span class="num">90.2%</span>。</li>
+            <li>代價：單一代理約為一般對話 <span class="num">4 倍</span>權杖，多代理約 <span class="num">15 倍</span>。</li>
+            <li>BrowseComp 分析中，權杖用量解釋約 80% 的表現差異，工具呼叫次數約 10%，模型選擇約 5%。</li>
+          </ul>
+        </div>
+        <h4>協調成本從哪裡來</h4>
+        <ul>
+          <li>每個子代理都要重新接收任務、共享狀態與工具定義，造成情境重複。</li>
+          <li>主代理須等待最慢的子代理，延遲敏感任務吃虧。</li>
+          <li>委派描述不清導致重工；子代理遞迴生成更多子代理，成本可能再放大 10 倍以上。</li>
+        </ul>
+        <div class="fact"><p><b>適用判斷</b>：問題大、方向可平行拆解、答案價值高的研究型任務才值得付出 15 倍成本。協調者提示應寫入「依任務複雜度決定子代理數量」的規則。</p></div>
+        <p class="src">來源：<a href="https://www.anthropic.com/engineering/multi-agent-research-system">Anthropic〈How we built our multi-agent research system〉</a>、<a href="https://www.sentisight.ai/make-multiple-ai-agents-collaborate/">SentiSight</a>、<a href="https://theaiengineer.substack.com/p/how-anthropic-built-multi-agent-deep">The AI Engineer</a></p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- LAYER 2 -->
+<section class="layer l2" id="layer2">
+  <div class="wrap">
+    <div class="layer-head">
+      <h2>第二層　控制層（Control Plane）</h2>
+      <p>決定 AI 能不能被管理、被負擔、被信任。</p>
+    </div>
+
+    <article class="concept" id="c04">
+      <div class="c-title">
+        <div class="no">04</div>
+        <h3>AI 閘道</h3>
+        <div class="en">AI Gateway</div>
+        <p class="take">所有 AI 流量的單一管制點：路由、驗證、限流、金鑰、成本、稽核。</p>
+      </div>
+      <div class="c-body">
+        <h4>定義</h4>
+        <p>位於應用程式與各模型供應商之間的代理層，以單一介面處理虛擬金鑰驗證、速率限制、團隊預算、請求紀錄與跨供應商自動備援（Failover）。</p>
+        <h4>主要產品比較</h4>
+        <div class="tbl"><table>
+          <tr><th>產品</th><th>定位</th><th>適用情境</th></tr>
+          <tr><td>LiteLLM</td><td>開源、自架，統一介面對接 100 餘家供應商，內建成本追蹤</td><td>重視資料落地與基礎設施自主</td></tr>
+          <tr><td>Portkey</td><td>託管式服務，整合護欄、語意快取、提示管理</td><td>不想自行維運閘道</td></tr>
+          <tr><td>Kong AI Gateway</td><td>既有 Kong API 管理平台的 AI 外掛；進階 AI 功能需企業授權</td><td>組織已使用 Kong</td></tr>
+          <tr><td>Cloudflare AI Gateway</td><td>邊緣節點快取、限流與分析</td><td>已在 Cloudflare 生態系</td></tr>
+        </table></div>
+        <h4>2026 趨勢</h4>
+        <ul>
+          <li>閘道開始納管 MCP 工具流量與代理間通訊（Agent-to-Agent，A2A），例如 Kong 3.14 於 2026 年 4 月加入 A2A 支援。</li>
+          <li>閘道本身也是供應鏈攻擊目標：據報導 LiteLLM 的 PyPI 套件於 2026 年 3 月發生供應鏈資安事件，選型時須納入資安評估。</li>
+        </ul>
+        <p class="src">來源：<a href="https://www.spheron.network/blog/ai-gateway-litellm-portkey-kong-gpu-cloud/">Spheron</a>、<a href="https://www.braintrust.dev/articles/ai-gateway-comparison-2026">Braintrust</a>、<a href="https://guptadeepak.com/tools/top-5-ai-gateways-2026/">Deepak Gupta</a>、<a href="https://dev.to/pranay_batta/buyers-guide-to-pick-the-best-llm-gateway-in-2026-1epa">DEV Community</a></p>
+      </div>
+    </article>
+
+    <article class="concept" id="c05">
+      <div class="c-title">
+        <div class="no">05</div>
+        <h3>推論經濟學</h3>
+        <div class="en">Inference Economics</div>
+        <p class="take">權杖就是成本單位；快取、批次、路由、選模型是四個槓桿。</p>
+      </div>
+      <div class="c-body">
+        <h4>四大成本槓桿（以 Anthropic API 為例）</h4>
+        <div class="tbl"><table>
+          <tr><th>槓桿</th><th>機制</th><th>效果</th></tr>
+          <tr><td>提示快取<br>（Prompt Caching）</td><td>重複使用相同前綴的系統提示、文件或工具定義</td><td>快取讀取為基本輸入價 0.1 倍（省 90%）；5 分鐘快取寫入 1.25 倍、1 小時 2 倍</td></tr>
+          <tr><td>批次處理<br>（Batch API）</td><td>非即時任務非同步處理</td><td>輸入與輸出權杖皆 5 折，可與快取疊加</td></tr>
+          <tr><td>路由</td><td>依任務難度分流至不同模型或供應商</td><td>避免所有請求都打到最貴模型</td></tr>
+          <tr><td>模型選擇</td><td>簡單任務用 Haiku、一般任務用 Sonnet、複雜推理用 Opus</td><td>單價差距可達數倍</td></tr>
+        </table></div>
+        <div class="fact">
+          <p><span class="warn">快取常見陷阱</span>：快取以「逐位元完全相同的前綴」為鍵。若系統提示開頭放入當天日期等動態內容，整段快取每次都會失效，折扣歸零。動態內容應放在前綴之後。</p>
+        </div>
+        <h4>為何「每任務 5 萬權杖」會改變帳單</h4>
+        <p>代理迴圈每一輪都會重送完整情境，加上工具定義與子代理複製，單一任務動輒數萬權杖。成本應以「每任務權杖數 × 任務量 × 單價」估算，而非以「每次對話」估算。</p>
+        <p class="src">來源：<a href="https://platform.claude.com/docs/en/about-claude/pricing">Claude Platform 定價文件</a>、<a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching">Prompt caching 文件</a>、<a href="https://dev.to/gabrielanhaia/anthropic-prompt-caching-saves-90-heres-the-one-caveat-nobody-mentions-258k">DEV Community</a></p>
+      </div>
+    </article>
+
+    <article class="concept" id="c07">
+      <div class="c-title">
+        <div class="no">07</div>
+        <h3>防護機制</h3>
+        <div class="en">Guardrails</div>
+        <p class="take">每個邊界都要檢查輸入與輸出；越早建置越省，事後補強代價高。</p>
+      </div>
+      <div class="c-body">
+        <h4>威脅框架：OWASP LLM 應用十大風險（2025 版）</h4>
+        <div class="tbl"><table>
+          <tr><th>編號</th><th>風險</th><th>要點</th></tr>
+          <tr><td>LLM01</td><td>提示注入（Prompt Injection）</td><td>連續兩版居首；分直接注入與間接注入（藏在網頁、檔案、工具回傳內容中）</td></tr>
+          <tr><td>LLM02</td><td>敏感資訊揭露</td><td>個人資料、機敏內容外洩</td></tr>
+          <tr><td>LLM05</td><td>不當輸出處理</td><td>模型輸出未經驗證即交給下游系統執行</td></tr>
+          <tr><td>LLM07</td><td>系統提示洩漏</td><td>提示內的金鑰或規則被套出</td></tr>
+        </table></div>
+        <h4>縱深防禦原則</h4>
+        <ul>
+          <li>提示注入無法「修補」解決，因為系統指令與使用者輸入對模型而言都是自然語言；須結合輸入驗證、輸出過濾、最小權限與敏感操作人工審核。</li>
+          <li>模型輸出一律視為不可信資料，比照外部輸入進行清理。</li>
+          <li>機敏資料不放入提示；關鍵控制放在模型之外獨立執行，不依賴提示內容。</li>
+          <li>區隔外部內容（檢索文件、網頁）與指令，避免不可信資料影響行為。</li>
+        </ul>
+        <p class="src">來源：<a href="https://aembit.io/blog/owasp-top-10-llm-risks-explained/">Aembit〈OWASP Top 10 for LLM Applications (2025)〉</a>、<a href="https://www.promptfoo.dev/docs/red-team/owasp-llm-top-10/">Promptfoo</a>、<a href="https://www.oligo.security/academy/owasp-top-10-llm-updated-2025-examples-and-mitigation-strategies">Oligo Security</a></p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- LAYER 3 -->
+<section class="layer l3" id="layer3">
+  <div class="wrap">
+    <div class="layer-head">
+      <h2>第三層　可靠性層（Reliability Layer）</h2>
+      <p>決定系統能不能被證明有效，並持續變好。</p>
+    </div>
+
+    <article class="concept" id="c06">
+      <div class="c-title">
+        <div class="no">06</div>
+        <h3>評測</h3>
+        <div class="en">Evals</div>
+        <p class="take">在使用者發現之前抓出退步；評測資料集是別人抄不走的護城河。</p>
+      </div>
+      <div class="c-body">
+        <h4>定義</h4>
+        <p>以程式化方式大規模檢驗模型輸出品質，形成「黃金資料集→回歸測試→模型評分→分數趨勢」的閉環。</p>
+        <h4>建置流程</h4>
+        <ul>
+          <li><b>黃金資料集（Golden Dataset）</b>：先定義何謂「好的輸出」，蒐集具代表性的輸入與預期輸出。Langfuse 建議完整回歸集擴充至 100–1,000 筆，另保留數十至數百筆作為每次修改的快速檢核。</li>
+          <li><b>回歸測試與持續整合閘門</b>：每次修改提示或更換模型即自動執行，關鍵指標（如幻覺率、忠實度）低於門檻就阻擋上線。</li>
+          <li><b>模型評分（LLM-as-a-Judge）</b>：以模型依評分準則打分，可大量執行，但研究顯示存在位置偏誤等偏差，須以人工標註校準。</li>
+          <li><b>線上評測</b>：對部分真實流量抽樣評分，並把失敗案例回灌資料集，成為永久回歸測試。</li>
+        </ul>
+        <div class="fact"><p><b>資料集漂移</b>：當黃金資料集不再反映真實使用情境，通過測試就不再代表實際品質，須定期更新並做版本管理。</p></div>
+        <h4>常用工具</h4>
+        <p>Braintrust（評測全生命週期與 CI 整合）、Langfuse（開源、可自架）、Promptfoo（MIT 授權，擅長紅隊測試）、DeepEval、RAGAS。</p>
+        <p class="src">來源：<a href="https://langfuse.com/resources/engineering/golden-dataset-evaluation">Langfuse〈Golden dataset evaluation〉</a>、<a href="https://langfuse.com/resources/engineering/llm-regression-testing">Langfuse〈LLM regression testing〉</a>、<a href="https://inference.net/content/llm-evaluation-tools-comparison/">Inference.net</a>、<a href="https://www.braintrust.dev/articles/deepeval-alternatives-2026">Braintrust</a></p>
+      </div>
+    </article>
+
+    <article class="concept" id="c08">
+      <div class="c-title">
+        <div class="no">08</div>
+        <h3>可觀測性</h3>
+        <div class="en">Observability</div>
+        <p class="take">看不到就無法除錯；多步驟代理流程尤其如此。</p>
+      </div>
+      <div class="c-body">
+        <h4>定義</h4>
+        <p>以追蹤（Traces）、日誌（Logs）、儀表板與警示，記錄每次模型呼叫、工具執行與子代理的輸入、輸出、延遲、權杖與成本。</p>
+        <h4>2026 標準：OpenTelemetry GenAI 語意慣例</h4>
+        <div class="fact">
+          <ul>
+            <li>以 <code>gen_ai.*</code> 屬性統一描述供應商、模型、權杖與成本；跨度（Span）以操作命名，例如 <code>invoke_agent</code>、<code>execute_tool</code>、<code>chat</code>。</li>
+            <li>供應商中立：一次埋點即可同時送往 Langfuse、Arize Phoenix 或自建後端，避免被單一工具綁定。Langfuse、Phoenix、LiteLLM、Bifrost 等均已對齊。</li>
+          </ul>
+        </div>
+        <h4>常用工具</h4>
+        <ul>
+          <li><b>Langfuse</b>：開源、可自架，含工作階段重播與評測範本。</li>
+          <li><b>Arize Phoenix</b>：Elastic License 2.0，擅長偵測輸出漂移。</li>
+          <li><b>Helicone</b>：輕量級，兼具快取與路由。</li>
+        </ul>
+        <div class="fact"><p><b>限制</b>：追蹤能告訴你「發生了什麼」，但無法告訴你「這一輪是否真的失敗」；上百步的追蹤樹也難以人工閱讀。可觀測性須與評測搭配。</p></div>
+        <p class="src">來源：<a href="https://www.morphllm.com/agent-tracing">Morph〈Agent Tracing (2026)〉</a>、<a href="https://signoz.io/comparisons/llm-observability-tools/">SigNoz</a>、<a href="https://docs.litellm.ai/docs/observability/opentelemetry_v2">LiteLLM 文件</a>、<a href="https://github.com/Arize-AI/openinference">OpenInference</a></p>
+      </div>
+    </article>
+
+    <article class="concept" id="c09">
+      <div class="c-title">
+        <div class="no">09</div>
+        <h3>苦澀的教訓</h3>
+        <div class="en">The Bitter Lesson</div>
+        <p class="take">能隨算力擴展的通用方法，長期勝過人工精巧設計；架構要為「模型會變強」預留空間。</p>
+      </div>
+      <div class="c-body">
+        <h4>原意</h4>
+        <p>強化學習先驅 Richard Sutton 於 2019 年 3 月發表的短文。他回顧 70 年 AI 研究指出，能充分利用運算資源的通用方法（主要是搜尋與學習）最終會以極大差距勝出；把人類領域知識寫進系統，短期有效，但很快停滯，且會讓方法更難受惠於算力增長。</p>
+        <h4>歷史例證</h4>
+        <ul>
+          <li>西洋棋：1997 年擊敗世界冠軍的是大規模深度搜尋，而非模仿人類棋理。</li>
+          <li>語音辨識：統計方法（隱藏式馬可夫模型）勝過知識規則，其後又被深度學習取代。</li>
+          <li>電腦視覺：人工設計的邊緣與形狀特徵，被讓神經網路自行從資料學習的方法取代。</li>
+        </ul>
+        <h4>對 AI 系統設計的意涵</h4>
+        <ul>
+          <li>避免用大量硬編碼規則修補模型當下的弱點，這些補丁在下一代模型上線後往往成為負擔。</li>
+          <li>把投資放在評測、資料與可替換的架構上，讓更強的模型能直接帶來效益；Anthropic 也指出，模型越強，代理可承擔的自主程度越高。</li>
+        </ul>
+        <div class="fact"><p><b>平衡觀點</b>：批評者（如 Rodney Brooks）提醒須計入整體成本，且至今多數成功方案仍需大量人類智慧。「苦澀的教訓」不是否定領域知識，而是提醒不要把知識寫死在無法擴展的地方。</p></div>
+        <p class="src">來源：<a href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html">Sutton〈The Bitter Lesson〉原文</a>、<a href="https://arxiv.org/pdf/2202.11296">arXiv 2202.11296</a>、<a href="https://metavert.io/bitter-lesson">Metavert</a></p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- Progression -->
+<section class="progress">
+  <div class="wrap">
+    <h2>三個階段：從提示到複利優勢</h2>
+    <div class="steps">
+      <div class="step s1"><h3>表層提示</h3><p>一次性對話，短期思維。成果依賴個人提示技巧，無法複製、無法量測。</p></div>
+      <div class="step s2"><h3>生產系統</h3><p>可靠、可觀測、成本可控、安全。三層架構齊備，每次修改都有評測把關。</p></div>
+      <div class="step s3"><h3>複利優勢</h3><p>更好的決策、更低的成本、更快的成果。評測資料與流程知識持續累積，模型升級時直接受惠。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Gov application -->
+<section class="gov">
+  <div class="wrap">
+    <h2>政府機關導入的檢核要點</h2>
+    <p class="intro">將九個概念轉譯為機關導入 AI 工作流（公文、預算、採購文件、教材編修）時可直接檢核的項目。</p>
+    <ul class="checklist">
+      <li><b>先工作流、後代理。</b>公文格式、預算表格等規則明確的產製，以固定流程搭配模型即可；只有需動態蒐整資料的研析任務才考慮代理或多代理。</li>
+      <li><b>工具少而精。</b>串接公文系統、雲端硬碟、資料庫時，每個工具職責單一、說明清楚，避免功能重疊導致誤用。</li>
+      <li><b>個資與機敏資料不入提示。</b>救護紀錄、病患資料等須在送入模型前遮蔽；輸出一律經人工核閱後才對外發文。</li>
+      <li><b>以權杖估算經費。</b>編列 AI 相關預算時，以「每件任務權杖數 × 年度件數 × 單價」試算，並評估快取與批次折扣。</li>
+      <li><b>由業務專家建立黃金資料集。</b>蒐集歷年優良公文、正確法規引用與標準答案，作為評測基準；模型或提示更換時先測後用。</li>
+      <li><b>保留紀錄以供稽核。</b>記錄每次模型呼叫的輸入、輸出與使用者，符合資安與政府資料治理要求。</li>
+      <li><b>架構可替換。</b>採購或建置時避免綁定單一模型，預留模型升級與供應商切換空間。</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sources">
+  <div class="wrap">
+    <h2>主要參考資料</h2>
+    <ol>
+      <li>Chief AI Leader，〈9 AI Concepts That Put You Ahead of 99% in 2026〉資訊圖（使用者提供）。</li>
+      <li>Anthropic，Building Effective AI Agents：<a href="https://www.anthropic.com/engineering/building-effective-agents">anthropic.com/engineering/building-effective-agents</a></li>
+      <li>Anthropic，Effective context engineering for AI agents：<a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">anthropic.com/engineering/effective-context-engineering-for-ai-agents</a></li>
+      <li>Anthropic，How we built our multi-agent research system：<a href="https://www.anthropic.com/engineering/multi-agent-research-system">anthropic.com/engineering/multi-agent-research-system</a></li>
+      <li>Anthropic，Introducing advanced tool use：<a href="https://anthropic.com/engineering/advanced-tool-use">anthropic.com/engineering/advanced-tool-use</a></li>
+      <li>Model Context Protocol Specification 2026-07-28：<a href="https://modelcontextprotocol.io/specification/2026-07-28">modelcontextprotocol.io/specification/2026-07-28</a></li>
+      <li>NSA，Model Context Protocol (MCP): Security Design Considerations（2026 年 6 月）：<a href="https://media.defense.gov/2026/Jun/02/2003943289/-1/-1/0/CSI_MCP_SECURITY.PDF">media.defense.gov</a></li>
+      <li>Claude Platform Docs，Pricing／Prompt caching：<a href="https://platform.claude.com/docs/en/about-claude/pricing">platform.claude.com/docs/en/about-claude/pricing</a></li>
+      <li>OWASP Top 10 for LLM Applications 2025 解析（Aembit）：<a href="https://aembit.io/blog/owasp-top-10-llm-risks-explained/">aembit.io</a></li>
+      <li>Langfuse，Golden dataset evaluation：<a href="https://langfuse.com/resources/engineering/golden-dataset-evaluation">langfuse.com</a></li>
+      <li>Morph，Agent Tracing (2026)：<a href="https://www.morphllm.com/agent-tracing">morphllm.com/agent-tracing</a></li>
+      <li>Braintrust，AI gateway comparison 2026：<a href="https://www.braintrust.dev/articles/ai-gateway-comparison-2026">braintrust.dev</a></li>
+      <li>Richard Sutton，The Bitter Lesson（2019）：<a href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html">incompleteideas.net</a></li>
+    </ol>
+  </div>
+</section>
+
+</main>
+<footer>
+  <div class="wrap">本頁為研析整理，產品功能、價格與統計數據以各來源最新公告為準。</div>
+</footer>
+</body>
+</html>

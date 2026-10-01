@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ChatGPT 50 項應用情境</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F5F4; --surface:#FFFFFF; --ink:#17242B; --muted:#5B6A70;
+  --rule:#CBD3D1; --accent:#0E6B66; --accent-soft:#DCEBE9;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121A1E; --surface:#18232848; --ink:#E6ECEA; --muted:#9AAAAE;
+    --rule:#2E3C42; --accent:#5FC2B8; --accent-soft:#1D3533;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121A1E; --surface:#18232848; --ink:#E6ECEA; --muted:#9AAAAE;
+  --rule:#2E3C42; --accent:#5FC2B8; --accent-soft:#1D3533;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 120px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+header{padding:56px 0 28px}
+h1{font-family:var(--serif);font-weight:900;font-size:clamp(2rem,6vw,3.4rem);line-height:1.2;margin:0 0 12px;letter-spacing:.02em}
+.lede{color:var(--muted);max-width:40em;margin:0}
+
+.toolbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--rule);padding:12px 0}
+.toolbar .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.search{flex:1 1 220px;min-width:0;font:inherit;padding:8px 12px;border:1px solid var(--rule);border-radius:6px;background:var(--surface);color:var(--ink)}
+.chips{display:flex;gap:6px;overflow-x:auto;flex:1 1 100%;padding-bottom:2px}
+.chip{flex:none;font:inherit;font-size:.9rem;padding:4px 12px;border:1px solid var(--rule);border-radius:999px;background:transparent;color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.search:focus-visible,.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.count{font-size:.9rem;color:var(--muted);white-space:nowrap}
+
+main{padding:8px 0 64px}
+section{margin-top:40px}
+.group-head{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:6px;margin-bottom:4px}
+.group-head h2{font-family:var(--serif);font-weight:600;font-size:1.4rem;margin:0}
+.group-head span{color:var(--muted);font-size:.9rem}
+
+ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;column-gap:40px}
+@media (min-width:800px){ol{grid-template-columns:1fr 1fr}}
+li{display:grid;grid-template-columns:2.6em 1fr;gap:4px 10px;padding:14px 0;border-bottom:1px solid var(--rule)}
+.no{font-family:var(--serif);font-weight:900;font-size:1.25rem;color:var(--accent);line-height:1.4}
+.t{font-weight:700;font-size:1.05rem;line-height:1.45}
+.en{display:block;font-weight:400;font-size:.85rem;color:var(--muted)}
+.d{grid-column:2;margin:0;color:var(--ink);font-size:.95rem}
+mark{background:var(--accent-soft);color:inherit;padding:0 1px}
+.empty{padding:40px 0;color:var(--muted)}
+footer{border-top:1px solid var(--rule);padding:20px 0 40px;color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <h1>ChatGPT 50 項應用情境</h1>
+  <p class="lede">依原圖 50 項編號完整整理，並依功能性質分為 7 類。可輸入關鍵字或點選分類篩選。</p>
+</header>
+
+<div class="toolbar">
+  <div class="wrap">
+    <input class="search" id="q" type="search" placeholder="搜尋中文或英文關鍵字" aria-label="搜尋應用情境">
+    <span class="count" id="count"></span>
+    <div class="chips" id="chips" role="group" aria-label="分類篩選"></div>
+  </div>
+</div>
+
+<main class="wrap" id="list"></main>
+
+<footer class="wrap">資料來源：使用者提供之「50 ChatGPT Use Cases」資訊圖，繁體中文為意譯整理。</footer>
+
+<script>
+const groups=[
+ {id:"think",name:"思考與決策",range:[1,7]},
+ {id:"write",name:"寫作與編修",range:[8,14]},
+ {id:"research",name:"搜尋與研究",range:[15,22]},
+ {id:"data",name:"文件與資料分析",range:[23,31]},
+ {id:"build",name:"程式與影像",range:[32,38]},
+ {id:"learn",name:"對話與學習",range:[39,42]},
+ {id:"auto",name:"專案管理與自動化",range:[43,50]}
+];
+const items=[
+["萬事皆可問","Ask Anything","幾乎任何主題皆可提問，並依所需深度與專業程度取得量身解說。"],
+["學習複雜主題","Learn Complex Topics","將科學、科技、商業、經濟等領域的艱深概念轉化為易懂說明。"],
+["解決複雜問題","Solve Complex Problems","提供難題，由其就限制條件、可能性、取捨與可行方案進行推理。"],
+["腦力激盪","Brainstorm Ideas","為事業、產品、內容、活動、功能、命名、專案、禮物、旅程等發想點子。"],
+["輔助決策","Better Decisions","依自訂標準比較選項，提供優缺點、評分與取捨分析。"],
+["擬定步驟計畫","Make Step-by-Step Plans","將創業、學習技能或完成專案等大方向目標，轉為可執行的路線圖。"],
+["個人化推薦","Personalized Picks","依個人偏好、需求與過往對話提供量身推薦。"],
+["撰寫內容","Write Content","產出文章、電子報、社群貼文、腳本、論文、說明文字、登陸頁等文案。"],
+["改寫任何內容","Rewrite Anything","將既有文字改得更清楚、更精簡、更詳盡、更淺白、更專業、更親切，或更貼合特定受眾。"],
+["內容摘要","Summarize Content","將文章、筆記、逐字稿、報告、文件、對話等長篇內容濃縮為重點。"],
+["草擬信件與訊息","Draft Emails and Messages","撰寫專業電子郵件、回覆、開發信、追蹤信、提案、私訊及職場溝通訊息。"],
+["校對與編修","Proofread and Edit","找出文法、拼字、清晰度、語氣、結構、一致性及可讀性問題，並產出改善版本。"],
+["語言翻譯","Translate Languages","進行跨語言翻譯，兼顧語境、語意、術語與語氣。"],
+["內容再利用","Repurpose Content","將一份內容轉為社群貼文、電子報、腳本、開場鉤子、摘要、輪播圖等多種格式。"],
+["網路搜尋","Search the Web","於 ChatGPT 內直接搜尋網路，運用相關線上來源取得最新資訊並回答問題。"],
+["研究最新動態","Research Latest News","追蹤人工智慧、科技、商業、科學、市場、娛樂等快速變動領域的最新發展。"],
+["事實查核","Fact-Check Claims","運用可得來源調查說法，區分有據事實與誤導、不確定或缺乏佐證的資訊。"],
+["產品研究","Research Products","依規格、功能、價格、評價、優缺點及替代方案比較現有產品。"],
+["旅遊規劃","Plan Travel","研究目的地、景點、住宿、餐廳、交通與活動，擬定完整旅遊計畫。"],
+["深度研究","Conduct Deep Research","跨多元來源調查複雜問題，產出詳盡且附來源依據的報告。"],
+["競爭者研究","Research Competitors","分析競爭對手的產品、功能、定價、定位、行銷策略及優劣勢。"],
+["市場研究","Conduct Market Research","研究產業、客群、趨勢、競爭者、市場機會與市場動態。"],
+["與 PDF 對話","Chat With PDFs","上傳 PDF 檔，請其解釋、摘要、比較、擷取內容或回答相關問題。"],
+["多文件分析","Analyze Multiple Documents","提供多份檔案，請其比較內容、找出差異、建立關聯並綜整資訊。"],
+["簡報分析","Analyze Presentations","上傳簡報，檢視其訊息傳達、結構、清晰度、正確性、流暢度及整體成效。"],
+["檔案資訊擷取","Extract Information From Files","於上傳檔案中找出特定事實、段落、參考資料、分類、表格、標題等資訊。"],
+["資料集資訊擷取","Extract Information","上傳結構化資料集，請其計算指標、找出規律、偵測異常並回答資料相關問題。"],
+["試算表分析","Analyze Spreadsheets","針對結構化資料計算指標、找出規律、偵測異常並回答相關問題。"],
+["製作圖表與視覺化","Create Charts & Visuals","將資料轉為清楚圖表，凸顯趨勢、關聯與比較。"],
+["資料清理與轉換","Clean and Transform Data","找出重複值、缺漏值、不一致及格式問題，整備為乾淨資料。"],
+["統計分析","Perform Statistical Analysis","運用資料分析能力進行統計、相關性、趨勢、實驗、預測等量化分析。"],
+["撰寫與除錯程式","Write and Debug Code","以多種程式語言產生、解釋、排錯、審查、重構及改善程式碼。"],
+["建置軟體原型","Build Software Prototypes","規劃軟體架構，協助建立元件、功能、介面、測試及可運作的原型。"],
+["圖像分析","Analyze Images","上傳圖片、螢幕截圖、圖表或示意圖，請其理解並說明內容。"],
+["生成圖像","Generate Images","描述插圖、廣告、概念、社群圖卡、模型稿、場景等視覺內容，由其生成。"],
+["編修既有圖像","Edit Existing Images","上傳圖片，請其修改元素、背景、外觀、構圖、風格、光線等視覺細節。"],
+["製作含文字圖像","Create Images With Text","生成含指定文字的海報、廣告、圖卡、模型稿等視覺素材。"],
+["透明背景素材","Transparent Assets","生成透明背景圖像，供簡報、社群圖卡、網站及其他設計使用。"],
+["語音對話","Have Voice Conversations","以自然語音與 ChatGPT 對話並取得語音回覆，免手操作進行交談、發想、學習及取得協助。"],
+["模擬真實對話","Practice Real Conversations","演練面試、簡報、業務電話、談判、語言會話、會議等真實情境。"],
+["AI 家教學習","Study With an AI Tutor","運用學習模式（Study Mode），透過引導式提問、解說、互動練習、測驗及理解檢核進行學習。"],
+["備考準備","Prepare for Exams","運用筆記與教材解說概念、產生測驗題目並擬定讀書計畫。"],
+["記憶個人化","Personalize With Memory","運用過往相關互動紀錄，使後續對話更貼合個人需求。"],
+["管理長期專案","Manage Long-Term Projects","運用專案（Projects）功能，彙整持續性工作的相關對話、檔案、指示、來源與脈絡。"],
+["專案協作","Collaborate on Projects","分享支援的專案，讓多人使用共同的對話、檔案、指示與專案脈絡協同作業。"],
+["排程任務","Task Scheduling","建立一次性或週期性任務，處理提醒、報告、更新、監測及其他需於日後執行的工作。"],
+["串接應用程式與服務","Connect Apps and Services","透過外掛程式（Plugins）串接支援的外部服務，將相關資訊與功能直接帶入 ChatGPT。"],
+["跨應用程式執行操作","Take Actions Across Apps","於電子郵件、行事曆、文件、檔案、訊息及各項服務中執行經授權的任務。"],
+["建置自訂 GPT","Build Custom GPTs","以自訂指示、知識、能力與設定，建立專為特定工作流程設計的 ChatGPT 版本。"],
+["委派多步驟工作","Delegate Multi-Step Work","將研究、網頁瀏覽、檔案處理、分析等複雜工作流程交由 ChatGPT 執行。"]
+];
+
+let active="all";
+const $=id=>document.getElementById(id);
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function hl(text,q){
+  const t=esc(text); if(!q) return t;
+  const e=esc(q).replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+  return t.replace(new RegExp(e,"gi"),m=>`<mark>${m}</mark>`);
+}
+function renderChips(){
+  const all=[{id:"all",name:"全部"}].concat(groups);
+  $("chips").innerHTML=all.map(g=>`<button class="chip" data-id="${g.id}" aria-pressed="${g.id===active}">${g.name}</button>`).join("");
+}
+function render(){
+  const q=$("q").value.trim();
+  const ql=q.toLowerCase();
+  let total=0,html="";
+  groups.forEach(g=>{
+    if(active!=="all"&&active!==g.id) return;
+    const rows=[];
+    for(let n=g.range[0];n<=g.range[1];n++){
+      const [zh,en,d]=items[n-1];
+      if(ql&&!(zh+en+d).toLowerCase().includes(ql)) continue;
+      rows.push(`<li><span class="no">${n}</span><div class="t">${hl(zh,q)}<span class="en" lang="en">${hl(en,q)}</span></div><p class="d">${hl(d,q)}</p></li>`);
+    }
+    if(!rows.length) return;
+    total+=rows.length;
+    html+=`<section id="${g.id}"><div class="group-head"><h2>${g.name}</h2><span>第 ${g.range[0]}–${g.range[1]} 項，共 ${rows.length} 項</span></div><ol>${rows.join("")}</ol></section>`;
+  });
+  $("list").innerHTML=html||`<p class="empty">查無符合「${esc(q)}」的項目，請改用其他關鍵字或切換為「全部」。</p>`;
+  $("count").textContent=`顯示 ${total} / 50 項`;
+}
+$("chips").addEventListener("click",e=>{
+  const b=e.target.closest(".chip"); if(!b) return;
+  active=b.dataset.id; renderChips(); render();
+});
+$("q").addEventListener("input",render);
+renderChips(); render();
+</script>
+</body>
+</html>

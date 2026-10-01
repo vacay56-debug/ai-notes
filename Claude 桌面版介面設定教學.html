@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Claude 桌面版介面設定教學</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F8F6; --surface:#FFFFFF; --ink:#18212B; --muted:#5E6875;
+  --line:#D9DEE3; --signal:#2F6FDE; --signal-soft:#E6EEFC;
+  --caution:#9A5B00; --caution-soft:#FBF1DF; --ok:#1E7A4F; --ok-soft:#E3F3EA;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#12171D; --surface:#1A2129; --ink:#E8ECF0; --muted:#9AA5B1;
+    --line:#2C3641; --signal:#6E9DF0; --signal-soft:#1D2B42;
+    --caution:#E0A94A; --caution-soft:#33280F; --ok:#5BC68F; --ok-soft:#143023;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#12171D; --surface:#1A2129; --ink:#E8ECF0; --muted:#9AA5B1;
+  --line:#2C3641; --signal:#6E9DF0; --signal-soft:#1D2B42;
+  --caution:#E0A94A; --caution-soft:#33280F; --ok:#5BC68F; --ok-soft:#143023;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  font-size:16px;line-height:1.75}
+a{color:var(--signal)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:4px}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:48px}
+@media (max-width:900px){.wrap{grid-template-columns:1fr;gap:0}}
+
+header.hero{max-width:1180px;margin:0 auto;padding:56px 20px 36px;border-bottom:1px solid var(--line)}
+.hero h1{font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(30px,5vw,48px);line-height:1.2;margin:0 0 14px;letter-spacing:.01em}
+.hero p{max-width:40em;color:var(--muted);margin:0}
+.route{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px;padding:0;list-style:none}
+.route li{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+.route li span{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:12px;font-weight:700}
+.route li+li::before{content:"";width:18px;height:1px;background:var(--line)}
+
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);align-self:start;padding:32px 0}
+nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:t}
+nav.toc li{counter-increment:t}
+nav.toc a{display:block;padding:7px 10px;border-left:2px solid var(--line);color:var(--muted);text-decoration:none;font-size:14.5px}
+nav.toc a::before{content:counter(t) "　";color:var(--signal);font-weight:700}
+nav.toc a:hover{color:var(--ink);border-left-color:var(--signal)}
+@media (max-width:900px){nav.toc{position:static;padding:20px 0;border-bottom:1px solid var(--line)}
+  nav.toc ol{display:flex;flex-wrap:wrap;gap:6px}nav.toc a{border:1px solid var(--line);border-radius:999px;padding:4px 12px}}
+
+main{padding:32px 0 80px;min-width:0}
+section{padding:8px 0 44px;border-bottom:1px solid var(--line);margin-bottom:40px}
+section:last-of-type{border-bottom:0}
+.sec-head{display:flex;gap:16px;align-items:baseline;margin-bottom:6px}
+.sec-no{font-family:"Noto Serif TC",serif;font-weight:900;font-size:44px;line-height:1;color:var(--signal)}
+h2{font-family:"Noto Serif TC",serif;font-weight:900;font-size:26px;margin:0;line-height:1.35}
+.where{color:var(--muted);font-size:14.5px;margin:4px 0 22px}
+h3{font-size:18px;margin:30px 0 10px}
+p{margin:0 0 12px;max-width:44em}
+
+/* 介面示意 */
+.mock{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;margin:0 0 20px;max-width:560px}
+.mock-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 10px;border-radius:6px;font-size:15px}
+.mock-row+.mock-row{border-top:1px dashed var(--line)}
+.mock-row b{font-weight:500}
+.mock-row em{font-style:normal;color:var(--muted);font-size:13px}
+.mock-row.on{background:var(--signal-soft)}
+.pill{font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+
+.tbl{overflow-x:auto;margin:0 0 16px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:15px}
+th,td{text-align:left;vertical-align:top;padding:11px 14px;border-bottom:1px solid var(--line)}
+th{font-size:13.5px;color:var(--muted);font-weight:500;background:transparent}
+tr:last-child td{border-bottom:0}
+td:first-child{white-space:nowrap;font-weight:700}
+td.rec{color:var(--ok);font-weight:500}
+
+.note{border-left:3px solid var(--caution);background:var(--caution-soft);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0;max-width:44em;font-size:15px}
+.note strong{color:var(--caution)}
+.tip{border-left:3px solid var(--ok);background:var(--ok-soft);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0;max-width:44em;font-size:15px}
+.tip strong{color:var(--ok)}
+kbd{font-family:inherit;font-size:13px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 6px;background:var(--surface)}
+
+.check{list-style:none;padding:0;margin:0;max-width:46em;counter-reset:c}
+.check li{counter-increment:c;display:grid;grid-template-columns:36px 1fr;gap:10px;padding:14px 0;border-bottom:1px solid var(--line)}
+.check li::before{content:counter(c);display:grid;place-items:center;width:28px;height:28px;border:2px solid var(--signal);border-radius:50%;font-weight:700;color:var(--signal);font-size:14px}
+.check b{display:block}
+.check span{color:var(--muted);font-size:14.5px}
+
+footer{max-width:1180px;margin:0 auto;padding:24px 20px 48px;color:var(--muted);font-size:13.5px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>Claude 桌面版介面設定教學</h1>
+  <p>依實際操作動線排序：先認識左側欄，再進入帳號選單與設定頁，最後處理自訂功能與方案。每節附介面示意、功能說明與新手建議設定，可對照畫面逐項完成。</p>
+  <ol class="route">
+    <li><span>1</span>左側欄</li>
+    <li><span>2</span>帳號選單</li>
+    <li><span>3</span>設定頁</li>
+    <li><span>4</span>自訂功能</li>
+    <li><span>5</span>方案與額度</li>
+    <li><span>6</span>新手檢核</li>
+  </ol>
+</header>
+
+<div class="wrap">
+<nav class="toc" aria-label="目錄">
+  <ol>
+    <li><a href="#s1">左側欄與頂部工具列</a></li>
+    <li><a href="#s2">帳號選單</a></li>
+    <li><a href="#s3">設定頁（Settings）</a></li>
+    <li><a href="#s4">自訂功能（Customize）</a></li>
+    <li><a href="#s5">方案升級與使用額度</a></li>
+    <li><a href="#s6">新手首日設定檢核</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- 1 -->
+<section id="s1">
+  <div class="sec-head"><span class="sec-no">1</span><h2>左側欄與頂部工具列</h2></div>
+  <p class="where">位置：開啟 Claude 桌面應用程式後，畫面最左側。</p>
+
+  <h3>頂部工具列</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>圖示</th><th>功能</th><th>使用時機</th></tr></thead>
+    <tbody>
+      <tr><td>☰ 選單</td><td>開啟應用程式主選單（檔案、編輯、檢視等）。</td><td>需使用快捷操作或視窗設定時。</td></tr>
+      <tr><td>側欄切換</td><td>收合／展開左側欄。</td><td>需要較大對話閱讀空間時收合。</td></tr>
+      <tr><td>← →</td><td>返回上一頁／前往下一頁。</td><td>在對話、專案、設定間切換後回溯。</td></tr>
+      <tr><td>對話／程式碼切換</td><td>左為一般對話模式，右（&lt;/&gt;）為 Claude Code 程式開發模式。</td><td>行政文書、研究一律用對話模式；撰寫程式或網頁工具時切換至程式碼模式。</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>主要功能選單</h3>
+  <div class="mock" aria-hidden="true">
+    <div class="mock-row on"><b>＋ New</b><em>新對話</em></div>
+    <div class="mock-row"><b>Projects</b><em>專案</em></div>
+    <div class="mock-row"><b>Artifacts</b><em>成品</em></div>
+    <div class="mock-row"><b>Scheduled</b><em>排程任務</em></div>
+    <div class="mock-row"><b>Dispatch <span class="pill">Beta</span></b><em>遠端派工</em></div>
+    <div class="mock-row"><b>Customize</b><em>自訂</em></div>
+    <div class="mock-row"><b>More</b><em>更多</em></div>
+  </div>
+
+  <div class="tbl"><table>
+    <thead><tr><th>項目</th><th>功能說明</th><th>新手建議</th></tr></thead>
+    <tbody>
+      <tr><td>New（新對話）</td><td>開啟一段全新對話，不帶入其他對話內容。</td><td class="rec">不同業務（公文、採購、研究）分開開新對話，避免內容混雜。</td></tr>
+      <tr><td>Projects（專案）</td><td>將同一主題的對話、上傳檔案、專案指示集中管理；專案內對話可共用知識檔案。</td><td class="rec">依業務建立專案，例如「TECC 手冊」「年度預算」「國際研討會」，並上傳相關法規與範本。</td></tr>
+      <tr><td>Artifacts（成品）</td><td>集中檢視 Claude 產出的網頁、文件、簡報等成品，可再開啟、編修、分享連結。</td><td class="rec">完成的教材、簡報可在此統一查找，不必翻找原對話。</td></tr>
+      <tr><td>Scheduled（排程任務）</td><td>設定 Claude 依週期（每日、每週等）自動執行固定任務，如定期整理國際新聞。</td><td class="rec">適合固定產製的例行簡報，下方「Scheduled」區會列出已建立的排程及其頻率。</td></tr>
+      <tr><td>Dispatch（Beta）</td><td>從手機傳訊息給 Claude，由桌機代為執行工作，完成後回報成果。</td><td>需桌機保持開機且應用程式開啟，詳見下方注意事項。</td></tr>
+      <tr><td>Customize（自訂）</td><td>進入技能、連接器、外掛等自訂功能（詳見第 4 節）。</td><td class="rec">新手先確認 Connectors 已連結常用服務。</td></tr>
+      <tr><td>More（更多）</td><td>展開其他較少用的功能入口。</td><td>依需要展開。</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note"><strong>Dispatch 注意事項：</strong>任務在桌機上執行，Claude 工作期間電腦須保持喚醒且桌面版 App 須開啟；此功能為 Beta，限 Pro 與 Max 方案，並需同時安裝桌面版與手機版 App。依官方說明，Dispatch 目前不開放新使用者申請，既有使用者可暫時繼續使用。</div>
+
+  <h3>下方清單區</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>區塊</th><th>功能說明</th></tr></thead>
+    <tbody>
+      <tr><td>Scheduled</td><td>列出已建立的排程任務名稱與執行頻率（例如「Weekly」每週）。點選可檢視或修改。</td></tr>
+      <tr><td>Pinned（釘選）</td><td>釘選的重要對話會固定顯示於此，方便快速開啟。</td></tr>
+      <tr><td>Chats and tasks</td><td>歷史對話與任務清單；右側放大鏡可搜尋，篩選圖示可依條件過濾。</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tip"><strong>操作技巧：</strong>在對話上按右鍵或點選「⋯」，可重新命名、釘選或刪除。建議以「日期＋業務名稱」命名，例如「0922 採購規格書」，便於日後搜尋。</div>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+  <div class="sec-head"><span class="sec-no">2</span><h2>帳號選單</h2></div>
+  <p class="where">位置：點選左側欄最下方的帳號名稱（顯示電子郵件）。</p>
+
+  <div class="tbl"><table>
+    <thead><tr><th>項目</th><th>功能說明</th><th>新手建議</th></tr></thead>
+    <tbody>
+      <tr><td>Settings</td><td>進入完整設定頁（詳見第 3 節）。快捷鍵 <kbd>Ctrl</kbd> + <kbd>,</kbd>。</td><td class="rec">記住快捷鍵，最常使用。</td></tr>
+      <tr><td>Language</td><td>切換介面顯示語言。</td><td class="rec">若偏好中文介面可於此切換；本教學以英文介面名稱對照。</td></tr>
+      <tr><td>Get help</td><td>開啟官方說明中心與客服管道。</td><td>遇到帳務、功能異常時使用。</td></tr>
+      <tr><td>View all plans</td><td>檢視各方案（Free、Pro、Max 等）內容與價格。</td><td>評估升級前先比較。</td></tr>
+      <tr><td>Get apps and extensions</td><td>下載手機 App、瀏覽器擴充功能等其他版本。</td><td class="rec">安裝手機 App，可隨時延續電腦上的對話。</td></tr>
+      <tr><td>Learn more</td><td>官方說明文件、使用政策等延伸資訊。</td><td>需要查證功能規則時使用。</td></tr>
+      <tr><td>Log out</td><td>登出目前帳號。</td><td>使用公用電腦後務必登出。</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+  <div class="sec-head"><span class="sec-no">3</span><h2>設定頁（Settings）</h2></div>
+  <p class="where">位置：帳號選單 ＞ Settings，或按 <kbd>Ctrl</kbd> + <kbd>,</kbd>。左上角有搜尋欄，可直接輸入關鍵字尋找設定項目。</p>
+
+  <h3>3-1　Preferences（偏好設定）</h3>
+  <p>開啟設定頁後的預設頁面，分為外觀、語音、通知三組。</p>
+
+  <div class="tbl"><table>
+    <thead><tr><th>設定</th><th>選項</th><th>說明</th><th>新手建議</th></tr></thead>
+    <tbody>
+      <tr><td>Theme（主題）</td><td>系統／淺色／深色</td><td>三個圖示依序為跟隨作業系統、淺色、深色。</td><td class="rec">選「系統」，隨電腦日夜模式切換。</td></tr>
+      <tr><td>Chat font（對話字體）</td><td>下拉選單</td><td>調整對話區字體樣式。</td><td class="rec">閱讀長篇中文時可試不同字體，以舒適為準。</td></tr>
+      <tr><td>Motion（動態效果）</td><td>System／Reduced</td><td>Reduced 可減少回應串流及介面動畫。</td><td class="rec">易感視覺疲勞者選 Reduced。</td></tr>
+      <tr><td>Voice：Language</td><td>下拉選單</td><td>語音模式的辨識與朗讀語言。</td><td class="rec">使用中文語音對話時改為中文。</td></tr>
+      <tr><td>Voice：Style</td><td>下拉選單</td><td>語音朗讀的聲音風格。</td><td>依個人喜好試聽選擇。</td></tr>
+      <tr><td>Voice：Speed</td><td>下拉選單</td><td>語音朗讀速度。</td><td>預設 Normal 即可。</td></tr>
+      <tr><td>Response completions</td><td>開／關</td><td>Claude 完成回應時發出通知，適合長時間任務。</td><td class="rec">建議開啟，執行大型文件或研究時可先處理其他工作。</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>3-2　其他設定分頁</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>分頁</th><th>功能說明</th><th>新手建議</th></tr></thead>
+    <tbody>
+      <tr><td>Account</td><td>帳號基本資料、名稱、帳號管理。</td><td class="rec">確認顯示名稱正確。</td></tr>
+      <tr><td>Privacy</td><td>資料使用與隱私相關選項。</td><td class="rec">逐項閱讀，依機關資安規範調整。</td></tr>
+      <tr><td>Billing</td><td>目前方案、付款方式、帳單紀錄。</td><td>透過 App Store 訂閱者，方案變更須至 iOS App（見第 5 節）。</td></tr>
+      <tr><td>Usage</td><td>查看目前使用量與額度剩餘狀況。</td><td class="rec">大量作業前先確認額度。</td></tr>
+      <tr><td>Capabilities</td><td>功能開關，例如網路搜尋、程式執行與檔案產製、成品等。</td><td class="rec">建議開啟網路搜尋與檔案產製，才能查最新資料並輸出 Word、PPT 等檔案。</td></tr>
+      <tr><td>Memory</td><td>記憶功能設定，含是否從對話產生記憶、檢視與管理已記住內容。</td><td class="rec">開啟後 Claude 可記得您的職務與偏好；可隨時檢視、要求刪除特定內容。</td></tr>
+      <tr><td>Design systems</td><td>設定簡報、設計成品使用的配色、字體等設計規範。</td><td>若機關有固定簡報版型，可於此建立並設為預設。</td></tr>
+      <tr><td>Claude Code</td><td>程式開發模式相關設定。</td><td>不寫程式可暫不調整。</td></tr>
+      <tr><td>Cowork</td><td>協作任務模式設定，讓 Claude 在電腦上代為處理檔案與多步驟工作。</td><td>熟悉基本對話後再進階使用。</td></tr>
+      <tr><td>Claude in Chrome</td><td>Chrome 瀏覽器擴充功能設定，讓 Claude 協助操作網頁。</td><td>需另行安裝擴充功能。</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>3-3　Desktop app（桌面應用程式）</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>分頁</th><th>功能說明</th></tr></thead>
+    <tbody>
+      <tr><td>General</td><td>桌面版一般設定，如開機啟動、快捷鍵等。</td></tr>
+      <tr><td>Extensions</td><td>桌面版擴充功能管理，可安裝本機工具供 Claude 使用。</td></tr>
+      <tr><td>Developer</td><td>開發者進階設定。一般使用者無須調整。</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="tip"><strong>個人偏好指示：</strong>可設定 Claude 回應的預設語言、文風與專業背景（例如「一律使用繁體中文、公文採三段式」）。若找不到位置，在設定頁搜尋欄輸入「preferences」或「instructions」即可定位。修改後僅套用於新開啟的對話。</div>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+  <div class="sec-head"><span class="sec-no">4</span><h2>自訂功能（Customize）</h2></div>
+  <p class="where">位置：設定頁左欄下方「Customize」區，或左側欄 Customize。</p>
+
+  <div class="tbl"><table>
+    <thead><tr><th>項目</th><th>功能說明</th><th>新手建議</th></tr></thead>
+    <tbody>
+      <tr><td>Skills（技能）</td><td>可重複使用的作業指引包，讓 Claude 依固定規範產出特定文件（如公文、預算書、簡報格式）。</td><td class="rec">確認單位共用技能已啟用；可依業務自建技能，統一產出格式。</td></tr>
+      <tr><td>Connectors（連接器）</td><td>連結外部服務，如 Google 雲端硬碟、Gmail、Google 日曆、Gamma 等，讓 Claude 讀取或操作。</td><td class="rec">先連結常用服務；公務帳號連結前確認機關資安規範。</td></tr>
+      <tr><td>Plugins（外掛）</td><td>整合技能、指令與連接器的功能套件，一次安裝整組工作流程。</td><td>單位若有提供外掛，可直接安裝。</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><strong>資安提醒：</strong>連接器授權後，Claude 可存取該服務內容。涉及個資、機敏公文的帳號，應依機關資通安全規定評估後再連結。</div>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+  <div class="sec-head"><span class="sec-no">5</span><h2>方案升級與使用額度</h2></div>
+  <p class="where">位置：帳號選單 ＞ View all plans，或 Settings ＞ Billing。</p>
+
+  <p>若最初是透過 iPhone 的 App Store 訂閱，電腦版會顯示「Upgrade in the iOS app」頁面，代表方案變更只能在 iOS App 內完成。</p>
+
+  <div class="tbl"><table>
+    <thead><tr><th>選項</th><th>操作方式</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>升級方案</td><td>以手機掃描畫面 QR Code，開啟 Claude App 後於 App 內升級。</td><td>付款與續約由 App Store 處理，取消訂閱亦須至 iPhone 的訂閱管理。</td></tr>
+      <tr><td>Buy usage credits</td><td>點選後新增信用卡，購買額外使用額度。</td><td>額度用完時可延續使用，原 App Store 訂閱維持不變。</td></tr>
+      <tr><td>Back to Claude</td><td>返回主畫面。</td><td>不變更時直接返回。</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><strong>提醒：</strong>付款資訊請自行輸入，勿在對話中提供信用卡號碼。</div>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+  <div class="sec-head"><span class="sec-no">6</span><h2>新手首日設定檢核</h2></div>
+  <p class="where">依序完成以下 8 項，即可開始日常使用。</p>
+  <ol class="check">
+    <li><div><b>安裝手機 App</b><span>帳號選單 ＞ Get apps and extensions，電腦與手機對話同步。</span></div></li>
+    <li><div><b>設定主題與字體</b><span>Settings ＞ Preferences ＞ Theme 選「系統」，Chat font 選擇舒適字體。</span></div></li>
+    <li><div><b>開啟完成通知</b><span>Preferences ＞ Notifications ＞ Response completions 開啟。</span></div></li>
+    <li><div><b>設定個人偏好指示</b><span>寫入職務背景與輸出規範（語言、術語格式、公文架構）。</span></div></li>
+    <li><div><b>開啟必要功能</b><span>Settings ＞ Capabilities，開啟網路搜尋、程式執行與檔案產製。</span></div></li>
+    <li><div><b>確認記憶設定</b><span>Settings ＞ Memory，決定是否啟用從對話產生記憶。</span></div></li>
+    <li><div><b>連結常用服務</b><span>Customize ＞ Connectors，依資安規範連結雲端硬碟、信箱、日曆。</span></div></li>
+    <li><div><b>建立業務專案</b><span>左側欄 ＞ Projects，依業務建立專案並上傳法規、範本等參考資料。</span></div></li>
+  </ol>
+</section>
+
+</main>
+</div>
+
+<footer>本教學依 2026 年 9 月介面擷圖整理，功能名稱與位置可能隨版本更新調整，以實際介面及官方說明中心（support.claude.com）為準。</footer>
+</body>
+</html>

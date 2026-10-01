@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI 工程 18 個常用詞｜救護業務對照版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Source+Serif+4:ital,wght@1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF2F5; --surface:#FFFFFF; --ink:#1B2A3A; --muted:#5B6B7B; --line:#D5DDE5;
+  --g1:#0E7C7B; --g2:#2D5DA8; --g3:#6A4C93; --g4:#9A6412; --g5:#B23A48;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#131A22; --surface:#1C2530; --ink:#E6ECF2; --muted:#9AA8B6; --line:#2E3A47;
+    --g1:#3FB7B5; --g2:#7BA3E8; --g3:#B39AD8; --g4:#E0A94A; --g5:#E57785;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131A22; --surface:#1C2530; --ink:#E6ECF2; --muted:#9AA8B6; --line:#2E3A47;
+  --g1:#3FB7B5; --g2:#7BA3E8; --g3:#B39AD8; --g4:#E0A94A; --g5:#E57785;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+h1{font-size:clamp(2rem,6vw,3.4rem);font-weight:900;line-height:1.15;margin:0 0 .6rem;letter-spacing:-.01em}
+.lead{color:var(--muted);max-width:38em;margin:0 0 2rem}
+.en{font-family:"Source Serif 4",Georgia,serif;font-style:italic;font-weight:500}
+
+/* 分組比例條：同時是篩選器 */
+.bar{display:flex;gap:4px;margin-bottom:.75rem}
+.seg{flex:var(--n);border:0;cursor:pointer;padding:.7rem .6rem .55rem;text-align:left;
+  background:var(--surface);color:var(--ink);border-top:5px solid var(--c);font:inherit;min-width:0}
+.seg b{display:block;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg span{font-size:.8rem;color:var(--muted)}
+.seg[aria-pressed="true"]{background:var(--c);color:#fff}
+.seg[aria-pressed="true"] span{color:#fff;opacity:.85}
+.seg:focus-visible,.search:focus-visible,.reset:focus-visible{outline:3px solid var(--g2);outline-offset:2px}
+.tools{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;margin-bottom:2rem}
+.search{flex:1;min-width:200px;font:inherit;padding:.6rem .8rem;border:1px solid var(--line);
+  background:var(--surface);color:var(--ink);border-radius:4px}
+.reset{font:inherit;background:none;border:0;color:var(--muted);cursor:pointer;text-decoration:underline}
+
+.group{margin-bottom:2.5rem}
+.group h2{font-size:1.25rem;margin:0 0 1rem;padding-left:.75rem;border-left:5px solid var(--c)}
+.group h2 small{font-weight:400;color:var(--muted);font-size:.85rem;margin-left:.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.term{background:var(--surface);padding:1.1rem 1.2rem 1rem;border:1px solid var(--line);display:flex;flex-direction:column}
+.term h3{margin:0;font-size:1.3rem;line-height:1.3}
+.term .en{display:block;color:var(--c);font-size:1rem;margin-bottom:.6rem}
+.term ul{margin:0 0 .9rem;padding-left:1.1rem}
+.term li{margin:.1rem 0}
+.ems{margin-top:auto;font-size:.92rem;background:color-mix(in srgb,var(--c) 10%,transparent);
+  padding:.55rem .7rem;border-left:3px solid var(--c)}
+.ems strong{color:var(--c)}
+.empty{color:var(--muted);padding:2rem 0}
+footer{color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);padding-top:1rem;margin-top:1rem}
+@media (max-width:640px){.seg b{font-size:.8rem}.seg span{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>AI 工程 18 個常用詞</h1>
+  <p class="lead">依 AI 系統運作流程分為五組，每個詞附一則到院前緊急救護（Emergency Medical Services, EMS）業務類比，便於跨單位溝通與內部訓練引用。</p>
+
+  <div class="bar" id="bar" role="group" aria-label="依分組篩選"></div>
+  <div class="tools">
+    <input class="search" id="q" type="search" placeholder="搜尋中英文詞彙或說明" aria-label="搜尋詞彙">
+    <button class="reset" id="reset" type="button">顯示全部</button>
+  </div>
+
+  <main id="list"></main>
+  <footer>內容為概念性說明，實際技術細節依各模型與平台規格為準。</footer>
+</div>
+
+<script>
+const groups=[
+ {id:"g1",name:"輸入與表示",desc:"模型如何讀進資料"},
+ {id:"g2",name:"檢索與知識",desc:"讓模型查得到正確資料"},
+ {id:"g3",name:"模型與運算",desc:"模型如何被訓練與執行"},
+ {id:"g4",name:"系統與代理",desc:"模型如何完成實際任務"},
+ {id:"g5",name:"效能與品質",desc:"如何確保系統快、穩、正確"}
+];
+const terms=[
+ ["g1","提示詞","Prompt",["輸入給模型的指令與內容","引導模型的行為方向","決定輸出的格式與品質"],"如同派遣指令：地址、主訴、傷患數越具體，現場回報越精準。"],
+ ["g1","詞元","Token",["模型處理文字的最小單位","計費與運算量以此計算","影響可輸入的資料上限"],"如同耗材計數單位；中文一字約折合 1 至 2 個詞元。"],
+ ["g1","上下文視窗","Context Window",["單次可處理的最大內容量","限制提示詞與附件長度","超出部分模型無法「看見」"],"如同一張救護紀錄表的容量，超出欄位的資訊無法同時納入判斷。"],
+ ["g1","嵌入向量","Embedding",["將文字轉為數值座標","語意相近者座標相近","語意搜尋的運算基礎"],"如同依主訴分類傷患：「胸悶」與「胸痛」會被歸在相近位置。"],
+ ["g2","向量搜尋","Vector Search",["比對嵌入向量找出相似內容","依語意而非關鍵字檢索","支援推薦與比對系統"],"查「呼吸困難」也能找出含「喘」、「血氧下降」的條文與教材。"],
+ ["g2","向量資料庫","Vector Database",["儲存大量嵌入向量","提供快速相似度查詢","RAG 架構的資料底座"],"如同將法規、SOP、訓練教材建成可依語意查詢的索引庫。"],
+ ["g2","檢索增強生成","Retrieval-Augmented Generation, RAG",["先檢索資料再生成回答","結合搜尋與語言模型","提高答案的事實正確性"],"如同先翻標準作業程序再處置，而非憑記憶作答；NotebookLM 即屬此類。"],
+ ["g3","微調","Fine-Tuning",["以特定資料再訓練既有模型","使模型適應專門任務","提升領域用語與準確度"],"如同 EMT-1 經進階訓練成為 EMT-P，專精特定領域。"],
+ ["g3","推論","Inference",["模型依輸入產生輸出","正式環境中實際運作","每次呼叫皆消耗運算資源"],"訓練是養成教育，推論是實際出勤執行任務。"],
+ ["g4","代理","Agents",["可自主規劃的 AI 系統","分解並執行多步驟任務","能運用工具與外部介面"],"如同現場指揮官：拆解任務、分派資源、追蹤進度直到完成。"],
+ ["g4","工具呼叫","Tool Calling",["模型主動啟用外部工具","串接 API 與各類服務","使 AI 能實際採取行動"],"如同救護員依需要取用 AED、生理監視器等裝備，而非僅憑徒手判斷。"],
+ ["g4","多模型路由","Multi-Model Routing",["依任務分派給適合的模型","善用專門化模型的長處","兼顧成本與品質"],"如同檢傷分類後依嚴重度後送至適當等級醫院。"],
+ ["g5","延遲","Latency",["從提問到產生回應的時間","直接影響使用者體驗","關鍵效能指標之一"],"如同反應時間：從受理報案到抵達現場。"],
+ ["g5","吞吐量","Throughput",["單位時間可處理的請求數","衡量系統承載能力","擴充規模時的重要依據"],"如同大量傷患事件中，每小時可完成檢傷與後送的人數。"],
+ ["g5","防護機制","Guardrails",["安全與驗證規則","過濾不當或危險輸出","約束模型行為範圍"],"如同醫療指導與標準作業程序中的禁止事項與操作界線。"],
+ ["g5","幻覺","Hallucination",["模型自信地產出錯誤內容","常因缺乏依據資料所致","可靠度的主要風險"],"如同引用不存在的法條或錯誤劑量——公文與教材引用須逐一查核。"],
+ ["g5","可觀測性","Observability",["監控 AI 系統運作狀態","記錄指標與執行日誌","協助排除正式環境問題"],"如同救護紀錄與品質稽核資料，出問題時可回溯每個環節。"],
+ ["g5","評估","Evaluation",["量測模型表現","以測試基準進行比較","及早發現品質問題"],"如同技能檢定與品質指標考核，以客觀標準確認能力。"]
+];
+const bar=document.getElementById("bar"),list=document.getElementById("list"),q=document.getElementById("q");
+let active=null;
+groups.forEach(g=>{
+  const n=terms.filter(t=>t[0]===g.id).length;
+  const b=document.createElement("button");
+  b.className="seg";b.type="button";b.style.setProperty("--n",n);b.style.setProperty("--c",`var(--${g.id})`);
+  b.setAttribute("aria-pressed","false");b.dataset.g=g.id;
+  b.innerHTML=`<b>${g.name}</b><span>${n} 詞</span>`;
+  b.onclick=()=>{active=active===g.id?null:g.id;render()};
+  bar.appendChild(b);
+});
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function render(){
+  bar.querySelectorAll(".seg").forEach(b=>b.setAttribute("aria-pressed",b.dataset.g===active));
+  const k=q.value.trim().toLowerCase();
+  let html="";
+  groups.forEach(g=>{
+    if(active&&active!==g.id)return;
+    const items=terms.filter(t=>t[0]===g.id&&(!k||t.slice(1,4).flat().concat(t[4]).join(" ").toLowerCase().includes(k)));
+    if(!items.length)return;
+    html+=`<section class="group" style="--c:var(--${g.id})"><h2>${g.name}<small>${g.desc}</small></h2><div class="grid">`+
+      items.map(t=>`<article class="term"><h3>${esc(t[1])}</h3><span class="en">${esc(t[2])}</span><ul>${t[3].map(x=>`<li>${esc(x)}</li>`).join("")}</ul><p class="ems"><strong>救護類比　</strong>${esc(t[4])}</p></article>`).join("")+
+      `</div></section>`;
+  });
+  list.innerHTML=html||`<p class="empty">找不到符合「${esc(q.value)}」的詞彙，請改用其他關鍵字或按「顯示全部」。</p>`;
+}
+q.addEventListener("input",render);
+document.getElementById("reset").onclick=()=>{active=null;q.value="";render()};
+render();
+</script>
+</body>
+</html>

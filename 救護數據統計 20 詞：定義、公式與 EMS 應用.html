@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>救護數據統計 20 詞：定義、公式與 EMS 應用</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3F6F7; --panel:#FFFFFF; --ink:#16252E; --muted:#56666F;
+  --line:#D5DEE3; --blue:#1D4F73; --blue-soft:#E3EDF3; --amber:#B8741A; --amber-soft:#F7ECDC;
+  --good:#2E6B4F; --warn:#9A3B2C;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --serif:"Noto Serif TC","PMingLiU",Georgia,serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1A20; --panel:#16242C; --ink:#E4ECF0; --muted:#9DB0BA;
+    --line:#2A3C46; --blue:#7FB3D8; --blue-soft:#1C3342; --amber:#E0A04A; --amber-soft:#33291A;
+    --good:#7CC4A0; --warn:#E58C7A;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1A20; --panel:#16242C; --ink:#E4ECF0; --muted:#9DB0BA;
+  --line:#2A3C46; --blue:#7FB3D8; --blue-soft:#1C3342; --amber:#E0A04A; --amber-soft:#33291A;
+  --good:#7CC4A0; --warn:#E58C7A;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:var(--serif);line-height:1.3;margin:0}
+a{color:var(--blue)}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+
+/* Hero */
+header.hero{padding:48px 0 28px;border-bottom:1px solid var(--line)}
+.hero h1{font-size:clamp(28px,5vw,46px);font-weight:900;letter-spacing:.02em;max-width:16em}
+.hero p{color:var(--muted);max-width:42em;margin:14px 0 0}
+
+/* Calculator */
+.lab{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:24px;padding:28px 0 36px}
+@media (max-width:820px){.lab{grid-template-columns:1fr}}
+.lab h2{font-size:22px;margin-bottom:6px}
+.lab .hint{color:var(--muted);font-size:14px;margin:0 0 10px}
+textarea{width:100%;min-height:150px;font:15px/1.6 var(--sans);color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;resize:vertical}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+button{font:14px var(--sans);color:var(--blue);background:var(--blue-soft);border:0;border-radius:4px;padding:6px 12px;cursor:pointer}
+button:hover{filter:brightness(.96)}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.stat{background:var(--panel);padding:10px 12px}
+.stat b{display:block;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted)}
+.stat.flag b{color:var(--amber)}
+.chart{background:var(--panel);border:1px solid var(--line);border-radius:6px;margin-top:14px;padding:10px 12px 4px;overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;min-width:320px}
+.chart .cap{font-size:13px;color:var(--muted);margin:0 0 4px}
+.reading{margin-top:12px;padding:12px 14px;border-left:4px solid var(--amber);background:var(--amber-soft);font-size:15px;border-radius:0 6px 6px 0}
+.err{color:var(--warn);font-size:14px;margin-top:8px}
+
+/* Nav */
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+nav.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:8px;padding-bottom:8px}
+nav.toc a{white-space:nowrap;text-decoration:none;font-size:14px;padding:4px 10px;border-radius:4px;color:var(--ink)}
+nav.toc a:hover{background:var(--blue-soft)}
+
+/* Groups */
+section.group{padding:40px 0 8px}
+.group-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.group-head h2{font-size:26px}
+.group-head p{margin:0;color:var(--muted);font-size:15px}
+.term{background:var(--panel);border:1px solid var(--line);border-radius:6px;margin-bottom:12px}
+.term summary{list-style:none;cursor:pointer;padding:16px 18px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:baseline}
+.term summary::-webkit-details-marker{display:none}
+.term h3{font-size:20px;font-weight:600}
+.term h3 small{font-family:var(--sans);font-size:14px;font-weight:400;color:var(--muted);margin-left:6px}
+.term .gist{grid-column:1/-1;color:var(--muted);font-size:15px}
+.term .xl{font-size:13px;color:var(--blue);background:var(--blue-soft);padding:2px 8px;border-radius:3px;white-space:nowrap}
+.term[open] summary{border-bottom:1px solid var(--line)}
+.body{padding:14px 18px 18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+@media (max-width:820px){.body{grid-template-columns:1fr}}
+.body h4{font-size:13px;color:var(--muted);font-weight:500;margin:0 0 4px}
+.body p{margin:0;font-size:15px}
+.formula{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:17px;background:var(--blue-soft);padding:8px 10px;border-radius:4px;overflow-x:auto;white-space:nowrap}
+.ems{border-left:3px solid var(--blue);padding-left:10px}
+.pit{border-left:3px solid var(--warn);padding-left:10px}
+
+/* Tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:560px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;color:var(--muted);font-size:14px}
+tr:last-child td{border-bottom:0}
+.fix td:first-child{white-space:nowrap;font-weight:500}
+footer{padding:36px 0 48px;color:var(--muted);font-size:14px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>救護數據統計 20 詞</h1>
+    <p>以原圖〈20 Statistics Terms Every Data Professional Should Know〉為底本，逐詞補充定義、公式、Excel 函數、到院前緊急救護（Emergency Medical Services, EMS）應用情境與常見誤判，並附即時試算器，可直接貼入救護數據驗證。</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="lab" aria-labelledby="lab-title">
+    <div>
+      <h2 id="lab-title">試算器</h2>
+      <p class="hint">貼入數值（逗號、空白或換行分隔）。預設資料為示範用之救護車抵達時間（分鐘），非實際統計。</p>
+      <label for="data" class="hint" style="display:block;margin:0 0 4px">資料</label>
+      <textarea id="data" spellcheck="false">6.2, 7.5, 5.8, 8.1, 9.4, 6.9, 7.2, 12.0, 6.5, 7.8, 8.3, 5.9, 7.1, 10.6, 6.8, 7.4, 8.9, 6.1, 7.7, 21.5, 9.1, 6.6, 7.0, 8.4, 11.2</textarea>
+      <div class="presets">
+        <button type="button" data-set="resp">抵達時間（右偏）</button>
+        <button type="button" data-set="norm">近似常態</button>
+        <button type="button" data-set="err">含登錄錯誤</button>
+      </div>
+      <div id="err" class="err" role="alert"></div>
+    </div>
+    <div>
+      <div class="stats" id="stats" aria-live="polite"></div>
+      <div class="chart">
+        <p class="cap">盒鬚圖（Box Plot）：盒體為 Q1–Q3，粗線為中位數，菱形為平均數，橘點為離群值（1.5×IQR 準則）</p>
+        <svg id="box" viewBox="0 0 600 110" role="img" aria-label="盒鬚圖"></svg>
+      </div>
+      <div class="chart">
+        <p class="cap">直方圖（Histogram）：組數依 Sturges 法則</p>
+        <svg id="hist" viewBox="0 0 600 170" role="img" aria-label="直方圖"></svg>
+      </div>
+      <div class="reading" id="reading"></div>
+    </div>
+  </div>
+</div>
+
+<nav class="toc" aria-label="章節">
+  <div class="wrap">
+    <a href="#g1">集中趨勢</a><a href="#g2">離散程度</a><a href="#g3">位置量數</a><a href="#g4">分配型態</a><a href="#g5">機率與抽樣</a><a href="#g6">推論統計</a><a href="#g7">變數關係</a><a href="#guide">報告選用</a><a href="#fix">原圖修正</a>
+  </div>
+</nav>
+
+<main class="wrap" id="terms"></main>
+
+<div class="wrap">
+  <section class="group" id="guide">
+    <div class="group-head"><h2>報告時如何選用統計量</h2><p>政策報告、績效考核與研討會簡報適用</p></div>
+    <div class="tbl"><table>
+      <thead><tr><th>資料特性</th><th>集中趨勢</th><th>離散程度</th><th>建議圖表</th><th>救護實例</th></tr></thead>
+      <tbody>
+        <tr><td>近似常態、無明顯離群值</td><td>平均數</td><td>標準差</td><td>直方圖</td><td>技術員術科測驗分數</td></tr>
+        <tr><td>右偏或含離群值</td><td>中位數</td><td>四分位距（IQR）</td><td>盒鬚圖</td><td>反應時間、現場停留時間</td></tr>
+        <tr><td>時間類績效指標</td><td>第 90 百分位數</td><td>達成率</td><td>累積分配圖</td><td>各縣市救護車抵達時間考核</td></tr>
+        <tr><td>類別資料</td><td>眾數、比例</td><td>—</td><td>長條圖</td><td>派遣原因、傷病類別</td></tr>
+        <tr><td>比例型成效指標</td><td>比率</td><td>95% 信賴區間</td><td>森林圖、誤差線</td><td>OHCA 存活率、ROSC 率</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="group" id="fix">
+    <div class="group-head"><h2>原圖修正與補強</h2><p>原圖為簡化示意，以下 4 處引用時須注意</p></div>
+    <div class="tbl"><table class="fix">
+      <thead><tr><th>項目</th><th>原圖內容</th><th>修正／補強</th></tr></thead>
+      <tbody>
+        <tr><td>四分位數</td><td>盒鬚圖標示 Min、Q1、Median、Q2、Max</td><td>Q2 即中位數，右側應為 Q3。</td></tr>
+        <tr><td>p 值</td><td>判斷結果是否可能出於偶然</td><td>p 值是「假設 H₀ 為真時，觀察到目前或更極端結果的機率」，不是 H₀ 為真的機率，也不代表效果大小。</td></tr>
+        <tr><td>信賴區間</td><td>以特定確定程度包含真值的範圍</td><td>95% 指的是方法的長期涵蓋率：重複抽樣 100 次，約 95 個區間會涵蓋真值；單一區間「有 95% 機率含真值」為常見誤述。</td></tr>
+        <tr><td>變異數／標準差</td><td>未區分母體與樣本</td><td>樣本計算分母為 n−1（Excel：VAR.S、STDEV.S）；母體為 N（VAR.P、STDEV.P）。業務資料多屬樣本。</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+</div>
+
+<footer class="wrap">
+  <p>底本：The World of Data〈20 Statistics Terms Every Data Professional Should Know〉。試算器預設資料為示範數值，不代表任何縣市實際績效。公式採 Excel 慣例：四分位數為 QUARTILE.INC（線性內插），偏態為 SKEW，信賴區間採 t 分配。</p>
+</footer>
+
+<script>
+const G = [
+ {id:"g1",name:"集中趨勢",desc:"資料的中心落在哪裡",terms:[
+  {zh:"平均數",en:"Mean",xl:"AVERAGE",gist:"所有數值加總後除以個數。",
+   f:"x̄ = Σxᵢ / n",
+   ems:"全年救護車平均抵達時間。適合近似常態的資料，例如 EMT-1 訓練結業測驗分數。",
+   pit:"易受極端值拉動。一筆 60 分鐘的偏遠山區案件，足以讓整體平均明顯上升。"},
+  {zh:"中位數",en:"Median",xl:"MEDIAN",gist:"排序後位於正中間的數值；n 為偶數時取中間兩數平均。",
+   f:"n 奇數：x₍(n+1)/2₎",
+   ems:"反應時間、現場停留時間屬右偏資料，以中位數描述「典型案件」較平均數精準。",
+   pit:"只反映中間位置，不反映尾端。績效考核應搭配第 90 百分位數。"},
+  {zh:"眾數",en:"Mode",xl:"MODE.SNGL",gist:"出現次數最多的值，類別資料唯一可用的集中趨勢量數。",
+   f:"max frequency(xᵢ)",
+   ems:"最常見的派遣原因（如急病、創傷）或最常執行的處置項目，可作為教材編修與訓練時數配置依據。",
+   pit:"連續數值資料常無重複值或出現多個眾數，參考價值低。"}
+ ]},
+ {id:"g2",name:"離散程度",desc:"資料分散或集中的程度",terms:[
+  {zh:"全距",en:"Range",xl:"MAX−MIN",gist:"最大值減最小值。",
+   f:"R = x₍max₎ − x₍min₎",
+   ems:"快速檢視各分隊抵達時間的最長與最短差距。",
+   pit:"僅由兩個極端值決定，一筆登錄錯誤即可使全距失真，正式報告宜改用 IQR。"},
+  {zh:"變異數",en:"Variance",xl:"VAR.S／VAR.P",gist:"各值與平均數差距平方後的平均。",
+   f:"s² = Σ(xᵢ − x̄)² / (n − 1)",
+   ems:"比較不同縣市反應時間的穩定度；變異數愈大，民眾等候時間愈難預期。",
+   pit:"單位為原單位平方（分鐘²），不易解讀，報告時改用標準差。"},
+  {zh:"標準差",en:"Standard Deviation, SD",xl:"STDEV.S",gist:"變異數開根號，單位與原資料相同。",
+   f:"s = √s²",
+   ems:"「平均 7.8 分鐘，標準差 1.2 分鐘」表示多數案件落在約 6.6–9.0 分鐘。",
+   pit:"「平均 ± 2SD 涵蓋約 95%」僅在常態分配成立；反應時間通常右偏，不宜直接套用。"}
+ ]},
+ {id:"g3",name:"位置量數",desc:"單一數值在整體中的相對位置",terms:[
+  {zh:"百分位數",en:"Percentile",xl:"PERCENTILE.INC",gist:"第 p 百分位數表示有 p% 的資料小於或等於此值。",
+   f:"位置 = (n − 1) × p + 1",
+   ems:"國際常以第 90 百分位數作為時間類績效基準（如美國消防協會 NFPA 1710 標準），即 90% 案件應於時限內抵達。",
+   pit:"百分位數（數值）與百分等級（排名比例）不同，公文用語需一致。"},
+  {zh:"四分位數",en:"Quartile",xl:"QUARTILE.INC",gist:"以 Q1（25%）、Q2（50%，即中位數）、Q3（75%）將資料切為四等份。",
+   f:"IQR = Q3 − Q1",
+   ems:"將 22 個直轄市、縣（市）的指標達成率分為四組，辨識落後組別作為輔導優先對象。",
+   pit:"不同軟體內插法不同（INC 與 EXC），跨年度比較應固定同一算法。"},
+  {zh:"離群值",en:"Outlier",xl:"Q1−1.5×IQR／Q3+1.5×IQR",gist:"明顯高於或低於其他資料的值。",
+   f:"x < Q1 − 1.5·IQR 或 x > Q3 + 1.5·IQR",
+   ems:"來源可能是真實特殊案件（偏遠山區、離島、大量傷患事件），或資料錯誤（時間戳記 0 分鐘、999 分鐘）。",
+   pit:"不可逕行刪除。先查證原始救護紀錄表，確認為錯誤才排除，並於報告註明處理方式。"}
+ ]},
+ {id:"g4",name:"分配型態",desc:"資料整體的形狀",terms:[
+  {zh:"分配",en:"Distribution",xl:"FREQUENCY",gist:"資料值在各可能結果或區間上的分布情形。",
+   f:"次數分配表、直方圖",
+   ems:"繪製出勤時段分配，作為人力排班與救護車配置的依據。",
+   pit:"組距設定會改變直方圖外觀，不同報告間比較時應採相同組距。"},
+  {zh:"常態分配",en:"Normal Distribution",xl:"NORM.DIST",gist:"鐘形、左右對稱，平均數＝中位數＝眾數。",
+   f:"68%：μ±1σ｜95%：μ±1.96σ｜99.7%：μ±3σ",
+   ems:"大樣本測驗成績、測量誤差近似常態；許多檢定（t 檢定）以常態為前提。",
+   pit:"時間、費用、次數類資料多非常態，套用前應以直方圖或常態機率圖檢視。"},
+  {zh:"偏態",en:"Skewness",xl:"SKEW",gist:"分配向左或向右延伸的程度。",
+   f:"右偏：平均數 > 中位數｜左偏：平均數 < 中位數",
+   ems:"反應時間為典型右偏：多數案件集中於短時間，少數案件拖出長尾。",
+   pit:"偏態係數絕對值大於 1 通常視為明顯偏態，應改報中位數與 IQR。"}
+ ]},
+ {id:"g5",name:"機率與抽樣",desc:"從部分推論全體的基礎",terms:[
+  {zh:"機率",en:"Probability",xl:"COUNTIF/COUNT",gist:"特定事件發生的可能性，介於 0 與 1。",
+   f:"P(A) = 事件 A 次數 / 總次數",
+   ems:"到院前心肺功能停止（Out-of-Hospital Cardiac Arrest, OHCA）患者恢復自發性循環（Return of Spontaneous Circulation, ROSC）的比率，即經驗機率。",
+   pit:"條件機率需界定分母。「有旁觀者 CPR 者的 ROSC 率」與「全體 OHCA 的 ROSC 率」不可混用。"},
+  {zh:"母體",en:"Population",xl:"—",gist:"研究所關注的全部個體或單位。",
+   f:"參數：μ、σ、N",
+   ems:"全國某年度全部救護出勤案件，或全體現職救護技術員。",
+   pit:"母體定義須明確（年度、地區、納入與排除條件），否則跨縣市比較失去基礎。"},
+  {zh:"樣本",en:"Sample",xl:"RAND()",gist:"自母體抽出、用以分析的部分資料。",
+   f:"統計量：x̄、s、n",
+   ems:"醫療指導品質審查時，自各分隊隨機抽查救護紀錄表。",
+   pit:"便利抽樣（只抽方便取得者）會產生偏差。應採隨機或分層隨機抽樣（依縣市、案件類型分層）。"}
+ ]},
+ {id:"g6",name:"推論統計",desc:"由樣本判斷母體與政策成效",terms:[
+  {zh:"信賴區間",en:"Confidence Interval, CI",xl:"CONFIDENCE.T",gist:"以樣本估計母體參數的區間，並標示信賴水準。",
+   f:"x̄ ± t₍α/2,n−1₎ · s/√n",
+   ems:"「OHCA 存活出院率 X%（95% CI a%–b%）」較只報點估計值更能呈現不確定性，小型縣市尤須標示。",
+   pit:"兩組信賴區間略有重疊，不等於差異不顯著；應直接檢定差值。"},
+  {zh:"假設檢定",en:"Hypothesis Testing",xl:"T.TEST／CHISQ.TEST",gist:"設立虛無假設 H₀ 與對立假設 H₁，以資料判斷是否拒絕 H₀。",
+   f:"H₀：無差異｜H₁：有差異",
+   ems:"評估導入調度員協助心肺復甦術（Dispatcher-Assisted CPR, DA-CPR）或新訓練課程後，旁觀者 CPR 率是否提升。",
+   pit:"「未拒絕 H₀」不等於「證明無效」，可能只是樣本數不足。"},
+  {zh:"p 值",en:"p-value",xl:"T.TEST 回傳值",gist:"假設 H₀ 為真時，觀察到目前或更極端結果的機率。",
+   f:"p < α（常用 0.05）→ 拒絕 H₀",
+   ems:"比較兩種止血帶訓練方式的施放時間，p = 0.01 表示差異不太可能只是隨機波動。",
+   pit:"p 值小不代表效果大。大樣本下 0.1 分鐘的差異也可能顯著，需一併報告效果量與信賴區間。"}
+ ]},
+ {id:"g7",name:"變數關係",desc:"兩個以上變數如何共同變化",terms:[
+  {zh:"相關",en:"Correlation",xl:"CORREL",gist:"兩變數線性關聯的方向與強度，皮爾森相關係數 r 介於 −1 與 1。",
+   f:"r = Σ(x−x̄)(y−ȳ) / √[Σ(x−x̄)²·Σ(y−ȳ)²]",
+   ems:"反應時間與 OHCA 存活率呈負相關：抵達愈慢，存活率愈低。",
+   pit:"相關不等於因果，且可能有干擾因子（如都市化程度同時影響反應時間與醫療資源）。"},
+  {zh:"迴歸",en:"Regression",xl:"SLOPE／LINEST",gist:"以一個或多個自變數估計應變數的變化。",
+   f:"ŷ = β₀ + β₁x₁ + … + βₖxₖ",
+   ems:"以反應時間、旁觀者 CPR、AED 使用預測 ROSC；結果為是否二元變數時，應採邏輯斯迴歸（Logistic Regression），結果以勝算比（Odds Ratio, OR）呈現。",
+   pit:"不宜外推至資料範圍以外，並須檢查殘差與共線性。"}
+ ]}
+];
+
+const main=document.getElementById("terms");
+main.innerHTML=G.map(g=>`
+<section class="group" id="${g.id}">
+  <div class="group-head"><h2>${g.name}</h2><p>${g.desc}</p></div>
+  ${g.terms.map(t=>`
+  <details class="term">
+    <summary>
+      <h3>${t.zh}<small>${t.en}</small></h3>
+      <span class="xl">Excel：${t.xl}</span>
+      <span class="gist">${t.gist}</span>
+    </summary>
+    <div class="body">
+      <div><h4>公式</h4><div class="formula">${t.f}</div></div>
+      <div class="ems"><h4>EMS 應用</h4><p>${t.ems}</p></div>
+      <div class="pit"><h4>常見誤判</h4><p>${t.pit}</p></div>
+    </div>
+  </details>`).join("")}
+</section>`).join("");
+
+/* ---------- calculator ---------- */
+const PRE={
+ resp:"6.2, 7.5, 5.8, 8.1, 9.4, 6.9, 7.2, 12.0, 6.5, 7.8, 8.3, 5.9, 7.1, 10.6, 6.8, 7.4, 8.9, 6.1, 7.7, 21.5, 9.1, 6.6, 7.0, 8.4, 11.2",
+ norm:"72, 78, 81, 69, 75, 84, 77, 80, 73, 76, 79, 82, 70, 74, 78, 86, 75, 77, 71, 80, 83, 76, 79, 74, 68",
+ err:"6.2, 7.5, 0, 8.1, 9.4, 6.9, 7.2, 999, 6.5, 7.8, 8.3, 5.9, 7.1, 10.6, 6.8, 7.4"
+};
+const tTable={1:12.706,2:4.303,3:3.182,4:2.776,5:2.571,6:2.447,7:2.365,8:2.306,9:2.262,10:2.228,11:2.201,12:2.179,13:2.16,14:2.145,15:2.131,16:2.12,17:2.11,18:2.101,19:2.093,20:2.086,21:2.08,22:2.074,23:2.069,24:2.064,25:2.06,26:2.056,27:2.052,28:2.048,29:2.045,30:2.042};
+const tCrit=df=>tTable[df]||(df<=40?2.021:df<=60?2.0:df<=120?1.98:1.96);
+const q=(s,p)=>{const h=(s.length-1)*p,l=Math.floor(h);return s[l]+(h-l)*((s[l+1]??s[l])-s[l]);};
+const fmt=v=>Number.isFinite(v)?(+v.toFixed(2)).toString():"—";
+const $=id=>document.getElementById(id);
+
+function calc(){
+  const x=$("data").value.split(/[\s,，、;；]+/).filter(Boolean).map(Number);
+  const bad=x.filter(v=>!Number.isFinite(v)).length;
+  const a=x.filter(Number.isFinite);
+  $("err").textContent=bad?`有 ${bad} 個項目不是數值，已略過。`:"";
+  if(a.length<3){$("err").textContent="至少需要 3 個數值才能計算。";$("stats").innerHTML="";$("box").innerHTML="";$("hist").innerHTML="";$("reading").textContent="";return;}
+  const s=[...a].sort((m,n)=>m-n),n=s.length;
+  const mean=a.reduce((m,v)=>m+v,0)/n;
+  const med=q(s,.5),q1=q(s,.25),q3=q(s,.75),iqr=q3-q1,p90=q(s,.9);
+  const cnt={};a.forEach(v=>cnt[v]=(cnt[v]||0)+1);
+  const mx=Math.max(...Object.values(cnt));
+  const mode=mx>1?Object.keys(cnt).filter(k=>cnt[k]===mx).map(Number).sort((m,n)=>m-n):[];
+  const v=a.reduce((m,x)=>m+(x-mean)**2,0)/(n-1),sd=Math.sqrt(v);
+  const skew=sd?n/((n-1)*(n-2))*a.reduce((m,x)=>m+((x-mean)/sd)**3,0):0;
+  const moe=tCrit(n-1)*sd/Math.sqrt(n);
+  const lo=q1-1.5*iqr,hi=q3+1.5*iqr,out=s.filter(x=>x<lo||x>hi);
+  const items=[
+    ["樣本數 n",n],["平均數",fmt(mean)],["中位數",fmt(med)],
+    ["眾數",mode.length?mode.slice(0,3).map(fmt).join("、")+(mode.length>3?"…":""):"無"],
+    ["全距",fmt(s[n-1]-s[0])],["變異數 s²",fmt(v)],["標準差 s",fmt(sd)],
+    ["Q1",fmt(q1)],["Q3",fmt(q3)],["IQR",fmt(iqr)],["第 90 百分位",fmt(p90)],
+    ["偏態係數",fmt(skew),Math.abs(skew)>1],["平均數 95% CI",`${fmt(mean-moe)}–${fmt(mean+moe)}`],
+    ["離群值",out.length?out.map(fmt).join("、"):"無",out.length>0]
+  ];
+  $("stats").innerHTML=items.map(([k,val,f])=>`<div class="stat${f?" flag":""}"><b>${val}</b><span>${k}</span></div>`).join("");
+
+  /* box plot */
+  const W=600,pad=30,min=s[0],max=s[n-1],span=(max-min)||1,X=z=>pad+(z-min)/span*(W-2*pad);
+  const wl=s.find(z=>z>=lo),wh=[...s].reverse().find(z=>z<=hi);
+  const ticks=5,tk=[...Array(ticks+1)].map((_,i)=>min+span*i/ticks);
+  $("box").innerHTML=`
+   <line x1="${X(wl)}" x2="${X(q1)}" y1="45" y2="45" stroke="var(--muted)"/>
+   <line x1="${X(q3)}" x2="${X(wh)}" y1="45" y2="45" stroke="var(--muted)"/>
+   <line x1="${X(wl)}" x2="${X(wl)}" y1="33" y2="57" stroke="var(--muted)"/>
+   <line x1="${X(wh)}" x2="${X(wh)}" y1="33" y2="57" stroke="var(--muted)"/>
+   <rect x="${X(q1)}" y="25" width="${Math.max(X(q3)-X(q1),1)}" height="40" fill="var(--blue-soft)" stroke="var(--blue)"/>
+   <line x1="${X(med)}" x2="${X(med)}" y1="25" y2="65" stroke="var(--blue)" stroke-width="3"/>
+   <path d="M${X(mean)} 39 l6 6 l-6 6 l-6 -6z" fill="var(--ink)"/>
+   ${out.map(z=>`<circle cx="${X(z)}" cy="45" r="5" fill="var(--amber)"/>`).join("")}
+   <line x1="${pad}" x2="${W-pad}" y1="85" y2="85" stroke="var(--line)"/>
+   ${tk.map(t=>`<text x="${X(t)}" y="102" font-size="12" text-anchor="middle" fill="var(--muted)">${fmt(t)}</text>`).join("")}`;
+
+  /* histogram */
+  const k=Math.ceil(Math.log2(n)+1),bw=span/k,bins=Array(k).fill(0);
+  s.forEach(z=>bins[Math.min(k-1,Math.floor((z-min)/bw))]++);
+  const top=Math.max(...bins),H=130,bwpx=(W-2*pad)/k;
+  $("hist").innerHTML=bins.map((c,i)=>{const h=c/top*H;return `<rect x="${pad+i*bwpx+1}" y="${10+H-h}" width="${bwpx-2}" height="${h}" fill="var(--blue)" opacity=".75"><title>${fmt(min+i*bw)}–${fmt(min+(i+1)*bw)}：${c} 筆</title></rect>${c?`<text x="${pad+i*bwpx+bwpx/2}" y="${6+H-h}" font-size="11" text-anchor="middle" fill="var(--muted)">${c}</text>`:""}`}).join("")+
+   `<line x1="${pad}" x2="${W-pad}" y1="${10+H}" y2="${10+H}" stroke="var(--line)"/>
+    <text x="${pad}" y="${H+28}" font-size="12" fill="var(--muted)">${fmt(min)}</text>
+    <text x="${W-pad}" y="${H+28}" font-size="12" text-anchor="end" fill="var(--muted)">${fmt(max)}</text>`;
+
+  /* reading */
+  let r;
+  if(Math.abs(skew)>1||out.length){
+    r=`資料${skew>0?"右偏":"左偏"}（偏態係數 ${fmt(skew)}）${out.length?`，含 ${out.length} 個離群值`:""}；平均數 ${fmt(mean)} ${mean>med?"高於":"低於"}中位數 ${fmt(med)}。建議報告「中位數 ${fmt(med)}（IQR ${fmt(q1)}–${fmt(q3)}）」${out.length?"，並先查證離群值是否為登錄錯誤":""}。`;
+  }else{
+    r=`資料大致對稱（偏態係數 ${fmt(skew)}），平均數與中位數接近。可報告「平均數 ${fmt(mean)} ± 標準差 ${fmt(sd)}」，母體平均數 95% 信賴區間為 ${fmt(mean-moe)}–${fmt(mean+moe)}。`;
+  }
+  $("reading").textContent=r;
+}
+$("data").addEventListener("input",calc);
+document.querySelectorAll("[data-set]").forEach(b=>b.addEventListener("click",()=>{$("data").value=PRE[b.dataset.set];calc();}));
+calc();
+</script>
+</body>
+</html>

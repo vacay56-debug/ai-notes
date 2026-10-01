@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>工作場域AI工具選用指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF2F6; --sheet:#FFFFFF; --ink:#16233A; --sub:#4D5B70; --rule:#CBD4DF;
+  --navy:#1F3A68; --warn-bg:#FFF6E0; --warn-ink:#6B4A00;
+  --c-gpt:#10A37F; --c-claude:#C4552C; --c-pplx:#20808D; --c-gamma:#7B3FE4;
+  --c-granola:#5E7D1E; --c-copilot:#2563EB; --c-gemini:#3B6FE0;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1622; --sheet:#172131; --ink:#E6ECF4; --sub:#A3B0C2; --rule:#2C3A50;
+    --navy:#8FB0E8; --warn-bg:#2A2412; --warn-ink:#F0CF7A;
+    --c-gpt:#3CCB9F; --c-claude:#E88A62; --c-pplx:#4FB8C4; --c-gamma:#A882F2;
+    --c-granola:#9BBE4E; --c-copilot:#6E9BF5; --c-gemini:#7FA2F2;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1622; --sheet:#172131; --ink:#E6ECF4; --sub:#A3B0C2; --rule:#2C3A50;
+  --navy:#8FB0E8; --warn-bg:#2A2412; --warn-ink:#F0CF7A;
+  --c-gpt:#3CCB9F; --c-claude:#E88A62; --c-pplx:#4FB8C4; --c-gamma:#A882F2;
+  --c-granola:#9BBE4E; --c-copilot:#6E9BF5; --c-gemini:#7FA2F2;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  line-height:1.75;font-size:16px}
+.wrap{max-width:880px;margin:0 auto;padding:40px 20px 64px}
+header{border-bottom:3px solid var(--ink);padding-bottom:24px;margin-bottom:32px}
+h1{font-family:"Noto Serif TC","PMingLiU",serif;font-weight:900;font-size:clamp(30px,6vw,48px);
+  line-height:1.2;margin:0 0 12px;letter-spacing:.02em}
+.lead{color:var(--sub);margin:0;max-width:40em}
+.src{font-size:14px;color:var(--sub);margin-top:12px}
+h2{font-family:"Noto Serif TC",serif;font-size:24px;margin:48px 0 16px;line-height:1.35}
+h2 small{display:block;font-family:"Noto Sans TC",sans-serif;font-weight:400;font-size:15px;color:var(--sub);margin-top:4px}
+
+/* Selector matrix — the memorable element */
+.matrix{background:var(--sheet);border:1px solid var(--rule);border-radius:4px;overflow-x:auto}
+.matrix table{width:100%;border-collapse:collapse;min-width:520px}
+.matrix th,.matrix td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--rule);vertical-align:middle}
+.matrix tr:last-child td{border-bottom:0}
+.matrix th{font-size:14px;color:var(--sub);font-weight:500;background:transparent}
+.matrix td.need{font-weight:500}
+.tag{display:inline-block;font-weight:700;padding:2px 10px;border-radius:3px;color:#fff;white-space:nowrap}
+:root[data-theme="dark"] .tag{color:#0F1622}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag{color:#0F1622}}
+
+/* Tool entries */
+.tool{background:var(--sheet);border:1px solid var(--rule);border-left:6px solid var(--c);
+  padding:22px 24px;margin-bottom:16px;border-radius:0 4px 4px 0}
+.tool-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-bottom:6px}
+.tool h3{margin:0;font-size:22px;font-weight:900;color:var(--c)}
+.role{font-weight:700;font-size:17px}
+.honor{font-size:13px;border:1px solid var(--c);color:var(--c);padding:0 8px;border-radius:3px}
+.desc{margin:0 0 14px;color:var(--sub)}
+.grid{display:grid;grid-template-columns:1fr 1.2fr;gap:16px}
+.grid h4{margin:0 0 6px;font-size:14px;color:var(--sub);font-weight:500}
+.grid ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.grid li{border:1px solid var(--rule);padding:2px 10px;border-radius:3px;font-size:15px}
+.when{margin:0;font-size:15px}
+@media (max-width:640px){.grid{grid-template-columns:1fr}.tool{padding:18px}}
+
+/* NFA mapping */
+.map{background:var(--sheet);border:1px solid var(--rule);border-radius:4px;overflow-x:auto}
+.map table{width:100%;border-collapse:collapse;min-width:560px}
+.map th,.map td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--rule);vertical-align:top;font-size:15px}
+.map th{font-size:14px;color:var(--sub);font-weight:500}
+.map tr:last-child td{border-bottom:0}
+.map td:first-child{font-weight:700;color:var(--navy);white-space:nowrap}
+
+.note{background:var(--warn-bg);color:var(--warn-ink);border-radius:4px;padding:18px 20px;margin-top:24px;font-size:15px}
+.note strong{display:block;margin-bottom:6px}
+.note ol{margin:0;padding-left:1.4em}
+.obs{margin:0;padding-left:1.4em}
+.obs li{margin-bottom:8px}
+footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--rule);font-size:13px;color:var(--sub)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>工作場域AI工具選用指南</h1>
+  <p class="lead">依任務性質選擇合適的生成式人工智慧（Generative Artificial Intelligence，GenAI）工具：6項主要工具與1項榮譽提名，各自說明定位、適用情境與使用時機。</p>
+  <p class="src">資料來源：Chief AI Leader資訊圖表〈Which AI Tool to Use at Work〉，本頁為繁體中文整理版。</p>
+</header>
+
+<h2>一、快速對照：要做什麼，用哪個<small>先看需求，再選工具</small></h2>
+<div class="matrix">
+<table>
+  <thead><tr><th>工作需求</th><th>建議工具</th><th>定位</th></tr></thead>
+  <tbody>
+    <tr><td class="need">加快日常工作、寫初稿、整理筆記</td><td><span class="tag" style="background:var(--c-gpt)">ChatGPT</span></td><td>日常工作助理</td></tr>
+    <tr><td class="need">把雜亂構想做成工具、應用程式或工作流程</td><td><span class="tag" style="background:var(--c-claude)">Claude</span></td><td>建構者</td></tr>
+    <tr><td class="need">決策前蒐集證據、查核事實、找來源</td><td><span class="tag" style="background:var(--c-pplx)">Perplexity</span></td><td>研究助理</td></tr>
+    <tr><td class="need">快速產出一份堪用簡報</td><td><span class="tag" style="background:var(--c-gamma)">Gamma</span></td><td>簡報助手</td></tr>
+    <tr><td class="need">會議記錄且不干擾會議進行</td><td><span class="tag" style="background:var(--c-granola)">Granola</span></td><td>低調的會議記錄者</td></tr>
+    <tr><td class="need">工作環境以微軟Office為主</td><td><span class="tag" style="background:var(--c-copilot)">Microsoft Copilot</span></td><td>微軟工作助手</td></tr>
+    <tr><td class="need">理解影片內容或在Google工具中作業</td><td><span class="tag" style="background:var(--c-gemini)">Gemini</span></td><td>YouTube助手</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>二、各工具完整說明</h2>
+
+<article class="tool" style="--c:var(--c-gpt)">
+  <div class="tool-head"><h3>ChatGPT</h3><span class="role">日常工作助理</span></div>
+  <p class="desc">協助規劃、思考與撰寫，推動工作持續進展。</p>
+  <div class="grid">
+    <div><h4>最適用於</h4><ul><li>工作規劃</li><li>初稿撰寫</li><li>簡易流程</li><li>筆記摘要</li></ul></div>
+    <div><h4>使用時機</h4><p class="when">需要協助，讓日常工作更快完成時。</p></div>
+  </div>
+</article>
+
+<article class="tool" style="--c:var(--c-claude)">
+  <div class="tool-head"><h3>Claude</h3><span class="role">建構者</span></div>
+  <p class="desc">將粗略構想轉化為工具、應用程式及實用的工作流程。</p>
+  <div class="grid">
+    <div><h4>最適用於</h4><ul><li>建置工具</li><li>工作流程</li><li>簡易應用程式</li><li>代理式流程（Agentic Processes）</li></ul></div>
+    <div><h4>使用時機</h4><p class="when">想從一個雜亂的構想，做出實際可用的成果時。</p></div>
+  </div>
+</article>
+
+<article class="tool" style="--c:var(--c-pplx)">
+  <div class="tool-head"><h3>Perplexity</h3><span class="role">研究助理</span></div>
+  <p class="desc">協助搜尋資料來源、查核事實，以及理解市場概況。</p>
+  <div class="grid">
+    <div><h4>最適用於</h4><ul><li>市場研究</li><li>競爭者檢視</li><li>事實查核</li><li>來源搜尋</li></ul></div>
+    <div><h4>使用時機</h4><p class="when">做出決策前，需要證據支撐時。</p></div>
+  </div>
+</article>
+
+<article class="tool" style="--c:var(--c-gamma)">
+  <div class="tool-head"><h3>Gamma</h3><span class="role">簡報助手</span></div>
+  <p class="desc">將構想轉為清楚的簡報，供客戶、教育訓練及團隊使用。</p>
+  <div class="grid">
+    <div><h4>最適用於</h4><ul><li>業務簡報</li><li>工作坊簡報</li><li>訓練投影片</li><li>內部進度報告</li></ul></div>
+    <div><h4>使用時機</h4><p class="when">需要快速產出一份品質堪用的簡報時。</p></div>
+  </div>
+</article>
+
+<article class="tool" style="--c:var(--c-granola)">
+  <div class="tool-head"><h3>Granola</h3><span class="role">低調的會議記錄者</span></div>
+  <p class="desc">擷取會議筆記與待辦事項，且無須在會議中加入記錄機器人。</p>
+  <div class="grid">
+    <div><h4>最適用於</h4><ul><li>會議紀錄</li><li>行動項目</li><li>客戶通話</li><li>業務通話</li></ul></div>
+    <div><h4>使用時機</h4><p class="when">想留下紀錄，又不想讓會議氣氛尷尬時。</p></div>
+  </div>
+</article>
+
+<article class="tool" style="--c:var(--c-copilot)">
+  <div class="tool-head"><h3>Microsoft Copilot</h3><span class="role">微軟工作助手</span></div>
+  <p class="desc">協助原本就在微軟工具環境中作業的團隊。</p>
+  <div class="grid">
+    <div><h4>最適用於</h4><ul><li>Outlook</li><li>Teams</li><li>Word</li><li>Excel</li></ul></div>
+    <div><h4>使用時機</h4><p class="when">組織業務主要建立在微軟生態系時。</p></div>
+  </div>
+</article>
+
+<article class="tool" style="--c:var(--c-gemini)">
+  <div class="tool-head"><h3>Gemini</h3><span class="role">YouTube助手</span><span class="honor">榮譽提名</span></div>
+  <p class="desc">協助搜尋並理解YouTube影片內容。</p>
+  <div class="grid">
+    <div><h4>最適用於</h4><ul><li>影片摘要</li><li>影片內容提問</li><li>尋找影片</li><li>Google工作流程</li></ul></div>
+    <div><h4>使用時機</h4><p class="when">需要理解影片內容，或在Google工具中作業時。</p></div>
+  </div>
+</article>
+
+<h2>三、圖表觀察重點</h2>
+<ol class="obs">
+  <li>分類邏輯為「依任務選工具」，而非比較模型能力高低；同一任務可由多項工具完成，圖表呈現的是各工具最具優勢的定位。</li>
+  <li>通用型（ChatGPT、Claude）與專用型（Perplexity、Gamma、Granola）並列，另有生態系綁定型（Microsoft Copilot、Gemini），選用時應先考量既有辦公環境。</li>
+  <li>圖表為單一來源之經驗性歸納，各工具功能持續更新，實際選用仍應以最新版本功能及機關規範為準。</li>
+</ol>
+
+<h2>四、緊急救護科業務對應建議<small>依本科常見業務延伸，非原圖內容</small></h2>
+<div class="map">
+<table>
+  <thead><tr><th>工具</th><th>對應業務</th><th>運用方式</th></tr></thead>
+  <tbody>
+    <tr><td>ChatGPT／Claude</td><td>公文（簽、函、書函）、預算說明書初稿</td><td>提供三段式架構與要點，產出初稿後人工核修</td></tr>
+    <tr><td>Claude</td><td>訓練模擬器、HTML教學工具、文件自動化流程</td><td>將TECC、PCC、CIT教材構想轉為互動式工具或標準化工作流</td></tr>
+    <tr><td>Perplexity</td><td>國際緊急醫療救護（Emergency Medical Services，EMS）制度比較、法規研修佐證</td><td>蒐集各國制度與文獻來源，引用前回查原始出處</td></tr>
+    <tr><td>Gamma</td><td>長官報告、跨機關說明、研討會及教育訓練簡報</td><td>快速產出版型，再依署內格式調整</td></tr>
+    <tr><td>Granola</td><td>跨機關協調會議紀錄</td><td>擷取決議與待辦事項；公務會議錄音須先確認機關資安規範</td></tr>
+    <tr><td>Microsoft Copilot</td><td>採購規格書、預算表、Outlook公務往來</td><td>於Word、Excel內直接改寫、彙整與分析</td></tr>
+    <tr><td>Gemini</td><td>美國國家緊急救護技術員協會（National Association of Emergency Medical Technicians，NAEMT）等國外訓練影片</td><td>摘要影片重點，輔助教材編修與課程比較</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="note">
+  <strong>公務使用注意事項</strong>
+  <ol>
+    <li>依行政院「行政院及所屬機關（構）使用生成式AI參考指引」，機密文書及個人資料不得輸入生成式AI工具。</li>
+    <li>AI產出之法規條文、統計數據及文獻引用，須經承辦人查證後方得用於公文或政策文件。</li>
+    <li>涉及採購評選、預算數額等決策事項，AI僅作輔助，不得取代專業判斷。</li>
+  </ol>
+</div>
+
+<footer>整理：內政部消防署救災救護組緊急救護科｜原圖來源：Chief AI Leader</footer>
+</div>
+</body>
+</html>
